@@ -1,0 +1,13 @@
+@import '@/app/styles/mixins';
+
+.radios {
+    display: flex;
+    gap: var(--gap-large);
+
+    &.vertical {
+        flex-direction: column;
+    }
+}
+
+
+

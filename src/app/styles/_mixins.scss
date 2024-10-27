@@ -1,0 +1,108 @@
+@mixin fluid-text($max, $min) {
+	font-size: clamp(#{$min}px, #{calc($max / 1440 * 100)}vw, #{$max}px);
+}
+
+@mixin reset-link {
+	color: inherit;
+	&,
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+@mixin reset-button {
+	padding: 0;
+	background-color: transparent;
+	border: none;
+}
+
+@mixin abs-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+}
+
+@mixin square($size) {
+	width: $size;
+	aspect-ratio: 1;
+}
+
+@mixin visually-hidden {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	margin: -1px !important;
+	border: 0 !important;
+	padding: 0 !important;
+	white-space: nowrap !important;
+	clip-path: inset(100%) !important;
+	clip: rect(0 0 0 0) !important;
+	overflow: hidden !important;
+}
+
+@mixin input-action-button {
+	@include reset-button;
+	@include square(30px);
+	border-radius: var(--border-radius-small);
+	color: var(--theme-color-primary);
+	cursor: pointer;
+	transition-duration: var(--transition-duration);
+  
+	@include hover {
+	  background-color: var(--theme-color-opacity);
+	}
+}
+
+@mixin check-mark {
+    justify-self: end;
+    margin-left: auto;
+	width: 12px;
+	height: 7px;
+	border-left: 2px solid var(--theme-color-primary);
+	border-bottom: 2px solid var(--theme-color-primary);
+	rotate: -45deg;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition-duration: var(--transition-duration);
+}
+
+@mixin hover-effect {
+    @include abs-center;
+    content: '';
+    height: 200%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: transparent;
+    transition-duration: inherit;
+}
+
+@mixin user-select-off {
+	-webkit-user-select: none; /* Chrome/Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+@mixin underline-bottom {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	translate: -50%;
+	height: 1px;
+	background-color: currentColor;
+	width: 0%;
+	transition-duration: inherit;
+}
+
+@mixin underline-right {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	translate: 0 -50%;
+	height: 0%;
+	background-color: currentColor;
+	width: 1px;
+	transition-duration: inherit;
+}

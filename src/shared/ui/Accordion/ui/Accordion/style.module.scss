@@ -1,0 +1,73 @@
+@import "@/app/styles/media", "@/app/styles/mixins";
+
+.accordion {
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+
+  // Accordion Theme
+  &.primary {
+    box-shadow: var(--box-shadow-small);
+    background-color: var(--theme-color-light);
+  }
+
+  &.clear {
+    background-color: transparent;
+  }
+
+  // Open
+  &.open {
+    .content {
+      opacity: 1;
+    }
+    .details {
+      padding-block: var(--padding);
+    }
+    .opening-icon {
+      rotate: 90deg;
+    }
+    .summary {
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.summary {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 5px;
+  padding: var(--padding);
+  cursor: pointer;
+  transition-duration: var(--transition-duration);
+  @include hover {
+    background-color: var(--theme-color-light-alt);
+  }
+
+  &:before {
+    @include underline-bottom;
+  }
+}
+
+.details {
+  height: 0px;
+  overflow-y: hidden;
+  padding-inline: var(--padding);
+  transition-duration: var(--transition-duration);
+}
+
+.content {
+  opacity: 0;
+  transition-duration: 1s;
+}
+
+.opening-icon {
+  display: flex;
+  transition-duration: var(--transition-duration);
+  width: var(--icon-size);
+  aspect-ratio: 1;
+  fill: currentColor;                             
+}

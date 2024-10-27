@@ -1,0 +1,53 @@
+:root {
+	--layout-width: 1440px;
+	--container-width: 1240px;
+	--container-padding-x: 20px;
+
+	--font-family: 'sans-serif';
+
+    --color-light: white;
+    --color-light-alt: rgb(217, 226, 211);
+    --color-dark: rgb(0, 0, 0);
+    --color-dark-alt: black;
+    --color-primary: blue;
+    --color-secondary: blue;
+	--color-error: rgb(255, 126, 126);
+
+	--box-shadow: 0 0 5px 1px currentColor;
+	--box-shadow-small: 0 0 2px currentColor;
+	--box-shadow-small-inset: 0 0 2px inset currentColor;
+
+	--border-radius-middle: 15px;
+	--border-radius-small: 7px;
+
+	--transition-duration: 0.2s;
+	--transition-duration-middle: 0.4s;
+
+	--opacity: 0.5;
+	--opacity-small: 0.8;
+	--opacity-big: 0.2;
+
+	--border: 1px solid currentColor;
+
+	--font-size-label: 1em;
+	--section-padding: 30px;
+	
+	--button-height: 50px;
+	--menu-item-height: 50px;
+
+	--height-large: 25px;
+	--height: 20px;
+	--height-small: 15px;
+
+	--padding-small: 10px;
+	--padding: 15px;
+	--padding-large: 20px;
+
+	--gap-small: 5px;
+	--gap: 10px;
+	--gap-large: 15px;
+
+	--icon-size: 20px;
+
+	--z-index-drop-down-menu: 1000;
+}

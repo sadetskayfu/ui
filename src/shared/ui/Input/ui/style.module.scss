@@ -1,0 +1,161 @@
+@import "@/app/styles/mixins", '@/app/styles/media';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  color: var(--theme-color-primary);
+
+  &.error {
+    color: var(--color-error);
+  }
+
+  &.readonly {
+    pointer-events: none;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity);
+  }
+
+  &:focus-within.dirty {
+	  .clear-button {
+		  opacity: 1;
+		  pointer-events: all;
+	  }
+  }
+  &:focus-within {
+    .password-button {
+      pointer-events: all;
+      opacity: 1;
+    }
+  }
+  
+}
+
+.field {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  border-radius: var(--border-radius-small);
+  border: none;
+  outline: none;
+  padding: var(--padding);
+  color: inherit;
+  box-shadow: var(--box-shadow-small);
+  transition-duration: 0.2s;
+
+  &::placeholder {
+    opacity: var(--opacity);
+    color: inherit;
+    transition-duration: 0.1s;
+  }
+
+  &:focus {
+    box-shadow: var(--box-shadow);
+  }
+}
+
+.label {
+  position: absolute;
+  left: var(--padding);
+  pointer-events: none;
+
+  &__required {
+    color: var(--color-error);
+  }
+}
+
+.buttons {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  right: var(--padding);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.clear-button {
+  opacity: 0;
+}
+
+.password-button {
+  opacity: var(--opacity);
+}
+
+.error-message {
+  color: var(--color-red);
+  font-size: var(--font-size-label);
+  padding-left: var(--padding);
+}
+
+// Variants
+.wrapper {
+  // Input variant
+  &.primary {
+    .input {
+      background-color: var(--theme-color-light-alt);
+
+      @include hover {
+        background-color: var(--theme-color-light);
+      }
+    }
+  }
+
+  &.transparent {
+    .input {
+      background-color: transparent;
+
+      @include hover {
+        box-shadow: var(--box-shadow);
+      }
+    }
+  }
+
+  // Label variant
+  &.placeholder {
+    .input::placeholder {
+      opacity: 0;
+    }
+    .label {
+      top: 50%;
+      translate: 0 -50%;
+      opacity: var(--opacity);
+      transition-duration: var(--transition-duration);
+
+    }
+
+    &.dirty,
+    &:focus-within {
+      .label {
+        translate: 0;
+        top: -1.7em;
+        font-size: var(--font-size-label);
+        opacity: var(--opacity-small);
+      }
+    }
+    &:focus-within {
+      .input::placeholder {
+        opacity: var(--opacity);
+      }
+    }
+  }
+
+  &.none {
+    .label {
+      @include visually-hidden;
+    }
+  }
+
+  &.static {
+    .label {
+      top: -1.7em;
+      font-size: var(--font-size-label);
+      opacity: var(--opacity-small);
+    }
+  }
+}

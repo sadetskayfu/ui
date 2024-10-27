@@ -1,0 +1,7 @@
+.title {
+    padding-block: 5px;
+    padding-inline: var(--padding);
+    background-color: var(--theme-color-secondary);
+    display: inline-flex;
+    border-radius: var(--border-radius-small);
+}

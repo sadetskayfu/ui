@@ -1,0 +1,49 @@
+@import '@/app/styles/mixins';
+
+.animation {
+    position: absolute;
+    top: 50%;
+    content: '';
+    width: 0%;
+    aspect-ratio: 1;
+    background-color: var(--theme-color-primary);
+
+    &.active {
+        animation-name: click;
+        animation-duration: 0.5s;
+    }
+
+    &.circle {
+        border-radius: 50%; 
+    }
+    &.square {
+        border-radius: var(--border-radius-small);
+    }
+    &.center {
+        left: 50%;
+        translate: -50% -50%;
+    }
+    &.left {
+        left: 0;
+        translate: 0% -50%;
+    }
+    &.right {
+        right: 0;
+        translate: 0 -50%;
+    }
+}
+
+@keyframes click {
+    0% {
+        width: 0%;
+        opacity: var(--opacity-big);
+    }
+
+    30% {
+        opacity: var(--opacity-big);
+    }
+    100% {
+        opacity: 0;
+        width: 100%;
+    }
+}

@@ -1,0 +1,60 @@
+@import '@/app/styles/mixins', '@/app/styles/media';
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    align-self: start;
+    column-gap: var(--gap);
+    cursor: pointer;
+    --toggleHeight: var(--height);
+    --width: calc(var(--toggleHeight) * 2);
+    --translateX: calc(var(--width) - var(--toggleHeight));
+
+    @include hover {
+        .hover {
+            background-color: var(--theme-color-opacity);
+        }
+    }
+    @include user-select-off;
+
+    &.checked {
+        .toggle-switch {
+            background-color: var(--theme-color-primary);
+        }
+        .switch {
+            transform: translateX(var(--translateX));
+        }
+    }
+
+    &.small {
+        --toggleHeight: var(--height-small);
+    }
+    &.large {
+        --toggleHeight: var(--height-large);
+    }
+}
+
+.toggle-switch {
+    height: var(--toggleHeight);
+    width: var(--width);
+    padding: 2px;
+    background-color: var(--theme-color-light-alt);
+    border-radius: var(--border-radius-middle);
+    display: flex;
+    box-shadow: var(--box-shadow-small);
+    transition-duration: var(--transition-duration);
+}
+
+.switch {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--theme-color-secondary);
+    transition-duration: inherit;
+}
+
+.hover {
+    @include hover-effect;
+    height: calc(200% + 8px);
+}

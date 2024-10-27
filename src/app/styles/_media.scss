@@ -1,0 +1,71 @@
+$desktop-above: 1281px;
+$desktop: 1280px;
+
+$tablet-above: 1024px;
+$tablet: 1023px;
+
+$mobile-above: 768px;
+$mobile: 767px;
+
+$mobile-above-m: 531px;
+$mobile-m: 530px;
+
+@mixin desktop-above {
+	@media (min-width: $desktop-above) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (max-width: $desktop) {
+		@content;
+	}
+}
+
+@mixin tablet-above {
+	@media (min-width: $tablet-above) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (max-width: $tablet) {
+		@content;
+	}
+}
+
+@mixin mobile-above {
+	@media (min-width: $mobile-above) {
+		@content;
+	}
+}
+
+@mixin mobile {
+	@media (max-width: $mobile) {
+		@content;
+	}
+}
+
+@mixin mobile-above-m {
+	@media (min-width: $mobile-above-m) {
+		@content;
+	}
+}
+
+@mixin mobile-m {
+	@media (max-width: $mobile-m) {
+		@content;
+	}
+}
+
+// Hover(only desktop) and click effect
+@mixin hover {
+	@media (hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+	&:focus {
+		@content;
+	}
+}

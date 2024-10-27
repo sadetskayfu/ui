@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 25px;
+}
+.column {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    &:not(:last-child) {
+        
+    }
+}
+
+
+.test {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}

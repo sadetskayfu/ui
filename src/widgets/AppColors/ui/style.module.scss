@@ -1,0 +1,49 @@
+.app-colors {
+    display: flex;
+    border-bottom: var(--border);
+    border-top: var(--border);
+}
+
+.summary,
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 5px;
+}
+
+.primary {
+    color: var(--theme-color-primary);
+}
+.secondary {
+    color: var(--theme-color-secondary);
+}
+.dark {
+    color: var(--theme-color-dark);
+}
+.dark-alt {
+    color: var(--theme-color-dark-alt);
+}
+.light {
+    color: var(--theme-color-light);
+}
+.light-alt {
+    color: var(--theme-color-light-alt);
+}
+
+.square {
+    width: 40px;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius-small);
+    background-color: currentColor;
+}
+
+.details .square {
+    background-color: transparent;
+    box-shadow: var(--box-shadow-small);
+}
+

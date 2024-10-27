@@ -1,0 +1,13 @@
+.list {
+    max-height: calc(var(--menu-item-height) * 7);
+    background-color: var(--theme-color-light);
+    overflow-y: auto;
+}
+
+.item {
+    transition-duration: var(--transition-duration);
+
+    &.hovered {
+        background-color: var(--theme-color-light-alt);
+    }
+}

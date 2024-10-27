@@ -1,0 +1,49 @@
+@import '@/app/styles/mixins';
+
+.menu {
+    width: 100%;
+}
+
+.item {
+    border: none;
+    width: 100%;
+    min-height: var(--menu-item-height);
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-inline: var(--padding);
+    color: inherit;
+    display: flex;
+    column-gap: var(--padding);
+
+    &.selected {
+        background-color: var(--theme-color-light-alt);
+        opacity: var(--opacity);
+
+        .check-mark {
+            opacity: 1;
+        }
+    }
+
+    &.no-options {
+        pointer-events: none;
+        background-color: var(--theme-color-light);
+    }
+}
+
+.title {
+    width: 100%;
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+}
+
+.icon {
+    width: 20px;
+}
+
+.check-mark {
+    @include check-mark;
+}
