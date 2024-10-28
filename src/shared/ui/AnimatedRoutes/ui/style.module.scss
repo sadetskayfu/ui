@@ -1,0 +1,58 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 0%;
+    background-color: var(--theme-color-dark-alt);
+  }
+  &::before {
+    top: 0;
+  }
+  &::after {
+    bottom: 0;
+  }
+  
+  &.animated {
+    .content {
+      animation-name: fade;
+      animation-duration: 0.5s;
+    }
+    &::before,
+    &::after {
+        animation-name: curtain;
+        animation-duration: 0.5s;
+    }
+  }
+}
+
+@keyframes curtain {
+  0% {
+    height: 0%;
+    opacity: 1;
+  }
+  50% {
+    height: 50%;
+    opacity: 1;
+  }
+  100% {
+    height: 0%;
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,6 +1,15 @@
 .title {
-    border-bottom: var(--border);
+    position: relative;
     line-height: 0.7;
-    padding-block: var(--section-padding);
-    margin-bottom: var(--section-padding);
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 15px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background-color: var(--theme-color-opacity);
+        top: 50%;
+        translate: 0 -50%;
+    }
 }

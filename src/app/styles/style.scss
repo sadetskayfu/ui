@@ -1,6 +1,9 @@
 @import 'normalize', 'variables','themes/dark', 'themes/light','mixins', 'globals',  'media', 'utils';
 
 .app {
-    background-color: var(--theme-color-light);
-    padding-bottom: var(--section-padding);                                                                 
+    background-color: var(--theme-color-light);                                                                
+}
+
+.content {
+    display: flex;
 }

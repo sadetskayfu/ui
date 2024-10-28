@@ -1,7 +1,7 @@
 import { classNames } from "@/shared/lib";
 import React, { memo, ReactNode, useEffect, useRef, useState } from "react";
 import { ClickAnimation } from "@/shared/ui/ClickAnimation";
-import { useClickAnimation } from "@/shared/lib/hooks";
+import { useAnimation } from "@/shared/lib/hooks";
 import AccordionIcon from "@/shared/assets/icons/opening-arrow.svg?react";
 import styles from "./style.module.scss";
 
@@ -32,7 +32,7 @@ export const Accordion = memo((props: AccordionProps) => {
 
   const isOpenInGroup = Boolean(index && onChangeSelectedIndex && selectedIndex === index)
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isAnimation, handleToggleAnimation } = useClickAnimation();
+  const { isAnimating, startAnimation } = useAnimation();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +53,7 @@ export const Accordion = memo((props: AccordionProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       toggleOpeningDetails();
-      handleToggleAnimation();
+      startAnimation();
     }
   };
 
@@ -63,7 +63,7 @@ export const Accordion = memo((props: AccordionProps) => {
          
       if(isOpen || isOpenInGroup) {
         const computedStyle = getComputedStyle(currentMenu)
-        const paddingBlock = Number(computedStyle.getPropertyValue('--padding').slice(0, -2)) * 2
+        const paddingBlock = Number(computedStyle.getPropertyValue('--padding-medium').slice(0, -2)) * 2
         const contentHeight = Number(currentMenu.scrollHeight) + paddingBlock
         currentMenu.style.height = contentHeight + 'px'
 
@@ -93,13 +93,13 @@ export const Accordion = memo((props: AccordionProps) => {
         className={styles["summary"]}
         tabIndex={0}
         onClick={toggleOpeningDetails}
-        onMouseDown={handleToggleAnimation}
+        onMouseDown={startAnimation}
         onKeyDown={handleKeyDown}
       >
         {childArray[0]}
         <span className={styles["opening-icon"]}>{Icon ? <Icon /> : <AccordionIcon/>}</span>
         <ClickAnimation
-          isAnimation={isAnimation}
+          isAnimating={isAnimating}
         />
       </div>
       <div className={styles["details"]} ref={menuRef}>

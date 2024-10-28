@@ -1,0 +1,12 @@
+.aside-bar {
+    height: calc(100vh - var(--header-height));
+    padding-inline: var(--padding-medium);
+    padding-block: var(--section-padding);
+    max-width: 200px;
+    width: 100%;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}

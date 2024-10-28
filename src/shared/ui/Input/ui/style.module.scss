@@ -16,7 +16,7 @@
 
   &.disabled {
     pointer-events: none;
-    opacity: var(--opacity);
+    opacity: var(--opacity-medium);
   }
 
   &:focus-within.dirty {
@@ -43,13 +43,13 @@
   border-radius: var(--border-radius-small);
   border: none;
   outline: none;
-  padding: var(--padding);
+  padding: var(--padding-medium);
   color: inherit;
   box-shadow: var(--box-shadow-small);
   transition-duration: 0.2s;
 
   &::placeholder {
-    opacity: var(--opacity);
+    opacity: var(--opacity-medium);
     color: inherit;
     transition-duration: 0.1s;
   }
@@ -61,7 +61,7 @@
 
 .label {
   position: absolute;
-  left: var(--padding);
+  left: var(--padding-medium);
   pointer-events: none;
 
   &__required {
@@ -73,7 +73,7 @@
   position: absolute;
   top: 50%;
   translate: 0 -50%;
-  right: var(--padding);
+  right: var(--padding-medium);
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -84,13 +84,13 @@
 }
 
 .password-button {
-  opacity: var(--opacity);
+  opacity: var(--opacity-medium);
 }
 
 .error-message {
   color: var(--color-red);
   font-size: var(--font-size-label);
-  padding-left: var(--padding);
+  padding-left: var(--padding-medium);
 }
 
 // Variants
@@ -124,7 +124,7 @@
     .label {
       top: 50%;
       translate: 0 -50%;
-      opacity: var(--opacity);
+      opacity: var(--opacity-medium);
       transition-duration: var(--transition-duration);
 
     }
@@ -140,7 +140,7 @@
     }
     &:focus-within {
       .input::placeholder {
-        opacity: var(--opacity);
+        opacity: var(--opacity-medium);
       }
     }
   }

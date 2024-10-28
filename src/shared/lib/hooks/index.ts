@@ -1,3 +1,3 @@
 export { useTheme } from "./useTheme/useTheme";
-export { useClickAnimation } from "./useClickAnimation/useClickAnimation";
+export { useAnimation } from "./useAnimation/useAnimation";
 

@@ -1,26 +1,29 @@
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 
-type AnimationTheme = 'circle' | 'square'
-type AnimationDirection = 'center' | 'left' | 'right'
+export type AnimationVariant = 'circle' | 'square'
+export type AnimationDirection = 'center' | 'left' | 'right'
+export type AnimationColor = 'light' | 'dark'
 
 interface ClickAnimationProps {
-  isAnimation: boolean;
-  theme?: AnimationTheme
+  isAnimating: boolean;
+  variant?: AnimationVariant
   direction?: AnimationDirection
+  color?: AnimationColor
   
 }
 
 export const ClickAnimation = (props: ClickAnimationProps) => {
-  const { isAnimation, theme = 'circle', direction = 'center' } = props;
+  const { isAnimating, variant = 'circle', direction = 'center', color ='dark' } = props;
 
   const mods: Record<string, boolean> = {
-    [styles["active"]]: isAnimation,
+    [styles["active"]]: isAnimating,
   };
 
   const additionalClasses: Array<string> = [
-    styles[theme],
-    styles[direction]
+    styles[variant],
+    styles[direction],
+    styles[color]
   ]
 
   return (

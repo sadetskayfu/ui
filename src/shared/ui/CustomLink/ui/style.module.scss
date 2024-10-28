@@ -1,0 +1,153 @@
+@import "@/app/styles/media", "@/app/styles/mixins";
+
+.link {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--border-radius-small);
+  column-gap: var(--gap-medium);
+  @include user-select-off;
+
+  // Direction
+  &.horizontal.clear,
+  &.horizontal.classic {
+    &:before {
+      @include underline-bottom;
+    }
+    &.active {
+      &:before {
+        width: 100%;
+        background-color: var(--theme-color-secondary);
+      }
+    }
+  }
+
+  &.vertical.clear,
+  &.vertical.classic {
+    &:before {
+      @include underline-right;
+    }
+    &.active {
+      border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
+      &:before {
+        height: 100%;
+        background-color: var(--theme-color-secondary);
+      }
+    }
+  }
+
+  // Variant
+  &.primary {
+    color: var(--theme-color-light);
+    background-color: var(--theme-color-primary);
+    box-shadow: var(--box-shadow);
+    @include hover {
+      background-color: var(--theme-color-dark-alt);
+    }
+    .icon {
+      stroke: var(--theme-color-light);
+      fill: var(--theme-color-light);
+    }
+  }
+
+  &.transparent {
+    box-shadow: var(--box-shadow);
+    @include hover {
+      background-color: var(--theme-color-opacity);
+    }
+  }
+
+  &.clear {
+    @include hover {
+      background-color: var(--theme-color-opacity);
+    }
+  }
+
+  &.classic {
+    @include hover {
+      color: var(--theme-color-secondary);
+      .icon {
+        stroke: var(--theme-color-secondary);
+        fill: var(--theme-color-secondary);
+      }
+    }
+  }
+
+  &.text {
+    color: var(--theme-color-secondary);
+    @include hover {
+      color: var(--theme-color-dark-alt);
+    }
+  }
+
+  // Minimalism variant
+  &.minimalism-round,
+  &.minimalism-square {
+    justify-content: center;
+    aspect-ratio: 1;
+    .label {
+      @include visually-hidden;
+    }
+  }
+  &.minimalism-round {
+    border-radius: 50%; 
+  }
+
+  // Size
+  &.small:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-small);
+    height: var(--button-height-small);
+    gap: var(--gap-small);
+  }
+  &.small.minimalism-square,
+  &.small.minimalism-round {
+    height: var(--button-height-small);
+  }
+
+  &.medium:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-medium);
+    height: var(--button-height-medium);
+    gap: var(--gap-medium);
+  }
+  &.medium.minimalism-square,
+  &.medium.minimalism-round {
+    height: var(--button-height-medium);
+  }
+
+  &.large:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-large);
+    height: var(--button-height-large);
+    gap: var(--gap-large);
+  }
+  &.large.minimalism-square,
+  &.large.minimalism-round {
+    height: var(--button-height-large);
+  }
+
+  // Disabled
+  &.disabled {
+    opacity: var(--opacity-medium);
+    pointer-events: none;
+  }
+
+  &.hidden-label {
+    justify-content: center;
+    .label {
+      @include visually-hidden;
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--box-shadow-small);
+  }
+}
+
+.icon {
+  height: 50%;
+  aspect-ratio: 1;
+  stroke: var(--theme-color-primary);
+  fill: var(--theme-color-primary);
+  display: flex;
+}

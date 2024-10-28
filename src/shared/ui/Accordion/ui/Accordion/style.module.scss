@@ -20,7 +20,7 @@
       opacity: 1;
     }
     .details {
-      padding-block: var(--padding);
+      padding-block: var(--padding-medium);
     }
     .opening-icon {
       rotate: 90deg;
@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: space-between;
   column-gap: 5px;
-  padding: var(--padding);
+  padding: var(--padding-medium);
   cursor: pointer;
   transition-duration: var(--transition-duration);
   @include hover {
@@ -55,7 +55,7 @@
 .details {
   height: 0px;
   overflow-y: hidden;
-  padding-inline: var(--padding);
+  padding-inline: var(--padding-medium);
   transition-duration: var(--transition-duration);
 }
 

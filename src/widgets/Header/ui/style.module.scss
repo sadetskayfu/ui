@@ -1,0 +1,34 @@
+.header {
+    height: var(--header-height);
+    background-color: var(--theme-color-dark-alt);
+}
+
+.primary {
+    color: var(--theme-color-primary);
+}
+.secondary {
+    color: var(--theme-color-secondary);
+}
+.dark {
+    color: var(--theme-color-dark);
+}
+.dark-alt {
+    color: var(--theme-color-dark-alt);
+}
+.light {
+    color: var(--theme-color-light);
+}
+.light-alt {
+    color: var(--theme-color-light-alt);
+}
+
+.square {
+    width: 40px;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius-small);
+    background-color: currentColor;
+}
+

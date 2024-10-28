@@ -1,7 +1,8 @@
 .title {
     padding-block: 5px;
-    padding-inline: var(--padding);
+    padding-inline: var(--padding-medium);
     background-color: var(--theme-color-secondary);
     display: inline-flex;
     border-radius: var(--border-radius-small);
+    box-shadow: var(--box-shadow);
 }

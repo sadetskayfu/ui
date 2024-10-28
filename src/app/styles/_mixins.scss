@@ -89,7 +89,7 @@
 	bottom: 0;
 	left: 50%;
 	translate: -50%;
-	height: 1px;
+	height: 2px;
 	background-color: currentColor;
 	width: 0%;
 	transition-duration: inherit;
@@ -103,6 +103,6 @@
 	translate: 0 -50%;
 	height: 0%;
 	background-color: currentColor;
-	width: 1px;
+	width: 2px;
 	transition-duration: inherit;
 }

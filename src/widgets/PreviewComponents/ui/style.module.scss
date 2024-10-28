@@ -1,0 +1,27 @@
+.wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    row-gap: var(--gap-medium);
+    align-items: start;
+
+    &.vertical {
+        .components {
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+    &.horizontal {
+        .components {
+            align-items: center;
+        }
+    }
+}
+
+.components {
+    display: flex;
+    
+    gap: var(--gap-medium);
+    padding: var(--padding-medium);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius-small);
+}

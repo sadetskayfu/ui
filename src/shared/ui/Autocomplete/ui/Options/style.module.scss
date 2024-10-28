@@ -13,14 +13,14 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-inline: var(--padding);
+    padding-inline: var(--padding-medium);
     color: inherit;
     display: flex;
-    column-gap: var(--padding);
+    column-gap: var(--padding-medium);
 
     &.selected {
         background-color: var(--theme-color-light-alt);
-        opacity: var(--opacity);
+        opacity: var(--opacity-medium);
 
         .check-mark {
             opacity: 1;

@@ -1,14 +1,16 @@
-import { MainPage } from "@/pages/MainPage";
+import { Header } from "@/widgets/Header";
+import { AppRouter } from "./providers/router";
 import "./styles/style.scss";
+import { AsideBar } from "@/widgets/AsideBar";
 
 function App() {
   return (
     <div className="app">
-      <div className="container">
-        <main className="content">
-          <MainPage />
-        </main>
-      </div>
+      <Header />
+      <main className="content">
+        <AsideBar />
+        <AppRouter />
+      </main>
     </div>
   );
 }

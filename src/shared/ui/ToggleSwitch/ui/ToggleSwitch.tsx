@@ -1,6 +1,6 @@
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { useClickAnimation } from "@/shared/lib/hooks";
+import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "../../ClickAnimation";
 import { memo } from "react";
 
@@ -31,12 +31,12 @@ export const ToggleSwitch = memo((props: ToggleSwitchProps) => {
     tabIndex = 0,
   } = props;
 
-  const { isAnimation, handleToggleAnimation } = useClickAnimation();
+  const { isAnimating, startAnimation } = useAnimation();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
     if (event.key === "Enter") {
       onToggle(name);
-      handleToggleAnimation();
+      startAnimation();
     }
   };
 
@@ -53,7 +53,7 @@ export const ToggleSwitch = memo((props: ToggleSwitchProps) => {
     <label
       className={classNames(styles["wrapper"], additionalClasses, mods)}
       tabIndex={tabIndex}
-      onMouseDown={handleToggleAnimation}
+      onMouseDown={startAnimation}
       onKeyDown={handleKeyDown}
     >
       <input
@@ -69,7 +69,7 @@ export const ToggleSwitch = memo((props: ToggleSwitchProps) => {
       <div className={styles["toggle-switch"]}>
         <span className={styles["switch"]}>
           <span className={styles['hover']}>
-            <ClickAnimation isAnimation={isAnimation} />
+            <ClickAnimation isAnimating={isAnimating} />
           </span>
         </span>
       </div>

@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 import { classNames } from "@/shared/lib";
-import { useClickAnimation } from "@/shared/lib/hooks";
+import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "@/shared/ui/ClickAnimation";
 import styles from "./style.module.scss";
 
@@ -33,7 +33,7 @@ export const Radio = (props: RadioProps) => {
     tabIndex = 0,
   } = props;
 
-  const { isAnimation, handleToggleAnimation } = useClickAnimation();
+  const { isAnimating, startAnimation } = useAnimation();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
@@ -42,7 +42,7 @@ export const Radio = (props: RadioProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
     if (event.key === "Enter") {
       onChange(value);
-      handleToggleAnimation();
+      startAnimation();
     }
   };
 
@@ -55,7 +55,7 @@ export const Radio = (props: RadioProps) => {
     <label
       className={classNames(styles["radio"], additionalClasses)}
       onKeyDown={handleKeyDown}
-      onMouseDown={handleToggleAnimation}
+      onMouseDown={startAnimation}
       tabIndex={tabIndex}
     >
       <input
@@ -70,7 +70,7 @@ export const Radio = (props: RadioProps) => {
       />
       <span className={styles["emulator"]}>
         <span className={styles['hover']}>
-          <ClickAnimation isAnimation={isAnimation} />
+          <ClickAnimation isAnimating={isAnimating} />
         </span>
       </span>
       {!hiddenLabel && <span>{label}</span>}

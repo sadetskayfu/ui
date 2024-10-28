@@ -139,7 +139,7 @@ export const FieldSubsection = memo(() => {
       </div>
       <div className={styles["components"]}>
         <div className={styles["component"]}>
-          <SubsectionTitle className={styles["component__title"]}>
+          <SubsectionTitle className={styles["component__title"]} titleVariant="h4">
             Text field
           </SubsectionTitle>
           <Input
@@ -160,7 +160,7 @@ export const FieldSubsection = memo(() => {
           />
         </div>
         <div className={styles["component"]}>
-          <SubsectionTitle className={styles["component__title"]}>
+          <SubsectionTitle className={styles["component__title"]} titleVariant="h4">
             Password field
           </SubsectionTitle>
           <Input
