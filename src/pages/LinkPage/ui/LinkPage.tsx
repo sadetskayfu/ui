@@ -4,7 +4,7 @@ import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { ROUTES } from "@/shared/constans/routes";
 import Icon from "@/shared/assets/icons/news.svg?react";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { capitalizeFirstLetter, classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 import {
@@ -30,25 +30,27 @@ const LinkPage = () => {
     setIsHiddenLabel((prev) => !prev);
   }, []);
 
-  const renderVariants = () => {
+  const renderVariants = useMemo(() => {
     return linkVariants.map((link) => {
       return (
         <CustomLink
+          key={link}
           to=""
           isDisabled={isDisabled}
           Icon={icon && Icon}
           variant={link}
         >
-          {capitalizeFirstLetter(link)}
+          {capitalizeFirstLetter(link) as string}
         </CustomLink>
       );
     });
-  };
+  }, [icon, isDisabled]);
 
-  const renderMinimalismVariants = () => {
-    return minimalismLinkVariants.map((link) => {
+  const renderMinimalismVariants = useMemo(() => {
+    return minimalismLinkVariants.map((link, index) => {
       return (
         <CustomLink
+          key={index}
           to=""
           isDisabled={isDisabled}
           Icon={Icon}
@@ -59,12 +61,13 @@ const LinkPage = () => {
         </CustomLink>
       );
     });
-  };
+  }, [isDisabled]);
 
-  const renderSizes = () => {
-    return linkSizes.map((link) => {
+  const renderSizes = useMemo(() => {
+    return linkSizes.map((link, index) => {
       return (
         <CustomLink
+          key={index}
           to=""
           variant="transparent"
           size={link.size}
@@ -76,12 +79,13 @@ const LinkPage = () => {
         </CustomLink>
       );
     });
-  };
+  }, [isDisabled, icon]);
 
-  const renderActiveHorizontalLinks = () => {
-    return activeHorizontalLinks.map((link) => {
+  const renderActiveHorizontalLinks = useMemo(() => {
+    return activeHorizontalLinks.map((link, index) => {
       return (
         <CustomLink
+          key={index}
           to={ROUTES.LINK}
           Icon={icon && Icon}
           variant={link.variant}
@@ -93,12 +97,13 @@ const LinkPage = () => {
         </CustomLink>
       );
     });
-  };
+  }, [icon, isDisabled, isHiddenLabel]);
 
-  const renderActiveVerticalLinks = () => {
-    return activeVerticalLinks.map((link) => {
+  const renderActiveVerticalLinks = useMemo(() => {
+    return activeVerticalLinks.map((link, index) => {
       return (
         <CustomLink
+          key={index}
           to={ROUTES.LINK}
           variant={link.variant}
           direction={link.direction}
@@ -110,7 +115,7 @@ const LinkPage = () => {
         </CustomLink>
       );
     });
-  };
+  }, [icon, isDisabled, isHiddenLabel]);
 
   return (
     <div className={classNames(styles["page"])}>
@@ -131,12 +136,12 @@ const LinkPage = () => {
       </div>
       <div className={styles["subsections"]}>
         <PreviewComponents title="Variants">
-          {renderVariants()}
+          {renderVariants}
         </PreviewComponents>
         <PreviewComponents title="Minimalism Variants">
-          {renderMinimalismVariants()}
+          {renderMinimalismVariants}
         </PreviewComponents>
-        <PreviewComponents title="Sizes">{renderSizes()}</PreviewComponents>
+        <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
         <div className={styles["mods"]}>
           <Checkbox
             isChecked={isHiddenLabel}
@@ -152,10 +157,10 @@ const LinkPage = () => {
           />
         </div>
         <PreviewComponents title="Active Horizontal Links">
-          {renderActiveHorizontalLinks()}
+          {renderActiveHorizontalLinks}
         </PreviewComponents>
         <PreviewComponents direction="vertical" title="Active Vertical Links">
-          {renderActiveVerticalLinks()}
+          {renderActiveVerticalLinks}
         </PreviewComponents>
       </div>
     </div>

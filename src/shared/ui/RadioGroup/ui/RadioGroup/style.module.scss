@@ -7,7 +7,16 @@
     &.vertical {
         flex-direction: column;
     }
+
+    &.hidden-title {
+        .title {
+            @include visually-hidden;
+        }
+    }
 }
 
+.title {
+    padding-bottom: var(--gap-large);
+}
 
 

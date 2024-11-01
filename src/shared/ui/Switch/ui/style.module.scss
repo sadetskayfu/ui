@@ -1,0 +1,89 @@
+@import "@/app/styles/mixins", "@/app/styles/media";
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  align-self: start;
+  column-gap: var(--gap-medium);
+  cursor: pointer;
+  --toggleHeight: var(--height-medium);
+  --width: calc(var(--toggleHeight) * 2);
+  --translateX: calc(var(--width) - var(--toggleHeight));
+
+  @include hover {
+    .hover {
+      background-color: var(--theme-color-opacity);
+    }
+  }
+  &:focus-visible {
+    .hover {
+      background-color: var(--theme-color-opacity);
+    }
+  }
+  @include user-select-off;
+
+  // Size
+  &.small {
+    --toggleHeight: var(--height-small);
+  }
+  &.large {
+    --toggleHeight: var(--height-large);
+  }
+
+  // Mods
+  &.checked {
+    .toggle-switch {
+      background-color: var(--color-primary);
+    }
+    .switch {
+      transform: translateX(var(--translateX));
+      background-color: var(--color-secondary);
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
+
+  &.required {
+    .label {
+        &:after {
+            display: inline;
+        }
+    }
+  }
+}
+
+.toggle-switch {
+  height: var(--toggleHeight);
+  width: var(--width);
+  padding: 2px;
+  background-color: var(--color-secondary);
+  border-radius: var(--border-radius-middle);
+  display: flex;
+  box-shadow: 0 0 2px var(--color-primary);
+  transition-duration: var(--transition-duration);
+}
+
+.switch {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  transition-duration: inherit;
+}
+
+.label {
+    &:after {
+        content: '*';
+        color: var(--color-error);
+        display: none;
+    }
+}
+
+.hover {
+  @include hover-effect;
+  height: calc(200% + 8px);
+}

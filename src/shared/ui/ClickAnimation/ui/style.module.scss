@@ -13,33 +13,38 @@
   }
 
   &.dark {
-    background-color: var(--theme-color-primary);
+    background-color: var(--color-primary);
   }
 
   &.light {
-    background-color: var(--theme-color-light);
+    background-color: var(--color-light);
   }
 
   &.circle {
     border-radius: 50%;
   }
+
   &.square {
     border-radius: var(--border-radius-small);
   }
+
   &.center {
     left: 50%;
     translate: -50% -50%;
   }
+
   &.left {
     left: 0;
     translate: 0% -50%;
-    height: 100%;
+    height: 110%;
   }
+  
   &.right {
     right: 0;
     translate: 0 -50%;
-    height: 100%;
+    height: 110%;
   }
+
 }
 
 @keyframes click {
@@ -53,6 +58,6 @@
   }
   100% {
     opacity: 0;
-    width: 100%;
+    width: 110%;
   }
 }

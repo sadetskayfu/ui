@@ -4,14 +4,14 @@ import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "@/shared/ui/ClickAnimation";
 import styles from "./style.module.scss";
 
-export type RadioSize = "small" | "middle" | "large";
+export type RadioSize = "small" | "medium" | "large";
 
 interface RadioProps {
   className?: string;
   size?: RadioSize;
   name: string;
   id?: string
-  hiddenLabel?: boolean
+  isHiddenLabel?: boolean
   label: string;
   selectedItem: string;
   value: string;
@@ -22,9 +22,9 @@ interface RadioProps {
 export const Radio = (props: RadioProps) => {
   const {
     className,
-    size = "middle",
+    size = "medium",
     id,
-    hiddenLabel,
+    isHiddenLabel,
     value,
     name,
     label,
@@ -73,7 +73,7 @@ export const Radio = (props: RadioProps) => {
           <ClickAnimation isAnimating={isAnimating} />
         </span>
       </span>
-      {!hiddenLabel && <span>{label}</span>}
+      {!isHiddenLabel && <span>{label}</span>}
     </label>
   );
 };

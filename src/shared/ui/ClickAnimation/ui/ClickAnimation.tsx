@@ -25,7 +25,6 @@ export const ClickAnimation = (props: ClickAnimationProps) => {
     styles[direction],
     styles[color]
   ]
-
   return (
     <span className={classNames(styles["animation"], additionalClasses, mods)}></span>
   );

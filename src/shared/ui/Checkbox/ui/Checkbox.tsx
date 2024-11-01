@@ -4,13 +4,15 @@ import { ClickAnimation } from "../../ClickAnimation";
 import { memo } from "react";
 import styles from "./style.module.scss";
 
-type CheckboxSize = "small" | "medium" | "large";
+export type CheckboxVariant = 'primary' | 'transparent'
+export type CheckboxSize = "small" | "medium" | "large";
 
 interface CheckboxProps {
   className?: string;
   size?: CheckboxSize;
+  variant?: CheckboxVariant
   id?: string
-  hiddenLabel?: boolean
+  isHiddenLabel?: boolean
   label: string;
   name: string;
   isChecked: boolean;
@@ -24,8 +26,9 @@ export const Checkbox = memo((props: CheckboxProps) => {
   const {
     className,
     id,
-    hiddenLabel,
+    isHiddenLabel,
     size = "medium",
+    variant = 'primary',
     label,
     name,
     isDisabled,
@@ -47,6 +50,7 @@ export const Checkbox = memo((props: CheckboxProps) => {
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[size],
+    styles[variant]
   ];
 
   const mods: Record<string, boolean | undefined> = {
@@ -77,7 +81,7 @@ export const Checkbox = memo((props: CheckboxProps) => {
           <ClickAnimation isAnimating={isAnimating} />
         </span>
       </span>
-      {!hiddenLabel && <span>{label}</span>}
+      {!isHiddenLabel && <span className={styles['label']}>{label}</span>}
     </label>
   );
 });

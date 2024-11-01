@@ -1,0 +1,22 @@
+.page {
+    padding-inline: var(--padding-medium);
+    padding-block: var(--section-padding);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    row-gap: var(--section-padding);
+}
+
+.mods {
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+
+.button {
+    position: relative;
+}
+
+.dropdown-menu {
+    width: 200px;
+}

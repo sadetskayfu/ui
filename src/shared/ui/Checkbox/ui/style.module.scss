@@ -6,7 +6,6 @@
     align-self: start;
     column-gap: var(--gap-medium);
     cursor: pointer;
-
     @include user-select-off;
     @include hover {
         .hover {
@@ -14,12 +13,26 @@
         }
     }
 
-    &.checked {
-        .checkbox {
-            background-color: var(--theme-color-primary);
+    &:focus-visible {
+        .hover {
+            background-color: var(--theme-color-opacity);
         }
     }
 
+    // Variant
+    &.primary {
+        .checkbox {
+            background-color: var(--color-secondary);
+        }
+    }
+
+    &.transparent {
+        .checkbox {
+            background-color: transparent;
+        }
+    }
+
+    // Size
     &.small {
         .checkbox {
             height: var(--height-small);
@@ -38,31 +51,64 @@
         }
     }
 
+    // Mods
     &.disabled {
         pointer-events: none;
         opacity: var(--opacity-medium);
+    }
+
+    &.required {
+        .label {
+            &:after {
+                display: inline;
+            }
+        }
+    }
+
+    &.checked {
+        .checkbox {
+            background-color: var(--color-primary);
+            &:before {
+                opacity: 1;
+            }
+        }
+    }
+    &.checked.transparent {
+        .checkbox {
+            background-color: var(--color-primary-light);
+        }
     }
 }
 
 .checkbox {
     position: relative;
     aspect-ratio: 1;
-    background-color: var(--theme-color-light-alt);
-    border-radius: 2px;
-    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius-small-m);
     transition-duration: var(--transition-duration);
+    color: var(--color-secondary);
+    box-shadow: 0 0 2px var(--color-primary);
 
     &:before {
         position: absolute;
         content: '';
         width: 70%;
         height: 40%;
-        border-left: 2px solid var(--theme-color-light-alt);
-        border-bottom: 2px solid var(--theme-color-light-alt);
+        border-left: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
         rotate: -45deg;
         left: 50%;
         translate: -50%;
         bottom: 40%;
+        opacity: 0;
+        transition-duration: inherit;
+    }
+}
+
+.label {
+    &:after {
+        content: '*';
+        color: var(--color-error);
+        display: none;
     }
 }
 

@@ -3,7 +3,7 @@ import { Input } from "../../../Input";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Options } from "../Options/Options";
 import styles from "./style.module.scss";
-import { InputVariant, LabelVariant } from "@/shared/ui/Input/ui/Input";
+import { InputVariant, InputLabelVariant } from "@/shared/ui/Input/ui/Input";
 
 export type AutocompleteVariant = 'text' | 'countries'
 
@@ -17,7 +17,7 @@ interface AutocompleteProps {
   className?: string;
   variant?: AutocompleteVariant
   inputVariant?: InputVariant
-  labelVariant?: LabelVariant
+  labelVariant?: InputLabelVariant
   strict?: boolean
   name: string;
   label: string;
@@ -35,8 +35,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
   const {
     className,
     variant = 'text',
-    inputVariant = 'primary',
-    labelVariant = 'placeholder',
+    inputVariant = 'transparent',
+    labelVariant = 'jump',
     strict = true,
     name,
     label,
@@ -131,7 +131,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onClick={handleToggleMenu}
         ref={inputRef}
         type="text"
-        autoComplete="new-password"
+        autoComplete="off"
       />
       <Options
         isVisible={isVisibleMenu}

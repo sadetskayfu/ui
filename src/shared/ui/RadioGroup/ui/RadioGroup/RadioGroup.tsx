@@ -3,7 +3,7 @@ import { memo, useMemo } from "react";
 import { Radio, RadioSize } from "../Radio/Radio";
 import styles from "./style.module.scss";
 
-type Direction = "horizontal" | "vertical";
+export type DirectionRadioGroup = "horizontal" | "vertical";
 
 
 interface RadioItem {
@@ -20,7 +20,10 @@ interface RadioGroupProps {
   selectedItem: string;
   items: RadioItem[];
   onChange: (value: string) => void;
-  direction?: Direction;
+  direction?: DirectionRadioGroup;
+  isHiddenRadioLabel?: boolean
+  isHiddenTitle?: boolean
+  radioId?: string
   tabIndex?: number
 }
 
@@ -28,18 +31,21 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
   const {
     className,
     classNameRadio,
-    size = 'middle',
+    size = 'medium',
     title,
     selectedItem,
     items,
     name,
     onChange,
     direction = "vertical",
+    isHiddenRadioLabel,
+    isHiddenTitle,
+    radioId,
     tabIndex = 0
   } = props;
 
   const renderItems = useMemo(() => {
-    const radioProps = { selectedItem, onChange, name, tabIndex, size, className: classNameRadio };
+    const radioProps = { selectedItem, onChange, name, tabIndex, size, className: classNameRadio, isHiddenLabel: isHiddenRadioLabel, id: radioId };
 
     return items.map((item) => {
       return (
@@ -51,16 +57,20 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
         />
       );
     });
-  }, [items, selectedItem, onChange, name, tabIndex, size, classNameRadio]);
+  }, [items, selectedItem, onChange, name, tabIndex, size, classNameRadio, isHiddenRadioLabel, radioId]);
 
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[direction],
   ];
 
+  const mods: Record<string, boolean | undefined> = {
+    [styles['hidden-title']]: isHiddenTitle
+  }
+
   return (
-    <fieldset className={classNames(styles["radios"], additionalClasses)}>
-      <legend className='visually-hidden'>{title}</legend>
+    <fieldset className={classNames(styles["radios"], additionalClasses, mods)}>
+      <legend className={styles['title']}>{title}</legend>
       {renderItems}
     </fieldset>
   );

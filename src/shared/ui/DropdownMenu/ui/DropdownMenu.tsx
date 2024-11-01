@@ -12,13 +12,13 @@ type HorizontalOpeningDirection =
   | "row-right"
   | "column-left"
   | "column-right";
-type PositionVariant = "row" | "column";
-type ClosingVariant = "mousedown" | "mousemove";
+export type DropdownPositionVariant = "row" | "column";
+export type DropdownClosingVariant = "mousedown" | "mousemove";
 
 interface DropdownMenuProps {
   className?: string;
-  positionVariant?: PositionVariant;
-  closingVariant?: ClosingVariant;
+  positionVariant?: DropdownPositionVariant;
+  closingVariant?: DropdownClosingVariant;
   children: ReactElement;
   isVisible: boolean;
   onClose: () => void;

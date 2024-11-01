@@ -13,17 +13,23 @@
       background-color: var(--theme-color-opacity);
     }
   }
+  &:focus-visible {
+      .hover {
+      background-color: var(--theme-color-opacity);
+    }
+  }
   & input[type="radio"]:checked + .emulator:before {
-    width: 60%;
+    height: 60%;
   }
 
+  // Size
   &.small {
     .emulator {
       height: var(--height-small);
     }
   }
 
-  &.middle {
+  &.medium {
     .emulator {
       height: var(--height-medium);
     }
@@ -39,18 +45,18 @@
 .emulator {
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--theme-color-light-alt);
+  background-color: var(--color-secondary);
   transition-duration: var(--transition-duration);
-  box-shadow: var(--box-shadow-small);
+  box-shadow: 0 0 2px var(--color-primary);
   position: relative;
 
   &:before {
     @include abs-center;
     content: "";
-    width: 0%;
+    height: 0%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background-color: var(--theme-color-primary);
+    background-color: var(--color-primary);
     transition-duration: inherit;
   }
 }

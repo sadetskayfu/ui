@@ -36,7 +36,6 @@ export const AccordionGroup = (props: AccordionGroupProps) => {
           onChangeSelectedIndex: handleChangeSelectedIndex,
           selectedIndex,
         };
-
         return cloneElement(child as ReactElement, {
           ...AccordionGroupChildrenProps,
         });

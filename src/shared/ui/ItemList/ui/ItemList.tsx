@@ -1,35 +1,44 @@
-import { Children, useState, useCallback, useRef, useEffect } from "react";
+import {
+  Children,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  cloneElement,
+  ReactElement,
+} from "react";
 import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
 interface ItemListProps {
   children?: React.ReactNode;
   isVisible?: boolean;
+  startIndex?: number;
   onOpen: () => void;
   onClose: () => void;
-  onSelect: (index: number) => void;
   parentRef: React.RefObject<HTMLElement>;
 }
 
 export const ItemList = (props: ItemListProps) => {
-  const { children, isVisible, onOpen, onClose, onSelect, parentRef } = props;
+  const {
+    children,
+    isVisible,
+    startIndex = -1,
+    onOpen,
+    onClose,
+    parentRef,
+  } = props;
 
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [activeIndex, setActiveIndex] = useState<number>(startIndex);
 
-  const listRef = useRef<HTMLUListElement>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
   const childrenArray = Children.toArray(children);
 
-  const handleMouseOver = useCallback(
-    (index: number) => {
-        setActiveIndex(index);
-    },[]
-  );
-
-  const handleSelect = useCallback((index: number) => {
-    onSelect(index)
-    onClose()
-  }, [onClose, onSelect])
+  const handleMouseOver = useCallback((index: number) => {
+    setActiveIndex(index);
+  }, []);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -39,10 +48,11 @@ export const ItemList = (props: ItemListProps) => {
           event.preventDefault();
           if (childrenArray.length > 0) {
             isVisible
-              ? setActiveIndex(
-                  (prevIndex) =>
-                    (prevIndex - 1 + childrenArray.length) %
-                    childrenArray.length
+              ? setActiveIndex((prevIndex) =>
+                  prevIndex === -1
+                    ? prevIndex + childrenArray.length
+                    : (prevIndex - 1 + childrenArray.length) %
+                      childrenArray.length
                 )
               : onOpen();
           }
@@ -61,32 +71,32 @@ export const ItemList = (props: ItemListProps) => {
         // Enter
         case "Enter":
           if (isVisible) {
-            if(activeIndex >= 0) {
-               handleSelect(activeIndex)
+            if (activeIndex >= 0) {
+                itemRefs.current[activeIndex]?.click();
             } else {
-                onClose()
+              onClose();
             }
           } else {
             onOpen();
           }
           break;
+        // Space
+        case " ":
+          event.preventDefault();
+          break;
         // Escape
         case "Escape":
           isVisible ? onClose() : parentRef.current?.blur();
+          break;
+        case "Tab":
+          parentRef.current?.blur();
+          onClose();
           break;
         default:
           break;
       }
     },
-    [
-      activeIndex,
-      childrenArray,
-      isVisible,
-      onClose,
-      onOpen,
-      parentRef,
-      handleSelect,
-    ]
+    [activeIndex, childrenArray, isVisible, onClose, onOpen, parentRef]
   );
 
   // Add handle keydown on parent
@@ -118,20 +128,19 @@ export const ItemList = (props: ItemListProps) => {
   }, [activeIndex]);
 
   return (
-    <ul className={styles["list"]} ref={listRef}>
-      {childrenArray.map((child, index) => {
+    <ul className={styles["list"]} ref={listRef} role="menu">
+      {Children.map(children, (child, index) => {
         const mods: Record<string, boolean> = {
           [styles["hovered"]]: index === activeIndex,
         };
 
         return (
-          <li
-            key={index}
-            className={classNames(styles["item"], [], mods)}
-            onMouseMove={() => handleMouseOver(index)}
-            onClick={() => handleSelect(index)}
-          >
-            {child}
+          <li key={index} className={classNames(styles["item"], [], mods)}>
+            {cloneElement(child as ReactElement, {
+              ref: (el: HTMLElement | null) => (itemRefs.current[index] = el),
+              onMouseMove: () => handleMouseOver(index),
+              role: "menuitem",
+            })}
           </li>
         );
       })}

@@ -1,9 +1,10 @@
 import { ButtonMinimalismVariant, ButtonVariant, ButtonSize as Size } from "@/shared/ui/Button";
+import { IconButtonSize, IconButtonVariant } from "@/shared/ui/IconButton";
 
 interface ButtonSize {
     size: Size
     variant: ButtonVariant
-    minimalism: ButtonMinimalismVariant
+    minimalism?: ButtonMinimalismVariant
 }
 
 interface MinimalismButton {
@@ -17,17 +18,14 @@ export const buttonSizes: ButtonSize[] = [
     {
         variant: 'primary',
         size: 'small',
-        minimalism: 'none',
     },
     {
         variant: 'primary',
         size: 'medium',
-        minimalism: 'none',
     },
     {
         variant: 'primary',
         size: 'large',
-        minimalism: 'none',
     },
     {
         variant: 'primary',

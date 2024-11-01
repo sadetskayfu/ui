@@ -5,9 +5,7 @@ interface NavigationLink {
     path: string
 }
 
-type NavigationLinks = NavigationLink[]
-
-export const navigationLinks: NavigationLinks = [
+export const navigationLinks: NavigationLink[] = [
     {
         label: 'Autocomplete',
         path: ROUTES.AUTOCOMPLETE
@@ -35,5 +33,13 @@ export const navigationLinks: NavigationLinks = [
     {
         label: 'Link',
         path: ROUTES.LINK
+    },
+    {
+        label: 'Dropdown',
+        path: ROUTES.DROPDOWN
+    },
+    {
+        label: 'Pagination',
+        path: ROUTES.PAGINATION
     }
 ]

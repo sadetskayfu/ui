@@ -7,6 +7,9 @@ import { Suspense } from "react";
 import { ButtonPage } from "@/pages/ButtonPage";
 import { LinkPage } from "@/pages/LinkPage";
 import { CheckboxPage } from "@/pages/CheckboxPage";
+import { RadioGroupPage } from "@/pages/RadioGroupPage";
+import { DropdownPage } from "@/pages/DropDownPage";
+import PaginationPage from "@/pages/PaginationPage/ui/PaginationPage";
 
 export const AppRouter = () => {
   return (
@@ -18,6 +21,9 @@ export const AppRouter = () => {
           <Route path={ROUTES.AUTOCOMPLETE} element={<AutocompletePage />} />
           <Route path={ROUTES.SWITCH} element={<SwitchPage />} />
           <Route path={ROUTES.CHECKBOX} element={<CheckboxPage />} />
+          <Route path={ROUTES.RADIO_GROUP} element={<RadioGroupPage />} />
+          <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
+          <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
         </Routes>
       </Suspense>
   );

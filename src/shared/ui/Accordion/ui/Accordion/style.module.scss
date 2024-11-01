@@ -7,7 +7,7 @@
   // Accordion Theme
   &.primary {
     box-shadow: var(--box-shadow-small);
-    background-color: var(--theme-color-light);
+    background-color: var(--color-light);
   }
 
   &.clear {
@@ -19,13 +19,13 @@
     .content {
       opacity: 1;
     }
-    .details {
+    .body {
       padding-block: var(--padding-medium);
     }
     .opening-icon {
       rotate: 90deg;
     }
-    .summary {
+    .header {
       &:before {
         width: 100%;
       }
@@ -33,7 +33,7 @@
   }
 }
 
-.summary {
+.header {
   position: relative;
   overflow: hidden;
   display: flex;
@@ -44,7 +44,7 @@
   cursor: pointer;
   transition-duration: var(--transition-duration);
   @include hover {
-    background-color: var(--theme-color-light-alt);
+    background-color: var(--color-secondary);
   }
 
   &:before {
@@ -52,7 +52,7 @@
   }
 }
 
-.details {
+.body {
   height: 0px;
   overflow-y: hidden;
   padding-inline: var(--padding-medium);

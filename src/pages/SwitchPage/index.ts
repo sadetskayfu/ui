@@ -1,3 +1,3 @@
 import { lazy } from "react";
 
-export const SwitchPage = lazy(() => import("./ui/Switch"));
+export const SwitchPage = lazy(() => import("./ui/SwitchPage"));

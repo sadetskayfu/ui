@@ -8,48 +8,49 @@ import {
   useState,
   useId,
 } from "react";
-import { ClearFieldButton } from "../../ClearFieldButton";
-import { ShowButtonPassword } from "../../ShowPasswordButton";
-
+import { ActionButton } from "../../ActionButton";
 import styles from "./style.module.scss";
 
-export type InputVariant = "primary" | "transparent";
-export type LabelVariant = "placeholder" | "none" | "static";
+export type InputVariant = "primary" | 'secondary' | "transparent" | 'clear';
+export type InputSize = 'medium' | 'large'
+export type InputLabelVariant = "jump" | "none" | "static";
 
-type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange">;
+type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "size">;
 
 interface InputProps extends HTMLInputProps {
   className?: string;
   label: string;
   name: string;
-  required?: boolean;
   variant?: InputVariant;
-  labelVariant?: LabelVariant;
-  readonly?: boolean;
-  disabled?: boolean;
+  labelVariant?: InputLabelVariant;
+  size?: InputSize;
+  isReadonly?: boolean;
+  isDisabled?: boolean;
+  isRequired?: boolean;
   showPasswordButton?: boolean;
   showOpenMenuButton?: boolean;
   errorMessage?: string;
   value: string;
-  type: string;
+  type?: 'text' | 'password';
   onChange?: (value: string) => void;
 }
 
 export const Input = memo(
-  forwardRef((props: InputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+  forwardRef((props: InputProps, ref: React.ForwardedRef<HTMLInputElement | null>) => {
     const {
       value,
       onChange,
       className,
       label,
       errorMessage,
-      required,
       variant = "primary",
-      labelVariant = "label-placeholder",
-      readOnly,
-      disabled,
+      labelVariant = "jump",
+      size = 'medium',
+      isReadonly,
+      isRequired,
+      isDisabled,
       showPasswordButton,
-      type,
+      type = 'text',
       ...otherProps
     } = props;
 
@@ -83,26 +84,27 @@ export const Input = memo(
     const mods: Record<string, boolean | undefined> = {
       [styles["dirty"]]: value.length !== 0,
       [styles["error"]]: !!errorMessage,
-      [styles["readonly"]]: readOnly,
-      [styles["disabled"]]: disabled,
+      [styles["readonly"]]: isReadonly,
+      [styles["disabled"]]: isDisabled,
+      [styles['required']]: isRequired
     };
 
     const additionalClasses: Array<string | undefined> = [
       className,
       styles[variant],
       styles[labelVariant],
+      styles[size]
     ];
 
     const inputType: string = (type === 'password') ? (visibilityPassword? 'text' : 'password') : type
 
-    const tabIndex:number = (disabled || readOnly)? -1 : 0
+    const tabIndex:number = (isDisabled || isReadonly)? -1 : 0
 
     return (
       <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
         <div className={styles["field"]}>
           <label className={styles["label"]} htmlFor={id}>
             {label}
-            {required && <span className={styles["label__required"]}>*</span>}
           </label>
           <input
             className={styles["input"]}
@@ -113,16 +115,18 @@ export const Input = memo(
             onChange={handleChange}
             type={inputType}
             ref={input}
+            autoComplete="off"
             {...otherProps}
           />
           <div className={styles["buttons"]}>
-          <ClearFieldButton className={styles['clear-button']} label="clear field" onClear={handleClear} />
+          <ActionButton className={styles['clear-button']} tabIndex={-1} variant="cross" label="Clear field" onClick={handleClear} />
             {showPasswordButton && (
-              <ShowButtonPassword
+              <ActionButton
                 className={styles['password-button']}
-                label="switching password visibility"
+                variant="password"
+                label="switch password visibility"
                 isCrossed={visibilityPassword}
-                onToggle={toggleVisibilityPassword}
+                onClick={toggleVisibilityPassword}
               />
             )}
           </div>

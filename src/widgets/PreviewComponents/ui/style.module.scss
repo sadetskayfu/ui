@@ -19,9 +19,8 @@
 
 .components {
     display: flex;
-    
-    gap: var(--gap-medium);
+    gap: var(--gap-30);
     padding: var(--padding-medium);
-    box-shadow: var(--box-shadow);
+    border: var(--border) var(--color-secondary);
     border-radius: var(--border-radius-small);
 }

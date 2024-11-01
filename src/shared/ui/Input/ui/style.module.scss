@@ -1,11 +1,114 @@
 @import "@/app/styles/mixins", '@/app/styles/media';
 
 .wrapper {
+  --paddingInline: var(--padding-medium);
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  color: var(--theme-color-primary);
+  color: var(--color-primary);
 
+  // Variant
+  &.primary {
+    .input {
+      border: var(--border);
+      background-color: var(--color-secondary);
+      &:focus {
+        border-color: var(--color-focus);
+      }
+    }
+    @include hover {
+      .input {
+        border-color: var(--color-focus);
+      }
+    }
+  }
+
+  &.transparent {
+    .input {
+      border: var(--border);
+      &:focus {
+          border-color: var(--color-focus);
+    }
+    }
+    @include hover {
+      .input {
+        border-color: var(--color-focus);
+      }
+    }
+  }
+
+  &.secondary {
+    .input {
+      border-bottom: var(--border);
+      border-radius: var(--border-radius-small) var(--border-radius-small) 0 0 ;
+      @include hover {
+        border-color: var(--color-focus);
+      }
+      &:focus {
+          border-color: var(--color-focus);
+    }
+    }
+  }
+
+  // Label Variants
+  &.jump {
+    .input::placeholder {
+      opacity: 0;
+    }
+    .label {
+      top: 50%;
+      translate: 0 -50%;
+      opacity: var(--opacity-medium);
+      transition-duration: var(--transition-duration);
+
+    }
+
+    &.dirty,
+    &:focus-within {
+      .label {
+        translate: 0;
+        top: -1.5em;
+        font-size: var(--font-size-label);
+        opacity: var(--opacity-small);
+      }
+    }
+    &:focus-within {
+      .input::placeholder {
+        opacity: var(--opacity-medium);
+      }
+    }
+  }
+
+  &.none {
+    .label {
+      @include visually-hidden;
+    }
+  }
+
+  &.static {
+    .label {
+      top: -1.5em;
+      font-size: var(--font-size-label);
+      opacity: var(--opacity-small);
+      color: var(--color-primary);
+    }
+  }
+
+  // Size
+  &.medium {
+    .input {
+      height: var(--button-height-medium);
+    }
+  }
+
+  &.large {
+    --paddingInline: var(--padding-large);
+    .input {
+      height: var(--button-height-large);
+    }
+  }
+
+  // Mods
   &.error {
     color: var(--color-error);
   }
@@ -18,6 +121,14 @@
     pointer-events: none;
     opacity: var(--opacity-medium);
   }
+
+  &.required {
+    .label {
+        &:after {
+            display: inline;
+        }
+    }
+}
 
   &:focus-within.dirty {
 	  .clear-button {
@@ -43,9 +154,8 @@
   border-radius: var(--border-radius-small);
   border: none;
   outline: none;
-  padding: var(--padding-medium);
+  padding-inline: var(--paddingInline);
   color: inherit;
-  box-shadow: var(--box-shadow-small);
   transition-duration: 0.2s;
 
   &::placeholder {
@@ -53,27 +163,25 @@
     color: inherit;
     transition-duration: 0.1s;
   }
-
-  &:focus {
-    box-shadow: var(--box-shadow);
-  }
 }
 
 .label {
   position: absolute;
-  left: var(--padding-medium);
+  left: var(--paddingInline);
   pointer-events: none;
 
-  &__required {
+  &:after {
+    content: '*';
     color: var(--color-error);
-  }
+    display: none;
+}
 }
 
 .buttons {
   position: absolute;
   top: 50%;
   translate: 0 -50%;
-  right: var(--padding-medium);
+  right: var(--paddingInline);
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -84,7 +192,7 @@
 }
 
 .password-button {
-  opacity: var(--opacity-medium);
+  
 }
 
 .error-message {
@@ -93,69 +201,3 @@
   padding-left: var(--padding-medium);
 }
 
-// Variants
-.wrapper {
-  // Input variant
-  &.primary {
-    .input {
-      background-color: var(--theme-color-light-alt);
-
-      @include hover {
-        background-color: var(--theme-color-light);
-      }
-    }
-  }
-
-  &.transparent {
-    .input {
-      background-color: transparent;
-
-      @include hover {
-        box-shadow: var(--box-shadow);
-      }
-    }
-  }
-
-  // Label variant
-  &.placeholder {
-    .input::placeholder {
-      opacity: 0;
-    }
-    .label {
-      top: 50%;
-      translate: 0 -50%;
-      opacity: var(--opacity-medium);
-      transition-duration: var(--transition-duration);
-
-    }
-
-    &.dirty,
-    &:focus-within {
-      .label {
-        translate: 0;
-        top: -1.7em;
-        font-size: var(--font-size-label);
-        opacity: var(--opacity-small);
-      }
-    }
-    &:focus-within {
-      .input::placeholder {
-        opacity: var(--opacity-medium);
-      }
-    }
-  }
-
-  &.none {
-    .label {
-      @include visually-hidden;
-    }
-  }
-
-  &.static {
-    .label {
-      top: -1.7em;
-      font-size: var(--font-size-label);
-      opacity: var(--opacity-small);
-    }
-  }
-}

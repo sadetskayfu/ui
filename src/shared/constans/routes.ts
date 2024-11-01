@@ -6,4 +6,6 @@ export const ROUTES = {
     RADIO_GROUP: '/radio-group',
     BUTTON: '/button',
     LINK: '/link',
+    DROPDOWN: '/dropdown',
+    PAGINATION: '/pagination',
 }

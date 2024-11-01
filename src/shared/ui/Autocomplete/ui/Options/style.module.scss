@@ -7,7 +7,7 @@
 .item {
     border: none;
     width: 100%;
-    min-height: var(--menu-item-height);
+    min-height: var(--button-height-medium);
     background-color: transparent;
     cursor: pointer;
     display: flex;
@@ -15,11 +15,10 @@
     align-items: center;
     padding-inline: var(--padding-medium);
     color: inherit;
-    display: flex;
     column-gap: var(--padding-medium);
 
     &.selected {
-        background-color: var(--theme-color-light-alt);
+        background-color: var(--color-secondary);
         opacity: var(--opacity-medium);
 
         .check-mark {
@@ -29,15 +28,18 @@
 
     &.no-options {
         pointer-events: none;
-        background-color: var(--theme-color-light);
+        background-color: var(--color-light);
     }
 }
 
 .title {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     column-gap: 5px;
     align-items: center;
+    justify-content: start;
+    text-wrap: nowrap;
 }
 
 .icon {

@@ -34,7 +34,7 @@ export const Accordion = memo((props: AccordionProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { isAnimating, startAnimation } = useAnimation();
 
-  const menuRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   const childArray = React.Children.toArray(children);
 
@@ -58,17 +58,17 @@ export const Accordion = memo((props: AccordionProps) => {
   };
 
   useEffect(() => {
-    if(menuRef.current) {
-      const currentMenu = menuRef.current
+    if(bodyRef.current) {
+      const currentBody = bodyRef.current
          
       if(isOpen || isOpenInGroup) {
-        const computedStyle = getComputedStyle(currentMenu)
+        const computedStyle = getComputedStyle(currentBody)
         const paddingBlock = Number(computedStyle.getPropertyValue('--padding-medium').slice(0, -2)) * 2
-        const contentHeight = Number(currentMenu.scrollHeight) + paddingBlock
-        currentMenu.style.height = contentHeight + 'px'
+        const contentHeight = Number(currentBody.scrollHeight) + paddingBlock
+        currentBody.style.height = contentHeight + 'px'
 
       } else {
-        currentMenu.style.height = '0px'
+        currentBody.style.height = '0px'
       }
     }
   }, [isOpen, isOpenInGroup]);
@@ -87,10 +87,9 @@ export const Accordion = memo((props: AccordionProps) => {
   return (
     <div
       className={classNames(styles["accordion"], additionalClasses, mods)}
-      tabIndex={-1}
     >
       <div
-        className={styles["summary"]}
+        className={styles["header"]}
         tabIndex={0}
         onClick={toggleOpeningDetails}
         onMouseDown={startAnimation}
@@ -102,7 +101,7 @@ export const Accordion = memo((props: AccordionProps) => {
           isAnimating={isAnimating}
         />
       </div>
-      <div className={styles["details"]} ref={menuRef}>
+      <div className={styles["body"]} ref={bodyRef}>
         <div className={styles["content"]}>{childArray[1]}</div>
       </div>
     </div>

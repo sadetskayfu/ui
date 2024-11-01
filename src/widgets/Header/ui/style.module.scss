@@ -1,25 +1,25 @@
 .header {
     height: var(--header-height);
-    background-color: var(--theme-color-dark-alt);
+    background-color: var(--color-primary-light);
 }
 
 .primary {
-    color: var(--theme-color-primary);
+    color: var(--color-primary);
 }
 .secondary {
-    color: var(--theme-color-secondary);
+    color: var(--color-primary-light);
 }
 .dark {
-    color: var(--theme-color-dark);
+    color: var(--color-dark);
 }
 .dark-alt {
-    color: var(--theme-color-dark-alt);
+    color: var(--color-primary-light);
 }
 .light {
-    color: var(--theme-color-light);
+    color: var(--color-light);
 }
 .light-alt {
-    color: var(--theme-color-light-alt);
+    color: var(--color-secondary);
 }
 
 .square {

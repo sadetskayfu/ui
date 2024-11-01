@@ -23,9 +23,10 @@ export const Options = (props: OptionsProps) => {
 
     const {isVisible, options, selectedValue, onClose, onOpen, onSelect, parentRef, variant} = props
 
-    const handleSelect = useCallback((index: number) => {
-        onSelect(options[index].id, options[index].label)
-    }, [onSelect, options])
+    const handleSelect = useCallback((id: string, label: string) => {
+        onSelect(id, label)
+        onClose()
+    }, [onSelect, onClose])
 
     const renderOptions = useMemo(() => {
 
@@ -34,21 +35,21 @@ export const Options = (props: OptionsProps) => {
                 [styles['selected']]: item.id === selectedValue
             }
             return (
-                <button className={classNames(styles['item'], [], mods)} key={item.id} type="button" tabIndex={-1}>
+                <button onClick={() => handleSelect(item.id, item.label)} className={classNames(styles['item'], [], mods)} key={item.id} tabIndex={-1}>
                     {variant === 'countries' && <img src={countriesIcons[item.id]} className={styles['icon']} alt="country flag"></img>}
                     <div className={styles['title']}>
                         <span>{item.label}</span>
                         {item.phone && <span>+{item.phone}</span>}
-                        <span className={styles['check-mark']}></span>
                     </div>
+                    <span className={styles['check-mark']}></span>
                 </button>
             )
         })
-    }, [options, selectedValue, variant])
+    }, [options, selectedValue, handleSelect, variant])
 
     return (
         <DropdownMenu className={styles['menu']} isVisible={isVisible} onClose={onClose} parentRef={parentRef}>
-            <ItemList isVisible={isVisible} onClose={onClose} onOpen={onOpen} parentRef={parentRef} onSelect={handleSelect}>
+            <ItemList isVisible={isVisible} onClose={onClose} onOpen={onOpen} parentRef={parentRef}>
                 {options.length > 0 ? renderOptions : <span className={classNames(styles['item'], [styles['no-options']])}>No options</span>}
             </ItemList>
         </DropdownMenu>

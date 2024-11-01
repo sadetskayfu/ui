@@ -19,7 +19,7 @@
     &.active {
       &:before {
         width: 100%;
-        background-color: var(--theme-color-secondary);
+        background-color: var(--color-primary-light);
       }
     }
   }
@@ -33,27 +33,29 @@
       border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
       &:before {
         height: 100%;
-        background-color: var(--theme-color-secondary);
+        background-color: var(--color-primary-light);
       }
     }
   }
 
   // Variant
   &.primary {
-    color: var(--theme-color-light);
-    background-color: var(--theme-color-primary);
-    box-shadow: var(--box-shadow);
+    color: var(--color-light);
+    background-color: var(--color-primary);
+    box-shadow: 0 0 2px var(--color-primary);
     @include hover {
-      background-color: var(--theme-color-dark-alt);
+      background-color: var(--color-primary-light);
     }
     .icon {
-      stroke: var(--theme-color-light);
-      fill: var(--theme-color-light);
+      svg {
+        stroke: var(--color-light);
+        fill: var(--color-light);
+      }
     }
   }
 
   &.transparent {
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 0 2px var(--color-primary);
     @include hover {
       background-color: var(--theme-color-opacity);
     }
@@ -62,23 +64,26 @@
   &.clear {
     @include hover {
       background-color: var(--theme-color-opacity);
+      box-shadow: 0 0 2px var(--theme-color-opacity);
     }
   }
 
   &.classic {
     @include hover {
-      color: var(--theme-color-secondary);
+      color: var(--color-primary);
       .icon {
-        stroke: var(--theme-color-secondary);
-        fill: var(--theme-color-secondary);
+        svg {
+          stroke: var(--color-focus);
+          fill: var(--color-focus);
+        }
       }
     }
   }
 
   &.text {
-    color: var(--theme-color-secondary);
+    color: var(--color-primary);
     @include hover {
-      color: var(--theme-color-dark-alt);
+      text-decoration: underline;
     }
   }
 
@@ -140,14 +145,16 @@
   }
 
   &:focus-visible {
-    box-shadow: var(--box-shadow-small);
+    box-shadow: var(--box-shadow-focus);
   }
 }
 
 .icon {
-  height: 50%;
+  height: 1em;
   aspect-ratio: 1;
-  stroke: var(--theme-color-primary);
-  fill: var(--theme-color-primary);
   display: flex;
+  svg {
+    stroke: var(--color-primary);
+    fill: var(--color-primary);
+  }
 }
