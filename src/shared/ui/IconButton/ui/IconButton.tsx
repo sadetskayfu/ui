@@ -3,6 +3,7 @@ import { ClickAnimation } from "../../ClickAnimation";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 import { AnimationDirection } from "../../ClickAnimation";
+import { memo } from "react";
 
 export type IconButtonVariant =
   | "cross"
@@ -27,7 +28,7 @@ interface IconButtonProps {
   onClick?: () => void;
 }
 
-export const IconButton = (props: IconButtonProps) => {
+export const IconButton = memo((props: IconButtonProps) => {
   const {
     className,
     variant = "clear",
@@ -101,4 +102,4 @@ export const IconButton = (props: IconButtonProps) => {
       <span className="visually-hidden">{children}</span>
     </button>
   );
-};
+});

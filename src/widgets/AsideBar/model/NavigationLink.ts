@@ -41,5 +41,9 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Pagination',
         path: ROUTES.PAGINATION
+    },
+    {
+        label: 'Start rating',
+        path: ROUTES.STAR_RATING
     }
 ]

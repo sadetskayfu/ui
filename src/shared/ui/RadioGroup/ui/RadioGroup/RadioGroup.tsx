@@ -17,7 +17,7 @@ interface RadioGroupProps {
   size?: RadioSize
   name: string;
   title: string;
-  selectedItem: string;
+  selectedValue: string;
   items: RadioItem[];
   onChange: (value: string) => void;
   direction?: DirectionRadioGroup;
@@ -33,7 +33,7 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
     classNameRadio,
     size = 'medium',
     title,
-    selectedItem,
+    selectedValue,
     items,
     name,
     onChange,
@@ -45,7 +45,7 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
   } = props;
 
   const renderItems = useMemo(() => {
-    const radioProps = { selectedItem, onChange, name, tabIndex, size, className: classNameRadio, isHiddenLabel: isHiddenRadioLabel, id: radioId };
+    const radioProps = { selectedValue, onChange, name, tabIndex, size, className: classNameRadio, isHiddenLabel: isHiddenRadioLabel, id: radioId };
 
     return items.map((item) => {
       return (
@@ -57,7 +57,7 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
         />
       );
     });
-  }, [items, selectedItem, onChange, name, tabIndex, size, classNameRadio, isHiddenRadioLabel, radioId]);
+  }, [items, selectedValue, onChange, name, tabIndex, size, classNameRadio, isHiddenRadioLabel, radioId]);
 
   const additionalClasses: Array<string | undefined> = [
     className,

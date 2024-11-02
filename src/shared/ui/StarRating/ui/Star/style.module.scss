@@ -1,0 +1,113 @@
+@import "@/app/styles/media", "@/app/styles/mixins";
+
+.star {
+  --width: 50px;
+  width: calc(var(--width) + var(--gap-small));
+  height: calc(var(--width) + var(--gap-small)); // Для красивого таба
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  @include hover {
+    .icon {
+      transform: scale(1.3);
+    }
+  }
+
+  &.quarter-filled {
+    .icon:before {
+      width: 25%;
+    }
+  }
+
+  &.half-filled {
+    .icon:before {
+      width: 50%;
+    }
+  }
+
+  &.three-quarters-filled {
+    .icon:before {
+      width: 75%;
+    }
+  }
+
+  &.filled {
+    .icon:before {
+      width: 100%;
+    }
+  }
+
+  // Size
+  &.small {
+    --width: var(--height-small);
+  }
+  &.medium {
+    --width: var(--height-medium);
+  }
+  &.large {
+    --width: var(--height-large);
+  }
+
+  // Mods
+  &.readonly {
+    pointer-events: none;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-big);
+  }
+}
+
+.icon {
+  position: relative;
+  height: var(--width);
+  aspect-ratio: 1;
+  background-color: var(--color-secondary);
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  transition: 0.1s;
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background-color: var(--color-primary);
+    z-index: 100;
+  }
+
+  &:after {
+    content: "";
+    @include abs-center;
+    height: calc(var(--width) - 5px);
+    aspect-ratio: 1;
+    background-color: var(--color-light);
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+  }
+}

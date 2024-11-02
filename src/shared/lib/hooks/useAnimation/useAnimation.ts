@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
-export const useAnimation = () => {
+export const useAnimation = (duration: number = 500) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -15,9 +15,9 @@ export const useAnimation = () => {
       setIsAnimating(true);
       timeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
-      }, 500);
+      }, duration);
     }, 0);
-  };
+  }, [duration]);
   
   return { isAnimating, startAnimation };
 };

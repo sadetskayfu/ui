@@ -9,7 +9,8 @@ import { LinkPage } from "@/pages/LinkPage";
 import { CheckboxPage } from "@/pages/CheckboxPage";
 import { RadioGroupPage } from "@/pages/RadioGroupPage";
 import { DropdownPage } from "@/pages/DropDownPage";
-import PaginationPage from "@/pages/PaginationPage/ui/PaginationPage";
+import {PaginationPage} from "@/pages/PaginationPage";
+import { StarRatingPage } from "@/pages/StarRatingPage";
 
 export const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ export const AppRouter = () => {
           <Route path={ROUTES.RADIO_GROUP} element={<RadioGroupPage />} />
           <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
           <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
+          <Route path={ROUTES.STAR_RATING} element={<StarRatingPage />} />
         </Routes>
       </Suspense>
   );

@@ -13,7 +13,7 @@ interface RadioProps {
   id?: string
   isHiddenLabel?: boolean
   label: string;
-  selectedItem: string;
+  selectedValue: string;
   value: string;
   onChange: (value: string) => void;
   tabIndex?: number;
@@ -28,7 +28,7 @@ export const Radio = (props: RadioProps) => {
     value,
     name,
     label,
-    selectedItem,
+    selectedValue,
     onChange,
     tabIndex = 0,
   } = props;
@@ -64,7 +64,7 @@ export const Radio = (props: RadioProps) => {
         id={id && id}
         name={name}
         value={value}
-        checked={value === selectedItem}
+        checked={value === selectedValue}
         onChange={handleChange}
         tabIndex={-1}
       />

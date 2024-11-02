@@ -19,7 +19,7 @@ const RadioGroupPage = () => {
             <RadioGroup
             items={items}
             onChange={handleSelectValue}
-            selectedItem={selectedValue}
+            selectedValue={selectedValue}
             name={item}
             title={capitalizeFirstLetter(item) as string}
             size={item}
@@ -39,7 +39,7 @@ const RadioGroupPage = () => {
             <RadioGroup
               items={items}
               onChange={handleSelectValue}
-              selectedItem={selectedValue}
+              selectedValue={selectedValue}
               name="horizontal"
               title="Horizontal"
               size="small"

@@ -76,7 +76,7 @@ const DropdownPage = () => {
           direction="horizontal"
           items={positionMenuVariants}
           onChange={handleSelectPositionVariant}
-          selectedItem={positionVariant}
+          selectedValue={positionVariant}
         />
         <RadioGroup
           title="Closing variant"
@@ -84,7 +84,7 @@ const DropdownPage = () => {
           direction="horizontal"
           items={closingMenuVariants}
           onChange={handleSelectClosingVariant}
-          selectedItem={closingVariant}
+          selectedValue={closingVariant}
         />
       </div>
       <div className={styles["subsection"]}>
