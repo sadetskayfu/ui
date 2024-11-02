@@ -18,6 +18,7 @@ interface StarProps {
   isQuarterFilled: boolean
   isReadonly?: boolean
   isDisabled?: boolean
+  isPrecise?: boolean
 }
 
 export const Star = memo((props: StarProps) => {
@@ -34,14 +35,16 @@ export const Star = memo((props: StarProps) => {
     isThreeQuartersFilled,
     isQuarterFilled,
     isReadonly,
-    isDisabled
+    isDisabled,
+    isPrecise,
   } = props;
 
   const starRef = useRef<HTMLLabelElement>(null);
 
   const handleMouseEnter: MouseEventHandler<HTMLLabelElement> = (event) => {
     const currentStar = starRef.current;
-    if (currentStar) {
+    
+    if (currentStar && isPrecise) {
       const { clientX } = event;
       const starRect = currentStar.getBoundingClientRect();
       const clickPosition = clientX - starRect.left;
@@ -50,13 +53,16 @@ export const Star = memo((props: StarProps) => {
       const localValue = isLeftHalf ? value - 0.5 : value;
 
       onMouseEnter(localValue);
+    } else {
+      onMouseEnter(value)
     }
   };
 
   const handleChange: MouseEventHandler<HTMLLabelElement> = (event) => {
     event.preventDefault()
     const currentStar = starRef.current;
-    if (currentStar) {
+
+    if (currentStar && isPrecise) {
       const { clientX } = event;
       const starRect = currentStar.getBoundingClientRect();
       const clickPosition = clientX - starRect.left;
@@ -65,7 +71,10 @@ export const Star = memo((props: StarProps) => {
       const localValue = isLeftHalf ? value - 0.5 : value;
 
       onChange(localValue);
+    } else {
+      onChange(value)
     }
+    
   };
 
   const mods: Record<string, boolean | undefined> = {

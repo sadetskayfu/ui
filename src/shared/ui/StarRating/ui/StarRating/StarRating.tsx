@@ -15,6 +15,7 @@ interface StarRatingProps {
   tabIndex?: number;
   isDisabled?: boolean;
   isReadonly?: boolean;
+  isPrecise?: boolean
 }
 
 export const StarRating = memo((props: StarRatingProps) => {
@@ -29,6 +30,7 @@ export const StarRating = memo((props: StarRatingProps) => {
     tabIndex = 0,
     isDisabled,
     isReadonly,
+    isPrecise
   } = props;
 
   const { isAnimating, startAnimation } = useAnimation(1000);
@@ -54,18 +56,20 @@ export const StarRating = memo((props: StarRatingProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (isReadonly || isDisabled) return;
 
+    const step = isPrecise ? 0.5 : 1
+
     switch (event.key) {
       case "ArrowRight":
         event.preventDefault();
         if(rating < 5) {
-            setRating(rating + 0.5);
+            setRating(rating + step);
         }
         break;
 
       case "ArrowLeft":
         event.preventDefault();
         if(rating > 0) {
-            setRating(rating - 0.5);
+            setRating(rating - step);
         }
         break;
       case 'Enter':
@@ -76,15 +80,6 @@ export const StarRating = memo((props: StarRatingProps) => {
         
       default:
         break;
-    }
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      const newValue = Math.min(rating + 0.5, maxStars);
-      setRating(newValue);
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      const newValue = Math.max(rating - 0.5, 0);
-      setRating(newValue);
     }
   };
 
@@ -130,6 +125,7 @@ export const StarRating = memo((props: StarRatingProps) => {
             name={name}
             isReadonly={isAnimating || isReadonly}
             isDisabled={isDisabled}
+            isPrecise={isPrecise}
             {...starStatusProps}
           />
         );

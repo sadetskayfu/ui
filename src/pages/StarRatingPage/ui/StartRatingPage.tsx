@@ -5,11 +5,11 @@ import { useCallback, useEffect, useState } from "react";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 
 const StarRatingPage = () => {
-  const [rating1, setRating1] = useState<number>(0);
+  const [rating1, setRating1] = useState<number>(1);
   const [rating2, setRating2] = useState<number>(0);
-  const [rating3, setRating3] = useState<number>(0);
-  const [rating4, setRating4] = useState<number>(0);
-  const [rating5, setRating5] = useState<number>(0);
+  const [rating3, setRating3] = useState<number>(1);
+  const [rating4, setRating4] = useState<number>(1);
+  const [rating5, setRating5] = useState<number>(1);
   const [avgRating, setAvgRating] = useState<number>(0)
 
   const handleChangeRating1 = useCallback((value: number) => {
@@ -56,7 +56,7 @@ const StarRatingPage = () => {
           size="medium"
         />
       </PreviewComponents>
-      <PreviewComponents title="Sizes" direction="vertical" isCentering>
+      <PreviewComponents title="Sizes and precise mod" direction="vertical" isCentering>
         <StarRating
           title="Rating small size"
           initialRating={rating3}
@@ -64,6 +64,7 @@ const StarRatingPage = () => {
           onChange={handleChangeRating3}
           name="small"
           size="small"
+          isPrecise
         />
         <StarRating
           title="Rating medium size"
@@ -72,6 +73,7 @@ const StarRatingPage = () => {
           onChange={handleChangeRating4}
           name="medium"
           size="medium"
+          isPrecise
         />
         <StarRating
           title="Rating large size"
@@ -80,6 +82,7 @@ const StarRatingPage = () => {
           onChange={handleChangeRating5}
           name="large"
           size="large"
+          isPrecise
         />
       </PreviewComponents>
       <PreviewComponents title="Readonly">

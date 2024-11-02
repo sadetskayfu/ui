@@ -58,6 +58,9 @@
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-big);
+    .icon {
+      background-color: var(--color-primary);
+    }
   }
 }
 
