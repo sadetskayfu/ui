@@ -1,8 +1,8 @@
 import { StarRating } from "@/shared/ui/StarRating";
-import styles from "./style.module.scss";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { useCallback, useEffect, useState } from "react";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
+import styles from "./style.module.scss";
 
 const StarRatingPage = () => {
   const [rating1, setRating1] = useState<number>(1);
@@ -34,7 +34,7 @@ const StarRatingPage = () => {
   }, [rating1, rating3, rating4, rating5])
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Star rating</SectionTitle>
       <PreviewComponents title="5 stars">
         <StarRating
@@ -107,7 +107,7 @@ const StarRatingPage = () => {
         />
         {avgRating}
       </PreviewComponents>
-    </div>
+    </section>
   );
 };
 

@@ -1,0 +1,94 @@
+/* VolumeSlider.css */
+.slider-container {
+    width: 256px;
+    padding: 16px;
+  }
+  
+  .slider-track {
+    position: relative;
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  
+  .slider-fill {
+    position: absolute;
+    height: 100%;
+    background-color: #3b82f6;
+    pointer-events: none;
+    transition: width 0.1s ease;
+  }
+  
+  .slider-marker {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #9ca3af;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .slider-value {
+    text-align: center;
+    margin-top: 8px;
+  }
+  
+  /* Стили для нативного инпута */
+  .slider-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Делаем инпут прозрачным */
+    cursor: pointer;
+    margin: 0;
+    /* Убираем стандартные стили */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  /* Стилизация thumb для разных браузеров */
+  .slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  .slider-input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+  }
+  
+  /* Видимый ползунок */
+  .slider-track::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: 50%;
+    left: var(--thumb-position, 50%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: transform 0.1s ease;
+  }
+  
+  .slider-track:hover::after {
+    transform: translate(-50%, -50%) scale(1.1);
+  }

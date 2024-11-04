@@ -42,7 +42,7 @@ const SwitchPage = () => {
   }, [isPreviewChecked, handleTogglePreviewChecked, isDisabled, isRequired]);
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Switch</SectionTitle>
       <div className={styles["mods"]}>
         <Checkbox
@@ -61,7 +61,7 @@ const SwitchPage = () => {
       <div className={styles["subsections"]}>
         <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

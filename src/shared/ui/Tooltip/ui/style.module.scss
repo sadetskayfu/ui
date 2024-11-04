@@ -1,0 +1,40 @@
+.container {
+    height: 45px;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    translate: -50%;
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: var(--transition-duration);
+
+    &.visible {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+.tooltip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    min-width: 30px;
+    padding-inline: var(--padding-small);
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    font-size: 16px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 15px;
+        left: 50%;
+        translate: -50%;
+        top:44%;
+        background-color: var(--color-dark);
+        clip-path: polygon(50% 50%, 100% 50%, 50% 100%, 0% 50%);
+    }
+}

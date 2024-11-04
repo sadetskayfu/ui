@@ -118,7 +118,7 @@ const LinkPage = () => {
   }, [icon, isDisabled, isHiddenLabel]);
 
   return (
-    <div className={classNames(styles["page"])}>
+    <section className={classNames(styles["page"])}>
       <SectionTitle>Link</SectionTitle>
       <div className={styles["mods"]}>
         <Checkbox
@@ -163,7 +163,7 @@ const LinkPage = () => {
           {renderActiveVerticalLinks}
         </PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

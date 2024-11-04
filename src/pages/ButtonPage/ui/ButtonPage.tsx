@@ -90,7 +90,7 @@ const ButtonPage = () => {
   }, [icon, isDisabled]);
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Button</SectionTitle>
       <div className={styles["mods"]}>
         <Checkbox
@@ -150,7 +150,7 @@ const ButtonPage = () => {
           </IconButton>
         </PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

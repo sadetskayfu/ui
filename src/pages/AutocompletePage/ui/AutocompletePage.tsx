@@ -23,7 +23,7 @@ const AutocompletePage = () => {
   }, []);
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Autocomplete</SectionTitle>
       <div className={styles["subsections"]}>
         <PreviewComponents title="Countries">
@@ -41,7 +41,7 @@ const AutocompletePage = () => {
           />
         </PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

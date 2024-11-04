@@ -8,8 +8,7 @@
   aspect-ratio: 1;
 
   &.active {
-    animation-name: click;
-    animation-duration: 0.5s;
+    animation: click 0.5s;
   }
 
   &.dark {

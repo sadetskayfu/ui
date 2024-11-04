@@ -67,7 +67,7 @@ const DropdownPage = () => {
   }, [handleSelect]);
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Dropdown menu</SectionTitle>
       <div className={styles["mods"]}>
         <RadioGroup
@@ -117,7 +117,7 @@ const DropdownPage = () => {
           </DropdownMenu>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

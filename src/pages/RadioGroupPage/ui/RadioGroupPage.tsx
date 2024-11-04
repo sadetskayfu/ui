@@ -29,7 +29,7 @@ const RadioGroupPage = () => {
   }, [selectedValue, handleSelectValue])
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Radio Group</SectionTitle>
       <div className={styles["subsections"]}>
         <PreviewComponents title="Sizes">
@@ -47,7 +47,7 @@ const RadioGroupPage = () => {
             />
         </PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

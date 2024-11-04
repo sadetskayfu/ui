@@ -72,7 +72,9 @@
     aspect-ratio: 1;
     border-radius: 50%;
     background-color: transparent;
-    transition-duration: inherit;
+    transition-duration: var(--transition-duration);
+	background-color: var(--theme-color-opacity);
+	opacity: 0;
 }
 
 @mixin user-select-off {

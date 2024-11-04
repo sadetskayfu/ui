@@ -11,6 +11,7 @@ import { RadioGroupPage } from "@/pages/RadioGroupPage";
 import { DropdownPage } from "@/pages/DropDownPage";
 import {PaginationPage} from "@/pages/PaginationPage";
 import { StarRatingPage } from "@/pages/StarRatingPage";
+import { SliderPage } from "@/pages/SliderPage";
 
 export const AppRouter = () => {
   return (
@@ -26,6 +27,7 @@ export const AppRouter = () => {
           <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
           <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
           <Route path={ROUTES.STAR_RATING} element={<StarRatingPage />} />
+          <Route path={ROUTES.SLIDER} element={<SliderPage />} />
         </Routes>
       </Suspense>
   );

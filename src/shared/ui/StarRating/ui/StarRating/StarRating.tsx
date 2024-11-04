@@ -109,7 +109,7 @@ export const StarRating = memo((props: StarRatingProps) => {
 
         const starStatusProps = {isFilled, isThreeQuartersFilled, isHalfFilled, isQuarterFilled}
 
-        const mods = {
+        const mods: Record<string, boolean | undefined> = {
           [styles["animated"]]: isAnimating && (isFilled || isHalfFilled),
         };
 

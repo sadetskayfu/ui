@@ -24,7 +24,7 @@ const PaginationPage = () => {
       }, []);
 
     return (
-        <div className={styles['page']}>
+        <section className={styles['page']}>
             <SectionTitle>Pagination</SectionTitle>
             <div className={styles['mods']}>
                 <Checkbox label='Infinity' name='infinity' isChecked={isInfinity} onToggle={handleToggleInfinity}/>
@@ -46,7 +46,7 @@ const PaginationPage = () => {
                 <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} variant='round'/>
                 </PreviewComponents>
             </div>
-        </div>
+        </section>
     )
 }
 

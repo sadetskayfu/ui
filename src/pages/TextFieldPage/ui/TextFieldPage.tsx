@@ -40,7 +40,7 @@ const TextFieldPage = () => {
     }, [value, handleChangeValue])
 
     return (
-        <div className={styles['page']}>
+        <section className={styles['page']}>
             <SectionTitle>Text Filed</SectionTitle>
             <div className={styles['subsections']}>
                 <PreviewComponents title='Field variants'>
@@ -53,7 +53,7 @@ const TextFieldPage = () => {
                     {renderLabelVariants}
                 </PreviewComponents>
             </div>
-        </div>
+        </section>
     )
 }
 

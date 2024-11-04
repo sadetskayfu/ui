@@ -45,5 +45,9 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Start rating',
         path: ROUTES.STAR_RATING
+    },
+    {
+        label: 'Slider',
+        path: ROUTES.SLIDER
     }
 ]

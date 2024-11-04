@@ -58,7 +58,7 @@ const CheckboxPage = () => {
   }, [isDisabled, isRequired, isPreviewChecked, handleTogglePreviewChecked]);
 
   return (
-    <div className={styles["page"]}>
+    <section className={styles["page"]}>
       <SectionTitle>Checkbox</SectionTitle>
       <div className={styles["mods"]}>
         <Checkbox
@@ -78,7 +78,7 @@ const CheckboxPage = () => {
         <PreviewComponents title="Variants">{renderVariants}</PreviewComponents>
         <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
       </div>
-    </div>
+    </section>
   );
 };
 

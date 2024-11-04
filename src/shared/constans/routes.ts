@@ -8,5 +8,6 @@ export const ROUTES = {
     LINK: '/link',
     DROPDOWN: '/dropdown',
     PAGINATION: '/pagination',
-    STAR_RATING: '/start-rating'
+    STAR_RATING: '/start-rating',
+    SLIDER: '/slider'
 }
