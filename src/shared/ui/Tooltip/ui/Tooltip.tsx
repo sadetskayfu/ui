@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { memo, RefObject, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
@@ -6,18 +6,21 @@ interface TooltipProps {
   label: string | number;
   parentRef: RefObject<HTMLElement>;
   anotherVisibilityCondition?: boolean
+  initialVisibility?: boolean
+  onToggle?: (value: boolean) => void
 }
 
-export const Tooltip = (props: TooltipProps) => {
-  const { label, parentRef, anotherVisibilityCondition } = props;
+export const Tooltip = memo((props: TooltipProps) => {
+  const { label, parentRef, anotherVisibilityCondition, initialVisibility = false, onToggle } = props;
 
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(initialVisibility);
 
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
   const handleOpen = useCallback(() => {
     setIsVisible(true);
-  }, []);
+    onToggle?.(true)
+  }, [onToggle]);
 
   const handleClose = useCallback((event: MouseEvent) => {
     if (
@@ -25,8 +28,9 @@ export const Tooltip = (props: TooltipProps) => {
       !parentRef.current?.contains(event.target as Node) && !anotherVisibilityCondition
     ) {
       setIsVisible(false);
+      onToggle?.(false)
     }
-  }, [parentRef, anotherVisibilityCondition]);
+  }, [parentRef, anotherVisibilityCondition, onToggle]);
 
   useEffect(() => {
     const currentParentRef = parentRef.current
@@ -41,6 +45,10 @@ export const Tooltip = (props: TooltipProps) => {
     }
   })
 
+  useEffect(() => {
+    setIsVisible(initialVisibility)
+  }, [initialVisibility])
+
   const mods: Record<string, boolean | undefined> = {
     [styles['visible']]: isVisible
   }
@@ -50,4 +58,4 @@ export const Tooltip = (props: TooltipProps) => {
       <div className={styles["tooltip"]}>{label}</div>
     </div>
   );
-};
+});

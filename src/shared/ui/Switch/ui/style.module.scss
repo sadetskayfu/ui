@@ -12,22 +12,20 @@
 
   @include hover {
     .hover {
-      background-color: var(--theme-color-opacity);
+      opacity: 1;
     }
   }
   &:focus-visible {
     .hover {
-      background-color: var(--theme-color-opacity);
+      opacity: 1;
     }
   }
   @include user-select-off;
 
   // Size
   &.small {
+    column-gap: var(--gap-small);
     --toggleHeight: var(--height-small);
-  }
-  &.large {
-    --toggleHeight: var(--height-large);
   }
 
   // Mods
@@ -38,6 +36,7 @@
     .switch {
       transform: translateX(var(--translateX));
       background-color: var(--color-secondary);
+      box-shadow: 0 0 2px var(--color-dark);
     }
   }
 

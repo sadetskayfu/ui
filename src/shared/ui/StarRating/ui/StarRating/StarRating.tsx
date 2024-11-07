@@ -8,9 +8,9 @@ interface StarRatingProps {
   className?: string;
   size?: StarSize;
   initialRating: number;
-  onChange: (value: number) => void;
+  onChange: (value: number, name: string) => void;
   name: string;
-  title: string;
+  label: string;
   maxStars?: number;
   tabIndex?: number;
   isDisabled?: boolean;
@@ -25,7 +25,7 @@ export const StarRating = memo((props: StarRatingProps) => {
     initialRating = 0,
     onChange,
     name,
-    title,
+    label,
     maxStars = 5,
     tabIndex = 0,
     isDisabled,
@@ -39,10 +39,10 @@ export const StarRating = memo((props: StarRatingProps) => {
   const handleChangeRating = useCallback(
     (value: number) => {
       setRating(value);
-      onChange(value);
+      onChange(value, name);
       startAnimation()
     },
-    [onChange, startAnimation]
+    [onChange, startAnimation, name]
   );
 
   const handleMouseEnter = useCallback((value: number) => {
@@ -61,7 +61,7 @@ export const StarRating = memo((props: StarRatingProps) => {
     switch (event.key) {
       case "ArrowRight":
         event.preventDefault();
-        if(rating < 5) {
+        if(rating < maxStars) {
             setRating(rating + step);
         }
         break;
@@ -97,8 +97,16 @@ export const StarRating = memo((props: StarRatingProps) => {
       tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
+      role='group'
+      area-label={label}
+      aria-valuemin={1}
+      aria-valuemax={maxStars}
+      aria-valuenow={initialRating}
+      aria-orientation="horizontal"
+      aria-disabled={isDisabled}
+      aria-readonly={isReadonly}
     >
-      <legend className="visually-hidden">{title}</legend>
+      <legend className="visually-hidden">{label}</legend>
 
       {[...Array(maxStars)].map((_, index) => {
         const starValue = index + 1;
@@ -119,6 +127,7 @@ export const StarRating = memo((props: StarRatingProps) => {
             size={size}
             key={starValue}
             value={starValue}
+            index={index}
             onChange={handleChangeRating}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}

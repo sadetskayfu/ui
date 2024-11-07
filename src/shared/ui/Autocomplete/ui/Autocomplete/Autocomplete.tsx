@@ -131,7 +131,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onClick={handleToggleMenu}
         ref={inputRef}
         type="text"
-        autoComplete="off"
       />
       <Options
         isVisible={isVisibleMenu}

@@ -5,6 +5,7 @@ import { classNames } from "@/shared/lib"
 import { countriesIcons } from "@/shared/constans/countriesIcons"
 import { Option } from "../Autocomplete/Autocomplete"
 import { AutocompleteVariant } from "../Autocomplete/Autocomplete"
+import { IconButton } from "@/shared/ui/IconButton"
 import styles from './style.module.scss'
 
 interface OptionsProps {
@@ -41,7 +42,7 @@ export const Options = (props: OptionsProps) => {
                         <span>{item.label}</span>
                         {item.phone && <span>+{item.phone}</span>}
                     </div>
-                    <span className={styles['check-mark']}></span>
+                    <IconButton className={styles["check-mark"]} isClickable={false} variant="check-mark" size="small">Check mark</IconButton>
                 </button>
             )
         })

@@ -61,7 +61,7 @@
   &.small:not(.minimalism) {
     padding-inline: var(--padding-small);
     height: var(--button-height-small);
-    gap: var(--gap-small);
+    gap: var(--padding-small-m);
   }
   &.small.minimalism {
     height: var(--button-height-small);
@@ -70,7 +70,7 @@
   &.medium:not(.minimalism) {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
-    gap: var(--gap-medium);
+    gap: var(--padding-small);
   }
   &.medium.minimalism {
     height: var(--button-height-medium);
@@ -79,7 +79,7 @@
   &.large:not(.minimalism) {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
-    gap: var(--gap-large);
+    gap: var(--padding-medium);
   }
   &.large.minimalism {
     height: var(--button-height-large);

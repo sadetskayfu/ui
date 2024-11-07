@@ -1,13 +1,16 @@
 @import '@/app/styles/mixins';
 
 .radios {
-    display: flex;
-    gap: var(--gap-large);
-
-    &.vertical {
-        flex-direction: column;
+    &.small {
+        .title {
+            padding-bottom: var(--gap-medium);
+        }
     }
-
+    &.medium {
+        .title {
+            padding-bottom: var(--gap-large);
+        }
+    }
     &.hidden-title {
         .title {
             @include visually-hidden;
@@ -15,8 +18,5 @@
     }
 }
 
-.title {
-    padding-bottom: var(--gap-large);
-}
 
 

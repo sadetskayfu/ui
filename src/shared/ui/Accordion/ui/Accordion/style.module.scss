@@ -1,19 +1,46 @@
 @import "@/app/styles/media", "@/app/styles/mixins";
 
 .accordion {
-  border-radius: var(--border-radius-small);
   overflow: hidden;
+  width: 100%;
+  transition-duration: var(--transition-duration);
+  &.border-radius {
+    border-radius: var(--border-radius-small);
+  }
+  &:first-child:not(.border-radius) {
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+  }
+  &:last-child:not(.border-radius) {
+    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small) ;
+  }
 
   // Accordion Theme
   &.primary {
-    box-shadow: var(--box-shadow-small);
-    background-color: var(--color-light);
+    box-shadow: 0 0 2px var(--color-primary);
+    background-color: var(--color-secondary);
+    .body {
+      background-color: var(--color-light);
+    }
+    .header {
+      @include hover {
+        background-color: var(--color-gray);
+      }
+      &:focus-visible {
+        background-color: var(--color-gray);
+      }
+    }
   }
-
   &.clear {
     background-color: transparent;
+    .header {
+      @include hover {
+        background-color: var(--theme-color-opacity);
+      }
+      &:focus-visible {
+        background-color: var(--theme-color-opacity);
+      }
+    }
   }
-
   // Open
   &.open {
     .content {
@@ -31,6 +58,12 @@
       }
     }
   }
+
+  // mods
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
 }
 
 .header {
@@ -39,17 +72,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  column-gap: 5px;
+  column-gap: var(--padding-small);
   padding: var(--padding-medium);
   cursor: pointer;
   transition-duration: var(--transition-duration);
-  @include hover {
-    background-color: var(--color-secondary);
-  }
-
   &:before {
     @include underline-bottom;
   }
+}
+
+.title {
+  background-color: transparent;
 }
 
 .body {
@@ -57,11 +90,14 @@
   overflow-y: hidden;
   padding-inline: var(--padding-medium);
   transition-duration: var(--transition-duration);
+  display: flex;
+  align-items: center;
 }
 
 .content {
   opacity: 0;
   transition-duration: 1s;
+  height: 100%;
 }
 
 .opening-icon {

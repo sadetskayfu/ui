@@ -94,6 +94,8 @@ export const Button = memo(
           onKeyDown={handleKeyDown}
           onClick={onClick}
           tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
+          disabled={isDisabled}
+          aria-readonly={isReadonly ? 'true' : 'false'}
           ref={ref}
           {...otherProps}
         >

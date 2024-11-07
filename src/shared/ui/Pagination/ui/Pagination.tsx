@@ -60,7 +60,7 @@ export const Pagination = memo(
       let startPage: number;
       let endPage: number;
 
-      // Определяем диапазон отображаемых страниц
+      // Range visible page
       if (currentPage < halfDisplayed + 3) {
         startPage = 1;
         endPage = Math.min(maxDisplayedPages, totalPages);
@@ -72,13 +72,11 @@ export const Pagination = memo(
         endPage = currentPage + halfDisplayed - 1;
       }
 
-      // Создаем массив страниц
       let pageNumbers: Array<string | number> = Array.from(
         { length: endPage - startPage + 1 },
         (_, i) => startPage + i
       );
 
-      // Добавляем "..."
       if (startPage > 1) {
         pageNumbers = [1, "..."].concat(pageNumbers);
       }
@@ -91,12 +89,10 @@ export const Pagination = memo(
 
     const additionalClasses: Array<string | undefined> = [
       className,
-      styles[size],
     ];
 
     return (
       <div className={classNames(styles["pagination"], additionalClasses)}>
-        {variant ? (
           <Button
             className={styles["button-pref-slide"]}
             size={size}
@@ -108,21 +104,8 @@ export const Pagination = memo(
             isDisabled={currentPage === 1 && !isInfinity}
             animateDirection="left"
           >
-            Prev
+            Previous page
           </Button>
-        ) : (
-          <IconButton
-            className={styles["button-pref-slide"]}
-            size={size}
-            Icon={ArrowIcon ? ArrowIcon : Arrow}
-            onClick={() => handlePageChange(currentPage - 1)}
-            isDisabled={currentPage === 1 && !isInfinity}
-            animateDirection="left"
-          >
-            Prev
-          </IconButton>
-        )}
-
         {getPageNumbers().map((page, index) => {
           return variant? (
             <Button
@@ -133,6 +116,8 @@ export const Pagination = memo(
               key={index}
               onClick={() => typeof page === "number" && handlePageChange(page)}
               isReadonly={typeof page === "string" || currentPage === page}
+              aria-current={currentPage === page ? "page" : undefined}
+              aria-label={`Page ${page}`}
             >
               {page.toString()}
             </Button>
@@ -145,13 +130,13 @@ export const Pagination = memo(
               key={index}
               onClick={() => typeof page === "number" && handlePageChange(page)}
               isReadonly={typeof page === "string" || currentPage === page}
+              aria-current={currentPage === page ? "page" : undefined}
+              aria-label={`Page ${page}`}
             >
               {page.toString()}
             </IconButton>
           );
         })}
-
-        {variant ? (
           <Button
             size={size}
             minimalism={variant}
@@ -162,19 +147,8 @@ export const Pagination = memo(
             isDisabled={currentPage === totalPages && !isInfinity}
             animateDirection="left"
           >
-            Prev
+            Next page
           </Button>
-        ) : (
-          <IconButton
-            size={size}
-            Icon={ArrowIcon ? ArrowIcon : Arrow}
-            onClick={() => handlePageChange(currentPage + 1)}
-            isDisabled={currentPage === totalPages && !isInfinity}
-            animateDirection="left"
-          >
-            Next
-          </IconButton>
-        )}
       </div>
     );
   }

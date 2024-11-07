@@ -1,7 +1,4 @@
 :root {
-	--layout-width: 1440px;
-	--container-width: 1240px;
-	--container-padding-x: 20px;
 	--font-family: 'sans-serif';
 
 	--color-opacity: rgba(0, 0, 0, 0.05);
@@ -28,6 +25,8 @@
 
 	--font-size-label: 1em;
 
+	--header-height: 50px;
+
 	--height-small-m: 15px;
 	--height-small: 20px;
 	--height-medium: 25px;
@@ -44,9 +43,9 @@
 	--padding-large: 20px;
 	--section-padding: 30px;
 
-	--gap-small: 5px;
-	--gap-medium: 8px;
-	--gap-large: 11px;
+	--gap-small: 10px;
+	--gap-medium: 15px;
+	--gap-large: 25px;
 
 	--gap-10: 10px;
 	--gap-15: 15px;

@@ -58,9 +58,10 @@ const CheckboxPage = () => {
   }, [isDisabled, isRequired, isPreviewChecked, handleTogglePreviewChecked]);
 
   return (
-    <section className={styles["page"]}>
+    <div className='page'>
+      <section className="section">
       <SectionTitle>Checkbox</SectionTitle>
-      <div className={styles["mods"]}>
+      <div className='filter'>
         <Checkbox
           label="Required"
           isChecked={isRequired}
@@ -74,11 +75,12 @@ const CheckboxPage = () => {
           onToggle={handleToggleDisabled}
         />
       </div>
-      <div className={styles["subsections"]}>
+      <div className='subsections'>
         <PreviewComponents title="Variants">{renderVariants}</PreviewComponents>
         <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

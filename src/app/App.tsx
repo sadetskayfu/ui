@@ -7,9 +7,11 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <main className="content">
+      <main className="content container">
         <AsideBar />
+        <div className="container-page">
         <AppRouter />
+        </div>
       </main>
     </div>
   );

@@ -2,8 +2,8 @@
 
 .star {
   --width: 50px;
-  width: calc(var(--width) + var(--gap-small));
-  height: calc(var(--width) + var(--gap-small)); // Для красивого таба
+  width: calc(var(--width) + var(--padding-small-m));
+  height: calc(var(--width) + var(--padding-small-m));
   display: inline-flex;
   justify-content: center;
   align-items: center;

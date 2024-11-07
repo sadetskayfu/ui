@@ -5,8 +5,7 @@ import { ROUTES } from "@/shared/constans/routes";
 import Icon from "@/shared/assets/icons/news.svg?react";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { useCallback, useMemo, useState } from "react";
-import { capitalizeFirstLetter, classNames } from "@/shared/lib";
-import styles from "./style.module.scss";
+import { capitalizeFirstLetter } from "@/shared/lib";
 import {
   activeHorizontalLinks,
   activeVerticalLinks,
@@ -118,36 +117,15 @@ const LinkPage = () => {
   }, [icon, isDisabled, isHiddenLabel]);
 
   return (
-    <section className={classNames(styles["page"])}>
-      <SectionTitle>Link</SectionTitle>
-      <div className={styles["mods"]}>
-        <Checkbox
-          isChecked={isDisabled}
-          label="Disabled"
-          name="disabled"
-          onToggle={handleToggleDisabled}
-        />
-        <Checkbox
-          isChecked={icon}
-          label="Icon"
-          name="icon"
-          onToggle={handleToggleIcon}
-        />
-      </div>
-      <div className={styles["subsections"]}>
-        <PreviewComponents title="Variants">
-          {renderVariants}
-        </PreviewComponents>
-        <PreviewComponents title="Minimalism Variants">
-          {renderMinimalismVariants}
-        </PreviewComponents>
-        <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
-        <div className={styles["mods"]}>
+    <div className="page">
+      <section className="section">
+        <SectionTitle>Link</SectionTitle>
+        <div className='filter'>
           <Checkbox
-            isChecked={isHiddenLabel}
-            label="Hidden label"
-            name="hidden label"
-            onToggle={handleToggleHiddenLabel}
+            isChecked={isDisabled}
+            label="Disabled"
+            name="disabled"
+            onToggle={handleToggleDisabled}
           />
           <Checkbox
             isChecked={icon}
@@ -156,14 +134,37 @@ const LinkPage = () => {
             onToggle={handleToggleIcon}
           />
         </div>
-        <PreviewComponents title="Active Horizontal Links">
-          {renderActiveHorizontalLinks}
-        </PreviewComponents>
-        <PreviewComponents direction="vertical" title="Active Vertical Links">
-          {renderActiveVerticalLinks}
-        </PreviewComponents>
-      </div>
-    </section>
+        <div className="subsections">
+          <PreviewComponents title="Variants">
+            {renderVariants}
+          </PreviewComponents>
+          <PreviewComponents title="Minimalism Variants">
+            {renderMinimalismVariants}
+          </PreviewComponents>
+          <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
+          <div className='filter'>
+            <Checkbox
+              isChecked={isHiddenLabel}
+              label="Hidden label"
+              name="hidden label"
+              onToggle={handleToggleHiddenLabel}
+            />
+            <Checkbox
+              isChecked={icon}
+              label="Icon"
+              name="icon"
+              onToggle={handleToggleIcon}
+            />
+          </div>
+          <PreviewComponents title="Active Horizontal Links">
+            {renderActiveHorizontalLinks}
+          </PreviewComponents>
+          <PreviewComponents direction="vertical" title="Active Vertical Links">
+            {renderActiveVerticalLinks}
+          </PreviewComponents>
+        </div>
+      </section>
+    </div>
   );
 };
 

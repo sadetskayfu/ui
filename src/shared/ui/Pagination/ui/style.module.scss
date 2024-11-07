@@ -1,18 +1,7 @@
 .pagination {
     display: flex;
     align-items: center;
-
-    &.small {
-        column-gap: var(--gap-10);
-    }
-
-    &.medium {
-        column-gap: var(--gap-15);
-    }
-
-    &.large {
-        column-gap: var(--gap-20);
-    }
+    column-gap: var(--gap-small);
 }
 
 .button-pref-slide {

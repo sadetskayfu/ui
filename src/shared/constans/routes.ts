@@ -9,5 +9,6 @@ export const ROUTES = {
     DROPDOWN: '/dropdown',
     PAGINATION: '/pagination',
     STAR_RATING: '/start-rating',
-    SLIDER: '/slider'
+    SLIDER: '/slider',
+    ACCORDION: '/accordion',
 }

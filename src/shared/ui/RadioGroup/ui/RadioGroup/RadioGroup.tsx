@@ -1,6 +1,7 @@
 import { classNames } from "@/shared/lib";
 import { memo, useMemo } from "react";
 import { Radio, RadioSize } from "../Radio/Radio";
+import { Group } from "@/shared/ui/Group";
 import styles from "./style.module.scss";
 
 export type DirectionRadioGroup = "horizontal" | "vertical";
@@ -61,7 +62,7 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
 
   const additionalClasses: Array<string | undefined> = [
     className,
-    styles[direction],
+    styles[size]
   ];
 
   const mods: Record<string, boolean | undefined> = {
@@ -69,9 +70,11 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
   }
 
   return (
-    <fieldset className={classNames(styles["radios"], additionalClasses, mods)}>
+    <fieldset className={classNames(styles["radios"], additionalClasses, mods)} role='group' aria-orientation={direction}>
       <legend className={styles['title']}>{title}</legend>
-      {renderItems}
+      <Group direction={direction} gap={size}>
+        {renderItems}
+      </Group>
     </fieldset>
   );
 });

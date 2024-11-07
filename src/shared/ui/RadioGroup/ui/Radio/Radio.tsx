@@ -4,7 +4,7 @@ import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "@/shared/ui/ClickAnimation";
 import styles from "./style.module.scss";
 
-export type RadioSize = "small" | "medium" | "large";
+export type RadioSize = "small" | "medium"
 
 interface RadioProps {
   className?: string;
@@ -57,6 +57,7 @@ export const Radio = (props: RadioProps) => {
       onKeyDown={handleKeyDown}
       onMouseDown={startAnimation}
       tabIndex={tabIndex}
+      role="radio"
     >
       <input
         className="visually-hidden"

@@ -4,18 +4,17 @@
     display: flex;
     align-items: center;
     align-self: start;
-    column-gap: var(--gap-medium);
     cursor: pointer;
     @include user-select-off;
     @include hover {
         .hover {
-            background-color: var(--theme-color-opacity);
+            opacity: 1;
         }
     }
 
     &:focus-visible {
         .hover {
-            background-color: var(--theme-color-opacity);
+            opacity: 1;;
         }
     }
 
@@ -34,20 +33,16 @@
 
     // Size
     &.small {
+        column-gap: var(--gap-small);
         .checkbox {
             height: var(--height-small);
         }
     }
 
     &.medium {
+        column-gap: var(--gap-medium);
         .checkbox {
             height: var(--height-medium);
-        }
-    }
-
-    &.large {
-        .checkbox {
-            height: var(--height-large);
         }
     }
 
@@ -71,11 +66,6 @@
             &:before {
                 opacity: 1;
             }
-        }
-    }
-    &.checked.transparent {
-        .checkbox {
-            background-color: var(--color-primary-light);
         }
     }
 }

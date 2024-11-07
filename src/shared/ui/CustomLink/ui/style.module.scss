@@ -71,12 +71,6 @@
   &.classic {
     @include hover {
       color: var(--color-primary);
-      .icon {
-        svg {
-          stroke: var(--color-focus);
-          fill: var(--color-focus);
-        }
-      }
     }
   }
 
@@ -104,7 +98,7 @@
   &.small:not(.minimalism-square, .minimalism-round, .text) {
     padding-inline: var(--padding-small);
     height: var(--button-height-small);
-    gap: var(--gap-small);
+    gap: var(--padding-small-m);
   }
   &.small.minimalism-square,
   &.small.minimalism-round {
@@ -114,7 +108,7 @@
   &.medium:not(.minimalism-square, .minimalism-round, .text) {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
-    gap: var(--gap-medium);
+    gap: var(--padding-small);
   }
   &.medium.minimalism-square,
   &.medium.minimalism-round {
@@ -124,17 +118,11 @@
   &.large:not(.minimalism-square, .minimalism-round, .text) {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
-    gap: var(--gap-large);
+    gap: var(--padding-medium);
   }
   &.large.minimalism-square,
   &.large.minimalism-round {
     height: var(--button-height-large);
-  }
-
-  // Disabled
-  &.disabled {
-    opacity: var(--opacity-medium);
-    pointer-events: none;
   }
 
   &.hidden-label {

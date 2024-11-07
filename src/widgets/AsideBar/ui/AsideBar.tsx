@@ -9,7 +9,7 @@ export const AsideBar = memo(() => {
   const renderNavigationLinks = useMemo(() => {
     return navigationLinks.map((link) => {
       return (
-        <li className={styles['item']}>
+        <li className={styles['item']} role="menu-item">
           <CustomLink direction="vertical" to={link.path}>{link.label}</CustomLink>
         </li>
       );
@@ -17,10 +17,10 @@ export const AsideBar = memo(() => {
   }, []);
 
   return (
-    <div className={styles["aside-bar"]} ref={menuRef}>
+    <aside className={styles["aside-bar"]} ref={menuRef}>
       <nav className={styles['navigation-menu']}>
-        <ul className={styles['list']}>{renderNavigationLinks}</ul>
+        <ul className={styles['list']} role="menu">{renderNavigationLinks}</ul>
       </nav>
-    </div>
+    </aside>
   );
 });

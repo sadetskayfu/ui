@@ -20,7 +20,6 @@
     &.selected {
         background-color: var(--color-secondary);
         opacity: var(--opacity-medium);
-
         .check-mark {
             opacity: 1;
         }
@@ -47,5 +46,5 @@
 }
 
 .check-mark {
-    @include check-mark;
+    opacity: 0;
 }

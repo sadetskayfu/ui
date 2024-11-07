@@ -1,32 +1,25 @@
 .wrapper {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     row-gap: var(--gap-medium);
     align-items: start;
+    min-width: 800px;
 
     &.vertical {
         .components {
             flex-direction: column;
-            justify-content: center;
-        }
-    }
-    &.horizontal {
-        .components {
-            align-items: center;
-        }
-    }
-    &.centering {
-        .components {
-            align-items: center;
-            justify-content: center;
         }
     }
 }
 
 .components {
+    width: 100%;
     display: flex;
-    gap: var(--gap-30);
-    padding: var(--padding-medium);
+    align-items: center;
+    justify-content: center;
+    gap: var(--padding-small);
+    padding-block: var(--section-padding);
+    padding-inline: var(--padding-medium);
     border: var(--border) var(--color-secondary);
     border-radius: var(--border-radius-small);
 }

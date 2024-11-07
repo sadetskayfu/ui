@@ -14,7 +14,7 @@
     @include user-select-off;
     @include hover {
         .hover {
-            background-color: var(--theme-color-opacity);
+            opacity: 1;
         }
     }
 
@@ -55,7 +55,7 @@
     &.password {
         &:before {
             @include abs-center;
-            background-color: var(--color-primary);
+            background-color: var(--color-dark);
             content: '';
             height: 1px;
             width: 0%;
@@ -67,7 +67,7 @@
         }
         &.active {
             &:before {
-                width: 100%;
+                width: 110%;
             }
         }
     }
@@ -114,20 +114,19 @@
     &:focus-visible {
         .hover {
             box-shadow: var(--box-shadow-focus);
+            opacity: 1;
         }
     }
 }
 
 .hover {
     @include hover-effect;
-    overflow: hidden;
 }
 
 .icon {
     display: flex;
     height: 100%;
     aspect-ratio: 1;
-    
     svg {
         fill: var(--color-primary);
         stroke: var(--color-primary);

@@ -1,7 +1,36 @@
 .container {
-	max-width: calc(var(--container-width) + var(--container-padding-x) * 2);
-	padding-inline: var(--container-padding-x);
+	max-width: 1400px;
 	margin-inline: auto;
+}
+
+.container-page {
+	width: 100%;
+	padding-inline: var(--padding-medium);
+	padding-block: var(--section-padding);
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.section {
+	display: flex;
+    flex-direction: column;
+    row-gap: var(--section-padding);
+}
+
+.subsections {
+	display: inline-flex;
+    flex-direction: column;
+	row-gap: var(--gap-large);
+}
+
+.filter {
+	display: flex;
+	flex-direction: column;
+	row-gap: var(--gap-large);
 }
 
 .visually-hidden {

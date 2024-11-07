@@ -43,11 +43,15 @@ export const navigationLinks: NavigationLink[] = [
         path: ROUTES.PAGINATION
     },
     {
-        label: 'Start rating',
+        label: 'Stars rating',
         path: ROUTES.STAR_RATING
     },
     {
         label: 'Slider',
         path: ROUTES.SLIDER
+    },
+    {
+        label: 'Accordion',
+        path: ROUTES.ACCORDION
     }
 ]

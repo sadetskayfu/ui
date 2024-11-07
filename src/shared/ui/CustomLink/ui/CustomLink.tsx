@@ -45,7 +45,6 @@ export const CustomLink = memo((props: CustomLinkProps) => {
     children,
     to,
     isExternal,
-    isDisabled,
     isHiddenLabeL,
     Icon,
     tabIndex = 0,
@@ -72,7 +71,6 @@ export const CustomLink = memo((props: CustomLinkProps) => {
 
   const mods: Record<string, boolean | undefined> = {
     [styles["active"]]: isActive,
-    [styles["disabled"]]: isDisabled,
     [styles['hidden-label']]: isHiddenLabeL,
   };
 
@@ -90,7 +88,7 @@ export const CustomLink = memo((props: CustomLinkProps) => {
         href={to}
         onMouseDown={startAnimation}
         onKeyDown={handleKeyDown}
-        tabIndex={isDisabled ? -1 : tabIndex}
+        tabIndex={tabIndex}
       >
         <span className={styles['label']}>{children}</span>
         {Icon && variant !== 'text' && (
@@ -114,7 +112,7 @@ export const CustomLink = memo((props: CustomLinkProps) => {
       to={to}
       onMouseDown={startAnimation}
       onKeyDown={handleKeyDown}
-      tabIndex={isDisabled ? -1 : tabIndex}
+      tabIndex={tabIndex}
     >
       <span className={styles['label']}>{children}</span>
       {Icon && variant !== 'text' && (

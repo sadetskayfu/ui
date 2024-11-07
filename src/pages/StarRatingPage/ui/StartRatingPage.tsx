@@ -2,7 +2,6 @@ import { StarRating } from "@/shared/ui/StarRating";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { useCallback, useEffect, useState } from "react";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
-import styles from "./style.module.scss";
 
 const StarRatingPage = () => {
   const [rating1, setRating1] = useState<number>(1);
@@ -34,11 +33,13 @@ const StarRatingPage = () => {
   }, [rating1, rating3, rating4, rating5])
 
   return (
-    <section className={styles["page"]}>
+    <div className='page'>
+      <section className="section">
       <SectionTitle>Star rating</SectionTitle>
+      <div className="subsections">
       <PreviewComponents title="5 stars">
         <StarRating
-          title="Rating 5 stars"
+          label="Rating 5 stars"
           initialRating={rating1}
           maxStars={5}
           onChange={handleChangeRating1}
@@ -48,7 +49,7 @@ const StarRatingPage = () => {
       </PreviewComponents>
       <PreviewComponents title="10 stars">
         <StarRating
-          title="Rating 10 stars"
+          label="Rating 10 stars"
           initialRating={rating2}
           maxStars={10}
           onChange={handleChangeRating2}
@@ -58,7 +59,7 @@ const StarRatingPage = () => {
       </PreviewComponents>
       <PreviewComponents title="Sizes and precise mod" direction="vertical" isCentering>
         <StarRating
-          title="Rating small size"
+          label="Rating small size"
           initialRating={rating3}
           maxStars={5}
           onChange={handleChangeRating3}
@@ -67,7 +68,7 @@ const StarRatingPage = () => {
           isPrecise
         />
         <StarRating
-          title="Rating medium size"
+          label="Rating medium size"
           initialRating={rating4}
           maxStars={5}
           onChange={handleChangeRating4}
@@ -76,7 +77,7 @@ const StarRatingPage = () => {
           isPrecise
         />
         <StarRating
-          title="Rating large size"
+          label="Rating large size"
           initialRating={rating5}
           maxStars={5}
           onChange={handleChangeRating5}
@@ -87,7 +88,7 @@ const StarRatingPage = () => {
       </PreviewComponents>
       <PreviewComponents title="Readonly">
         <StarRating
-          title="Rating"
+          label="Rating"
           initialRating={avgRating}
           maxStars={5}
           onChange={() => undefined}
@@ -98,7 +99,7 @@ const StarRatingPage = () => {
       </PreviewComponents>
       <PreviewComponents title="Disabled">
         <StarRating
-          title="Rating"
+          label="Rating"
           initialRating={avgRating}
           maxStars={5}
           onChange={() => undefined}
@@ -107,7 +108,9 @@ const StarRatingPage = () => {
         />
         {avgRating}
       </PreviewComponents>
-    </section>
+      </div>
+      </section>
+    </div>
   );
 };
 

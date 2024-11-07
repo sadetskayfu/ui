@@ -9,7 +9,8 @@ interface StarProps {
   size?: StarSize
   name: string;
   value: number;
-  onChange: (value: number) => void;
+  index: number;
+  onChange: (value: number, name: string) => void;
   onMouseEnter: (value: number) => void;
   onMouseLeave: () => void;
   isFilled: boolean;
@@ -27,6 +28,7 @@ export const Star = memo((props: StarProps) => {
     size = 'medium',
     name,
     value,
+    index,
     onChange,
     onMouseEnter,
     onMouseLeave,
@@ -70,9 +72,9 @@ export const Star = memo((props: StarProps) => {
       const isLeftHalf = clickPosition < starRect.width / 2;
       const localValue = isLeftHalf ? value - 0.5 : value;
 
-      onChange(localValue);
+      onChange(localValue, name);
     } else {
-      onChange(value)
+      onChange(value, name)
     }
     
   };
@@ -93,6 +95,9 @@ export const Star = memo((props: StarProps) => {
 
   return (
     <label
+      role="radio"
+      aria-checked={isFilled || isHalfFilled ? 'true' : 'false'}
+      aria-label={index === 1 ? `${index} star` : `${index} stars`}
       ref={starRef}
       onMouseMove={handleMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -104,6 +109,7 @@ export const Star = memo((props: StarProps) => {
         tabIndex={-1}
         type="radio"
         name={name}
+        value={index}
       />
       <span className={styles["icon"]}></span>
     </label>

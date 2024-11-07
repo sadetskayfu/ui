@@ -21,6 +21,6 @@ export const items: Item[] = [
 ]
 
 export const radioSizes: RadioSize[] = [
-    'small', 'medium', 'large'
+    'small', 'medium'
 ]
 

@@ -1,19 +1,1 @@
-.page {
-    padding-inline: var(--padding-medium);
-    padding-block: var(--section-padding);
-    display: flex;
-    flex-direction: column;
-    row-gap: var(--section-padding);
-}
 
-.mods {
-    display: flex;
-    flex-direction: column;
-    row-gap: var(--gap-medium);
-}
-
-.subsections {
-    display: inline-flex;
-    flex-direction: column;
-    row-gap: var(--section-padding);
-}

@@ -1,60 +1,129 @@
-@import '@/app/styles/mixins';
+@import '@/app/styles/mixins', '@/app/styles/media';
 
-.slider {
-    display: flex;
-    align-items: center;
-    height: 45px;
-    width: 150px;
-    @include user-select-off;
-    border: 1px solid black;
+.container {
+  @include user-select-off;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  // Size
+  &.small {
+    height: var(--height-small);
+    .track {
+      height: 4px;
+    }
+    .thumb {
+      height: var(--height-small);
+    }
+  }
+
+  &.medium {
+    height: var(--height-medium);
+    .track {
+      height: 6px;
+    }
+    .thumb {
+      height: var(--height-medium);
+    }
+  }
+  // Mods
+  &.dragging {
+    .thumb {
+     &:before {
+      height: 250%;
+     } 
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    .marker {
+      pointer-events: none;
+    }
+    .track {
+      opacity: 0.5;
+    }
+  }
 }
 
 .track {
-    position: relative;
-    height: 5px;
-    width: 100%;
-    border-radius: 5px;
-    background-color:red;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  position: relative;
+  background-color: var(--color-secondary);
+  border-radius: 5px;
+  width: 100%;
 }
 
 .fill {
-    position: absolute;
-    height: 130%;
-    width: 0%;
-    left: 0;
-    background-color: var(--color-primary);
-    top: 50%;
-    translate: 0% -50%;
-    border-radius: 5px;
+  position: absolute;
+  border-radius: 5px;
+  height: 100%;
+  background-color: var(--color-primary);
+}
+
+.marker {
+  position: absolute;
+  height: 50%;
+  aspect-ratio: 1;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition-duration: var(--transition-duration);
+  opacity: 0;
+  pointer-events: none;
+
+  &.active {
+    background-color: var(--color-dark);
+    .marker-label {
+      color: var(--color-dark);
+    }
+  }
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.marker-label {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+  top: 15px;
+  color: var(--color-primary);
+  transition-duration: var(--transition-duration);
+  font-size: 14px;
 }
 
 .thumb {
-    position: absolute;
-    top: 50%;
-    translate: -50% -50%;
-    height: var(--height-medium);
-    aspect-ratio: 1;
-    background-color: var(--color-primary);
-    border-radius: 50%;
-    box-shadow: 0 0 2px var(--color-primary);
-    z-index: 1;
+  position: absolute;
+  aspect-ratio: 1;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 2px var(--color-secondary);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+
+  &:before {
+    @include hover-effect;
+  }
+
+  &:focus {
+    &:before {
+      opacity: 1;
+    }
+  }
+
+  @include hover {
+    &:before {
+      opacity: 1;
+    }
+  }
 }
 
-.mark {
-    height: 2px;
-    aspect-ratio: 1;
-    background-color: var(--color-primary);
-    border-radius: 50%;
-}
 
-.input {
-    position: absolute;
-    cursor: pointer;
-    opacity: 0 ;
-    height: 15px;
-    width: calc(100% + 15px);
-    transform: translateX(-9.5px);
-}
+
+
+

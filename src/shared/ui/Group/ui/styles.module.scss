@@ -1,0 +1,13 @@
+.group {
+    display: flex;
+    &.small {
+        gap: var(--gap-medium);
+    }
+    &.medium {
+        gap: var(--gap-large);
+    }
+
+    &.vertical {
+        flex-direction: column;
+    }
+}

@@ -22,6 +22,7 @@ interface IconButtonProps {
   isActive?: boolean;
   isReadonly?: boolean;
   isDisabled?: boolean;
+  isStopFocus?: boolean
   tabIndex?: number;
   children: string;
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -39,6 +40,7 @@ export const IconButton = memo((props: IconButtonProps) => {
     isActive,
     isReadonly,
     isDisabled,
+    isStopFocus,
     children,
     Icon,
     onClick,
@@ -50,7 +52,10 @@ export const IconButton = memo((props: IconButtonProps) => {
     if (event.key === "Enter" || event.key === " ") startAnimation();
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (event: React.MouseEvent) => {
+    if(isStopFocus){
+      event.preventDefault()
+    }
     startAnimation();
   };
 
@@ -90,6 +95,8 @@ export const IconButton = memo((props: IconButtonProps) => {
       type="button"
       onKeyDown={handleKeyDown}
       onMouseDown={handleMouseDown}
+      disabled={isDisabled}
+      aria-readonly={isReadonly}
     >
       <span className={styles["hover"]}>
         <ClickAnimation isAnimating={isAnimating} direction={animateDirection} />

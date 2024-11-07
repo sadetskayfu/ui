@@ -5,7 +5,7 @@ import { memo } from "react";
 import styles from "./style.module.scss";
 
 export type CheckboxVariant = 'primary' | 'transparent'
-export type CheckboxSize = "small" | "medium" | "large";
+export type CheckboxSize = "small" | "medium"
 
 interface CheckboxProps {
   className?: string;
@@ -75,6 +75,8 @@ export const Checkbox = memo((props: CheckboxProps) => {
         onChange={() => onToggle(name)}
         checked={isChecked}
         tabIndex={-1}
+        disabled={isDisabled}
+        required={isRequired}
       ></input>
       <span className={styles["checkbox"]}>
         <span className={styles['hover']}>

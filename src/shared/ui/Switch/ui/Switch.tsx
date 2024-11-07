@@ -4,7 +4,7 @@ import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "../../ClickAnimation";
 import { memo } from "react";
 
-export type SwitchSize = "small" | "medium" | "large";
+export type SwitchSize = "small" | "medium"
 
 interface SwitchProps {
   className?: string;
@@ -71,6 +71,8 @@ export const Switch = memo((props: SwitchProps) => {
         onChange={() => onToggle(name)}
         checked={isChecked}
         tabIndex={-1}
+        disabled={isDisabled}
+        required={isRequired}
       ></input>
       <div className={styles["toggle-switch"]}>
         <span className={styles["switch"]}>

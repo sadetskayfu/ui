@@ -3,18 +3,17 @@
 .radio {
   display: flex;
   align-items: center;
-  column-gap: var(--gap-medium);
   cursor: pointer;
 
   @include user-select-off;
   @include hover {
     .hover {
-      background-color: var(--theme-color-opacity);
+      opacity: 1;
     }
   }
   &:focus-visible {
       .hover {
-      background-color: var(--theme-color-opacity);
+        opacity: 1;
     }
   }
   & input[type="radio"]:checked + .emulator:before {
@@ -23,20 +22,16 @@
 
   // Size
   &.small {
+    column-gap: var(--gap-small);
     .emulator {
       height: var(--height-small);
     }
   }
 
   &.medium {
+    column-gap: var(--gap-medium);
     .emulator {
       height: var(--height-medium);
-    }
-  }
-
-  &.large {
-    .emulator {
-      height: var(--height-large);
     }
   }
 }
@@ -57,6 +52,7 @@
     border-radius: 50%;
     background-color: var(--color-primary);
     transition-duration: inherit;
+    box-shadow: 0 0 2px var(--color-dark);
   }
 }
 
