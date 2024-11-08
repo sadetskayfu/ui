@@ -1,25 +1,47 @@
-import { ReactElement} from 'react'
-import { classNames } from '@/shared/lib'
-import styles from './style.module.scss'
+import { ReactElement } from "react";
+import { classNames } from "@/shared/lib";
+import styles from "./style.module.scss";
+import { Portal } from "../../Portal";
+
+export type BackdropVariant = "dark" | "clear";
+type BackdropZIndex = "small" | "large";
 
 interface BackdropProps {
-	className?: string
-	children: ReactElement
-	isVisible: boolean
-	onClose?: () => void
+  className?: string;
+  variant?: BackdropVariant;
+  zIndex?: BackdropZIndex;
+  children: ReactElement;
+  isVisible: boolean;
+  onClose?: () => void;
 }
 
 export const Backdrop = (props: BackdropProps) => {
+  const {
+    className,
+    children,
+    isVisible,
+    onClose,
+    variant = "dark",
+    zIndex = "large",
+  } = props;
 
-	const { className, children, isVisible, onClose } = props
+  const mods: Record<string, boolean> = {
+    [styles["visible"]]: isVisible,
+  };
+  const additionalClasses: Array<string | undefined> = [
+    className,
+    styles[variant],
+    styles[zIndex],
+  ];
 
-	const mods: Record<string, boolean> = {
-		[styles['visible']]: isVisible,
-	}
-
-	return (
-		<div onClick={() => onClose?.()} className={classNames(styles['backdrop'], [className], mods)}>
-			{children}
-		</div>
-	)
-}
+  return (
+    <Portal>
+      <div
+        onClick={() => onClose?.()}
+        className={classNames(styles["backdrop"], additionalClasses, mods)}
+      >
+        {children}
+      </div>
+    </Portal>
+  );
+};

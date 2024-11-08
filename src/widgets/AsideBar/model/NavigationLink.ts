@@ -53,5 +53,13 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Accordion',
         path: ROUTES.ACCORDION
+    },
+    {
+        label: 'Backdrop',
+        path: ROUTES.BACKDROP
+    },
+    {
+        label: 'Aside menu',
+        path: ROUTES.ASIDE_MENU
     }
 ]

@@ -51,6 +51,7 @@ export const Accordion = memo((props: AccordionProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
+  const focusableElementsRef = useRef<HTMLElement[]>([]);
 
   const id = useId() + "accordion-body";
 
@@ -72,43 +73,69 @@ export const Accordion = memo((props: AccordionProps) => {
     }
   };
 
+  // Get items
   useEffect(() => {
-    if (bodyRef.current) {
-      const focusableElements = bodyRef.current.querySelectorAll<HTMLElement>(
+    if (!bodyRef.current) return;
+  
+    const currentBodyRef = bodyRef.current;
+
+    const updateFocusableElements = () => {
+      const focusableElements = currentBodyRef.querySelectorAll<HTMLElement>(
         "a, button, input, textarea, select, [tabindex]"
       );
+      focusableElementsRef.current = Array.from(focusableElements);
+    };
 
-      focusableElements.forEach((el) => {
-        if (!el.hasAttribute("data-tabindex")) {
-          el.setAttribute("data-tabindex", el.getAttribute("tabindex") ?? "0");
-        }
-        if (isOpen || isOpenInGroup) {
-          const originalTabIndex = el.getAttribute("data-tabindex");
-          el.tabIndex =
-            originalTabIndex !== null ? parseInt(originalTabIndex, 10) : 0;
-        } else {
-          el.tabIndex = -1;
-        }
-      });
-    }
+    const observer = new MutationObserver(updateFocusableElements);
+  
+    observer.observe(currentBodyRef, {
+      childList: true,
+      subtree: true,
+    });
+
+    updateFocusableElements();
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Update tab index
+  useEffect(() => {
+    focusableElementsRef.current.forEach((el) => {
+      if (!el.hasAttribute("data-tabindex")) {
+        el.setAttribute("data-tabindex", el.getAttribute("tabindex") ?? "0");
+      }
+      if (isOpen || isOpenInGroup) {
+        const originalTabIndex = el.getAttribute("data-tabindex");
+        el.tabIndex =
+          originalTabIndex !== null ? parseInt(originalTabIndex, 10) : 0;
+      } else {
+        el.tabIndex = -1;
+      }
+    });
   }, [isOpen, isOpenInGroup]);
 
+  // Set body height
   useEffect(() => {
-    if (bodyRef.current) {
-      const currentBody = bodyRef.current;
+    if (!bodyRef.current) return;
 
-      if (isOpen || isOpenInGroup) {
-        const computedStyle = getComputedStyle(currentBody);
-        const paddingBlock =
-          parseInt(computedStyle.getPropertyValue("--padding-medium")) * 2;
-        const contentHeight = currentBody.scrollHeight;
-        currentBody.style.height = contentHeight + paddingBlock + "px";
-        setTimeout(() => {
-          currentBody.style.height = "auto";
-        }, 100);
-      } else {
+    const currentBody = bodyRef.current;
+    const computedStyle = getComputedStyle(currentBody);
+    const paddingBlock =
+      parseInt(computedStyle.getPropertyValue("--padding-medium")) * 2;
+    const contentHeight = currentBody.scrollHeight;
+
+    if (isOpen || isOpenInGroup) {
+      currentBody.style.height = contentHeight + paddingBlock + "px";
+      setTimeout(() => {
+        currentBody.style.height = "auto";
+      }, 100);
+    } else {
+      currentBody.style.height = contentHeight + "px";
+      setTimeout(() => {
         currentBody.style.height = "0px";
-      }
+      }, 0)
     }
   }, [isOpen, isOpenInGroup]);
 

@@ -13,57 +13,6 @@
   &:last-child:not(.border-radius) {
     border-radius: 0 0 var(--border-radius-small) var(--border-radius-small) ;
   }
-
-  // Accordion Theme
-  &.primary {
-    box-shadow: 0 0 2px var(--color-primary);
-    background-color: var(--color-secondary);
-    .body {
-      background-color: var(--color-light);
-    }
-    .header {
-      @include hover {
-        background-color: var(--color-gray);
-      }
-      &:focus-visible {
-        background-color: var(--color-gray);
-      }
-    }
-  }
-  &.clear {
-    background-color: transparent;
-    .header {
-      @include hover {
-        background-color: var(--theme-color-opacity);
-      }
-      &:focus-visible {
-        background-color: var(--theme-color-opacity);
-      }
-    }
-  }
-  // Open
-  &.open {
-    .content {
-      opacity: 1;
-    }
-    .body {
-      padding-block: var(--padding-medium);
-    }
-    .opening-icon {
-      rotate: 90deg;
-    }
-    .header {
-      &:before {
-        width: 100%;
-      }
-    }
-  }
-
-  // mods
-  &.disabled {
-    pointer-events: none;
-    opacity: var(--opacity-medium);
-  }
 }
 
 .header {
@@ -106,4 +55,61 @@
   width: var(--icon-size);
   aspect-ratio: 1;
   fill: currentColor;                             
+}
+
+// Variants
+.accordion {
+  &.primary {
+    box-shadow: 0 0 2px var(--color-primary);
+    background-color: var(--color-secondary);
+    .body {
+      background-color: var(--color-light);
+    }
+    .header {
+      @include hover {
+        background-color: var(--color-gray);
+      }
+      &:focus-visible {
+        background-color: var(--color-gray);
+      }
+    }
+  }
+  &.clear {
+    background-color: transparent;
+    .header {
+      @include hover {
+        background-color: var(--theme-color-opacity);
+      }
+      &:focus-visible {
+        background-color: var(--theme-color-opacity);
+      }
+    }
+  }
+}
+
+// Open
+.accordion {
+  &.open {
+    .content {
+      opacity: 1;
+    }
+    .body {
+      padding-block: var(--padding-medium);
+    }
+    .opening-icon {
+      rotate: 90deg;
+    }
+    .header {
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+}
+// Mods
+.accordion {
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
 }

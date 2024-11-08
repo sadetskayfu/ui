@@ -64,7 +64,7 @@ export const Slider = memo((props: SliderProps) => {
 
   const isActiveMinThumb = document.activeElement === minThumbRef.current;
   const isActiveMaxThumb = document.activeElement === maxThumbRef.current;
-
+ 
   const calculateTranslateThumb = (value: number) =>
     ((value - min) * 100) / (max - min);
 
@@ -223,7 +223,7 @@ export const Slider = memo((props: SliderProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, thumbIndex: number = 0) => {
     const isArrowKey = ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(event.key);
     if (!isArrowKey) return;
-
+    event.preventDefault()
     const direction = event.key === "ArrowUp" || event.key === "ArrowRight" ? 1 : -1;
 
     const currentValue: number = Array.isArray(value) ? value[thumbIndex] : value

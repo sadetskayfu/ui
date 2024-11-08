@@ -13,6 +13,8 @@ import {PaginationPage} from "@/pages/PaginationPage";
 import { StarRatingPage } from "@/pages/StarRatingPage";
 import { SliderPage } from "@/pages/SliderPage";
 import { AccordionPage } from "@/pages/AccordionPage";
+import { BackdropPage } from "@/pages/BackdropPage";
+import { AsideMenuPage } from "@/pages/AsideMenuPage";
 
 export const AppRouter = () => {
   return (
@@ -30,6 +32,8 @@ export const AppRouter = () => {
           <Route path={ROUTES.STAR_RATING} element={<StarRatingPage />} />
           <Route path={ROUTES.SLIDER} element={<SliderPage />} />
           <Route path={ROUTES.ACCORDION} element={<AccordionPage />} />
+          <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
+          <Route path={ROUTES.ASIDE_MENU} element={<AsideMenuPage />} />
         </Routes>
       </Suspense>
   );

@@ -1,22 +1,37 @@
 .backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgb(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.6s, z-index 3s;
-    z-index: var(--z-index-overlay-close);
+    transition: opacity 0.4s, z-index 3s;
+    z-index: var(--z-index-close);
     animation-name: appearance;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     
     &.visible {
         opacity: 1;
         pointer-events: auto;
-        z-index: var(--z-index-overlay-open);
-        transition: opacity 0.6s, z-index 0s;
+        transition: opacity 0.4s;
+    }
+
+    &.dark {
+        background-color: rgb(0, 0, 0, 0.3);
+    }
+    &.clear {
+        background-color: transparent;
+    }
+    &.small {
+        &.visible {
+            z-index: var(--z-index-backdrop-open-small);
+        }
+    }
+    &.large {
+        &.visible {
+            z-index: var(--z-index-backdrop-open-large);
+        }
     }
 }
 

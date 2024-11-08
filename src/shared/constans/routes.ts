@@ -11,4 +11,6 @@ export const ROUTES = {
     STAR_RATING: '/start-rating',
     SLIDER: '/slider',
     ACCORDION: '/accordion',
+    BACKDROP: '/backdrop',
+    ASIDE_MENU: '/aside-menu',
 }
