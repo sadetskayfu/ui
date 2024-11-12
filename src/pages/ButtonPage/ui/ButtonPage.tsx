@@ -13,6 +13,7 @@ import {
 } from "../model/Button";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import { IconButton } from "@/shared/ui/IconButton";
+import { Group } from "@/shared/ui/Group";
 
 const ButtonPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -92,7 +93,7 @@ const ButtonPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Button</SectionTitle>
-        <div className="filter">
+        <Group direction="vertical">
           <Checkbox
             isChecked={isDisabled}
             label="Disabled"
@@ -105,7 +106,7 @@ const ButtonPage = () => {
             name="icon"
             onToggle={handleToggleIcon}
           />
-        </div>
+        </Group>
         <div className="subsections">
           <PreviewComponents title="Button variants">
             {renderVariants}

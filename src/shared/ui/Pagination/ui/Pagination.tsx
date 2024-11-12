@@ -87,29 +87,28 @@ export const Pagination = memo(
       return pageNumbers;
     };
 
-    const additionalClasses: Array<string | undefined> = [
-      className,
-    ];
+    const additionalClasses: Array<string | undefined> = [className];
 
     return (
       <div className={classNames(styles["pagination"], additionalClasses)}>
-          <Button
-            className={styles["button-pref-slide"]}
-            size={size}
-            minimalism={variant}
-            variant="clear"
-            isHiddenLabel
-            Icon={ArrowIcon ? ArrowIcon : Arrow}
-            onClick={() => handlePageChange(currentPage - 1)}
-            isDisabled={currentPage === 1 && !isInfinity}
-            animateDirection="left"
-          >
-            Previous page
-          </Button>
+        <Button
+          className={styles["button-pref-slide"]}
+          size={size}
+          minimalism={variant}
+          variant="clear"
+          isHiddenLabel
+          Icon={ArrowIcon ? ArrowIcon : Arrow}
+          onClick={() => handlePageChange(currentPage - 1)}
+          isDisabled={currentPage === 1 && !isInfinity}
+          animateDirection="right"
+        >
+          Previous page
+        </Button>
         {getPageNumbers().map((page, index) => {
-          return variant? (
+          return (
             <Button
-              variant={currentPage === page ? "transparent" : "clear"}
+              className={styles["button"]}
+              variant={currentPage === page ? "secondary" : "clear"}
               minimalism={variant}
               animateDirection="left"
               size={size}
@@ -121,34 +120,20 @@ export const Pagination = memo(
             >
               {page.toString()}
             </Button>
-          ) : (
-            <IconButton
-              variant={typeof page === "number" ? "pagination" : "clear"}
-              isActive={currentPage === page}
-              Icon={Icon ? Icon : PaginationIcon}
-              size={size}
-              key={index}
-              onClick={() => typeof page === "number" && handlePageChange(page)}
-              isReadonly={typeof page === "string" || currentPage === page}
-              aria-current={currentPage === page ? "page" : undefined}
-              aria-label={`Page ${page}`}
-            >
-              {page.toString()}
-            </IconButton>
           );
         })}
-          <Button
-            size={size}
-            minimalism={variant}
-            variant="clear"
-            isHiddenLabel
-            Icon={ArrowIcon ? ArrowIcon : Arrow}
-            onClick={() => handlePageChange(currentPage + 1)}
-            isDisabled={currentPage === totalPages && !isInfinity}
-            animateDirection="left"
-          >
-            Next page
-          </Button>
+        <Button
+          size={size}
+          minimalism={variant}
+          variant="clear"
+          isHiddenLabel
+          Icon={ArrowIcon ? ArrowIcon : Arrow}
+          onClick={() => handlePageChange(currentPage + 1)}
+          isDisabled={currentPage === totalPages && !isInfinity}
+          animateDirection="left"
+        >
+          Next page
+        </Button>
       </div>
     );
   }

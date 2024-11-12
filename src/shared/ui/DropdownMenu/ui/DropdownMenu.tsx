@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 
@@ -19,7 +19,7 @@ interface DropdownMenuProps {
   className?: string;
   positionVariant?: DropdownPositionVariant;
   closingVariant?: DropdownClosingVariant;
-  children: ReactElement;
+  children: ReactNode;
   isVisible: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
@@ -126,6 +126,7 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
       className={classNames(styles["dropdown"], additionalClasses, mods)}
       ref={menuRef}
       onMouseDown={handleStopFocus}
+      aria-hidden={isVisible ? 'false' : 'true'}
     >
       {children}
     </div>

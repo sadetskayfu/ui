@@ -2,8 +2,8 @@ import { classNames, getItemOnId } from "@/shared/lib";
 import { Input } from "../../../Input";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Options } from "../Options/Options";
-import styles from "./style.module.scss";
 import { InputVariant, InputLabelVariant } from "@/shared/ui/Input/ui/Input";
+import styles from "./style.module.scss";
 
 export type AutocompleteVariant = 'text' | 'countries'
 
@@ -89,7 +89,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
   }, [onSelect]);
 
   // Clear after blur and close options menu + validate
-  const handleClearAfterBlur = useCallback(() => {
+  const handleBlur = useCallback(() => {
     if(strict) {
       selectedValue === '' ? onChange?.('') : onChange?.(getItemOnId(options, selectedValue).label);
     }
@@ -127,7 +127,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         placeholder={placeholder}
         errorMessage={errorMessage}
         onChange={handleChange}
-        onBlur={handleClearAfterBlur}
+        onBlur={handleBlur}
         onClick={handleToggleMenu}
         ref={inputRef}
         type="text"

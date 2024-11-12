@@ -21,11 +21,9 @@ const PaginationPage = () => {
         <div className='page'>
             <section className='section'>
             <SectionTitle>Pagination</SectionTitle>
-            <div className='filter'>
                 <Checkbox label='Infinity' name='infinity' isChecked={isInfinity} onToggle={handleToggleInfinity}/>
-            </div>
             <div className='subsections'>
-                <PreviewComponents title='Pagination Square' direction='vertical' isCentering>
+                <PreviewComponents title='Pagination Square' direction='vertical'>
                 <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='small' isInfinity={isInfinity} variant='square'/>
                 <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='medium' isInfinity={isInfinity} variant='square'/>
                 <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} variant='square'/>

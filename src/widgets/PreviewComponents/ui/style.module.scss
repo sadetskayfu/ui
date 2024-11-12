@@ -1,7 +1,7 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    row-gap: var(--gap-medium);
+    row-gap: var(--gap-small-s);
     align-items: start;
     min-width: 800px;
 
@@ -17,9 +17,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--padding-small);
+    gap: var(--gap-medium-l);
     padding-block: var(--section-padding);
     padding-inline: var(--padding-medium);
-    border: var(--border) var(--color-secondary);
+    box-shadow: var(--box-shadow-primary);
     border-radius: var(--border-radius-small);
 }

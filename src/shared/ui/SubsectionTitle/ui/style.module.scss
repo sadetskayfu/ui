@@ -1,7 +1,8 @@
 .title {
-    padding-block: 5px;
+    padding-block: var(--padding-small-s);
     padding-inline: var(--padding-medium);
     background-color: var(--color-secondary);
     display: inline-flex;
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--box-shadow-primary);
 }

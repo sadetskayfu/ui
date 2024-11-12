@@ -1,6 +1,6 @@
 .star-rating {
   display: flex;
-  border-radius: var(--border-radius-small);
+  border-radius: var(--border-radius-medium);
   &:focus-visible {
     box-shadow: var(--box-shadow-focus);
   }

@@ -6,12 +6,13 @@ import {
   useEffect,
   cloneElement,
   ReactElement,
+  ReactNode,
 } from "react";
+import { MenuItemProps } from "../../MenuItem";
 import styles from "./style.module.scss";
-import { classNames } from "@/shared/lib";
 
-interface ItemListProps {
-  children?: React.ReactNode;
+interface MenuListProps {
+  children?: ReactNode;
   isVisible?: boolean;
   startIndex?: number;
   onOpen: () => void;
@@ -19,7 +20,7 @@ interface ItemListProps {
   parentRef: React.RefObject<HTMLElement>;
 }
 
-export const ItemList = (props: ItemListProps) => {
+export const MenuList = (props: MenuListProps) => {
   const {
     children,
     isVisible,
@@ -31,8 +32,8 @@ export const ItemList = (props: ItemListProps) => {
 
   const [activeIndex, setActiveIndex] = useState<number>(startIndex);
 
-  const listRef = useRef<HTMLUListElement | null>(null);
-  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const menuRef = useRef<HTMLUListElement | null>(null);
+  const interactiveElements: NodeListOf<HTMLButtonElement> | undefined = menuRef.current?.querySelectorAll('button, a')
 
   const childrenArray = Children.toArray(children);
 
@@ -43,7 +44,6 @@ export const ItemList = (props: ItemListProps) => {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       switch (event.key) {
-        // Arrow Up
         case "ArrowUp":
           event.preventDefault();
           if (childrenArray.length > 0) {
@@ -57,7 +57,6 @@ export const ItemList = (props: ItemListProps) => {
               : onOpen();
           }
           break;
-        // Arrow Down
         case "ArrowDown":
           event.preventDefault();
           if (childrenArray.length > 0) {
@@ -68,81 +67,70 @@ export const ItemList = (props: ItemListProps) => {
               : onOpen();
           }
           break;
-        // Enter
         case "Enter":
+        case ' ':
+          event.preventDefault()
           if (isVisible) {
             if (activeIndex >= 0) {
-                itemRefs.current[activeIndex]?.click();
-            } else {
-              onClose();
-            }
+              interactiveElements?.[activeIndex].click()
           } else {
-            onOpen();
-          }
+            setTimeout(() => {
+              onClose()
+            }, 0)
+          }}
           break;
-        // Space
-        case " ":
-          event.preventDefault();
-          break;
-        // Escape
         case "Escape":
           isVisible ? onClose() : parentRef.current?.blur();
-          break;
-        case "Tab":
-          parentRef.current?.blur();
-          onClose();
           break;
         default:
           break;
       }
     },
-    [activeIndex, childrenArray, isVisible, onClose, onOpen, parentRef]
+    [activeIndex, childrenArray, isVisible, onClose, onOpen, parentRef, interactiveElements]
   );
 
   // Add handle keydown on parent
   useEffect(() => {
-    const currentParentRef = parentRef.current;
-    currentParentRef?.addEventListener("keydown", handleKeyDown);
+      const currentParent = parentRef.current
+      currentParent?.addEventListener('keydown', handleKeyDown)
     return () => {
-      currentParentRef?.removeEventListener("keydown", handleKeyDown);
+      currentParent?.removeEventListener("keydown", handleKeyDown);
     };
   }, [parentRef, handleKeyDown]);
 
   // Scroll list if selected item not visible
   useEffect(() => {
-    const currentList = listRef.current;
-    if (currentList && activeIndex !== -1) {
-      const selectedElement = currentList.children[activeIndex];
-      const listRect = currentList.getBoundingClientRect();
+    const currentMenu = menuRef.current;
+    if (currentMenu && activeIndex !== -1) {
+      const selectedElement = currentMenu.children[activeIndex];
+      const menuRect = currentMenu.getBoundingClientRect();
 
       if (selectedElement) {
         const selectedRect = selectedElement.getBoundingClientRect();
 
-        if (selectedRect.bottom > listRect.bottom) {
-          currentList.scrollTop += selectedRect.bottom - listRect.bottom;
-        } else if (selectedRect.top < listRect.top) {
-          currentList.scrollTop -= listRect.top - selectedRect.top;
+        if (selectedRect.bottom > menuRect.bottom) {
+          currentMenu.scrollTop += selectedRect.bottom - menuRect.bottom;
+        } else if (selectedRect.top < menuRect.top) {
+          currentMenu.scrollTop -= menuRect.top - selectedRect.top;
         }
       }
     }
   }, [activeIndex]);
 
   return (
-    <ul className={styles["list"]} ref={listRef} role="menu">
+    <ul className={styles["menu"]} ref={menuRef} role="menu">
       {Children.map(children, (child, index) => {
-        const mods: Record<string, boolean> = {
-          [styles["hovered"]]: index === activeIndex,
-        };
 
-        return (
-          <li key={index} className={classNames(styles["item"], [], mods)}>
-            {cloneElement(child as ReactElement, {
-              ref: (el: HTMLElement | null) => (itemRefs.current[index] = el),
-              onMouseMove: () => handleMouseOver(index),
-              role: "menuitem",
-            })}
-          </li>
-        );
+        const isHovered = index === activeIndex;
+
+        const props: Partial<MenuItemProps> = {
+          isHovered: isHovered,
+          onMouseMove: () => handleMouseOver(index),
+        }
+
+        return cloneElement(child as ReactElement, {
+          ...props
+        });
       })}
     </ul>
   );

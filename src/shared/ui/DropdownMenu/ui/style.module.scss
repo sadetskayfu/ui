@@ -4,46 +4,44 @@
   opacity: 0;
   pointer-events: none;
   color: var(--color-primary);
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--box-shadow-primary);
   overflow: hidden;
-  border-radius: var(--border-radius-small);
-
+  border-radius: var(--border-radius-medium);
+  transition: opacity 0.2s;
+  
   &.visible {
-    transition: opacity var(--transition-duration-middle);
     pointer-events: all;
     opacity: 1;
   }
+}
 
-  // Vertical opening direction
+// Vertical opening direction
+.dropdown {
   &.row-up {
     bottom: 100%;
   }
-
   &.row-down {
     top: 100%;
   }
-
   &.column-up {
     bottom: 0;
   }
-
   &.column-down {
     top: 0;
   }
+}
 
-  // Horizontal opening direction
+// Horizontal opening direction
+.dropdown {
   &.row-left {
     right: 0;
   }
-
   &.row-right {
     left: 0;
   }
-
   &.column-left {
     right: 100%;
   }
-
   &.column-right {
     left: 100%;
   }

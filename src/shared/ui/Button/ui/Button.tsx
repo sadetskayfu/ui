@@ -5,7 +5,7 @@ import { ClickAnimation, AnimationColor, AnimationDirection, AnimationVariant } 
 import styles from "./style.module.scss";
 
 
-export type ButtonVariant = "primary" | "transparent" | "clear";
+export type ButtonVariant = "primary" | "secondary" | "transparent" | "clear";
 export type ButtonMinimalismVariant = "round" | "square"
 export type ButtonSize = "small" | "medium" | "large"
 
@@ -56,13 +56,15 @@ export const Button = memo(
       const { isAnimating, startAnimation } = useAnimation();
 
       const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if ((isKeyBlocked || event.key === ' ')) {
-          event.preventDefault();
-        } else {
-          if (event.key === "Enter") {
-            startAnimation();
+          if (event.key === "Enter" || event.key === ' ') {
+            if(isKeyBlocked) {
+              event.preventDefault()
+            } else {
+              event.preventDefault()
+              onClick()
+              startAnimation();
+            }
           }
-        }
       };
 
       const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {

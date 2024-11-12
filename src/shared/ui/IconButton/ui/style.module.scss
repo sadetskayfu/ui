@@ -17,8 +17,60 @@
             opacity: 1;
         }
     }
+}
 
-    // variant
+.hover {
+    @include hover-effect;
+}
+
+.icon {
+    display: flex;
+    height: 100%;
+    aspect-ratio: 1;
+    svg {
+        fill: var(--color-primary);
+        stroke: var(--color-primary);
+        transition-duration: 0.2s;
+    }
+}
+
+// Sizes
+.button {
+    &.small {
+        height: 15px;
+    }
+
+    &.medium {
+        height: var(--button-height-small-m);
+    }
+
+    &.large {
+        height: var(--button-height-small-l);
+    }
+}
+
+// Mods
+.button {
+    &.readonly {
+        pointer-events: none
+    }
+    &.disabled {
+        pointer-events: none;
+        opacity: var(--opacity-medium);
+    }
+    &.clickable {
+        cursor: pointer;
+    }
+    &:focus-visible {
+        .hover {
+            box-shadow: var(--box-shadow-focus);
+            opacity: 1;
+        }
+    }
+}
+
+// Variants
+.button {
     &.cross {
         &:before,
         &:after {
@@ -85,51 +137,5 @@
             translate: -50%;
             bottom: 40%;
         }
-    }
-
-    // Size
-    &.small {
-        height: var(--height-small-m);
-    }
-
-    &.medium {
-        height: var(--height-small);
-    }
-
-    &.large {
-        height: var(--height-medium);
-    }
-
-    // Mods
-    &.readonly {
-        pointer-events: none
-    }
-    &.disabled {
-        pointer-events: none;
-        opacity: var(--opacity-medium);
-    }
-    &.clickable {
-        cursor: pointer;
-    }
-    &:focus-visible {
-        .hover {
-            box-shadow: var(--box-shadow-focus);
-            opacity: 1;
-        }
-    }
-}
-
-.hover {
-    @include hover-effect;
-}
-
-.icon {
-    display: flex;
-    height: 100%;
-    aspect-ratio: 1;
-    svg {
-        fill: var(--color-primary);
-        stroke: var(--color-primary);
-        transition-duration: var(--transition-duration);
     }
 }

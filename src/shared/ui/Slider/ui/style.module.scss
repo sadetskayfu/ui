@@ -6,75 +6,51 @@
   width: 100%;
   display: flex;
   align-items: center;
-
-  // Size
-  &.small {
-    height: var(--height-small);
-    .track {
-      height: 4px;
-    }
-    .thumb {
-      height: var(--height-small);
-    }
-  }
-
-  &.medium {
-    height: var(--height-medium);
-    .track {
-      height: 6px;
-    }
-    .thumb {
-      height: var(--height-medium);
-    }
-  }
-  // Mods
-  &.dragging {
-    .thumb {
-     &:before {
-      height: 250%;
-     } 
-    }
-  }
-
-  &.disabled {
-    pointer-events: none;
-    .marker {
-      pointer-events: none;
-    }
-    .track {
-      opacity: 0.5;
-    }
-  }
 }
 
 .track {
   position: relative;
   background-color: var(--color-secondary);
-  border-radius: 5px;
+  border-radius: var(--border-radius-small);
   width: 100%;
+  box-shadow: var(--box-shadow-primary);
 }
 
 .fill {
   position: absolute;
-  border-radius: 5px;
+  border-radius: var(--border-radius-small);
   height: 100%;
   background-color: var(--color-primary);
+  box-shadow: var(--box-shadow-secondary);
 }
 
 .marker {
   position: absolute;
-  height: 50%;
+  height: 150%;
   aspect-ratio: 1;
-  background-color: var(--color-primary);
+  box-shadow: var(--box-shadow-primary);
+  background-color: var(--color-secondary);
   border-radius: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  transition-duration: var(--transition-duration);
   opacity: 0;
   pointer-events: none;
 
+  &:before {
+    content: '';
+    @include abs-center;
+    height: 50%;
+    aspect-ratio: 1;
+    border-radius: inherit;
+    background-color: var(--color-gray);
+  }
+
   &.active {
-    background-color: var(--color-dark);
+    box-shadow: var(--box-shadow-secondary);
+    background-color: var(--color-primary);
+    &:before {
+      background-color: var(--color-dark);
+    }
     .marker-label {
       color: var(--color-dark);
     }
@@ -92,8 +68,8 @@
   translate: -50%;
   top: 15px;
   color: var(--color-primary);
-  transition-duration: var(--transition-duration);
-  font-size: 14px;
+  transition-duration: 0.2s;
+  font-size: var(--font-size-small);
 }
 
 .thumb {
@@ -101,7 +77,7 @@
   aspect-ratio: 1;
   background-color: var(--color-primary);
   border-radius: 50%;
-  box-shadow: 0 0 2px var(--color-secondary);
+  box-shadow: var(--box-shadow-secondary);
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
@@ -123,6 +99,47 @@
   }
 }
 
+// Sizes
+.container {
+  &.small {
+    height: var(--button-height-small-s);
+    .track {
+      height: 4px;
+    }
+    .thumb {
+      height: var(--button-height-small-s);
+    }
+  }
+
+  &.medium {
+    height: var(--button-height-small-m);
+    .track {
+      height: 6px;
+    }
+    .thumb {
+      height: var(--button-height-small-m);
+    }
+  }
+}
+
+// Mods
+.container {
+  &.dragging {
+    .thumb:before {
+      height: 250%;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    .marker {
+      pointer-events: none;
+    }
+    .track {
+      opacity: 0.5;
+    }
+  }
+}
 
 
 

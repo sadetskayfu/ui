@@ -1,0 +1,62 @@
+.menu-item {
+    height: var(--button-height-medium);
+    
+    &.selected {
+        .button,
+        .link {
+            background-color: var(--color-secondary);
+        }   
+    }
+    &.hovered {
+        .button,
+        .link {
+            background-color: var(--theme-color-opacity);
+        }   
+    }
+}
+
+.button,
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: var(--padding-small);
+    width: 100%;
+    height: 100%;
+    padding-inline: var(--padding-medium);
+    cursor: pointer;
+    color: var(--color-dark);
+
+    &:focus-visible {
+        background-color: var(--color-gray);
+    }
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    padding: none;
+}
+
+
+
+.icon {
+    height: 1em;
+    aspect-ratio: 1;
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+}
+
+.check-mark {
+    opacity: 0;
+    animation: appearance-check-mark 0.2s forwards
+}
+
+@keyframes appearance-check-mark {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

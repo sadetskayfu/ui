@@ -24,7 +24,7 @@ const AutocompletePage = () => {
 
   return (
     <section className={styles["page"]}>
-      <SectionTitle>Autocomplete</SectionTitle>
+      {/* <SectionTitle>Autocomplete</SectionTitle>
       <div className={styles["subsections"]}>
         <PreviewComponents title="Countries">
           <Autocomplete
@@ -40,7 +40,7 @@ const AutocompletePage = () => {
             placeholder="Select you country..."
           />
         </PreviewComponents>
-      </div>
+      </div> */}
     </section>
   );
 };

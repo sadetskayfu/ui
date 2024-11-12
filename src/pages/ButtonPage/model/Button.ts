@@ -12,7 +12,7 @@ interface MinimalismButton {
     minimalism: ButtonMinimalismVariant
 }
 
-export const buttonVariants: ButtonVariant[] = ["primary", 'transparent', 'clear']
+export const buttonVariants: ButtonVariant[] = ["primary", "secondary", 'transparent', 'clear']
 
 export const buttonSizes: ButtonSize[] = [
     {

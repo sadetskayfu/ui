@@ -14,8 +14,6 @@ interface AsideMenuProps {
   onClose?: () => void;
   positionVariant?: AsideMenuPositionVariant;
   backdropVariant?: BackdropVariant;
-  isLazy?: boolean
-  isUnmounting?: boolean
   parentRef?: RefObject<HTMLElement>
 }
 
@@ -25,8 +23,6 @@ export const AsideMenu = (props: AsideMenuProps) => {
     label = 'Navigate menu',
     children,
     isVisible,
-    isLazy,
-    isUnmounting,
     onClose,
     positionVariant = "left",
     backdropVariant,
@@ -38,7 +34,6 @@ export const AsideMenu = (props: AsideMenuProps) => {
   const focusableElementsRef = useRef<HTMLElement[]>([]);
   const [isFocusFirstItem, setIsFocusFirstItem] = useState<boolean>(false)
   const [isFocusLastItem, setIsFocusLastItem] = useState<boolean>(false)
-  const [isMounting, setIsMounting] = useState<boolean>(false)
 
   const id = useId() + 'aside-menu-label'
 
@@ -100,14 +95,11 @@ export const AsideMenu = (props: AsideMenuProps) => {
     if(isVisible && firstItem) {
         firstItem.focus()
         handleSetFocusFirstItem()
-    }
-    isVisible && setIsMounting(true)
-        
+    }   
     return () => {
-        isUnmounting && setIsMounting(false)
         currentParent?.focus()
     }
-  }, [isVisible, firstItem, isUnmounting, parentRef])
+  }, [isVisible, firstItem, parentRef])
 
   // Get items
   useEffect(() => {
@@ -171,16 +163,11 @@ export const AsideMenu = (props: AsideMenuProps) => {
 
   const mods: Record<string, boolean | undefined> = {
     [styles["visible"]]: isVisible,
-    [styles['lazy']]: isLazy
   };
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[positionVariant],
   ];
-
-  if(isLazy && !isMounting) {
-    return
-  }
 
   if (backdropVariant) {
     return (

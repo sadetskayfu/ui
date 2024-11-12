@@ -4,136 +4,8 @@
   --paddingInline: var(--padding-medium);
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--gap-small-s);
   color: var(--color-dark);
-
-  // Variants
-  &.primary {
-    .input {
-      box-shadow: 0 0 2px var(--color-primary);
-      background-color: var(--color-secondary);
-      &:focus {
-        background-color: var(--color-light);
-      }
-    }
-    @include hover {
-      .input {
-        background-color: var(--color-light);
-      }
-    }
-  }
-
-  &.transparent {
-    .input {
-      box-shadow: 0 0 2px var(--color-primary);
-      &:focus {
-        background-color: var(--theme-color-opacity);
-      }
-    }
-    @include hover {
-      .input {
-        background-color: var(--theme-color-opacity);
-      }
-    }
-  }
-
-  // Label Variants
-  &.jump {
-    .input::placeholder {
-      opacity: 0;
-    }
-    .label {
-      top: 50%;
-      translate: 0 -50%;
-      opacity: var(--opacity-medium);
-      transition-duration: var(--transition-duration);
-    }
-
-    &.dirty,
-    &:focus-within {
-      .label {
-        translate: 0;
-        top: -1.5em;
-        font-size: var(--font-size-label);
-        opacity: var(--opacity-small);
-      }
-    }
-    &:focus-within {
-      .input::placeholder {
-        opacity: var(--opacity-medium);
-      }
-    }
-  }
-
-  &.none {
-    .label {
-      @include visually-hidden;
-    }
-  }
-
-  &.static {
-    .label {
-      top: -1.5em;
-      font-size: var(--font-size-label);
-      opacity: var(--opacity-small);
-    }
-  }
-
-  // Size
-  &.medium {
-    .input {
-      height: var(--button-height-medium);
-    }
-  }
-  &.large {
-    --paddingInline: var(--padding-large);
-    .input {
-      height: var(--button-height-large);
-    }
-  }
-
-  // Mods
-  &.error {
-    color: var(--color-error);
-    animation: error 0.5s;
-  }
-  &.readonly {
-    pointer-events: none;
-  }
-  &.disabled {
-    pointer-events: none;
-    opacity: var(--opacity-medium);
-  }
-  &.required {
-    .label {
-      &:after {
-        display: inline;
-      }
-    }
-  }
-  &.search {
-    .input {
-      padding-right: calc(var(--paddingInline) + 60px);
-    }
-  }
-  &.password {
-    .input {
-      padding-right: calc(var(--paddingInline) + 50px);
-    }
-  }
-  // Action buttons
-  &:focus-within.dirty {
-    .clear-button {
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
-  &:focus-within {
-    .buttons:not(.clear-button) {
-      pointer-events: all;
-      opacity: 1;
-    }
-  }
 }
 
 .field {
@@ -146,7 +18,7 @@
   border: none;
   outline: none;
   padding-inline: var(--paddingInline);
-  padding-right: calc(var(--paddingInline) + 30px);
+  padding-right: calc(var(--paddingInline) + (var(--button-height-small-s) * 2));
   color: inherit;
   transition-duration: 0.2s;
 
@@ -161,6 +33,7 @@
   position: absolute;
   left: var(--paddingInline);
   pointer-events: none;
+
   &:after {
     content: "*";
     color: var(--color-error);
@@ -185,8 +58,148 @@
 
 .error-message {
   color: var(--color-red);
-  font-size: var(--font-size-label);
-  padding-left: var(--padding-medium);
+  font-size: var(--font-size-small);
+  padding-left: var(--paddingInline);
+}
+
+// Variants
+.wrapper {
+  &.primary {
+    .input {
+      box-shadow: var(--box-shadow-secondary);
+      background-color: var(--color-secondary);
+      &:focus {
+        background-color: var(--color-light);
+      }
+    }
+    @include hover {
+      .input {
+        background-color: var(--color-light);
+      }
+    }
+  }
+
+  &.transparent {
+    .input {
+      box-shadow: var(--box-shadow-primary);
+      &:focus {
+        background-color: var(--theme-color-opacity);
+      }
+    }
+    @include hover {
+      .input {
+        background-color: var(--theme-color-opacity);
+      }
+    }
+  }
+}
+
+// Label Variants
+.wrapper {
+  &.jump {
+    .input::placeholder {
+      opacity: 0;
+    }
+    .label {
+      top: 50%;
+      translate: 0 -50%;
+      opacity: var(--opacity-medium);
+      transition-duration: 0.2s;
+    }
+
+    &.dirty,
+    &:focus-within {
+      .label {
+        translate: 0;
+        top: -1.5em;
+        opacity: var(--opacity-small);
+      }
+    }
+    &:focus-within {
+      .input::placeholder {
+        opacity: var(--opacity-medium);
+      }
+    }
+  }
+
+  &.none {
+    .label {
+      @include visually-hidden;
+    }
+  }
+
+  &.static {
+    .label {
+      top: -1.5em;
+      opacity: var(--opacity-small);
+    }
+  }
+}
+
+// Sizes
+.wrapper {
+  &.medium {
+    .input {
+      height: var(--button-height-medium);
+    }
+  }
+  &.large {
+    --paddingInline: var(--padding-large);
+    .input {
+      height: var(--button-height-large);
+    }
+  }
+}
+
+// Mods
+.wrapper {
+  &.error {
+    color: var(--color-error);
+    animation: error 0.5s;
+    .input {
+      box-shadow: var(--box-shadow-error);
+    }
+  }
+  &.readonly {
+    pointer-events: none;
+  }
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
+  &.required {
+    .label {
+      &:after {
+        display: inline;
+      }
+    }
+  }
+  &.search {
+    .input {
+      padding-right: calc(var(--paddingInline) + (var(--button-height-small-s) * 4));
+    }
+  }
+  &.password {
+    .input {
+      padding-right: calc(var(--paddingInline) + (var(--button-height-small-s) * 4));
+    }
+  }
+}
+
+// Action buttons
+.wrapper {
+  &:focus-within.dirty {
+    .clear-button {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+  &:focus-within {
+    .buttons:not(.clear-button) {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
 }
 
 @keyframes error {

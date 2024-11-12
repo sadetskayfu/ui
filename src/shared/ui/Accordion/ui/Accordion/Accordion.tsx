@@ -168,7 +168,7 @@ export const Accordion = memo((props: AccordionProps) => {
           {Icon ? (
             <Icon />
           ) : (
-            <IconButton Icon={AccordionIcon} isClickable={false} size="medium">
+            <IconButton Icon={AccordionIcon} isClickable={false} size="small">
               Opening status icon
             </IconButton>
           )}

@@ -2,10 +2,9 @@
     position: fixed;
     background-color: var(--color-light);
     z-index: var(--z-index-close);
-    box-shadow: 0 0 2px var(--color-dark);
-    transition: transform 0.4s, opacity 0.4s, z-index 3s;
+    transition: transform 0.4s, z-index 3s;
     pointer-events: none;
-    opacity: 0;
+    box-shadow: 0 0 1px var(--color-primary);
 }
 
 // Position
@@ -34,69 +33,12 @@
     }
 }
 
-// If lazy render
-.aside-menu.lazy {
-    &.top {
-        animation: appearance-top 0.4s;
-    }
-    &.bottom {
-        animation: appearance-bottom 0.4s;
-    }
-    &.right {
-        animation: appearance-right 0.4s;
-    }
-    &.left {
-        animation: appearance-left 0.4s;
-    }
-}
-
 .aside-menu {
     &.visible {
         pointer-events: all;
-        opacity: 1;
         transform: translateX(0%) translateY(0%);
         z-index: var(--z-index-aside-menu);
-        transition: transform 0.4s, opacity 0.4s;
+        transition: transform 0.4s;
     }
 }
 
-@keyframes appearance-left {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0; 
-    }
-    100% {
-        transform: translateX(0%);
-        opacity: 1;
-    }
-}
-@keyframes appearance-right {
-    0% {
-        transform: translateX(100%);
-        opacity: 0; 
-    }
-    100% {
-        transform: translateX(0%);
-        opacity: 1;
-    }
-}
-@keyframes appearance-bottom {
-    0% {
-        transform: translateY(100%);
-        opacity: 0; 
-    }
-    100% {
-        transform: translateY(0%);
-        opacity: 1;
-    }
-}
-@keyframes appearance-top {
-    0% {
-        transform: translateY(-100%);
-        opacity: 0; 
-    }
-    100% {
-        transform: translateY(0%);
-        opacity: 1;
-    }
-}

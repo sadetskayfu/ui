@@ -13,4 +13,5 @@ export const ROUTES = {
     ACCORDION: '/accordion',
     BACKDROP: '/backdrop',
     ASIDE_MENU: '/aside-menu',
+    MODAL: '/modal'
 }

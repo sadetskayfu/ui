@@ -61,5 +61,9 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Aside menu',
         path: ROUTES.ASIDE_MENU
+    },
+    {
+        label: 'Modal',
+        path: ROUTES.MODAL
     }
 ]

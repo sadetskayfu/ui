@@ -17,22 +17,7 @@
     }
   }
   & input[type="radio"]:checked + .emulator:before {
-    height: 60%;
-  }
-
-  // Size
-  &.small {
-    column-gap: var(--gap-small);
-    .emulator {
-      height: var(--height-small);
-    }
-  }
-
-  &.medium {
-    column-gap: var(--gap-medium);
-    .emulator {
-      height: var(--height-medium);
-    }
+    height: 70%;
   }
 }
 
@@ -40,8 +25,8 @@
   aspect-ratio: 1;
   border-radius: 50%;
   background-color: var(--color-secondary);
-  transition-duration: var(--transition-duration);
-  box-shadow: 0 0 2px var(--color-primary);
+  transition-duration: 0.2s;
+  box-shadow: var(--box-shadow-primary);
   position: relative;
 
   &:before {
@@ -52,10 +37,27 @@
     border-radius: 50%;
     background-color: var(--color-primary);
     transition-duration: inherit;
-    box-shadow: 0 0 2px var(--color-dark);
+    box-shadow: var(--box-shadow-secondary);
   }
 }
 
 .hover {
   @include hover-effect;
+}
+
+// Sizes
+.radio {
+  &.small {
+    column-gap: var(--gap-small-s);
+    .emulator {
+      height: var(--button-height-small-s);
+    }
+  }
+
+  &.medium {
+    column-gap: var(--gap-small-m);
+    .emulator {
+      height: var(--button-height-small-m);
+    }
+  }
 }

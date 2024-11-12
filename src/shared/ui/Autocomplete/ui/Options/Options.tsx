@@ -1,11 +1,11 @@
 import { DropdownMenu } from "@/shared/ui/DropdownMenu"
-import { ItemList } from "@/shared/ui/ItemList"
+import { MenuList } from "@/shared/ui/MenuList"
 import { useCallback, useMemo } from "react"
 import { classNames } from "@/shared/lib"
 import { countriesIcons } from "@/shared/constans/countriesIcons"
 import { Option } from "../Autocomplete/Autocomplete"
 import { AutocompleteVariant } from "../Autocomplete/Autocomplete"
-import { IconButton } from "@/shared/ui/IconButton"
+import { MenuItem } from "@/shared/ui/MenuItem"
 import styles from './style.module.scss'
 
 interface OptionsProps {
@@ -17,7 +17,6 @@ interface OptionsProps {
     onSelect: (id: string, value: string) => void
     parentRef: React.RefObject<HTMLInputElement>
     variant: AutocompleteVariant
-
 }
 
 export const Options = (props: OptionsProps) => {
@@ -26,33 +25,33 @@ export const Options = (props: OptionsProps) => {
 
     const handleSelect = useCallback((id: string, label: string) => {
         onSelect(id, label)
-        onClose()
+        setTimeout(() => {
+            onClose()
+        }, 0)
     }, [onSelect, onClose])
 
     const renderOptions = useMemo(() => {
-
         return options.map((item) => {
-            const mods: Record<string, boolean> = {
-                [styles['selected']]: item.id === selectedValue
-            }
+            const isSelected = item.id === selectedValue
             return (
-                <button onClick={() => handleSelect(item.id, item.label)} className={classNames(styles['item'], [], mods)} key={item.id} tabIndex={-1}>
-                    {variant === 'countries' && <img src={countriesIcons[item.id]} className={styles['icon']} alt="country flag"></img>}
-                    <div className={styles['title']}>
+                <MenuItem onClick={() => handleSelect(item.id, item.label)} key={item.id} isSelected={isSelected}>
+                    <div className={styles['content']}>
+                        {variant === 'countries' && <img src={countriesIcons[item.id]} className={styles['icon']} alt="country flag"></img>}
+                        <div className={styles['title']}>
                         <span>{item.label}</span>
                         {item.phone && <span>+{item.phone}</span>}
                     </div>
-                    <IconButton className={styles["check-mark"]} isClickable={false} variant="check-mark" size="small">Check mark</IconButton>
-                </button>
+                    </div>
+                </MenuItem>
             )
         })
     }, [options, selectedValue, handleSelect, variant])
 
     return (
         <DropdownMenu className={styles['menu']} isVisible={isVisible} onClose={onClose} parentRef={parentRef}>
-            <ItemList isVisible={isVisible} onClose={onClose} onOpen={onOpen} parentRef={parentRef}>
+            <MenuList isVisible={isVisible} onClose={onClose} onOpen={onOpen} parentRef={parentRef}>
                 {options.length > 0 ? renderOptions : <span className={classNames(styles['item'], [styles['no-options']])}>No options</span>}
-            </ItemList>
+            </MenuList>
         </DropdownMenu>
     )
 }

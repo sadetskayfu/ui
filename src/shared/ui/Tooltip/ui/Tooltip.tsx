@@ -71,11 +71,10 @@ export const Tooltip = memo((props: TooltipProps) => {
   };
 
   return (
-      <div
-        ref={tooltipRef}
-        className={classNames(styles["container"], [], mods)}
-      >
-        <div className={styles["tooltip"]}>{label}</div>
+    <div ref={tooltipRef} className={classNames(styles["container"], [], mods)}>
+      <div className={styles["tooltip"]}>
+        <span>{label}</span>
       </div>
+    </div>
   );
 });

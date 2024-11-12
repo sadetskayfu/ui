@@ -13,6 +13,7 @@ import {
   linkVariants,
   minimalismLinkVariants,
 } from "../model/Link";
+import { Group } from "@/shared/ui/Group";
 
 const LinkPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -120,7 +121,7 @@ const LinkPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Link</SectionTitle>
-        <div className='filter'>
+        <Group direction="vertical">
           <Checkbox
             isChecked={isDisabled}
             label="Disabled"
@@ -133,7 +134,7 @@ const LinkPage = () => {
             name="icon"
             onToggle={handleToggleIcon}
           />
-        </div>
+        </Group>
         <div className="subsections">
           <PreviewComponents title="Variants">
             {renderVariants}
@@ -142,7 +143,7 @@ const LinkPage = () => {
             {renderMinimalismVariants}
           </PreviewComponents>
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
-          <div className='filter'>
+          <Group direction="vertical">
             <Checkbox
               isChecked={isHiddenLabel}
               label="Hidden label"
@@ -155,7 +156,7 @@ const LinkPage = () => {
               name="icon"
               onToggle={handleToggleIcon}
             />
-          </div>
+          </Group>
           <PreviewComponents title="Active Horizontal Links">
             {renderActiveHorizontalLinks}
           </PreviewComponents>

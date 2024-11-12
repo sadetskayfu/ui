@@ -1,19 +1,23 @@
 @import '@/app/styles/mixins';
 
 .radios {
+    &.hidden-title {
+        .title {
+            @include visually-hidden;
+        }
+    }
+}
+
+// Sizes
+.radios {
     &.small {
         .title {
-            padding-bottom: var(--gap-medium);
+            padding-bottom: var(--gap-medium-s);
         }
     }
     &.medium {
         .title {
-            padding-bottom: var(--gap-large);
-        }
-    }
-    &.hidden-title {
-        .title {
-            @include visually-hidden;
+            padding-bottom: var(--gap-medium-m);
         }
     }
 }

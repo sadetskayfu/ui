@@ -5,6 +5,7 @@ import { Switch } from "@/shared/ui/Switch";
 import { useCallback, useMemo, useState } from "react";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import { Checkbox } from "@/shared/ui/Checkbox";
+import { Group } from "@/shared/ui/Group";
 
 const SwitchPage = () => {
   const [isPreviewChecked, setIsPreviewChecked] = useState<boolean>(false);
@@ -44,7 +45,7 @@ const SwitchPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Switch</SectionTitle>
-        <div className="filter">
+        <Group direction="vertical">
           <Checkbox
             isChecked={isDisabled}
             label="Disabled"
@@ -57,7 +58,7 @@ const SwitchPage = () => {
             name="require"
             onToggle={handleToggleRequired}
           />
-        </div>
+        </Group>
         <div className="subsections">
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
         </div>

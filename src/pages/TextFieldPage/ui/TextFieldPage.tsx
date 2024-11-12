@@ -5,6 +5,7 @@ import { Input } from "@/shared/ui/Input";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import { useCallback, useMemo, useState } from "react";
 import { Checkbox } from "@/shared/ui/Checkbox";
+import { Group } from "@/shared/ui/Group";
 
 const TextFieldPage = () => {
   const [value, setValue] = useState<string>("");
@@ -86,7 +87,7 @@ const TextFieldPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Text Filed</SectionTitle>
-        <div className="filter">
+        <Group direction="vertical">
           <Checkbox
             name="disabled"
             label="Disabled"
@@ -105,7 +106,7 @@ const TextFieldPage = () => {
             isChecked={isRequired}
             onToggle={handleToggleRequired}
           />
-        </div>
+        </Group>
         <div className="subsections">
           <PreviewComponents title="Field variants">
             {renderFieldVariants}

@@ -96,8 +96,6 @@ export const Star = memo((props: StarProps) => {
   return (
     <label
       role="radio"
-      aria-checked={isFilled || isHalfFilled ? 'true' : 'false'}
-      aria-label={index === 1 ? `${index} star` : `${index} stars`}
       ref={starRef}
       onMouseMove={handleMouseEnter}
       onMouseLeave={onMouseLeave}

@@ -1,34 +1,5 @@
-@import '@/app/styles/mixins';
-
 .menu {
     width: 100%;
-}
-
-.item {
-    border: none;
-    width: 100%;
-    min-height: var(--button-height-medium);
-    background-color: transparent;
-    cursor: pointer;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    padding-inline: var(--padding-medium);
-    color: inherit;
-    column-gap: var(--padding-medium);
-
-    &.selected {
-        background-color: var(--color-secondary);
-        opacity: var(--opacity-medium);
-        .check-mark {
-            opacity: 1;
-        }
-    }
-
-    &.no-options {
-        pointer-events: none;
-        background-color: var(--color-light);
-    }
 }
 
 .title {
@@ -43,8 +14,4 @@
 
 .icon {
     width: 20px;
-}
-
-.check-mark {
-    opacity: 0;
 }

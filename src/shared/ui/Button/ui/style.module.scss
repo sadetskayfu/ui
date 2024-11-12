@@ -8,22 +8,32 @@
   justify-content: space-between;
   cursor: pointer;
   border: none;
-  border-radius: var(--border-radius-small);
-  transition-duration: var(--transition-duration);
-  flex-shrink: 0;
+  border-radius: var(--border-radius-medium);
+  text-wrap: nowrap;
   background-color: transparent;
   @include user-select-off;
+  gap: var(--gap-small-s);
+}
 
-  // Variant
+.icon {
+  height: 1em;
+  aspect-ratio: 1;
+  display: flex;
+  svg {
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+  }
+}
+
+// Variants
+.button {
   &.primary {
     color: var(--color-light);
-    box-shadow: 0 0 2px var(--color-primary);
+    box-shadow: var(--box-shadow-secondary);
     background-color: var(--color-primary);
-
     @include hover {
       background-color: var(--color-primary-light);
     }
-
     .icon {
       svg {
         stroke: var(--color-light);
@@ -32,8 +42,16 @@
     }
   }
 
+  &.secondary {
+    box-shadow: var(--box-shadow-secondary);
+    background-color: var(--color-secondary);
+    @include hover {
+      background-color: var(--color-gray);
+    }
+  }
+
   &.transparent {
-    box-shadow: 0 0 2px var(--color-primary);
+    box-shadow: var(--box-shadow-primary);
     background-color: transparent;
     @include hover {
       background-color: var(--theme-color-opacity);
@@ -42,35 +60,27 @@
 
   &.clear {
     background-color: transparent;
+    box-shadow: var(--box-shadow-transparent);
     @include hover {
       background-color: var(--theme-color-opacity);
-      box-shadow: 0 0 2px var(--theme-color-opacity);
+      box-shadow: var(--box-shadow-primary);
     }
   }
+}
 
-  // Minimalism variant
-  &.minimalism {
-    justify-content: center;
-    aspect-ratio: 1;
-
-    &__round {
-      border-radius: 50%;
-    }
-  }
-  // Size
+// Sizes
+.button {
   &.small:not(.minimalism) {
-    padding-inline: var(--padding-small);
-    height: var(--button-height-small);
-    gap: var(--padding-small-m);
+    padding-inline: var(--padding-small-l);
+    height: var(--button-height-small-l);
   }
   &.small.minimalism {
-    height: var(--button-height-small);
+    height: var(--button-height-small-l);
   }
 
   &.medium:not(.minimalism) {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
-    gap: var(--padding-small);
   }
   &.medium.minimalism {
     height: var(--button-height-medium);
@@ -79,13 +89,14 @@
   &.large:not(.minimalism) {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
-    gap: var(--padding-medium);
   }
   &.large.minimalism {
     height: var(--button-height-large);
   }
+}
 
-  // Disabled
+// Mods
+.button {
   &.disabled {
     opacity: var(--opacity-medium);
     pointer-events: none;
@@ -100,20 +111,19 @@
       @include visually-hidden;
     }
   }
-
   &:focus-visible {
     box-shadow: var(--box-shadow-focus);
   }
 }
 
-.icon {
-  height: 1em;
-  aspect-ratio: 1;
-  display: flex;
-  svg {
-    fill: var(--color-primary);
-    stroke: var(--color-primary);
+// Minimalism variant
+.button {
+  &.minimalism {
+    justify-content: center;
+    aspect-ratio: 1;
+
+    &__round {
+      border-radius: 50%;
+    }
   }
 }
-
-

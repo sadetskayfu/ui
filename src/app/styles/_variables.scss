@@ -2,20 +2,19 @@
 	--font-family: 'sans-serif';
 
 	--color-opacity: rgba(0, 0, 0, 0.05);
+	--color-shadow: rgba(0, 0, 0, 0.05);
 	--color-focus: rgb(63, 26, 5);
 	--color-error: rgb(207, 77, 17);
 
-	--box-shadow: 0 0 5px 2px var(--color-opacity);
-	--box-shadow-focus: 0 0 2px 1px var(--color-focus);
-	--box-shadow-small-inset: 0 0 2px inset currentColor;
+	--box-shadow-focus: 0 0.5px 5px var(--color-focus);
+	--box-shadow-primary: 0 0.5px 1px rgb(202, 131, 25);
+	--box-shadow-secondary: 0 0.5px 1px rgb(63, 26, 5);
+	--box-shadow-error: 0 0.5px 1px var(--color-error);
+	--box-shadow-transparent: 0 0.5px 1px transparent;
 	
-	--border-radius-small-m: 4px;
-	--border-radius-small: 7px;
+	--border-radius-small: 4px;
+	--border-radius-medium: 7px;
 	--border-radius-middle: 15px;
-	
-
-	--transition-duration: 0.2s;
-	--transition-duration-middle: 0.4s;
 
 	--opacity-small: 0.8;
 	--opacity-medium: 0.5;
@@ -23,44 +22,38 @@
 
 	--border: 2px solid;
 
-	--font-size-label: 1em;
+	--font-size-small: 14px;
+	--font-size-medium: 18px;
+	--font-size-large: 20px;
 
 	--header-height: 50px;
 
-	--height-small-m: 15px;
-	--height-small: 20px;
-	--height-medium: 25px;
-	--height-large: 30px;
-
+	--button-height-small-s: 20px;
 	--button-height-small-m: 25px;
-	--button-height-small: 35px;
+	--button-height-small-l: 35px;
 	--button-height-medium: 45px;
 	--button-height-large: 55px;
 
-    --padding-small-m: 5px;
-	--padding-small: 10px;
+    --padding-small-s: 5px;
+	--padding-small-l: 10px;
 	--padding-medium: 15px;
 	--padding-large: 20px;
-	--section-padding: 30px;
+	
+	--section-padding: 50px;
 
-	--gap-small: 10px;
-	--gap-medium: 15px;
-	--gap-large: 25px;
+	--gap-small-s: 10px;
+	--gap-small-m: 12.5px;
+	--gap-small-l: 17.5px;
+	--gap-medium-s: 18px;
+	--gap-medium-m: 25px;
+	--gap-medium-l: 35px;
+	//--gap-large: 25px;
 
-	--gap-10: 10px;
-	--gap-15: 15px;
-	--gap-20: 20px;
-	--gap-30: 30px;
-	--gap-40: 40px;
-	--gap-50: 50px;
-
-
-	--icon-size: 20px;
-
-	--z-index-drop-down-menu: 1000;
+	--z-index-drop-down-menu: 2500;
 	--z-index-close: -1000;
 	--z-index-backdrop-open-small: 500;
 	--z-index-backdrop-open-large: 1500;
 	--z-index-tooltip: 2000;
 	--z-index-aside-menu: 1900;
+	--z-index-menu: 2000;
 }

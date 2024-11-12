@@ -6,20 +6,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: var(--border-radius-small);
-  column-gap: var(--gap-medium);
+  border-radius: var(--border-radius-medium);
+  column-gap: var(--gap-small-s);
+  text-wrap: nowrap;
   @include user-select-off;
+}
 
-  // Direction
+.icon {
+  height: 1em;
+  aspect-ratio: 1;
+  display: flex;
+  svg {
+    stroke: var(--color-primary);
+    fill: var(--color-primary);
+  }
+}
+
+// Directions
+.link {
   &.horizontal.clear,
   &.horizontal.classic {
     &:before {
       @include underline-bottom;
+      height: 2px;
     }
     &.active {
       &:before {
         width: 100%;
-        background-color: var(--color-primary-light);
+        background-color: var(--color-primary);
       }
     }
   }
@@ -28,21 +42,24 @@
   &.vertical.classic {
     &:before {
       @include underline-right;
+      width: 2px;
     }
     &.active {
-      border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
+      border-radius: var(--border-radius-medium) 0 0 var(--border-radius-medium);
       &:before {
         height: 100%;
-        background-color: var(--color-primary-light);
+        background-color: var(--color-primary);
       }
     }
   }
+}
 
-  // Variant
+// Variants
+.link {
   &.primary {
     color: var(--color-light);
     background-color: var(--color-primary);
-    box-shadow: 0 0 2px var(--color-primary);
+    box-shadow: var(--box-shadow-secondary);
     @include hover {
       background-color: var(--color-primary-light);
     }
@@ -55,20 +72,21 @@
   }
 
   &.transparent {
-    box-shadow: 0 0 2px var(--color-primary);
+    box-shadow: var(--box-shadow-primary);
     @include hover {
       background-color: var(--theme-color-opacity);
     }
   }
 
   &.clear {
+    box-shadow: var(--box-shadow-transparent);
     @include hover {
       background-color: var(--theme-color-opacity);
-      box-shadow: 0 0 2px var(--theme-color-opacity);
     }
   }
 
   &.classic {
+    box-shadow: var(--box-shadow-transparent);
     @include hover {
       color: var(--color-primary);
     }
@@ -80,8 +98,40 @@
       text-decoration: underline;
     }
   }
+}
 
-  // Minimalism variant
+// Sizes
+.link {
+  &.small:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-small-l);
+    height: var(--button-height-small-l);
+  }
+  &.small.minimalism-square,
+  &.small.minimalism-round {
+    height: var(--button-height-small-l);
+  }
+
+  &.medium:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-medium);
+    height: var(--button-height-medium);
+  }
+  &.medium.minimalism-square,
+  &.medium.minimalism-round {
+    height: var(--button-height-medium);
+  }
+
+  &.large:not(.minimalism-square, .minimalism-round, .text) {
+    padding-inline: var(--padding-large);
+    height: var(--button-height-large);
+  }
+  &.large.minimalism-square,
+  &.large.minimalism-round {
+    height: var(--button-height-large);
+  }
+}
+
+// Minimalism variants
+.link {
   &.minimalism-round,
   &.minimalism-square {
     justify-content: center;
@@ -93,38 +143,10 @@
   &.minimalism-round {
     border-radius: 50%; 
   }
+}
 
-  // Size
-  &.small:not(.minimalism-square, .minimalism-round, .text) {
-    padding-inline: var(--padding-small);
-    height: var(--button-height-small);
-    gap: var(--padding-small-m);
-  }
-  &.small.minimalism-square,
-  &.small.minimalism-round {
-    height: var(--button-height-small);
-  }
-
-  &.medium:not(.minimalism-square, .minimalism-round, .text) {
-    padding-inline: var(--padding-medium);
-    height: var(--button-height-medium);
-    gap: var(--padding-small);
-  }
-  &.medium.minimalism-square,
-  &.medium.minimalism-round {
-    height: var(--button-height-medium);
-  }
-
-  &.large:not(.minimalism-square, .minimalism-round, .text) {
-    padding-inline: var(--padding-large);
-    height: var(--button-height-large);
-    gap: var(--padding-medium);
-  }
-  &.large.minimalism-square,
-  &.large.minimalism-round {
-    height: var(--button-height-large);
-  }
-
+// Mods
+.link {
   &.hidden-label {
     justify-content: center;
     .label {
@@ -135,14 +157,7 @@
   &:focus-visible {
     box-shadow: var(--box-shadow-focus);
   }
-}
-
-.icon {
-  height: 1em;
-  aspect-ratio: 1;
-  display: flex;
-  svg {
-    stroke: var(--color-primary);
-    fill: var(--color-primary);
+  &.active {
+    color: var(--color-primary);
   }
 }

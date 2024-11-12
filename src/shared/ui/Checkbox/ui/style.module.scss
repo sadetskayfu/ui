@@ -17,66 +17,15 @@
             opacity: 1;;
         }
     }
-
-    // Variant
-    &.primary {
-        .checkbox {
-            background-color: var(--color-secondary);
-        }
-    }
-
-    &.transparent {
-        .checkbox {
-            background-color: transparent;
-        }
-    }
-
-    // Size
-    &.small {
-        column-gap: var(--gap-small);
-        .checkbox {
-            height: var(--height-small);
-        }
-    }
-
-    &.medium {
-        column-gap: var(--gap-medium);
-        .checkbox {
-            height: var(--height-medium);
-        }
-    }
-
-    // Mods
-    &.disabled {
-        pointer-events: none;
-        opacity: var(--opacity-medium);
-    }
-
-    &.required {
-        .label {
-            &:after {
-                display: inline;
-            }
-        }
-    }
-
-    &.checked {
-        .checkbox {
-            background-color: var(--color-primary);
-            &:before {
-                opacity: 1;
-            }
-        }
-    }
 }
 
 .checkbox {
     position: relative;
     aspect-ratio: 1;
-    border-radius: var(--border-radius-small-m);
-    transition-duration: var(--transition-duration);
+    border-radius: var(--border-radius-small);
+    transition-duration: 0.2s;
     color: var(--color-secondary);
-    box-shadow: 0 0 2px var(--color-primary);
+    box-shadow: var(--box-shadow-primary);
 
     &:before {
         position: absolute;
@@ -104,4 +53,63 @@
 
 .hover {
     @include hover-effect;
+}
+
+// Variants
+.wrapper {
+    &.primary {
+        .checkbox {
+            background-color: var(--color-secondary);
+            
+        }
+    }
+
+    &.transparent {
+        .checkbox {
+            background-color: transparent;
+        }
+    }
+}
+
+// Mods
+.wrapper {
+    &.disabled {
+        pointer-events: none;
+        opacity: var(--opacity-medium);
+    }
+
+    &.required {
+        .label {
+            &:after {
+                display: inline;
+            }
+        }
+    }
+
+    &.checked {
+        .checkbox {
+            background-color: var(--color-primary);
+            box-shadow: var(--box-shadow-secondary);
+            &:before {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// Sizes
+.wrapper {    
+    &.small {
+        column-gap: var(--gap-small-s);
+        .checkbox {
+            height: var(--button-height-small-s);
+        }
+    }
+
+    &.medium {
+        column-gap: var(--gap-small-m);
+        .checkbox {
+            height: var(--button-height-small-m);
+        }
+    }
 }

@@ -24,13 +24,7 @@
 .subsections {
 	display: inline-flex;
     flex-direction: column;
-	row-gap: var(--gap-large);
-}
-
-.filter {
-	display: flex;
-	flex-direction: column;
-	row-gap: var(--gap-large);
+	row-gap: var(--section-padding);
 }
 
 .visually-hidden {

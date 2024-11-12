@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { checkboxSizes, checkboxVariants } from "../model/Checkbox";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { Group } from "@/shared/ui/Group";
 
 const CheckboxPage = () => {
   const [isPreviewChecked, setIsPreviewChecked] = useState<boolean>(false);
@@ -61,7 +62,7 @@ const CheckboxPage = () => {
     <div className='page'>
       <section className="section">
       <SectionTitle>Checkbox</SectionTitle>
-      <div className='filter'>
+      <Group direction="vertical">
         <Checkbox
           label="Required"
           isChecked={isRequired}
@@ -74,7 +75,7 @@ const CheckboxPage = () => {
           name="disabled"
           onToggle={handleToggleDisabled}
         />
-      </div>
+      </Group>
       <div className='subsections'>
         <PreviewComponents title="Variants">{renderVariants}</PreviewComponents>
         <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>

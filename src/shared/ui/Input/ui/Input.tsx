@@ -91,13 +91,18 @@ export const Input = memo(
         onChange?.("");
       };
 
+      const inputType: string =
+        type === "password" ? (isPasswordVisible ? "text" : "password") : type;
+
+      const tabIndex: number = isDisabled || isReadonly ? -1 : 0;
+
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: value.length !== 0,
         [styles["error"]]: !!errorMessage,
         [styles["readonly"]]: isReadonly,
         [styles["disabled"]]: isDisabled,
         [styles["required"]]: isRequired,
-        [styles['password']]: isVisiblePasswordButton,
+        [styles['password']]: type === 'password',
         [styles['search']]: isSearch
       };
 
@@ -107,11 +112,6 @@ export const Input = memo(
         styles[labelVariant],
         styles[size],
       ];
-
-      const inputType: string =
-        type === "password" ? (isPasswordVisible ? "text" : "password") : type;
-
-      const tabIndex: number = isDisabled || isReadonly ? -1 : 0;
 
       return (
         <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
