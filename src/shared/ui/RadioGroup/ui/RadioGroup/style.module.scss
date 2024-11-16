@@ -8,19 +8,13 @@
     }
 }
 
-// Sizes
-.radios {
-    &.small {
-        .title {
-            padding-bottom: var(--gap-medium-s);
-        }
-    }
-    &.medium {
-        .title {
-            padding-bottom: var(--gap-medium-m);
-        }
-    }
+.title {
+    padding: 0;
+    line-height: 0.7;
+    padding-bottom: var(--gap-medium-s);
 }
+
+
 
 
 

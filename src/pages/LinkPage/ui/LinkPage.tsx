@@ -1,4 +1,4 @@
-import { CustomLink } from "@/shared/ui/CustomLink";
+import { CustomLink, CustomLinkColor } from "@/shared/ui/CustomLink";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { ROUTES } from "@/shared/constans/routes";
@@ -9,17 +9,23 @@ import { capitalizeFirstLetter } from "@/shared/lib";
 import {
   activeHorizontalLinks,
   activeVerticalLinks,
+  colorVariants,
   linkSizes,
   linkVariants,
   minimalismLinkVariants,
 } from "../model/Link";
 import { Group } from "@/shared/ui/Group";
+import { RadioGroup } from "@/shared/ui/RadioGroup";
 
 const LinkPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [icon, setIcon] = useState<boolean>(false);
   const [isHiddenLabel, setIsHiddenLabel] = useState<boolean>(false);
+  const [color, setColor] = useState<CustomLinkColor>("primary");
 
+  const handleToggleColor = useCallback((value: string) => {
+    setColor(value as ButtonColor);
+  }, []);
   const handleToggleDisabled = useCallback(() => {
     setIsDisabled((prev) => !prev);
   }, []);
@@ -39,12 +45,13 @@ const LinkPage = () => {
           isDisabled={isDisabled}
           Icon={icon && Icon}
           variant={link}
+          color={color}
         >
           {capitalizeFirstLetter(link) as string}
         </CustomLink>
       );
     });
-  }, [icon, isDisabled]);
+  }, [icon, isDisabled, color]);
 
   const renderMinimalismVariants = useMemo(() => {
     return minimalismLinkVariants.map((link, index) => {
@@ -54,14 +61,14 @@ const LinkPage = () => {
           to=""
           isDisabled={isDisabled}
           Icon={Icon}
-          variant={link.variant}
-          minimalism={link.minimalism}
+          minimalism={link}
+          color={color}
         >
-          {link.variant as string}
+          {link as string}
         </CustomLink>
       );
     });
-  }, [isDisabled]);
+  }, [isDisabled, color]);
 
   const renderSizes = useMemo(() => {
     return linkSizes.map((link, index) => {
@@ -69,17 +76,16 @@ const LinkPage = () => {
         <CustomLink
           key={index}
           to=""
-          variant="transparent"
-          size={link.size}
+          size={link}
           isDisabled={isDisabled}
-          minimalism={link.minimalism}
-          Icon={link.minimalism !== "none" ? Icon : icon && Icon}
+          Icon={icon && Icon}
+          color={color}
         >
-          {capitalizeFirstLetter(link.size) as string}
+          {capitalizeFirstLetter(link) as string}
         </CustomLink>
       );
     });
-  }, [isDisabled, icon]);
+  }, [isDisabled, icon, color]);
 
   const renderActiveHorizontalLinks = useMemo(() => {
     return activeHorizontalLinks.map((link, index) => {
@@ -92,12 +98,13 @@ const LinkPage = () => {
           direction={link.direction}
           isDisabled={isDisabled}
           isHiddenLabeL={isHiddenLabel}
+          color={color}
         >
           {capitalizeFirstLetter(link.variant) as string}
         </CustomLink>
       );
     });
-  }, [icon, isDisabled, isHiddenLabel]);
+  }, [icon, isDisabled, isHiddenLabel, color]);
 
   const renderActiveVerticalLinks = useMemo(() => {
     return activeVerticalLinks.map((link, index) => {
@@ -110,29 +117,41 @@ const LinkPage = () => {
           isDisabled={isDisabled}
           Icon={icon && Icon}
           isHiddenLabeL={isHiddenLabel}
+          color={color}
         >
           {capitalizeFirstLetter(link.variant) as string}
         </CustomLink>
       );
     });
-  }, [icon, isDisabled, isHiddenLabel]);
+  }, [icon, isDisabled, isHiddenLabel, color]);
 
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Link</SectionTitle>
         <Group direction="vertical">
-          <Checkbox
-            isChecked={isDisabled}
-            label="Disabled"
-            name="disabled"
-            onToggle={handleToggleDisabled}
-          />
-          <Checkbox
-            isChecked={icon}
-            label="Icon"
-            name="icon"
-            onToggle={handleToggleIcon}
+          <Group direction="horizontal">
+            <Checkbox
+              isChecked={isDisabled}
+              label="Disabled"
+              name="disabled"
+              onToggle={handleToggleDisabled}
+            />
+            <Checkbox
+              isChecked={icon}
+              label="Icon"
+              name="icon"
+              onToggle={handleToggleIcon}
+            />
+          </Group>
+          <RadioGroup
+            direction="horizontal"
+            items={colorVariants}
+            selectedValue={color}
+            name="button-color"
+            title="Colors"
+            size="small"
+            onChange={handleToggleColor}
           />
         </Group>
         <div className="subsections">

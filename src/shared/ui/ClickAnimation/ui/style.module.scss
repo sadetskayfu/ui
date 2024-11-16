@@ -12,11 +12,11 @@
   }
 
   &.dark {
-    background-color: var(--color-primary);
+    background-color: var(--primary-500);
   }
 
   &.light {
-    background-color: var(--color-dark);
+    background-color: var(--primary-200);
   }
 
   &.circle {

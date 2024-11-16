@@ -5,7 +5,8 @@
   display: flex;
   flex-direction: column;
   row-gap: var(--gap-small-s);
-  color: var(--color-dark);
+  color: var(--dark-900);
+  width: 100%;
 }
 
 .field {
@@ -36,7 +37,7 @@
 
   &:after {
     content: "*";
-    color: var(--color-error);
+    color: var(--red-600);
     display: none;
   }
 }
@@ -67,14 +68,14 @@
   &.primary {
     .input {
       box-shadow: var(--box-shadow-secondary);
-      background-color: var(--color-secondary);
+      background-color: var(--primary-200);
       &:focus {
-        background-color: var(--color-light);
+        background-color: var(--light);
       }
     }
     @include hover {
       .input {
-        background-color: var(--color-light);
+        background-color: var(--light);
       }
     }
   }
@@ -83,12 +84,12 @@
     .input {
       box-shadow: var(--box-shadow-primary);
       &:focus {
-        background-color: var(--theme-color-opacity);
+        background-color: var(--primary-opacity);
       }
     }
     @include hover {
       .input {
-        background-color: var(--theme-color-opacity);
+        background-color: var(--primary-opacity);
       }
     }
   }
@@ -112,19 +113,13 @@
       .label {
         translate: 0;
         top: -1.5em;
-        opacity: var(--opacity-small);
+        opacity: 1;
       }
     }
     &:focus-within {
       .input::placeholder {
         opacity: var(--opacity-medium);
       }
-    }
-  }
-
-  &.none {
-    .label {
-      @include visually-hidden;
     }
   }
 
@@ -154,7 +149,7 @@
 // Mods
 .wrapper {
   &.error {
-    color: var(--color-error);
+    color: var(--red-600);
     animation: error 0.5s;
     .input {
       box-shadow: var(--box-shadow-error);

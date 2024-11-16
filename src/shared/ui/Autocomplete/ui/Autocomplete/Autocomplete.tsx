@@ -26,6 +26,7 @@ interface AutocompleteProps {
   options: Option[];
   placeholder?: string;
   errorMessage?: string;
+  tabIndex?: number
   onChange?: (value: string) => void;
   onSelect?: (id: string, value: string) => void;
   onValidate?: (value: string) => string[];
@@ -45,6 +46,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
     options,
     selectedValue,
     errorMessage,
+    tabIndex = 0,
     onChange,
     onSelect,
     onValidate,
@@ -130,6 +132,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onBlur={handleBlur}
         onClick={handleToggleMenu}
         ref={inputRef}
+        tabIndex={tabIndex}
         type="text"
       />
       <Options

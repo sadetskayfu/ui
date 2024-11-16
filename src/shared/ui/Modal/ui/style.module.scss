@@ -1,10 +1,10 @@
 .modal {
-    box-shadow: var(--box-shadow-primary);
+    border: var(--border-secondary);
     opacity: 0;
     z-index: var(--z-index-close);
     transition: opacity 0.4s, transform 0.4s, z-index 3s;
-    background-color: var(--color-light);
-    border-radius: var(--border-radius-middle);
+    background-color: var(--light);
+    border-radius: var(--border-radius-medium);
     pointer-events: none;
     transform: translateY(50%);
 

@@ -1,12 +1,15 @@
 import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "../../ClickAnimation";
 import { classNames } from "@/shared/lib";
-import styles from "./style.module.scss";
 import { AnimationDirection } from "../../ClickAnimation";
 import { memo } from "react";
+import CrossIcon from "@/shared/assets/icons/cross.svg?react";
+import ArrowIcon from "@/shared/assets/icons/arrow.svg?react";
+import styles from "./style.module.scss";
 
 export type IconButtonVariant =
   | "cross"
+  | "arrow"
   | "password"
   | "pagination"
   | "check-mark"
@@ -17,12 +20,12 @@ interface IconButtonProps {
   className?: string;
   variant?: IconButtonVariant;
   size?: IconButtonSize;
-  animateDirection?: AnimationDirection
+  animateDirection?: AnimationDirection;
   isClickable?: boolean;
   isActive?: boolean;
   isReadonly?: boolean;
   isDisabled?: boolean;
-  isStopFocus?: boolean
+  isStopFocus?: boolean;
   tabIndex?: number;
   children: string;
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -34,7 +37,7 @@ export const IconButton = memo((props: IconButtonProps) => {
     className,
     variant = "clear",
     size = "medium",
-    animateDirection = 'center',
+    animateDirection = "center",
     tabIndex = 0,
     isClickable = true,
     isActive,
@@ -49,12 +52,16 @@ export const IconButton = memo((props: IconButtonProps) => {
   const { isAnimating, startAnimation } = useAnimation();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "Enter" || event.key === " ") startAnimation();
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      startAnimation();
+      onClick?.();
+    }
   };
 
   const handleMouseDown = (event: React.MouseEvent) => {
-    if(isStopFocus){
-      event.preventDefault()
+    if (isStopFocus) {
+      event.preventDefault();
     }
     startAnimation();
   };
@@ -63,7 +70,7 @@ export const IconButton = memo((props: IconButtonProps) => {
     [styles["disabled"]]: isDisabled,
     [styles["readonly"]]: isReadonly,
     [styles["active"]]: isActive,
-    [styles['clickable']]: isClickable
+    [styles["clickable"]]: isClickable,
   };
 
   const additionalClasses: Array<string | undefined> = [
@@ -74,12 +81,20 @@ export const IconButton = memo((props: IconButtonProps) => {
 
   if (!isClickable) {
     return (
-      <span
-        className={classNames(styles["button"], additionalClasses, mods)}
-      >
+      <span className={classNames(styles["button"], additionalClasses, mods)}>
         {Icon && (
           <span className={styles["icon"]}>
             <Icon />
+          </span>
+        )}
+        {variant === "cross" && (
+          <span className={styles["icon"]}>
+            <CrossIcon />
+          </span>
+        )}
+        {variant === "arrow" && (
+          <span className={styles["icon"]}>
+            <ArrowIcon />
           </span>
         )}
         <span className="visually-hidden">{children}</span>
@@ -99,11 +114,24 @@ export const IconButton = memo((props: IconButtonProps) => {
       aria-readonly={isReadonly}
     >
       <span className={styles["hover"]}>
-        <ClickAnimation isAnimating={isAnimating} direction={animateDirection} />
+        <ClickAnimation
+          isAnimating={isAnimating}
+          direction={animateDirection}
+        />
       </span>
       {Icon && (
         <span className={styles["icon"]}>
           <Icon />
+        </span>
+      )}
+      {variant === "cross" && (
+        <span className={styles["icon"]}>
+          <CrossIcon />
+        </span>
+      )}
+      {variant === "arrow" && (
+        <span className={styles["icon"]}>
+          <ArrowIcon />
         </span>
       )}
       <span className="visually-hidden">{children}</span>

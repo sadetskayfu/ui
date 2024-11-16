@@ -1,9 +1,7 @@
 import { Button } from "../../Button";
 import Arrow from "@/shared/assets/icons/arrow.svg?react";
-import PaginationIcon from "@/shared/assets/icons/pagination.svg?react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib";
-import { IconButton } from "../../IconButton";
 import styles from "./style.module.scss";
 
 export type PaginationVariant = "square" | "round";
@@ -13,7 +11,6 @@ interface PaginationProps {
   className?: string;
   variant?: PaginationVariant;
   size?: PaginationSize;
-  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
   ArrowIcon?: React.FC<React.SVGProps<SVGSVGElement>>;
   isInfinity?: boolean;
   totalItems: number;
@@ -27,7 +24,6 @@ export const Pagination = memo(
   ({
     className,
     variant,
-    Icon,
     ArrowIcon,
     size = "small",
     isInfinity,
@@ -108,7 +104,8 @@ export const Pagination = memo(
           return (
             <Button
               className={styles["button"]}
-              variant={currentPage === page ? "secondary" : "clear"}
+              variant={currentPage === page ? "filled" : "clear"}
+              color="secondary"
               minimalism={variant}
               animateDirection="left"
               size={size}

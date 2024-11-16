@@ -1,39 +1,32 @@
-import { Button } from "@/shared/ui/Button";
+import { Button, ButtonColor } from "@/shared/ui/Button";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { useCallback, useMemo, useState } from "react";
 import Icon from "@/shared/assets/icons/news.svg?react";
-import PaginationIcon from "@/shared/assets/icons/pagination.svg?react";
-import PasswordIcon from "@/shared/assets/icons/eye-password.svg?react";
 import {
   buttonSizes,
   buttonVariants,
+  colorVariants,
   minimalismButtonVariants,
 } from "../model/Button";
 import { capitalizeFirstLetter } from "@/shared/lib";
-import { IconButton } from "@/shared/ui/IconButton";
 import { Group } from "@/shared/ui/Group";
+import { RadioGroup } from "@/shared/ui/RadioGroup";
 
 const ButtonPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [icon, setIcon] = useState<boolean>(false);
-  const [isActivePaginationIcon, setIsActivePaginationIcon] =
-    useState<boolean>(false);
-  const [isVisibilityPassword, setIsVisibilityPassword] =
-    useState<boolean>(false);
+  const [color, setColor] = useState<ButtonColor>("primary");
 
+  const handleToggleColor = useCallback((value: string) => {
+    setColor(value as ButtonColor);
+  }, []);
   const handleToggleDisabled = useCallback(() => {
     setIsDisabled((prev) => !prev);
   }, []);
   const handleToggleIcon = useCallback(() => {
     setIcon((prev) => !prev);
-  }, []);
-  const handleToggleActivePaginationIcon = useCallback(() => {
-    setIsActivePaginationIcon((prev) => !prev);
-  }, []);
-  const handleToggleVisibilityPassword = useCallback(() => {
-    setIsVisibilityPassword((prev) => !prev);
   }, []);
 
   const renderVariants = useMemo(() => {
@@ -45,12 +38,13 @@ const ButtonPage = () => {
           variant={btn}
           Icon={icon && Icon}
           isDisabled={isDisabled}
+          color={color}
         >
           {capitalizeFirstLetter(btn) as string}
         </Button>
       );
     });
-  }, [isDisabled, icon]);
+  }, [isDisabled, icon, color]);
 
   const renderMinimalismVariants = useMemo(() => {
     return minimalismButtonVariants.map((btn, index) => {
@@ -58,17 +52,17 @@ const ButtonPage = () => {
         <Button
           key={index}
           onClick={() => undefined}
-          variant={btn.variant}
-          minimalism={btn.minimalism}
           Icon={Icon}
           isDisabled={isDisabled}
           isHiddenLabel
+          minimalism={btn}
+          color={color}
         >
-          {btn.variant}
+          {btn}
         </Button>
       );
     });
-  }, [isDisabled]);
+  }, [isDisabled, color]);
 
   const renderSizes = useMemo(() => {
     return buttonSizes.map((btn, index) => {
@@ -76,35 +70,46 @@ const ButtonPage = () => {
         <Button
           key={index}
           onClick={() => undefined}
-          variant={btn.variant}
-          minimalism={btn.minimalism}
-          size={btn.size}
-          Icon={btn.minimalism ? Icon : icon && Icon}
-          isHiddenLabel={btn.minimalism ? true : false}
+          size={btn}
           isDisabled={isDisabled}
+          color={color}
+          Icon={icon && Icon}
         >
-          {capitalizeFirstLetter(btn.size) as string}
+          {capitalizeFirstLetter(btn) as string}
         </Button>
       );
     });
-  }, [icon, isDisabled]);
+  }, [isDisabled, color, icon]);
 
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Button</SectionTitle>
         <Group direction="vertical">
-          <Checkbox
-            isChecked={isDisabled}
-            label="Disabled"
-            name="disabled"
-            onToggle={handleToggleDisabled}
-          />
-          <Checkbox
-            isChecked={icon}
-            label="Icon"
-            name="icon"
-            onToggle={handleToggleIcon}
+          <Group direction="horizontal">
+            <Checkbox
+              isChecked={isDisabled}
+              label="Disabled"
+              name="disabled"
+              onToggle={handleToggleDisabled}
+              size="small"
+            />
+            <Checkbox
+              isChecked={icon}
+              label="Icon"
+              name="icon"
+              size="small"
+              onToggle={handleToggleIcon}
+            />
+          </Group>
+          <RadioGroup
+            direction="horizontal"
+            items={colorVariants}
+            selectedValue={color}
+            name="button-color"
+            title="Colors"
+            size="small"
+            onChange={handleToggleColor}
           />
         </Group>
         <div className="subsections">
@@ -115,47 +120,6 @@ const ButtonPage = () => {
             {renderMinimalismVariants}
           </PreviewComponents>
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
-          <PreviewComponents title="Icon buttons variants">
-            <IconButton
-              isActive={isActivePaginationIcon}
-              onClick={handleToggleActivePaginationIcon}
-              variant="pagination"
-              Icon={PaginationIcon}
-              isDisabled={isDisabled}
-            >
-              Pagination
-            </IconButton>
-            <IconButton
-              isActive={isVisibilityPassword}
-              onClick={handleToggleVisibilityPassword}
-              variant="password"
-              Icon={PasswordIcon}
-              isDisabled={isDisabled}
-            >
-              Pagination
-            </IconButton>
-            <IconButton
-              isClickable={false}
-              variant="check-mark"
-              isDisabled={isDisabled}
-            >
-              Pagination
-            </IconButton>
-            <IconButton variant="cross" isDisabled={isDisabled}>
-              Cross
-            </IconButton>
-          </PreviewComponents>
-          <PreviewComponents title="Icon buttons sizes">
-            <IconButton variant="cross" size="small" isDisabled={isDisabled}>
-              Small
-            </IconButton>
-            <IconButton variant="cross" size="medium" isDisabled={isDisabled}>
-              Medium
-            </IconButton>
-            <IconButton variant="cross" size="large" isDisabled={isDisabled}>
-              Large
-            </IconButton>
-          </PreviewComponents>
         </div>
       </section>
     </div>

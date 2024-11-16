@@ -1,96 +1,20 @@
 import { CustomLinkDirection, CustomLinkMinimalismVariant, CustomLinkSize, CustomLinkVariant } from "@/shared/ui/CustomLink"
 
-interface MinimalismLink {
-    variant: CustomLinkVariant
-    minimalism: CustomLinkMinimalismVariant
-}
-
-interface LinkSize {
-    size: CustomLinkSize
-    minimalism: CustomLinkMinimalismVariant
-}
-
 interface ActiveLink {
     direction: CustomLinkDirection
     variant: CustomLinkVariant
 }
 
 export const linkVariants: CustomLinkVariant[] = [
-    'primary', 'transparent', 'clear', 'classic', 'text'
+    'filled', 'outlined', 'clear', 'standart', 'text'
 ]
 
-export const minimalismLinkVariants: MinimalismLink[] = [
-    {
-        variant: 'primary',
-        minimalism: 'round'
-    },
-    {
-        variant: 'transparent',
-        minimalism: 'round'
-    },
-    {
-        variant: 'clear',
-        minimalism: 'round'
-    },
-    {
-        variant: 'classic',
-        minimalism: 'round'
-    },
-    {
-        variant: 'primary',
-        minimalism: 'square'
-    },
-    {
-        variant: 'transparent',
-        minimalism: 'square'
-    },
-    {
-        variant: 'clear',
-        minimalism: 'square'
-    },
-    {
-        variant: 'classic',
-        minimalism: 'square'
-    },
+export const minimalismLinkVariants: CustomLinkMinimalismVariant[] = [
+    'round', 'square'
 ]
 
-export const linkSizes: LinkSize[] = [
-    {
-        size: 'small',
-        minimalism: 'none'
-    },
-    {
-        size: 'medium',
-        minimalism: 'none'
-    },
-    {
-        size: 'large',
-        minimalism: 'none'
-    },
-    {
-        size: 'small',
-        minimalism: 'round'
-    },
-    {
-        size: 'medium',
-        minimalism: 'round'
-    },
-    {
-        size: 'large',
-        minimalism: 'round'
-    },
-    {
-        size: 'small',
-        minimalism: 'square'
-    },
-    {
-        size: 'medium',
-        minimalism: 'square'
-    },
-    {
-        size: 'large',
-        minimalism: 'square'
-    },
+export const linkSizes: CustomLinkSize[] = [
+    'small', 'medium', 'large'
 ]
 
 export const activeHorizontalLinks: ActiveLink[] = [
@@ -100,7 +24,7 @@ export const activeHorizontalLinks: ActiveLink[] = [
     },
     {
         direction: 'horizontal',
-        variant: 'classic',
+        variant: 'standart',
     },
 ]
 
@@ -111,6 +35,22 @@ export const activeVerticalLinks: ActiveLink[] = [
     },
     {
         direction: 'vertical',
-        variant: 'classic',
+        variant: 'standart',
+    },
+]
+
+interface colorVariant {
+    value: string
+    label: string
+}
+
+export const colorVariants: colorVariant[] = [
+    {
+        value: 'primary',
+        label: 'Primary'
+    },
+    {
+        value: 'secondary',
+        label: 'Secondary'
     },
 ]

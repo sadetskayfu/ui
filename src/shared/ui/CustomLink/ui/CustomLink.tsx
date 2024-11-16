@@ -11,12 +11,13 @@ import {
 } from "../../ClickAnimation/ui/ClickAnimation";
 
 export type CustomLinkVariant =
-  | "primary"
-  | "transparent"
+  | "filled"
+  | "outlined"
   | "clear"
-  | "classic"
+  | "standart"
   | "text"
-export type CustomLinkMinimalismVariant = "round" | "square" | "none";
+export type CustomLinkColor = 'primary' | 'secondary'
+export type CustomLinkMinimalismVariant = "round" | "square";
 export type CustomLinkDirection = "vertical" | "horizontal";
 export type CustomLinkSize = "small" | "medium" | "large";
 
@@ -24,6 +25,7 @@ interface CustomLinkProps extends LinkProps {
   className?: string;
   to: string;
   variant?: CustomLinkVariant;
+  color?: CustomLinkColor
   minimalism?: CustomLinkMinimalismVariant
   size?: CustomLinkSize;
   direction?: CustomLinkDirection;
@@ -39,7 +41,8 @@ export const CustomLink = memo((props: CustomLinkProps) => {
   const {
     className,
     variant = "clear",
-    minimalism = 'none',
+    color = 'primary',
+    minimalism,
     direction = "horizontal",
     size = "medium",
     children,
@@ -64,22 +67,24 @@ export const CustomLink = memo((props: CustomLinkProps) => {
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[variant],
+    styles[color],
     styles[direction],
     styles[size],
-    styles[`minimalism-${minimalism}`]
+    styles[`minimalism__${minimalism}`],
   ];
 
   const mods: Record<string, boolean | undefined> = {
     [styles["active"]]: isActive,
     [styles['hidden-label']]: isHiddenLabeL,
+    [styles['minimalism']]: !!minimalism
   };
 
   const animationDirection: AnimationDirection =
-    variant === "clear" && minimalism === 'none' || isHiddenLabeL? "left" : "center";
+    variant === "clear" && !minimalism || isHiddenLabeL? "left" : "center";
   const animationVariant: AnimationVariant =
     variant === "clear" && minimalism !== 'round' || minimalism === 'square' || isHiddenLabeL ? "square" : "circle";
   const animationColor: AnimationColor =
-    variant === "primary" ? "light" : "dark";
+    color === "primary" && variant === 'filled' ? "light" : "dark";
 
   if (isExternal) {
     return (

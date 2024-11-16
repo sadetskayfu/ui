@@ -1,20 +1,23 @@
+@import './themes/light';
+
 :root {
 	--font-family: 'sans-serif';
 
-	--color-opacity: rgba(0, 0, 0, 0.05);
-	--color-shadow: rgba(0, 0, 0, 0.05);
-	--color-focus: rgb(63, 26, 5);
-	--color-error: rgb(207, 77, 17);
+	--red-600: rgb(133, 52, 15);
+	--red-500: rgb(153, 48, 0);
+	--red-100: rgb(255, 245, 241);
+	--red-opacity: rgb(255, 151, 104, 0.2);
 
-	--box-shadow-focus: 0 0.5px 5px var(--color-focus);
-	--box-shadow-primary: 0 0.5px 1px rgb(202, 131, 25);
-	--box-shadow-secondary: 0 0.5px 1px rgb(63, 26, 5);
-	--box-shadow-error: 0 0.5px 1px var(--color-error);
-	--box-shadow-transparent: 0 0.5px 1px transparent;
-	
+	--green-600: rgb(1, 49, 11);
+	--green-500: rgb(28, 71, 37);
+	--green-100: rgb(239, 255, 242);
+	--green-opacity: rgba(152, 221, 167, 0.2);
+
+	--box-shadow-error: 0 0.5px 1px var(--red-600);
+
 	--border-radius-small: 4px;
 	--border-radius-medium: 7px;
-	--border-radius-middle: 15px;
+	--border-radius-large: 9999px;
 
 	--opacity-small: 0.8;
 	--opacity-medium: 0.5;
@@ -22,6 +25,8 @@
 
 	--border: 2px solid;
 
+	--font-size-small-s: 10px;
+	--font-size-small-m: 12px;
 	--font-size-small: 14px;
 	--font-size-medium: 18px;
 	--font-size-large: 20px;
@@ -34,6 +39,11 @@
 	--button-height-medium: 45px;
 	--button-height-large: 55px;
 
+	--input-height-medium: 55px;
+	--input-height-large: 65px;
+
+	--icon-size-small: 13px;
+
     --padding-small-s: 5px;
 	--padding-small-l: 10px;
 	--padding-medium: 15px;
@@ -44,10 +54,9 @@
 	--gap-small-s: 10px;
 	--gap-small-m: 12.5px;
 	--gap-small-l: 17.5px;
-	--gap-medium-s: 18px;
+	--gap-medium-s: 16px;
 	--gap-medium-m: 25px;
 	--gap-medium-l: 35px;
-	//--gap-large: 25px;
 
 	--z-index-drop-down-menu: 2500;
 	--z-index-close: -1000;

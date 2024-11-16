@@ -10,26 +10,23 @@
 
 .track {
   position: relative;
-  background-color: var(--color-secondary);
+  background-color: var(--primary-200);
   border-radius: var(--border-radius-small);
   width: 100%;
-  box-shadow: var(--box-shadow-primary);
 }
 
 .fill {
   position: absolute;
   border-radius: var(--border-radius-small);
   height: 100%;
-  background-color: var(--color-primary);
-  box-shadow: var(--box-shadow-secondary);
+  background-color: var(--primary-500);
 }
 
 .marker {
   position: absolute;
   height: 150%;
   aspect-ratio: 1;
-  box-shadow: var(--box-shadow-primary);
-  background-color: var(--color-secondary);
+  background-color: var(--primary-200);
   border-radius: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -42,17 +39,16 @@
     height: 50%;
     aspect-ratio: 1;
     border-radius: inherit;
-    background-color: var(--color-gray);
+    background-color: var(--primary-300);
   }
 
   &.active {
-    box-shadow: var(--box-shadow-secondary);
-    background-color: var(--color-primary);
+    background-color: var(--primary-500);
     &:before {
-      background-color: var(--color-dark);
+      background-color: var(--primary-300);
     }
     .marker-label {
-      color: var(--color-dark);
+      color: var(--primary-500);
     }
   }
 
@@ -66,8 +62,8 @@
   position: absolute;
   left: 50%;
   translate: -50%;
-  top: 15px;
-  color: var(--color-primary);
+  top: var(--gap-medium-m);
+  color: var(--primary-300);
   transition-duration: 0.2s;
   font-size: var(--font-size-small);
 }
@@ -75,9 +71,9 @@
 .thumb {
   position: absolute;
   aspect-ratio: 1;
-  background-color: var(--color-primary);
-  border-radius: 50%;
+  background-color: var(--primary-500);
   box-shadow: var(--box-shadow-secondary);
+  border-radius: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;

@@ -10,6 +10,7 @@
   column-gap: var(--gap-small-s);
   text-wrap: nowrap;
   @include user-select-off;
+  color: var(--primary-500);
 }
 
 .icon {
@@ -17,15 +18,15 @@
   aspect-ratio: 1;
   display: flex;
   svg {
-    stroke: var(--color-primary);
-    fill: var(--color-primary);
+    stroke: var(--primary-500);
+    fill: var(--primary-500);
   }
 }
 
 // Directions
 .link {
   &.horizontal.clear,
-  &.horizontal.classic {
+  &.horizontal.standart {
     &:before {
       @include underline-bottom;
       height: 2px;
@@ -33,13 +34,13 @@
     &.active {
       &:before {
         width: 100%;
-        background-color: var(--color-primary);
+        background-color: var(--primary-500);
       }
     }
   }
 
   &.vertical.clear,
-  &.vertical.classic {
+  &.vertical.standart {
     &:before {
       @include underline-right;
       width: 2px;
@@ -48,7 +49,7 @@
       border-radius: var(--border-radius-medium) 0 0 var(--border-radius-medium);
       &:before {
         height: 100%;
-        background-color: var(--color-primary);
+        background-color: var(--primary-500);
       }
     }
   }
@@ -56,92 +57,102 @@
 
 // Variants
 .link {
-  &.primary {
-    color: var(--color-light);
-    background-color: var(--color-primary);
-    box-shadow: var(--box-shadow-secondary);
-    @include hover {
-      background-color: var(--color-primary-light);
+  &.filled {
+    &.primary {
+      background-color: var(--primary-500);
+      color: var(--light);
+      @include hover {
+        background-color: var(--primary-400);
+      }
+      .icon {
+        svg {
+          fill: var(--light);
+          stroke: var(--light);
+        }
+      }
     }
-    .icon {
-      svg {
-        stroke: var(--color-light);
-        fill: var(--color-light);
+    &.secondary {
+      background-color: var(--primary-200);
+      @include hover {
+        background-color: var(--primary-opacity);
       }
     }
   }
-
-  &.transparent {
-    box-shadow: var(--box-shadow-primary);
+  &.outlined {
+    &.primary {
+      border: var(--border-primary);
+      background-color: transparent;
+    }
+    &.secondary {
+      background-color: transparent;
+      border: var(--border-secondary);
+    }
     @include hover {
-      background-color: var(--theme-color-opacity);
+      background-color: var(--primary-opacity);
     }
   }
-
   &.clear {
-    box-shadow: var(--box-shadow-transparent);
+    background-color: transparent;
     @include hover {
-      background-color: var(--theme-color-opacity);
+      background-color: var(--primary-opacity);
     }
   }
-
-  &.classic {
-    box-shadow: var(--box-shadow-transparent);
+  &.standart {
     @include hover {
-      color: var(--color-primary);
+      color: var(--primary-300);
+      .icon {
+        svg {
+          fill: var(--primary-300);
+          stroke: var(--primary-300);
+        }
+      }
     }
   }
-
   &.text {
-    color: var(--color-primary);
+    color: var(--primary-300);
     @include hover {
-      text-decoration: underline;
+      color: var(--primary-400);
     }
   }
 }
 
 // Sizes
 .link {
-  &.small:not(.minimalism-square, .minimalism-round, .text) {
+  &.small:not(.minimalism, .text) {
     padding-inline: var(--padding-small-l);
     height: var(--button-height-small-l);
   }
-  &.small.minimalism-square,
-  &.small.minimalism-round {
+  &.small.minimalism {
     height: var(--button-height-small-l);
   }
 
-  &.medium:not(.minimalism-square, .minimalism-round, .text) {
+  &.medium:not(.minimalism, .text) {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
   }
-  &.medium.minimalism-square,
-  &.medium.minimalism-round {
+  &.medium.minimalism {
     height: var(--button-height-medium);
   }
 
-  &.large:not(.minimalism-square, .minimalism-round, .text) {
+  &.large:not(.minimalism, .text) {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
   }
-  &.large.minimalism-square,
-  &.large.minimalism-round {
+  &.large.minimalism {
     height: var(--button-height-large);
   }
 }
-
 // Minimalism variants
 .link {
-  &.minimalism-round,
-  &.minimalism-square {
+  &.minimalism {
     justify-content: center;
     aspect-ratio: 1;
+    &__round {
+      border-radius: 50%;
+    }
     .label {
       @include visually-hidden;
     }
-  }
-  &.minimalism-round {
-    border-radius: 50%; 
   }
 }
 
@@ -158,6 +169,23 @@
     box-shadow: var(--box-shadow-focus);
   }
   &.active {
-    color: var(--color-primary);
+    color: var(--primary-300);
+    .icon {
+      svg {
+        stroke: var(--primary-300);
+        fill: var(--primary-300);
+      }
+    }
+    &.standart {
+      @include hover {
+        color: var(--primary-400);
+        .icon {
+          svg {
+            stroke: var(--primary-400);
+            fill: var(--primary-400);
+          }
+        }
+      }
+    }
   }
 }

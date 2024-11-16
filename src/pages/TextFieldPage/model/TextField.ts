@@ -6,7 +6,7 @@ export const fieldVariants: InputVariant[] = [
 ]
 
 export const labelVariants: InputLabelVariant[] = [
-    'static', 'jump', 'none'
+    'static', 'jump'
 ]
 
 export const fieldSizes: InputSize[] = [

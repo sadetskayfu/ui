@@ -1,25 +1,25 @@
 .header {
     height: var(--header-height);
-    background-color: var(--color-dark);
+    background-color: var(--dark-900);
 }
 
 .primary {
-    color: var(--color-primary);
+    color: var(--primary-500);
 }
 .secondary {
-    color: var(--color-primary-light);
+    color: var(--primary-400);
 }
 .dark {
-    color: var(--color-dark);
+    color: var(--dark-900);
 }
 .dark-alt {
-    color: var(--color-primary-light);
+    color: var(--primary-400);
 }
 .light {
-    color: var(--color-light);
+    color: var(--light);
 }
 .light-alt {
-    color: var(--color-secondary);
+    color: var(--primary-200);
 }
 
 .square {

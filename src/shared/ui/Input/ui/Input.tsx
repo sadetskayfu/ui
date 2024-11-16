@@ -14,7 +14,7 @@ import SearchIcon from '@/shared/assets/icons/search.svg?react';
 
 export type InputVariant = "primary" | "transparent" | "clear";
 export type InputSize = "medium" | "large";
-export type InputLabelVariant = "jump" | "none" | "static";
+export type InputLabelVariant = "jump" | "static";
 
 interface InputProps {
   className?: string;
@@ -33,6 +33,7 @@ interface InputProps {
   errorMessage?: string;
   value: string;
   type?: "text" | "password";
+  tabIndex?: number
   onClick?: () => void
   onBlur?: () => void
   onFocus?: () => void
@@ -57,6 +58,7 @@ export const Input = memo(
         isDisabled,
         isSearch,
         isVisiblePasswordButton,
+        tabIndex = 0,
         onClick,
         onBlur,
         onFocus,
@@ -89,12 +91,13 @@ export const Input = memo(
 
       const handleClear = () => {
         onChange?.("");
+        input.current?.focus()
       };
 
       const inputType: string =
         type === "password" ? (isPasswordVisible ? "text" : "password") : type;
 
-      const tabIndex: number = isDisabled || isReadonly ? -1 : 0;
+      const currentTabIndex: number = isDisabled || isReadonly ? -1 : tabIndex;
 
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: value.length !== 0,
@@ -121,7 +124,7 @@ export const Input = memo(
             </label>
             <input
               className={styles["input"]}
-              tabIndex={tabIndex}
+              tabIndex={currentTabIndex}
               placeholder={placeholder}
               id={id}
               aria-errormessage={id + "errors"}

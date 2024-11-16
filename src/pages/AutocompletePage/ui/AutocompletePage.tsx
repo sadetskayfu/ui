@@ -1,5 +1,4 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
-import styles from "./style.module.scss";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useMemo, useState } from "react";
 import { countries } from "../model/Autocomplete";
@@ -23,25 +22,27 @@ const AutocompletePage = () => {
   }, []);
 
   return (
-    <section className={styles["page"]}>
-      {/* <SectionTitle>Autocomplete</SectionTitle>
-      <div className={styles["subsections"]}>
-        <PreviewComponents title="Countries">
-          <Autocomplete
-            label="Country"
-            name="country"
-            options={getCountriesArray}
-            value={countryValue}
-            selectedValue={selectedCountry}
-            onChange={handleChangeCountryValue}
-            onSelect={handleSelectCountry}
-            errorMessage={countryError[0]}
-            variant="countries"
-            placeholder="Select you country..."
-          />
-        </PreviewComponents>
-      </div> */}
-    </section>
+    <div className="page">
+      <section className="section">
+        <SectionTitle>Autocomplete</SectionTitle>
+        <div className="subsections">
+          <PreviewComponents title="Countries">
+            <Autocomplete
+              label="Country"
+              name="country"
+              options={getCountriesArray}
+              value={countryValue}
+              selectedValue={selectedCountry}
+              onChange={handleChangeCountryValue}
+              onSelect={handleSelectCountry}
+              errorMessage={countryError[0]}
+              variant="countries"
+              placeholder="Select you country..."
+            />
+          </PreviewComponents>
+        </div>
+      </section>
+    </div>
   );
 };
 

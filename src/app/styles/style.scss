@@ -1,7 +1,7 @@
 @import 'normalize', 'variables','themes/dark', 'themes/light','mixins', 'globals',  'media', 'utils';
 
 .app {
-    background-color: var(--color-light); 
+    background-color: var(--light); 
     height: 100vh;                                                          
 }
 

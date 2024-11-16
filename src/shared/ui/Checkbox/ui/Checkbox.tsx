@@ -4,7 +4,7 @@ import { ClickAnimation } from "../../ClickAnimation";
 import { memo } from "react";
 import styles from "./style.module.scss";
 
-export type CheckboxVariant = 'primary' | 'transparent'
+export type CheckboxVariant = 'filled' | 'outlined'
 export type CheckboxSize = "small" | "medium"
 
 interface CheckboxProps {
@@ -28,7 +28,7 @@ export const Checkbox = memo((props: CheckboxProps) => {
     id,
     isHiddenLabel,
     size = "medium",
-    variant = 'primary',
+    variant = 'filled',
     label,
     name,
     isDisabled,

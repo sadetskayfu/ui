@@ -11,7 +11,7 @@ import AccordionIcon from "@/shared/assets/icons/opening-arrow.svg?react";
 import { IconButton } from "@/shared/ui/IconButton";
 import styles from "./style.module.scss";
 
-type AccordionVariant = "primary" | "clear";
+type AccordionVariant = "filled" | "outlined" | "clear";
 type AccordionTitleVariant = "h3" | "h4";
 
 interface AccordionProps {
@@ -36,7 +36,7 @@ export const Accordion = memo((props: AccordionProps) => {
     title,
     titleVariant = "h3",
     Icon,
-    variant = "primary",
+    variant = "filled",
     index,
     selectedIndex,
     isBorderRadius,

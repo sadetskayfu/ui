@@ -22,8 +22,8 @@
     min-width: 30px;
     padding-inline: var(--padding-small-l);
     border-radius: var(--border-radius-medium);
-    background-color: var(--color-dark);
-    color: var(--color-light);
+    background-color: var(--primary-200);
+    color: var(--primary-500);
     font-size: var(--font-size-small);
 
     &:before {
@@ -34,7 +34,7 @@
         left: 50%;
         translate: -50%;
         top:44%;
-        background-color: var(--color-dark);
+        background-color: var(--primary-200);
         clip-path: polygon(50% 50%, 100% 50%, 50% 100%, 0% 50%);
     }
 }

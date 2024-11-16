@@ -62,7 +62,6 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
 
   const additionalClasses: Array<string | undefined> = [
     className,
-    styles[size]
   ];
 
   const mods: Record<string, boolean | undefined> = {
@@ -72,7 +71,7 @@ export const RadioGroup = memo((props: RadioGroupProps) => {
   return (
     <fieldset className={classNames(styles["radios"], additionalClasses, mods)} role='group' aria-orientation={direction}>
       <legend className={styles['title']}>{title}</legend>
-      <Group direction={direction} gap={size}>
+      <Group direction={direction} gap='small'>
         {renderItems}
       </Group>
     </fieldset>

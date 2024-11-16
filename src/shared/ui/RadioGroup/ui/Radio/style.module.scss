@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  column-gap: var(--gap-small-s);
 
   @include user-select-off;
   @include hover {
@@ -24,9 +25,8 @@
 .emulator {
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--color-secondary);
+  background-color: var(--primary-200);
   transition-duration: 0.2s;
-  box-shadow: var(--box-shadow-primary);
   position: relative;
 
   &:before {
@@ -35,9 +35,8 @@
     height: 0%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background-color: var(--color-primary);
+    background-color: var(--primary-500);
     transition-duration: inherit;
-    box-shadow: var(--box-shadow-secondary);
   }
 }
 
@@ -48,14 +47,12 @@
 // Sizes
 .radio {
   &.small {
-    column-gap: var(--gap-small-s);
     .emulator {
       height: var(--button-height-small-s);
     }
   }
 
   &.medium {
-    column-gap: var(--gap-small-m);
     .emulator {
       height: var(--button-height-small-m);
     }

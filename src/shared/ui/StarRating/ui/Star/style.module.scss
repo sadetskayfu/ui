@@ -20,7 +20,7 @@
   position: relative;
   height: var(--width);
   aspect-ratio: 1;
-  background-color: var(--color-secondary);
+  background-color: var(--primary-200);
   clip-path: polygon(
     50% 0%,
     61% 35%,
@@ -42,7 +42,7 @@
     top: 0;
     height: 100%;
     width: 0%;
-    background-color: var(--color-primary);
+    background-color: var(--primary-500);
     z-index: 100;
   }
 }
@@ -94,7 +94,7 @@
     pointer-events: none;
     opacity: var(--opacity-big);
     .icon {
-      background-color: var(--color-primary);
+      background-color: var(--primary-500);
     }
   }
 }

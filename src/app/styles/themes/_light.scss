@@ -1,10 +1,24 @@
 .app-theme-light {
-  --color-light: rgb(255, 255, 255);
-  --color-dark: rgb(63, 26, 5);
-  --color-secondary: rgb(255, 242, 227);
-  --color-primary: rgb(202, 131, 25);
-  --color-primary-light: rgb(233, 151, 29,0.8);
-  --color-gray: rgb(255, 226, 183);
+  --light: rgb(255, 255, 255);
+  --light-100: rgba(255, 255, 255, 0.959);
+  --dark-900: rgb(12, 2, 24);
+
+  --primary-600: rgb(46, 22, 77);
+  --primary-500: rgb(71, 36, 114);
+  --primary-400: rgb(125, 67, 196);
+  --primary-300: rgb(237, 222, 255);
+  --primary-200: rgb(244, 235, 255);
   
-  --theme-color-opacity: rgba(252, 232, 202, 0.2);
+  --primary-opacity: rgba(228, 202, 255, 0.2);
+
+  --border-primary: 2px solid var(--primary-500);
+	--border-secondary: 2px solid var(--primary-200);
+
+  --box-shadow-focus: 0 0 5px var(--primary-500);
+  --box-shadow-focus-light: 0 0 5px var(--primary-200);
+	--box-shadow-primary: 0 0 0 var(--primary-500);
+	--box-shadow-secondary: 0 0 1px var(--primary-200);
+  --box-shadow-bottom: 0 3px 2px var(--primary-500);
+	
+	--box-shadow-transparent: 0 0 1px transparent;
 }

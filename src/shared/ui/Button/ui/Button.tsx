@@ -5,13 +5,15 @@ import { ClickAnimation, AnimationColor, AnimationDirection, AnimationVariant } 
 import styles from "./style.module.scss";
 
 
-export type ButtonVariant = "primary" | "secondary" | "transparent" | "clear";
+export type ButtonVariant = "filled" | "outlined" | "clear"
+export type ButtonColor = 'primary' | 'secondary'
 export type ButtonMinimalismVariant = "round" | "square"
 export type ButtonSize = "small" | "medium" | "large"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: ButtonVariant;
+  color?: ButtonColor;
   size?: ButtonSize;
   minimalism?: ButtonMinimalismVariant;
   animateDirection?: AnimationDirection
@@ -43,8 +45,9 @@ export const Button = memo(
         isKeyBlocked,
         isStopFocus,
         isHiddenLabel,
-        variant = "primary",
+        variant = "filled",
         size = "medium",
+        color = 'primary',
         minimalism,
         type = "button",
         Icon,
@@ -77,6 +80,7 @@ export const Button = memo(
       const additionalClasses: Array<string | undefined> = [
         className,
         styles[variant],
+        styles[color],
         styles[size],
         styles[`minimalism__${minimalism}`],
       ];
@@ -110,7 +114,7 @@ export const Button = memo(
           <ClickAnimation
             variant={!animationVariant && minimalism === 'square' ? 'square' : animationVariant}
             direction={animateDirection}
-            color={!animationColor && variant === 'primary' ? 'light' : animationColor}
+            color={!animationColor && color === 'primary' && variant === 'filled' ? 'light' : animationColor}
             isAnimating={isAnimating}
           />
         </button>

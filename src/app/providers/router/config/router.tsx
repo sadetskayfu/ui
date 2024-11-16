@@ -16,6 +16,7 @@ import { AccordionPage } from "@/pages/AccordionPage";
 import { BackdropPage } from "@/pages/BackdropPage";
 import { AsideMenuPage } from "@/pages/AsideMenuPage";
 import { ModalPage } from "@/pages/ModalPage";
+import { SelectPage } from "@/pages/SelectPage";
 
 export const AppRouter = () => {
   return (
@@ -36,6 +37,7 @@ export const AppRouter = () => {
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
         <Route path={ROUTES.ASIDE_MENU} element={<AsideMenuPage />} />
         <Route path={ROUTES.MODAL} element={<ModalPage />} />
+        <Route path={ROUTES.SELECT} element={<SelectPage />} />
       </Routes>
     </Suspense>
   );

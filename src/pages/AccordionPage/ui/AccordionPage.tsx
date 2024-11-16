@@ -25,7 +25,7 @@ const AccordionPage = () => {
       <section className="section">
         <SectionTitle>Accordion</SectionTitle>
         <PreviewComponents title="Accordion variants" direction="vertical">
-          <Accordion title="Primary" isBorderRadius>
+          <Accordion title="Filled" isBorderRadius>
             <Group direction="vertical" gap="small">
               <Checkbox
                 label="Blue"
@@ -50,6 +50,34 @@ const AccordionPage = () => {
               />
             </Group>
           </Accordion>
+          <Accordion title="Outlined" variant="outlined" isBorderRadius>
+            <Group direction="vertical" gap="small">
+              <Checkbox
+                label="Blue"
+                name="blue-color"
+                isChecked={blueColor}
+                onToggle={handleToggleBlueColor}
+                size="small"
+                variant="outlined"
+              />
+              <Checkbox
+                label="Red"
+                name="red-color"
+                isChecked={redColor}
+                onToggle={handleToggleRedColor}
+                size="small"
+                variant="outlined"
+              />
+              <Checkbox
+                label="Green"
+                name="green-color"
+                isChecked={greenColor}
+                onToggle={handleToggleGreenColor}
+                size="small"
+                variant="outlined"
+              />
+            </Group>
+          </Accordion>
           <Accordion title="Clear" variant="clear" isBorderRadius>
             <Group direction="vertical" gap="small">
               <Checkbox
@@ -58,7 +86,7 @@ const AccordionPage = () => {
                 isChecked={blueColor}
                 onToggle={handleToggleBlueColor}
                 size="small"
-                variant="transparent"
+                variant="outlined"
               />
               <Checkbox
                 label="Red"
@@ -66,7 +94,7 @@ const AccordionPage = () => {
                 isChecked={redColor}
                 onToggle={handleToggleRedColor}
                 size="small"
-                variant="transparent"
+                variant="outlined"
               />
               <Checkbox
                 label="Green"
@@ -74,7 +102,7 @@ const AccordionPage = () => {
                 isChecked={greenColor}
                 onToggle={handleToggleGreenColor}
                 size="small"
-                variant="transparent"
+                variant="outlined"
               />
             </Group>
           </Accordion>
@@ -89,7 +117,7 @@ const AccordionPage = () => {
                   isChecked={blueColor}
                   onToggle={handleToggleBlueColor}
                   size="small"
-                  variant="transparent"
+                  variant="outlined"
                 />
                 <Checkbox
                   label="Red"
@@ -97,7 +125,7 @@ const AccordionPage = () => {
                   isChecked={redColor}
                   onToggle={handleToggleRedColor}
                   size="small"
-                  variant="transparent"
+                  variant="outlined"
                 />
                 <Checkbox
                   label="Green"
@@ -105,7 +133,7 @@ const AccordionPage = () => {
                   isChecked={greenColor}
                   onToggle={handleToggleGreenColor}
                   size="small"
-                  variant="transparent"
+                  variant="outlined"
                 />
               </Group>
             </Accordion>
@@ -117,23 +145,19 @@ const AccordionPage = () => {
                   isChecked={blueColor}
                   onToggle={handleToggleBlueColor}
                   size="small"
-                  variant="transparent"
                 />
                 <Checkbox
                   label="Red"
                   name="red-color"
                   isChecked={redColor}
                   onToggle={handleToggleRedColor}
-                  size="small"
-                  variant="transparent"
-                />
+                  size="small" />
                 <Checkbox
                   label="Green"
                   name="green-color"
                   isChecked={greenColor}
                   onToggle={handleToggleGreenColor}
                   size="small"
-                  variant="transparent"
                 />
               </Group>
             </Accordion>
@@ -145,7 +169,6 @@ const AccordionPage = () => {
                   isChecked={blueColor}
                   onToggle={handleToggleBlueColor}
                   size="small"
-                  variant="transparent"
                 />
                 <Checkbox
                   label="Red"
@@ -153,7 +176,6 @@ const AccordionPage = () => {
                   isChecked={redColor}
                   onToggle={handleToggleRedColor}
                   size="small"
-                  variant="transparent"
                 />
                 <Checkbox
                   label="Green"
@@ -161,7 +183,6 @@ const AccordionPage = () => {
                   isChecked={greenColor}
                   onToggle={handleToggleGreenColor}
                   size="small"
-                  variant="transparent"
                 />
               </Group>
             </Accordion>

@@ -51,18 +51,23 @@
 
 // Variants
 .accordion {
-  &.primary {
-    box-shadow: var(--box-shadow-primary);
-    background-color: var(--color-secondary);
-    .body {
-      background-color: var(--color-light);
-    }
+  &.filled{
     .header {
+      background-color: var(--primary-200);
       @include hover {
-        background-color: var(--color-gray);
+        background-color: var(--primary-300);
       }
       &:focus-visible {
-        background-color: var(--color-gray);
+        background-color: var(--primary-300);
+      }
+    }
+  }
+  &.outlined {
+    background-color: transparent;
+    border: var(--border-secondary);
+    .header {
+      @include hover {
+        background-color: var(--primary-opacity);
       }
     }
   }
@@ -70,10 +75,10 @@
     background-color: transparent;
     .header {
       @include hover {
-        background-color: var(--theme-color-opacity);
+        background-color: var(--primary-opacity);
       }
       &:focus-visible {
-        background-color: var(--theme-color-opacity);
+        background-color: var(--primary-opacity);
       }
     }
   }

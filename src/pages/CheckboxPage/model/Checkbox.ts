@@ -5,4 +5,4 @@ import {
 
 export const checkboxSizes: CheckboxSize[] = ["small", "medium"];
 
-export const checkboxVariants: CheckboxVariant[] = ["primary", "transparent"];
+export const checkboxVariants: CheckboxVariant[] = ["filled", "outlined"];

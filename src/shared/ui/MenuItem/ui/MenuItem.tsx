@@ -9,6 +9,8 @@ export interface MenuItemProps {
   children: ReactNode;
   isHovered?: boolean;
   isSelected?: boolean;
+  isDisabled?: boolean;
+  isReadonly?: boolean;
   isLink?: boolean;
   isExternalLink?: boolean;
   onClick?: () => void;
@@ -24,6 +26,8 @@ export const MenuItem = memo((props: MenuItemProps) => {
     children,
     isHovered,
     isSelected,
+    isDisabled,
+    isReadonly,
     isLink,
     isExternalLink,
     onClick,
@@ -33,9 +37,13 @@ export const MenuItem = memo((props: MenuItemProps) => {
     to = '',
   } = props;
 
+  const currentTabIndex = (isDisabled || isReadonly) ? -1 : tabIndex
+
   const mods: Record<string, boolean | undefined> = {
     [styles["hovered"]]: isHovered,
     [styles["selected"]]: isSelected,
+    [styles['disabled']]: isDisabled,
+    [styles['readonly']]: isReadonly
   };
 
   if (isLink)
@@ -43,11 +51,13 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
+        aria-disabled={isDisabled ? 'true' : 'false'}
+        aria-readonly={isReadonly ? 'true' : 'false'}
       >
         <Link
           className={styles["link"]}
           onMouseMove={onMouseMove}
-          tabIndex={tabIndex}
+          tabIndex={currentTabIndex}
           to={to}
         >
           {children}
@@ -65,11 +75,13 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
+        aria-disabled={isDisabled ? 'true' : 'false'}
+        aria-readonly={isReadonly ? 'true' : 'false'}
       >
         <a
           className={styles["link"]}
           onMouseMove={onMouseMove}
-          tabIndex={tabIndex}
+          tabIndex={currentTabIndex}
           href={to}
         >
           {children}
@@ -86,12 +98,14 @@ export const MenuItem = memo((props: MenuItemProps) => {
     <li
       className={classNames(styles["menu-item"], [className], mods)}
       role="menuitem"
+      aria-readonly={isReadonly ? 'true' : 'false'}
     >
       <button
         className={styles["button"]}
         onClick={onClick}
         onMouseMove={onMouseMove}
-        tabIndex={tabIndex}
+        tabIndex={currentTabIndex}
+        disabled={isDisabled}
       >
         {children}
         {Icon && (

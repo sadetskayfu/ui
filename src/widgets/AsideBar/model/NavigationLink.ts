@@ -65,5 +65,9 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Modal',
         path: ROUTES.MODAL
+    },
+    {
+        label: 'Select',
+        path: ROUTES.SELECT
     }
 ]

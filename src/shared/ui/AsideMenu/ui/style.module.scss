@@ -1,10 +1,9 @@
 .aside-menu {
     position: fixed;
-    background-color: var(--color-light);
+    background-color: var(--light);
     z-index: var(--z-index-close);
     transition: transform 0.4s, z-index 3s;
     pointer-events: none;
-    box-shadow: 0 0 1px var(--color-primary);
 }
 
 // Position
@@ -13,23 +12,27 @@
         width: 100%;
         top: 0;
         transform: translateY(-100%);
+        border-bottom: var(--border-secondary);
     }
     &.bottom {
         width: 100%;
         bottom: 0;
         transform: translateY(100%);
+        border-top: var(--border-secondary);
     }
     &.left {
         height: 100%;
         left: 0;
         top: 0;
         transform: translateX(-100%);
+        border-right: var(--border-secondary);
     }
     &.right {
         height: 100%;
         right: 0;
         top: 0;
         transform: translateX(100%);
+        border-left: var(--border-secondary);
     }
 }
 

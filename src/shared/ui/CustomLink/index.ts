@@ -4,4 +4,5 @@ export type {
   CustomLinkMinimalismVariant,
   CustomLinkSize,
   CustomLinkVariant,
+  CustomLinkColor
 } from "./ui/CustomLink";

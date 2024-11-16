@@ -10,9 +10,9 @@
   border: none;
   border-radius: var(--border-radius-medium);
   text-wrap: nowrap;
-  background-color: transparent;
   @include user-select-off;
   gap: var(--gap-small-s);
+  color: var(--primary-500);
 }
 
 .icon {
@@ -20,50 +20,51 @@
   aspect-ratio: 1;
   display: flex;
   svg {
-    fill: var(--color-primary);
-    stroke: var(--color-primary);
+    fill: var(--primary-500);
+    stroke: var(--primary-500);
   }
 }
 
 // Variants
 .button {
-  &.primary {
-    color: var(--color-light);
-    box-shadow: var(--box-shadow-secondary);
-    background-color: var(--color-primary);
-    @include hover {
-      background-color: var(--color-primary-light);
+  &.filled {
+    &.primary {
+      background-color: var(--primary-500);
+      color: var(--light);
+      @include hover {
+        background-color: var(--primary-400);
+      }
+      .icon {
+        svg {
+          fill: var(--light);
+          stroke: var(--light);
+        }
+      }
     }
-    .icon {
-      svg {
-        stroke: var(--color-light);
-        fill: var(--color-light);
+    &.secondary {
+      background-color: var(--primary-200);
+      @include hover {
+        background-color: var(--primary-opacity);
       }
     }
   }
-
-  &.secondary {
-    box-shadow: var(--box-shadow-secondary);
-    background-color: var(--color-secondary);
+  &.outlined {
+    &.primary {
+      border: var(--border-primary);
+      background-color: transparent;
+    }
+    &.secondary {
+      background-color: transparent;
+      border: var(--border-secondary);
+    }
     @include hover {
-      background-color: var(--color-gray);
+      background-color: var(--primary-opacity);
     }
   }
-
-  &.transparent {
-    box-shadow: var(--box-shadow-primary);
-    background-color: transparent;
-    @include hover {
-      background-color: var(--theme-color-opacity);
-    }
-  }
-
   &.clear {
     background-color: transparent;
-    box-shadow: var(--box-shadow-transparent);
     @include hover {
-      background-color: var(--theme-color-opacity);
-      box-shadow: var(--box-shadow-primary);
+      background-color: var(--primary-opacity);
     }
   }
 }
@@ -121,7 +122,6 @@
   &.minimalism {
     justify-content: center;
     aspect-ratio: 1;
-
     &__round {
       border-radius: 50%;
     }
