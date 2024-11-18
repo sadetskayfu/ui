@@ -10,13 +10,12 @@ interface SwitchProps {
   className?: string;
   size?: SwitchSize;
   id?: string
-  isHiddenLabel?: boolean
-  label: string;
-  name: string;
+  label?: string;
+  name?: string;
   isDisabled?: boolean
   isRequired?: boolean
   isChecked: boolean;
-  onToggle: (name: string) => void;
+  onToggle: () => void;
   tabIndex?: number;
 }
 
@@ -24,7 +23,6 @@ export const Switch = memo((props: SwitchProps) => {
   const {
     className,
     id,
-    isHiddenLabel,
     size = "medium",
     label,
     name,
@@ -37,10 +35,15 @@ export const Switch = memo((props: SwitchProps) => {
 
   const { isAnimating, startAnimation } = useAnimation();
 
+  const handleToggle = () => {
+    onToggle()
+    startAnimation()
+  }
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (event.key === "Enter") {
-      onToggle(name);
-      startAnimation();
+    if (event.key === "Enter" || event.key === ' ') {
+      event.preventDefault()
+      handleToggle()
     }
   };
 
@@ -59,7 +62,6 @@ export const Switch = memo((props: SwitchProps) => {
     <label
       className={classNames(styles["wrapper"], additionalClasses, mods)}
       tabIndex={isDisabled? -1 : tabIndex}
-      onMouseDown={startAnimation}
       onKeyDown={handleKeyDown}
     >
       <input
@@ -68,7 +70,7 @@ export const Switch = memo((props: SwitchProps) => {
         id={id && id}
         value={name}
         name={name}
-        onChange={() => onToggle(name)}
+        onChange={handleToggle}
         checked={isChecked}
         tabIndex={-1}
         disabled={isDisabled}
@@ -81,7 +83,7 @@ export const Switch = memo((props: SwitchProps) => {
           </span>
         </span>
       </div>
-      {!isHiddenLabel && <span className={styles['label']}>{label}</span>}
+      {label && <span className={styles['label']}>{label}</span>}
     </label>
   );
 });

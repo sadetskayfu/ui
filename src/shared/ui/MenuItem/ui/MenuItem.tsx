@@ -1,6 +1,6 @@
 import { memo, ReactNode } from "react";
 import { classNames } from "@/shared/lib";
-import { IconButton } from "@/shared/ui/IconButton";
+import { Icon as CheckMark } from "@/shared/ui/Icon";
 import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
 
@@ -16,7 +16,7 @@ export interface MenuItemProps {
   onClick?: () => void;
   onMouseMove?: () => void;
   tabIndex?: number;
-  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  Icon?: ReactNode;
   to?: string;
 }
 
@@ -34,16 +34,16 @@ export const MenuItem = memo((props: MenuItemProps) => {
     onMouseMove,
     tabIndex = -1,
     Icon,
-    to = '',
+    to = "",
   } = props;
 
-  const currentTabIndex = (isDisabled || isReadonly) ? -1 : tabIndex
+  const currentTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
 
   const mods: Record<string, boolean | undefined> = {
     [styles["hovered"]]: isHovered,
     [styles["selected"]]: isSelected,
-    [styles['disabled']]: isDisabled,
-    [styles['readonly']]: isReadonly
+    [styles["disabled"]]: isDisabled,
+    [styles["readonly"]]: isReadonly,
   };
 
   if (isLink)
@@ -51,8 +51,8 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
-        aria-disabled={isDisabled ? 'true' : 'false'}
-        aria-readonly={isReadonly ? 'true' : 'false'}
+        aria-disabled={isDisabled ? "true" : "false"}
+        aria-readonly={isReadonly ? "true" : "false"}
       >
         <Link
           className={styles["link"]}
@@ -61,11 +61,7 @@ export const MenuItem = memo((props: MenuItemProps) => {
           to={to}
         >
           {children}
-          {Icon && (
-            <span className={styles["icon"]}>
-              <Icon />
-            </span>
-          )}
+          {Icon && <>{Icon}</>}
         </Link>
       </li>
     );
@@ -75,8 +71,8 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
-        aria-disabled={isDisabled ? 'true' : 'false'}
-        aria-readonly={isReadonly ? 'true' : 'false'}
+        aria-disabled={isDisabled ? "true" : "false"}
+        aria-readonly={isReadonly ? "true" : "false"}
       >
         <a
           className={styles["link"]}
@@ -85,11 +81,7 @@ export const MenuItem = memo((props: MenuItemProps) => {
           href={to}
         >
           {children}
-          {Icon && (
-            <span className={styles["icon"]}>
-              <Icon />
-            </span>
-          )}
+          {Icon && <>{Icon}</>}
         </a>
       </li>
     );
@@ -98,7 +90,7 @@ export const MenuItem = memo((props: MenuItemProps) => {
     <li
       className={classNames(styles["menu-item"], [className], mods)}
       role="menuitem"
-      aria-readonly={isReadonly ? 'true' : 'false'}
+      aria-readonly={isReadonly ? "true" : "false"}
     >
       <button
         className={styles["button"]}
@@ -108,21 +100,8 @@ export const MenuItem = memo((props: MenuItemProps) => {
         disabled={isDisabled}
       >
         {children}
-        {Icon && (
-          <span className={styles["icon"]}>
-            <Icon />
-          </span>
-        )}
-        {isSelected && (
-          <IconButton
-            className={styles["check-mark"]}
-            isClickable={false}
-            variant="check-mark"
-            size="small"
-          >
-            Check mark
-          </IconButton>
-        )}
+        {Icon && <>{Icon}</>}
+        {isSelected && <CheckMark variant="check-mark" size="small" />}
       </button>
     </li>
   );

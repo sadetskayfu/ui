@@ -3,7 +3,7 @@ import { Tooltip } from "../../Tooltip";
 import { classNames, insertArrayInSortedArray } from "@/shared/lib";
 import styles from "./style.module.scss";
 
-export type SliderSize = 'small' | 'medium'
+export type SliderSize = "small" | "medium";
 
 export interface SliderCustomMarker {
   value: number;
@@ -11,11 +11,11 @@ export interface SliderCustomMarker {
 }
 
 interface SliderProps {
-  className?: string
-  size?: SliderSize
-  name: string
-  minName?: string
-  maxName?: string
+  className?: string;
+  size?: SliderSize;
+  name: string;
+  minName?: string;
+  maxName?: string;
   label: string;
   min: number;
   max: number;
@@ -23,17 +23,17 @@ interface SliderProps {
   minRange?: number;
   isWalkingMarkers?: boolean;
   isVisibleMarkers?: boolean;
-  isDisabled?: boolean
+  isDisabled?: boolean;
   customMarkers?: SliderCustomMarker[];
   initialValue: number | [number, number];
   onChange?: (value: number | [number, number], name: string) => void;
-  tabIndex?: number
+  tabIndex?: number;
 }
 
 export const Slider = memo((props: SliderProps) => {
   const {
     className,
-    size = 'medium',
+    size = "medium",
     name,
     minName,
     maxName,
@@ -48,10 +48,10 @@ export const Slider = memo((props: SliderProps) => {
     customMarkers = [],
     initialValue,
     onChange,
-    tabIndex = 0
+    tabIndex = 0,
   } = props;
 
-  const [value, setValue] = useState<number | [number, number]>(initialValue)
+  const [value, setValue] = useState<number | [number, number]>(initialValue);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isVisibleMinTooltip, setIsVisibleMinTooltip] =
     useState<boolean>(false);
@@ -64,7 +64,7 @@ export const Slider = memo((props: SliderProps) => {
 
   const isActiveMinThumb = document.activeElement === minThumbRef.current;
   const isActiveMaxThumb = document.activeElement === maxThumbRef.current;
- 
+
   const calculateTranslateThumb = (value: number) =>
     ((value - min) * 100) / (max - min);
 
@@ -96,10 +96,12 @@ export const Slider = memo((props: SliderProps) => {
       const customMarkerLabel = customMarkers.filter(
         (item) => item.value === marker
       )[0]?.label;
-      const isCustomMarker = !!customMarkerLabel
+      const isCustomMarker = !!customMarkerLabel;
 
       const mods: Record<string, boolean | undefined> = {
-        [styles["active"]]: typeof value === "number" && marker <= value || Array.isArray(value) && marker >= value[0] && marker <= value[1],
+        [styles["active"]]:
+          (typeof value === "number" && marker <= value) ||
+          (Array.isArray(value) && marker >= value[0] && marker <= value[1]),
         [styles["visible"]]: isVisibleMarkers || isCustomMarker,
       };
 
@@ -173,14 +175,14 @@ export const Slider = memo((props: SliderProps) => {
         updatedValues[thumbIndex] = isWalkingMarkers
           ? findNearestMarker(newValue)
           : newValue;
-        setValue(updatedValues)
+        setValue(updatedValues);
         onChange?.(updatedValues, name);
       } else {
         // Default slider
         const updatedValue = isWalkingMarkers
           ? findNearestMarker(newValue)
           : newValue;
-        setValue(updatedValue)
+        setValue(updatedValue);
         onChange?.(updatedValue, name);
       }
     },
@@ -194,7 +196,7 @@ export const Slider = memo((props: SliderProps) => {
       isActiveMinThumb,
       value,
       onChange,
-      name
+      name,
     ]
   );
 
@@ -220,37 +222,52 @@ export const Slider = memo((props: SliderProps) => {
     setIsDragging(false);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, thumbIndex: number = 0) => {
-    const isArrowKey = ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(event.key);
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    thumbIndex: number = 0
+  ) => {
+    const isArrowKey = [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowRight",
+      "ArrowLeft",
+    ].includes(event.key);
     if (!isArrowKey) return;
-    event.preventDefault()
-    const direction = event.key === "ArrowUp" || event.key === "ArrowRight" ? 1 : -1;
+    event.preventDefault();
+    const direction =
+      event.key === "ArrowUp" || event.key === "ArrowRight" ? 1 : -1;
 
-    const currentValue: number = Array.isArray(value) ? value[thumbIndex] : value
-    let newValue: number
-    
-    if(customMarkers.length > 0 && isWalkingMarkers) {
-      const currentMarkerIndex = markers.indexOf(currentValue) 
-      if(direction === 1 && currentMarkerIndex === markers.length - 1) return
-      if(direction === -1 && currentMarkerIndex === 0) return
-      newValue = direction === 1 ? markers[currentMarkerIndex + 1] : markers[currentMarkerIndex - 1]
+    const currentValue: number = Array.isArray(value)
+      ? value[thumbIndex]
+      : value;
+    let newValue: number;
+
+    if (customMarkers.length > 0 && isWalkingMarkers) {
+      const currentMarkerIndex = markers.indexOf(currentValue);
+      if (direction === 1 && currentMarkerIndex === markers.length - 1) return;
+      if (direction === -1 && currentMarkerIndex === 0) return;
+      newValue =
+        direction === 1
+          ? markers[currentMarkerIndex + 1]
+          : markers[currentMarkerIndex - 1];
     } else {
-      const newLocalValue = currentValue + direction * (isWalkingMarkers ? step : 1);
+      const newLocalValue =
+        currentValue + direction * (isWalkingMarkers ? step : 1);
       newValue = Math.min(Math.max(newLocalValue, min), max);
     }
 
-    if(Array.isArray(value)) {
+    if (Array.isArray(value)) {
       if (isActiveMinThumb && newValue + minRange - 1 >= value[1]) return;
       if (isActiveMaxThumb && newValue - minRange + 1 <= value[0]) return;
-      
-      const currentValues: [number, number] = [...value]
-      currentValues[thumbIndex] = newValue
-      setValue(currentValues)
-      onChange?.(currentValues, name)
-      return
+
+      const currentValues: [number, number] = [...value];
+      currentValues[thumbIndex] = newValue;
+      setValue(currentValues);
+      onChange?.(currentValues, name);
+      return;
     }
-    setValue(newValue)
-    onChange?.(newValue, name)
+    setValue(newValue);
+    onChange?.(newValue, name);
   };
 
   useEffect(() => {
@@ -266,18 +283,18 @@ export const Slider = memo((props: SliderProps) => {
   }, [isDragging, handleMouseMove]);
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    setValue(initialValue);
+  }, [initialValue]);
 
   const mods: Record<string, boolean | undefined> = {
     [styles["dragging"]]: isDragging,
-    [styles['disabled']]: isDisabled,
+    [styles["disabled"]]: isDisabled,
   };
 
   const additionalClasses: Array<string | undefined> = [
     className,
-    styles[size]
-  ]
+    styles[size],
+  ];
 
   return (
     <div
@@ -303,7 +320,7 @@ export const Slider = memo((props: SliderProps) => {
               }}
             />
             <div
-              tabIndex={isDisabled? -1 : tabIndex}
+              tabIndex={isDisabled ? -1 : tabIndex}
               className={styles["thumb"]}
               style={{
                 left: `${calculateTranslateThumb(value[0])}%`,
@@ -318,21 +335,32 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemin={min}
               aria-valuemax={max}
               aria-orientation="horizontal"
-              role='slider'
+              role="slider"
             >
               <Tooltip
                 parentRef={minThumbRef}
-                label={value[0]}
                 initialVisibility={isVisibleMinTooltip}
                 onToggle={setIsVisibleMinTooltip}
                 anotherVisibilityCondition={
                   document.activeElement === minThumbRef.current
                 }
+              >
+                {value[0]}
+              </Tooltip>
+              <input
+                tabIndex={-1}
+                className="visually-hidden"
+                name={minName}
+                type="range"
+                max={max}
+                min={min}
+                value={value[0]}
+                aria-hidden
+                disabled={isDisabled}
               />
-              <input tabIndex={-1} className="visually-hidden" name={minName} type="range" max={max} min={min} value={value[0]} aria-hidden disabled={isDisabled}/>
             </div>
             <div
-              tabIndex={isDisabled? -1 : tabIndex}
+              tabIndex={isDisabled ? -1 : tabIndex}
               className={styles["thumb"]}
               style={{
                 left: `${calculateTranslateThumb(value[1])}%`,
@@ -347,18 +375,29 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemin={min}
               aria-valuemax={max}
               aria-orientation="horizontal"
-              role='slider'
+              role="slider"
             >
               <Tooltip
                 parentRef={maxThumbRef}
-                label={value[1]}
                 initialVisibility={isVisibleMaxTooltip}
                 onToggle={setIsVisibleMaxTooltip}
                 anotherVisibilityCondition={
                   document.activeElement === maxThumbRef.current
                 }
+              >
+                {value[1]}
+              </Tooltip>
+              <input
+                tabIndex={-1}
+                className="visually-hidden"
+                name={maxName}
+                type="range"
+                max={max}
+                min={min}
+                value={value[1]}
+                aria-hidden
+                disabled={isDisabled}
               />
-              <input tabIndex={-1} className="visually-hidden" name={maxName} type="range" max={max} min={min} value={value[1]} aria-hidden disabled={isDisabled}/>
             </div>
           </>
         ) : (
@@ -369,7 +408,7 @@ export const Slider = memo((props: SliderProps) => {
               style={{ width: `${calculateTranslateThumb(value)}%` }}
             />
             <div
-              tabIndex={isDisabled? -1 : tabIndex}
+              tabIndex={isDisabled ? -1 : tabIndex}
               className={styles["thumb"]}
               style={{ left: `${calculateTranslateThumb(value)}%` }}
               ref={minThumbRef}
@@ -381,18 +420,29 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemin={min}
               aria-valuemax={max}
               aria-orientation="horizontal"
-              role='slider'
+              role="slider"
             >
               <Tooltip
                 parentRef={minThumbRef}
-                label={value}
                 initialVisibility={isVisibleMinTooltip}
                 onToggle={setIsVisibleMinTooltip}
                 anotherVisibilityCondition={
                   document.activeElement === minThumbRef.current
                 }
+              >
+                {value}
+              </Tooltip>
+              <input
+                tabIndex={-1}
+                className="visually-hidden"
+                name={name}
+                type="range"
+                max={max}
+                min={min}
+                value={value}
+                aria-hidden
+                disabled={isDisabled}
               />
-              <input tabIndex={-1} className="visually-hidden" name={name} type="range" max={max} min={min} value={value} aria-hidden disabled={isDisabled}/>
             </div>
           </>
         )}

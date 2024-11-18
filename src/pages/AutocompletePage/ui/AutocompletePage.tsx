@@ -27,7 +27,7 @@ const AutocompletePage = () => {
         <SectionTitle>Autocomplete</SectionTitle>
         <div className="subsections">
           <PreviewComponents title="Countries">
-            <Autocomplete
+            {/* <Autocomplete
               label="Country"
               name="country"
               options={getCountriesArray}
@@ -38,7 +38,7 @@ const AutocompletePage = () => {
               errorMessage={countryError[0]}
               variant="countries"
               placeholder="Select you country..."
-            />
+            /> */}
           </PreviewComponents>
         </div>
       </section>

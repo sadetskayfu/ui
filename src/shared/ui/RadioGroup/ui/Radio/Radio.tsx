@@ -37,10 +37,12 @@ export const Radio = (props: RadioProps) => {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
+    startAnimation()
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" || event.key === ' ') {
+      event.preventDefault()
       onChange(value);
       startAnimation();
     }
@@ -55,7 +57,6 @@ export const Radio = (props: RadioProps) => {
     <label
       className={classNames(styles["radio"], additionalClasses)}
       onKeyDown={handleKeyDown}
-      onMouseDown={startAnimation}
       tabIndex={tabIndex}
       role="radio"
     >

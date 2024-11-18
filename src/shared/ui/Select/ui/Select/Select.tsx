@@ -11,8 +11,7 @@ import {
 import styles from "./style.module.scss";
 import { Options } from "../Options/Options";
 import { Chip } from "@/shared/ui/Chip";
-import { IconButton } from "@/shared/ui/IconButton";
-import ArrowIcon from "@/shared/assets/icons/arrow.svg?react"
+import { Icon } from "@/shared/ui/Icon";
 
 export type SelectVariant = "outlined";
 export type SelectSize = "medium" | "large";
@@ -38,7 +37,8 @@ interface SelectProps {
   isReadonly?: boolean;
   isDisabled?: boolean;
   errorMessage?: string;
-  onValidate?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -57,7 +57,8 @@ export const Select = memo((props: SelectProps) => {
     isReadonly,
     isDisabled,
     errorMessage,
-    onValidate,
+    onBlur,
+    onFocus,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -128,7 +129,7 @@ export const Select = memo((props: SelectProps) => {
   };
 
   const handleBlur = () => {
-    onValidate?.();
+    onBlur?.();
     handleCloseMenu();
   };
 
@@ -156,7 +157,14 @@ export const Select = memo((props: SelectProps) => {
     if (Array.isArray(selectedValues) && selectedValues.length > 0) {
       return getSelectedValues.map((item) => {
         return (
-          <Chip color="secondary" variant="outlined" size="medium" isStopFocus onClose={() => handleDelete(item.id)} key={item.id}>
+          <Chip
+            color="secondary"
+            variant="filled"
+            size="small"
+            isStopFocus
+            onClose={() => handleDelete(item.id)}
+            key={item.id}
+          >
             {item.label}
           </Chip>
         );
@@ -182,13 +190,14 @@ export const Select = memo((props: SelectProps) => {
     [styles["disabled"]]: isDisabled,
     [styles["readonly"]]: isReadonly,
     [styles["dirty"]]: isDirty,
-    [styles['visible-menu']]: isVisibleMenu
+    [styles["visible-menu"]]: isVisibleMenu,
+    [styles["errored"]]: !!errorMessage,
   };
 
   const currentTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
 
   return (
-      <div className={classNames(styles["select"], additionalClasses, mods)}>
+    <div className={classNames(styles["select"], additionalClasses, mods)}>
       {labelVariant === "static" && (
         <span className={styles["label"]}>{label}</span>
       )}
@@ -203,6 +212,10 @@ export const Select = memo((props: SelectProps) => {
           onClick={handleToggleVisibleMenu}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
+          onFocus={onFocus}
+          aria-readonly={isReadonly ? 'true' : 'false'}
+          aria-disabled={isDisabled ? 'true' : 'false'}
+          aria-errormessage={id + 'error'}
         >
           {labelVariant === "jump" && (
             <span className={styles["label"]}>{label}</span>
@@ -212,9 +225,12 @@ export const Select = memo((props: SelectProps) => {
           ) : (
             <div className={styles["chips"]}>{renderSelectedValues}</div>
           )}
-          <span className={styles['arrow-icon']}>
-            <ArrowIcon />
-          </span>
+          <Icon
+            className={styles["arrow-icon"]}
+            variant="arrow"
+            size="small"
+            color="custom-color"
+          />
           {placeholder && (
             <span className={styles["placeholder"]}>{placeholder}</span>
           )}
@@ -230,7 +246,11 @@ export const Select = memo((props: SelectProps) => {
           isCloseAfterSelect={Array.isArray(selectedValues) ? false : true}
         />
       </div>
-      {errorMessage && <p className={styles["error"]}>{errorMessage}</p>}
+      {errorMessage && (
+        <div className={styles["error-message"]} id={id + 'error'}>
+          <p>{errorMessage}</p>
+        </div>
+      )}
     </div>
   );
 });

@@ -3,7 +3,7 @@ import { ButtonMinimalismVariant, ButtonVariant, ButtonSize } from "@/shared/ui/
 export const buttonVariants: ButtonVariant[] = ['filled', 'outlined', 'clear']
 
 export const buttonSizes: ButtonSize[] = [
-    'small', 'medium', 'large'
+    "small-l", 'medium', 'large'
 ]
 
 export const minimalismButtonVariants: ButtonMinimalismVariant[] = [

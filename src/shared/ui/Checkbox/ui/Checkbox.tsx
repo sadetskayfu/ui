@@ -3,6 +3,7 @@ import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation } from "../../ClickAnimation";
 import { memo } from "react";
 import styles from "./style.module.scss";
+import { Icon } from "../../Icon";
 
 export type CheckboxVariant = 'filled' | 'outlined'
 export type CheckboxSize = "small" | "medium"
@@ -12,13 +13,12 @@ interface CheckboxProps {
   size?: CheckboxSize;
   variant?: CheckboxVariant
   id?: string
-  isHiddenLabel?: boolean
-  label: string;
-  name: string;
+  label?: string;
+  name?: string;
   isChecked: boolean;
   isRequired?: boolean
   isDisabled?: boolean
-  onToggle: (name: string) => void;
+  onToggle: () => void;
   tabIndex?: number;
 }
 
@@ -26,7 +26,6 @@ export const Checkbox = memo((props: CheckboxProps) => {
   const {
     className,
     id,
-    isHiddenLabel,
     size = "medium",
     variant = 'filled',
     label,
@@ -40,10 +39,15 @@ export const Checkbox = memo((props: CheckboxProps) => {
 
   const { isAnimating, startAnimation } = useAnimation();
 
+  const handleToggle = () => {
+    onToggle()
+    startAnimation()
+  }
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (event.key === "Enter") {
-      onToggle(name);
-      startAnimation();
+    if (event.key === "Enter" || event.key === ' ') {
+      event.preventDefault()
+      handleToggle()
     }
   };
 
@@ -63,7 +67,6 @@ export const Checkbox = memo((props: CheckboxProps) => {
     <label
       className={classNames(styles["wrapper"], additionalClasses, mods)}
       tabIndex={isDisabled? -1 : tabIndex}
-      onMouseDown={startAnimation}
       onKeyDown={handleKeyDown}
     >
       <input
@@ -72,18 +75,19 @@ export const Checkbox = memo((props: CheckboxProps) => {
         id={id && id}
         value={name}
         name={name}
-        onChange={() => onToggle(name)}
+        onChange={handleToggle}
         checked={isChecked}
         tabIndex={-1}
         disabled={isDisabled}
         required={isRequired}
       ></input>
-      <span className={styles["checkbox"]}>
+      <div className={styles["checkbox"]}>
+        <Icon className={styles['icon']} color="light" variant="check-mark" size="custom-size" />
         <span className={styles['hover']}>
           <ClickAnimation isAnimating={isAnimating} />
         </span>
-      </span>
-      {!isHiddenLabel && <span className={styles['label']}>{label}</span>}
+      </div>
+      {label && <span className={styles['label']}>{label}</span>}
     </label>
   );
 });

@@ -13,16 +13,11 @@
   @include user-select-off;
   gap: var(--gap-small-s);
   color: var(--primary-500);
+  transition-duration: 0.2s;
 }
 
 .icon {
-  height: 1em;
-  aspect-ratio: 1;
   display: flex;
-  svg {
-    fill: var(--primary-500);
-    stroke: var(--primary-500);
-  }
 }
 
 // Variants
@@ -33,12 +28,6 @@
       color: var(--light);
       @include hover {
         background-color: var(--primary-400);
-      }
-      .icon {
-        svg {
-          fill: var(--light);
-          stroke: var(--light);
-        }
       }
     }
     &.secondary {
@@ -71,14 +60,23 @@
 
 // Sizes
 .button {
-  &.small:not(.minimalism) {
+  // Small-s, only minimalism mode
+  &.small-s.minimalism {
+    height: var(--button-height-small-s);
+  }
+  // Small-m, only minimalism mode
+  &.small-m.minimalism {
+    height: var(--button-height-small-m);
+  }
+  // Small-l
+  &.small-l:not(.minimalism) {
     padding-inline: var(--padding-small-l);
     height: var(--button-height-small-l);
   }
-  &.small.minimalism {
+  &.small-l.minimalism {
     height: var(--button-height-small-l);
   }
-
+  // Medium
   &.medium:not(.minimalism) {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
@@ -86,7 +84,7 @@
   &.medium.minimalism {
     height: var(--button-height-medium);
   }
-
+  // Large
   &.large:not(.minimalism) {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
@@ -122,6 +120,7 @@
   &.minimalism {
     justify-content: center;
     aspect-ratio: 1;
+    padding: 0;
     &__round {
       border-radius: 50%;
     }

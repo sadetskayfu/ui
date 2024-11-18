@@ -9,12 +9,12 @@
   @include user-select-off;
   @include hover {
     .hover {
-      opacity: 1;
+      background-color: var(--primary-opacity);
     }
   }
   &:focus-visible {
       .hover {
-        opacity: 1;
+        background-color: var(--primary-opacity);
     }
   }
   & input[type="radio"]:checked + .emulator:before {

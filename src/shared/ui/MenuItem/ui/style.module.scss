@@ -46,13 +46,6 @@
     padding: none;
 }
 
-.icon {
-    height: 1em;
-    aspect-ratio: 1;
-    fill: var(--primary-500);
-    stroke: var(--primary-500);
-}
-
 .check-mark {
     opacity: 0;
     animation: appearance-check-mark 0.2s forwards

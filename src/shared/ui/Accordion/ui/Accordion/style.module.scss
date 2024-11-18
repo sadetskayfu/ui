@@ -49,6 +49,13 @@
   height: 100%;
 }
 
+.opening-icon {
+  svg {
+    transform: rotate(180deg);
+    transition-duration: 0.2s;
+  }
+}
+
 // Variants
 .accordion {
   &.filled{
@@ -67,6 +74,9 @@
     border: var(--border-secondary);
     .header {
       @include hover {
+        background-color: var(--primary-opacity);
+      }
+      &:focus-visible {
         background-color: var(--primary-opacity);
       }
     }

@@ -7,8 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import AccordionIcon from "@/shared/assets/icons/opening-arrow.svg?react";
-import { IconButton } from "@/shared/ui/IconButton";
+import { Icon as ArrowIcon } from "@/shared/ui/Icon";
 import styles from "./style.module.scss";
 
 type AccordionVariant = "filled" | "outlined" | "clear";
@@ -19,7 +18,7 @@ interface AccordionProps {
   children: ReactNode;
   title: string;
   titleVariant?: AccordionTitleVariant;
-  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  Icon?: ReactNode;
   variant?: AccordionVariant;
   index?: number;
   selectedIndex?: number | null;
@@ -76,7 +75,7 @@ export const Accordion = memo((props: AccordionProps) => {
   // Get items
   useEffect(() => {
     if (!bodyRef.current) return;
-  
+
     const currentBodyRef = bodyRef.current;
 
     const updateFocusableElements = () => {
@@ -87,7 +86,7 @@ export const Accordion = memo((props: AccordionProps) => {
     };
 
     const observer = new MutationObserver(updateFocusableElements);
-  
+
     observer.observe(currentBodyRef, {
       childList: true,
       subtree: true,
@@ -135,7 +134,7 @@ export const Accordion = memo((props: AccordionProps) => {
       currentBody.style.height = contentHeight + "px";
       setTimeout(() => {
         currentBody.style.height = "0px";
-      }, 0)
+      }, 0);
     }
   }, [isOpen, isOpenInGroup]);
 
@@ -164,15 +163,9 @@ export const Accordion = memo((props: AccordionProps) => {
       >
         {titleVariant === "h3" && <h3 className={styles["title"]}>{title}</h3>}
         {titleVariant === "h4" && <h4 className={styles["title"]}>{title}</h4>}
-        <span className={styles["opening-icon"]}>
-          {Icon ? (
-            <Icon />
-          ) : (
-            <IconButton Icon={AccordionIcon} isClickable={false} size="small">
-              Opening status icon
-            </IconButton>
-          )}
-        </span>
+        <div className={styles["opening-icon"]}>
+          {Icon ? <>{Icon}</> : <ArrowIcon variant="arrow" size="small" />}
+        </div>
       </div>
       <div
         className={styles["body"]}

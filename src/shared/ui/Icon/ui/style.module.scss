@@ -1,0 +1,62 @@
+.icon {
+  display: inline-flex;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+
+// Variants
+.icon {
+  &.filled {
+    &.primary {
+      svg {
+        fill: var(--primary-500);
+        stroke: var(--primary-500);
+      }
+    }
+    &.secondary {
+      svg {
+        fill: var(--primary-200);
+        stroke: var(--primary-200);
+      }
+    }
+    &.light {
+      svg {
+        fill: var(--light);
+        stroke: var(--light);
+      }
+    }
+  }
+  &.outlined {
+    &.primary {
+      svg {
+        stroke: var(--primary-500);
+      }
+    }
+    &.secondary {
+      svg {
+        stroke: var(--primary-200);
+      }
+    }
+    &.light {
+      svg {
+        stroke: var(--light);
+      }
+    }
+  }
+}
+
+// Sizes
+.icon {
+  &.small {
+    height: var(--icon-height-small)
+  }
+  &.medium {
+    height: var(--icon-height-medium)
+  }
+  &.large {
+    height: var(--icon-height-large)
+  }
+  &.custom-size {
+    width: 1em;
+  }
+}

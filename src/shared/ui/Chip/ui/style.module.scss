@@ -4,10 +4,11 @@
   --height: var(--button-height-small-m);
   --chipBgColor: var(--primary-500);
   --chipHoverBgColor: var(--primary-400);
-  --buttonHoverBorderColor: var(--light);
   --buttonBgColor: var(--primary-opacity);
+  --buttonHoverBgColor: var(--light);
   --boxShadowFocus: var(--box-shadow-focus);
   --color: var(--light);
+  --iconColor: var(--primary-300);
   height: var(--height);
   border-radius: var(--border-radius-large);
   padding-inline: calc(var(--height) / 3);
@@ -20,7 +21,7 @@
   color: var(--color);
   background-color: var(--chipBgColor);
 
-  &.have-icon {
+  &.have-close-button {
     padding-right: 3px;
   }
   &.clickable {
@@ -46,24 +47,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid transparent;
   cursor: pointer;
+  border: none;
   background-color: var(--buttonBgColor);
+  transition-duration: 0.2s;
   @include hover {
-    border-color: var(--buttonHoverBorderColor);
+    background-color: var(--buttonHoverBgColor);
   }
   &:focus-visible {
-    box-shadow: var(--boxShadowFocus);
+    background-color: var(--buttonHoverBgColor);
   }
 }
 
 .icon {
-  display: flex;
-  height: 70%;
-  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
   svg {
-    fill: var(--color);
-    stroke: var(--color);
+    fill: var(--iconColor);
+    stroke: var(--iconColor);
   }
 }
 
@@ -71,24 +72,25 @@
 .chip {
   &.filled {
     &.primary {
-      --boxShadowFocus: var(--box-shadow-focus-light);
+      --iconColor: var(--primary-500);
     }
     &.secondary {
       --chipBgColor: var(--primary-200);
       --chipHoverBgColor: var(--primary-opacity);
       --color: var(--primary-500);
       --buttonBgColor: var(--light);
-      --buttonHoverBorderColor: var(--primary-500);
+      --iconColor: var(--primary-200);
+      --buttonHoverBgColor: var(--primary-500);
     }
     &.error {
-      --chipBgColor: var(--red-500);
-      --chipHoverBgColor: var(--red-600);
-      --buttonHoverBorderColor: var(--light);
+      --chipBgColor: var(--red-600);
+      --chipHoverBgColor: var(--red-500);
+      --iconColor: var(--red-600);
     }
     &.success {
-        --chipBgColor: var(--green-500);
-        --chipHoverBgColor: var(--green-600);
-        --buttonHoverBorderColor: var(--light);
+        --chipBgColor: var(--green-600);
+        --chipHoverBgColor: var(--green-500);
+        --iconColor: var(--green-600);
       }
   }
 
@@ -98,41 +100,42 @@
     --chipHoverBgColor: var(--primary-opacity);
     &.primary {
       border: 1px solid var(--primary-500);
-      --buttonHoverBorderColor: var(--primary-500);
+      --buttonHoverBgColor: var(--primary-500);
     }
     &.secondary {
       border: 1px solid var(--primary-200);
-      --buttonHoverBorderColor: var(--primary-300);
+      --buttonHoverBgColor: var(--primary-500);
     }
     &.error {
-      border: 1px solid var(--red-500);
-      --color: var(--red-500);
+      border: 1px solid var(--red-600);
+      --color: var(--red-600);
       --chipHoverBgColor: var(--red-100);
       --buttonBgColor: var(--red-opacity);
-      --buttonHoverBorderColor: var(--red-500);
+      --iconColor: var(--red-100);
+      --buttonHoverBgColor: var(--red-600);
     }
     &.success {
-        border: 1px solid var(--green-500);
-        --color: var(--green-500);
+        border: 1px solid var(--green-600);
+        --color: var(--green-600);
         --chipHoverBgColor: var(--green-100);
         --buttonBgColor: var(--green-opacity);
-        --buttonHoverBorderColor: var(--green-500);
+        --iconColor: var(--green-100);
+        --buttonHoverBgColor: var(--green-600);
       }
   }
 }
 
 .chip {
   &.small {
-    --height: var(--button-height-small-s);
-    font-size: var(--font-size-small-s);
-  }
-  &.medium {
     --height: var(--button-height-small-m);
     font-size: var(--font-size-small-m);
   }
-  &.large {
+  &.medium {
     --height: var(--button-height-small-l);
     font-size: var(--font-size-small);
+  }
+  &.large {
+    --height: var(--button-height-medium);
   }
 }
 

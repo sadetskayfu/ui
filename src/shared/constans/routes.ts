@@ -15,4 +15,7 @@ export const ROUTES = {
     ASIDE_MENU: '/aside-menu',
     MODAL: '/modal',
     SELECT: '/select',
+    CHIP: '/chip',
+    TOOLTIP: '/tooltip',
+    ICONS: '/icons'
 }

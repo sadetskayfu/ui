@@ -11,13 +11,13 @@
   text-wrap: nowrap;
   @include user-select-off;
   color: var(--primary-500);
+  transition-duration: 0.2s;
 }
 
 .icon {
-  height: 1em;
-  aspect-ratio: 1;
   display: flex;
   svg {
+    transition-duration: 0.2s;
     stroke: var(--primary-500);
     fill: var(--primary-500);
   }

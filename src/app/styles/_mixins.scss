@@ -59,8 +59,6 @@
     border-radius: 50%;
     background-color: transparent;
     transition-duration: 0.2s;
-	background-color: var(--primary-opacity);
-	opacity: 0;
 }
 
 @mixin user-select-off {

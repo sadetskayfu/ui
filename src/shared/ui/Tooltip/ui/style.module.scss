@@ -1,27 +1,27 @@
 .container {
-    height: 45px;
+    --arrowWidth: 15px;
+    --arrowHeight: 20px;
+    --padding: 15px;
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    translate: -50%;
     opacity: 0;
-    pointer-events: none;
-    transition-duration: 0.2s;
+    transition: opacity 0.2s;
     z-index: var(--z-index-tooltip);
-
+    display: flex;
+    pointer-events: none;
     &.visible {
         opacity: 1;
+        pointer-events: all;
     }
 }
 
 .tooltip {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
     min-width: 30px;
-    padding-inline: var(--padding-small-l);
-    border-radius: var(--border-radius-medium);
+    padding: var(--padding-small-l);
+    border-radius: var(--border-radius-small);
     background-color: var(--primary-200);
     color: var(--primary-500);
     font-size: var(--font-size-small);
@@ -29,12 +29,66 @@
     &:before {
         content: '';
         position: absolute;
-        height: 20px;
-        width: 15px;
-        left: 50%;
-        translate: -50%;
-        top:44%;
+        height: var(--arrowHeight);
+        width: var(--arrowWidth);
         background-color: var(--primary-200);
         clip-path: polygon(50% 50%, 100% 50%, 50% 100%, 0% 50%);
+    }
+}
+
+.content {
+    text-wrap: nowrap;
+}
+
+// Position
+.container {
+    &.top {
+        padding-bottom: var(--padding);
+        bottom: 100%;
+        left: 50%;
+        translate: -50%;
+        .tooltip:before {
+            left: 50%;
+            translate: -50%;
+            top: calc(100% - (var(--arrowHeight) / 2) - 1px);
+        }
+    }
+    &.right {
+        align-items: center;
+        padding-left: var(--padding);
+        left: 100%;
+        top: 50%;
+        translate: 0 -50%;
+        .tooltip:before {
+            right: calc(100% - (var(--arrowWidth) / 2) - 1px);
+            top: 50%;
+            translate: 0 -50%;
+            rotate: 90deg;
+        }
+    }
+    &.left {
+        align-items: center;
+        padding-right: var(--padding);
+        right: 100%;
+        top: 50%;
+        translate: 0 -50%;
+        .tooltip:before {
+            left: calc(100% - (var(--arrowWidth) / 2) - 1px);
+            top: 50%;
+            translate: 0 -50%;
+            rotate: -90deg;
+        }
+    }
+    &.bottom {
+        padding-top: var(--padding);
+        top: 100%;
+        left: 50%;
+        translate: -50%;
+        .tooltip:before {
+            left: 50%;
+            translate: -50%;
+            bottom: calc(100% - (var(--arrowHeight) / 2) - 1px);
+            transform: rotate(180deg);
+        }
     }
 }

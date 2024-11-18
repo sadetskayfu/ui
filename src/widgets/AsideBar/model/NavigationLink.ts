@@ -69,5 +69,17 @@ export const navigationLinks: NavigationLink[] = [
     {
         label: 'Select',
         path: ROUTES.SELECT
+    },
+    {
+        label: 'Chip',
+        path: ROUTES.CHIP
+    },
+    {
+        label: 'Tooltip',
+        path: ROUTES.TOOLTIP
+    },
+    {
+        label: 'Icons',
+        path: ROUTES.ICONS
     }
 ]

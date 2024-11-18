@@ -7,45 +7,45 @@
   column-gap: var(--gap-small-s);
   cursor: pointer;
   --toggleHeight: var(--button-height-small-m);
-  --width: calc(var(--toggleHeight) * 2);
+  --width: calc(var(--toggleHeight) * 1.8);
   --translateX: calc(var(--width) - var(--toggleHeight));
 
   @include hover {
     .hover {
-      opacity: 1;
+      background-color: var(--primary-opacity);
     }
   }
   &:focus-visible {
     .hover {
-      opacity: 1;
+      background-color: var(--primary-opacity);
     }
   }
   @include user-select-off;
 }
 
 .toggle-switch {
-  height: var(--toggleHeight);
+  height: calc(var(--toggleHeight) / 1.8);
   width: var(--width);
-  padding: 3px;
-  background-color: var(--primary-200);
+  background-color: var(--primary-300);
   border-radius: var(--border-radius-large);
   display: flex;
+  align-items: center;
   transition-duration: 0.2s;
 }
 
 .switch {
   position: relative;
-  height: 100%;
+  height: var(--toggleHeight);
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--primary-300);
+  background-color: var(--primary-200);
   transition-duration: inherit;
 }
 
 .label {
     &:after {
         content: '*';
-        color: var(--red-600);
+        color: var(--red-500);
         display: none;
     }
 }
@@ -58,11 +58,12 @@
 .wrapper {
   &.checked {
     .toggle-switch {
-      background-color: var(--primary-500);
+      background-color: var(--primary-400);
     }
     .switch {
       transform: translateX(var(--translateX));
-      background-color: var(--primary-200);
+      background-color: var(--primary-500);
+      box-shadow: var(--box-shadow-secondary);
     }
   }
 

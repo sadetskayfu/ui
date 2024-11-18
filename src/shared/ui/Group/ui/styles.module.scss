@@ -1,10 +1,11 @@
 .group {
     display: flex;
+
     &.small {
         gap: var(--gap-medium-s);
     }
     &.medium {
-        gap: var(--gap-medium-s);
+        gap: var(--gap-medium-m);
     }
 
     &.vertical {

@@ -1,5 +1,6 @@
 import {
   memo,
+  ReactNode,
   RefObject,
   useCallback,
   useEffect,
@@ -9,8 +10,12 @@ import {
 import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
+type TooltipPositionVariant = 'left' | 'top' | 'bottom' | 'right'
+
 interface TooltipProps {
-  label: string | number;
+  className?: string
+  position?: TooltipPositionVariant
+  children: ReactNode
   parentRef: RefObject<HTMLElement>;
   anotherVisibilityCondition?: boolean;
   initialVisibility?: boolean;
@@ -19,7 +24,9 @@ interface TooltipProps {
 
 export const Tooltip = memo((props: TooltipProps) => {
   const {
-    label,
+    className,
+    position = 'top',
+    children,
     parentRef,
     anotherVisibilityCondition,
     initialVisibility = false,
@@ -40,6 +47,7 @@ export const Tooltip = memo((props: TooltipProps) => {
       if (
         tooltipRef.current &&
         !parentRef.current?.contains(event.target as Node) &&
+        !tooltipRef.current?.contains(event.target as Node) &&
         !anotherVisibilityCondition
       ) {
         setIsVisible(false);
@@ -70,10 +78,15 @@ export const Tooltip = memo((props: TooltipProps) => {
     [styles["visible"]]: isVisible,
   };
 
+  const additionalClasses: Array<string | undefined> = [
+    className,
+    styles[position]
+  ]
+
   return (
-    <div ref={tooltipRef} className={classNames(styles["container"], [], mods)}>
+    <div ref={tooltipRef} className={classNames(styles["container"], additionalClasses, mods)}>
       <div className={styles["tooltip"]}>
-        <span>{label}</span>
+        <div className={styles['content']}>{children}</div>
       </div>
     </div>
   );

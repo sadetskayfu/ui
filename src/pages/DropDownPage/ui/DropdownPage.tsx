@@ -6,8 +6,8 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { Button } from "@/shared/ui/Button";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { MenuItem } from "@/shared/ui/MenuItem";
-import Icon from "@/shared/assets/icons/news.svg?react";
 import styles from "./style.module.scss";
+import { Icon } from "@/shared/ui/Icon";
 
 const DropdownPage = () => {
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const DropdownPage = () => {
   const renderMenuOptions = useMemo(() => {
     return options.map((option) => {
       return (
-        <MenuItem key={option.value} Icon={Icon} onClick={handleClick}>
+        <MenuItem key={option.value} Icon={<Icon variant="bell" size="medium" color="secondary" />} onClick={handleClick}>
           <span>{option.label}</span>
         </MenuItem>
       );

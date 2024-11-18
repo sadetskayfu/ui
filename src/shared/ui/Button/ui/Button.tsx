@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, forwardRef, memo} from "react";
+import { ButtonHTMLAttributes, forwardRef, memo, ReactNode} from "react";
 import { classNames } from "@/shared/lib";
 import { useAnimation } from "@/shared/lib/hooks";
 import { ClickAnimation, AnimationColor, AnimationDirection, AnimationVariant } from "../../ClickAnimation";
@@ -8,7 +8,7 @@ import styles from "./style.module.scss";
 export type ButtonVariant = "filled" | "outlined" | "clear"
 export type ButtonColor = 'primary' | 'secondary'
 export type ButtonMinimalismVariant = "round" | "square"
-export type ButtonSize = "small" | "medium" | "large"
+export type ButtonSize = "small-s" | "small-m" | "small-l" | "medium" | "large"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
@@ -26,7 +26,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isHiddenLabel?: boolean
   children: string;
   type?: "submit" | "reset" | "button" | undefined;
-  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  Icon?: ReactNode
   tabIndex?: number;
   onClick: () => void;
 }
@@ -74,8 +74,12 @@ export const Button = memo(
         if(isStopFocus) {
           event.preventDefault();
         }
-        startAnimation();
       };
+
+      const handleClick = () => {
+        onClick()
+        startAnimation()
+      }
     
       const additionalClasses: Array<string | undefined> = [
         className,
@@ -98,7 +102,7 @@ export const Button = memo(
           type={type}
           onMouseDown={handleMouseDown}
           onKeyDown={handleKeyDown}
-          onClick={onClick}
+          onClick={handleClick}
           tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
           disabled={isDisabled}
           aria-readonly={isReadonly ? 'true' : 'false'}
@@ -107,9 +111,9 @@ export const Button = memo(
         >
           <span className={styles["label"]}>{children}</span>
           {Icon && (
-            <span className={styles["icon"]}>
-              <Icon />
-            </span>
+            <div className={styles["icon"]}>
+              {Icon}
+            </div>
           )}
           <ClickAnimation
             variant={!animationVariant && minimalism === 'square' ? 'square' : animationVariant}

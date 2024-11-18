@@ -2,7 +2,6 @@ import { CustomLink, CustomLinkColor } from "@/shared/ui/CustomLink";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { ROUTES } from "@/shared/constans/routes";
-import Icon from "@/shared/assets/icons/news.svg?react";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { useCallback, useMemo, useState } from "react";
 import { capitalizeFirstLetter } from "@/shared/lib";
@@ -16,6 +15,7 @@ import {
 } from "../model/Link";
 import { Group } from "@/shared/ui/Group";
 import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { Icon } from "@/shared/ui/Icon";
 
 const LinkPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -24,7 +24,7 @@ const LinkPage = () => {
   const [color, setColor] = useState<CustomLinkColor>("primary");
 
   const handleToggleColor = useCallback((value: string) => {
-    setColor(value as ButtonColor);
+    setColor(value as CustomLinkColor);
   }, []);
   const handleToggleDisabled = useCallback(() => {
     setIsDisabled((prev) => !prev);
@@ -43,7 +43,7 @@ const LinkPage = () => {
           key={link}
           to=""
           isDisabled={isDisabled}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="cart" color="custom-color" size="custom-size"/>}
           variant={link}
           color={color}
         >
@@ -60,7 +60,7 @@ const LinkPage = () => {
           key={index}
           to=""
           isDisabled={isDisabled}
-          Icon={Icon}
+          Icon={<Icon variant="cart" color="custom-color" size="custom-size"/>}
           minimalism={link}
           color={color}
         >
@@ -78,7 +78,7 @@ const LinkPage = () => {
           to=""
           size={link}
           isDisabled={isDisabled}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="cart" color="custom-color" size="custom-size"/>}
           color={color}
         >
           {capitalizeFirstLetter(link) as string}
@@ -93,7 +93,7 @@ const LinkPage = () => {
         <CustomLink
           key={index}
           to={ROUTES.LINK}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="cart" color="custom-color" size="custom-size"/>}
           variant={link.variant}
           direction={link.direction}
           isDisabled={isDisabled}
@@ -115,7 +115,7 @@ const LinkPage = () => {
           variant={link.variant}
           direction={link.direction}
           isDisabled={isDisabled}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="cart" color="custom-color" size="custom-size"/>}
           isHiddenLabeL={isHiddenLabel}
           color={color}
         >

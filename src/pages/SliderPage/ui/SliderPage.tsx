@@ -45,7 +45,7 @@ const SliderPage = () => {
         <div className="subsections">
           <PreviewComponents direction="vertical" title="Slider">
             <div className={styles["slider"]}>
-              <Slider name="slider" label="Slider" initialValue={10} min={0} max={100} />
+              <Slider name="slider" label="Slider" initialValue={10} min={0} max={100000} step={1000} isWalkingMarkers/>
             </div>
           </PreviewComponents>
           <PreviewComponents direction="vertical" title="Markers">

@@ -3,7 +3,6 @@ import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { useCallback, useMemo, useState } from "react";
-import Icon from "@/shared/assets/icons/news.svg?react";
 import {
   buttonSizes,
   buttonVariants,
@@ -13,6 +12,7 @@ import {
 import { capitalizeFirstLetter } from "@/shared/lib";
 import { Group } from "@/shared/ui/Group";
 import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { Icon } from "@/shared/ui/Icon";
 
 const ButtonPage = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -36,7 +36,7 @@ const ButtonPage = () => {
           key={btn}
           onClick={() => undefined}
           variant={btn}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="heart" size="custom-size" color='custom-color'/>}
           isDisabled={isDisabled}
           color={color}
         >
@@ -52,7 +52,7 @@ const ButtonPage = () => {
         <Button
           key={index}
           onClick={() => undefined}
-          Icon={Icon}
+          Icon={<Icon variant="heart" size="custom-size" color='custom-color'/>}
           isDisabled={isDisabled}
           isHiddenLabel
           minimalism={btn}
@@ -73,7 +73,7 @@ const ButtonPage = () => {
           size={btn}
           isDisabled={isDisabled}
           color={color}
-          Icon={icon && Icon}
+          Icon={icon && <Icon variant="heart" size="custom-size" color='custom-color'/>}
         >
           {capitalizeFirstLetter(btn) as string}
         </Button>

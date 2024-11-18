@@ -1,8 +1,8 @@
 import { classNames, getItemOnId } from "@/shared/lib";
-import { Input } from "../../../Input";
+import { Input } from "../../../Field";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Options } from "../Options/Options";
-import { InputVariant, InputLabelVariant } from "@/shared/ui/Input/ui/Input";
+import { InputVariant, InputLabelVariant } from "@/shared/ui/Field/ui/Field";
 import styles from "./style.module.scss";
 
 export type AutocompleteVariant = 'text' | 'countries'

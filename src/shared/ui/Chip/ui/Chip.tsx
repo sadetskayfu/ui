@@ -1,7 +1,6 @@
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 import { memo } from "react";
-import CrossIcon from "@/shared/assets/icons/cross.svg?react";
 import {
   AnimationColor,
   AnimationDirection,
@@ -9,6 +8,7 @@ import {
   ClickAnimation,
 } from "../../ClickAnimation";
 import { useAnimation } from "@/shared/lib/hooks";
+import { Icon } from "@/shared/ui/Icon";
 
 export type ChipVariant = "filled" | "outlined";
 export type ChipColor = "primary" | "secondary" | "success" | "error";
@@ -80,7 +80,7 @@ export const Chip = memo((props: ChipProps) => {
   };
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["have-icon"]]: !!onClose,
+    [styles["have-close-button"]]: !!onClose,
     [styles["clickable"]]: isClickable,
     [styles["disabled"]]: isDisabled,
   };
@@ -122,9 +122,7 @@ export const Chip = memo((props: ChipProps) => {
             disabled={isDisabled}
           >
             <span className="visually-hidden">Delete</span>
-            <span className={styles["icon"]}>
-              <CrossIcon />
-            </span>
+            <Icon className={styles['icon']} color='custom-color' variant="x-mark" size="custom-size"/>
           </button>
         )}
         <ClickAnimation
@@ -153,9 +151,7 @@ export const Chip = memo((props: ChipProps) => {
           disabled={isDisabled}
         >
           <span className="visually-hidden">Delete</span>
-          <span className={styles["icon"]}>
-            <CrossIcon />
-          </span>
+          <Icon className={styles['icon']} color='custom-color' variant="x-mark" size="custom-size"/>
         </button>
       )}
     </div>

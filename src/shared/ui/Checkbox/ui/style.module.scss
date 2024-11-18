@@ -9,13 +9,12 @@
     @include user-select-off;
     @include hover {
         .hover {
-            opacity: 1;
+            background-color: var(--primary-opacity);
         }
     }
-
     &:focus-visible {
         .hover {
-            opacity: 1;;
+            background-color: var(--primary-opacity);
         }
     }
 }
@@ -26,27 +25,19 @@
     border-radius: var(--border-radius-small);
     transition-duration: 0.2s;
     color: var(--primary-200);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    &:before {
-        position: absolute;
-        content: '';
-        width: 80%;
-        height: 45%;
-        border-left: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        rotate: -45deg;
-        left: 50%;
-        translate: -50%;
-        bottom: 40%;
-        opacity: 0;
-        transition-duration: inherit;
-    }
+.icon {
+    opacity: 0;
 }
 
 .label {
     &:after {
         content: '*';
-        color: var(--red-600);
+        color: var(--red-500);
         display: none;
     }
 }
@@ -90,9 +81,9 @@
     &.checked {
         .checkbox {
             background-color: var(--primary-500);
-            &:before {
-                opacity: 1;
-            }
+        }
+        .icon {
+            opacity: 1;
         }
     }
 }
@@ -103,11 +94,17 @@
         .checkbox {
             height: var(--button-height-small-s);
         }
+        .icon {
+            font-size: 15px;
+        }
     }
 
     &.medium {
         .checkbox {
             height: var(--button-height-small-m);
+        }
+        .icon {
+            font-size: 20px;
         }
     }
 }

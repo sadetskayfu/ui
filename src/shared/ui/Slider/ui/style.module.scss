@@ -84,13 +84,13 @@
 
   &:focus {
     &:before {
-      opacity: 1;
+      background-color: var(--primary-opacity);
     }
   }
 
   @include hover {
     &:before {
-      opacity: 1;
+      background-color: var(--primary-opacity);
     }
   }
 }

@@ -3,15 +3,15 @@
 :root {
 	--font-family: 'sans-serif';
 
-	--red-600: rgb(133, 52, 15);
-	--red-500: rgb(153, 48, 0);
+	--red-600: rgb(141, 17, 17);
+	--red-500: rgb(207, 20, 20);
 	--red-100: rgb(255, 245, 241);
-	--red-opacity: rgb(255, 151, 104, 0.2);
+	--red-opacity: rgb(207, 20, 20, 0.2);
 
 	--green-600: rgb(1, 49, 11);
-	--green-500: rgb(28, 71, 37);
+	--green-500: rgb(39, 128, 58);
 	--green-100: rgb(239, 255, 242);
-	--green-opacity: rgba(152, 221, 167, 0.2);
+	--green-opacity: rgba(39, 128, 58, 0.2);
 
 	--box-shadow-error: 0 0.5px 1px var(--red-600);
 
@@ -23,8 +23,6 @@
 	--opacity-medium: 0.5;
 	--opacity-big: 0.2;
 
-	--border: 2px solid;
-
 	--font-size-small-s: 10px;
 	--font-size-small-m: 12px;
 	--font-size-small: 14px;
@@ -33,12 +31,17 @@
 
 	--header-height: 50px;
 
+	--icon-height-small: 13px;
+	--icon-height-medium: 18px;
+	--icon-height-large: 23px;
+
 	--button-height-small-s: 20px;
 	--button-height-small-m: 25px;
 	--button-height-small-l: 35px;
 	--button-height-medium: 45px;
 	--button-height-large: 55px;
 
+	--input-height-small: 45px;
 	--input-height-medium: 55px;
 	--input-height-large: 65px;
 
@@ -54,7 +57,7 @@
 	--gap-small-s: 10px;
 	--gap-small-m: 12.5px;
 	--gap-small-l: 17.5px;
-	--gap-medium-s: 16px;
+	--gap-medium-s: 20px;
 	--gap-medium-m: 25px;
 	--gap-medium-l: 35px;
 

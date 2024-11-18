@@ -12,7 +12,7 @@ interface OptionsProps {
   onClose: () => void;
   onOpen: () => void;
   onSelect: (id: string) => void;
-  isCloseAfterSelect?: boolean
+  isCloseAfterSelect?: boolean;
   parentRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -31,7 +31,7 @@ export const Options = (props: OptionsProps) => {
   const handleSelect = useCallback(
     (id: string) => {
       onSelect(id);
-      if(isCloseAfterSelect) {
+      if (isCloseAfterSelect) {
         setTimeout(() => {
           onClose();
         }, 0);
@@ -51,11 +51,7 @@ export const Options = (props: OptionsProps) => {
           key={item.id}
           isSelected={isSelected}
         >
-          <div className={styles["content"]}>
-            <div className={styles["title"]}>
-              <span>{item.label}</span>
-            </div>
-          </div>
+          <span>{item.label}</span>
         </MenuItem>
       );
     });
