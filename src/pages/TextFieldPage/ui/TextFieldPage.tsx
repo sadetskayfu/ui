@@ -150,6 +150,26 @@ const TextFieldPage = () => {
               />
             </form>
           </PreviewComponents>
+          <PreviewComponents title="Search field">
+            <form autoComplete="off">
+              <Field
+                className={styles["field"]}
+                name="search"
+                label="Search"
+                size="medium"
+                value={value}
+                onChange={handleChangePassword}
+                placeholder="Enter password..."
+                labelVariant={labelVariant}
+                isDisabled={isDisabled}
+                isReadonly={isReadonly}
+                isRequired={isRequired}
+                type="password"
+                autoComplete="new-password"
+                isVisibleEyeButton
+              />
+            </form>
+          </PreviewComponents>
         </div>
       </section>
     </div>

@@ -1,7 +1,6 @@
 import { classNames } from "@/shared/lib";
-import { ChangeEvent, memo, useRef, forwardRef, useState, useId, InputHTMLAttributes, useEffect } from "react";
+import { ChangeEvent, memo, useRef, forwardRef, useState, useId, InputHTMLAttributes } from "react";
 import styles from "./style.module.scss";
-import { IconButton } from "../../IconButton";
 import { Icon } from "../../Icon";
 import { Button } from "../../Button";
 
@@ -83,6 +82,10 @@ export const Field = memo(
         onBlur?.();
       };
 
+      const handleSetFocus = () => {
+        input.current?.focus()
+      }
+
       const toggleVisibilityPassword = () => {
         if (input.current && isVisibleEyeButton) {
           const cursorPosition = input.current.selectionStart;
@@ -94,7 +97,7 @@ export const Field = memo(
       };
 
       const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onChange?.(event.target.value.trim());
+        onChange?.(event.target.value);
       };
 
       const handleClear = () => {
@@ -112,11 +115,10 @@ export const Field = memo(
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: isDirty,
         [styles["errored"]]: !!errorMessage,
+        [styles['focused']]: isFocusedField,
         [styles["readonly"]]: isReadonly,
         [styles["disabled"]]: isDisabled,
         [styles["required"]]: isRequired,
-        [styles["password"]]: type === "password",
-        [styles["search"]]: isSearch,
       };
 
       const additionalClasses: Array<string | undefined> = [
@@ -128,11 +130,11 @@ export const Field = memo(
 
       return (
         <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
-          <div className={styles["field"]}>
+          <div className={styles["field-wrapper"]}>
             <label className={styles["label"]} htmlFor={id}>
               {label}
             </label>
-            <div className={styles["input-wrapper"]}>
+            <div className={styles["field"]} onClick={handleSetFocus}>
               <input
                 className={styles["input"]}
                 name={name}
