@@ -1,36 +1,30 @@
-import { classNames } from "@/shared/lib";
-import { Link, LinkProps, useLocation } from "react-router-dom";
-import { ClickAnimation } from "../../ClickAnimation";
-import { useAnimation } from "@/shared/lib/hooks";
-import { KeyboardEventHandler, memo, ReactNode } from "react";
-import styles from "./style.module.scss";
 import {
-  AnimationColor,
-  AnimationDirection,
-  AnimationVariant,
-} from "../../ClickAnimation/ui/ClickAnimation";
+  classNames,
+  handleRipple,
+  handleRippleMousePosition,
+} from "@/shared/lib";
+import { Link, LinkProps, useLocation } from "react-router-dom";
+import { memo, ReactNode, useRef } from "react";
+import styles from "./style.module.scss";
+import { RippleWrapper } from "../../RippleWrapper";
+import { LinkCheckMark } from "../../LinkCheckMark";
 
-export type CustomLinkVariant =
-  | "filled"
-  | "outlined"
-  | "clear"
-  | "standart"
-  | "text";
-export type CustomLinkColor = "primary" | "secondary";
-export type CustomLinkMinimalismVariant = "round" | "square";
+export type CustomLinkVariant = "standart" | "text";
+export type CustomLinkColor = "primary";
 export type CustomLinkDirection = "vertical" | "horizontal";
-export type CustomLinkSize = "small" | "medium" | "large";
+export type CustomLinkSize = "medium";
 
 interface CustomLinkProps extends LinkProps {
   className?: string;
   to: string;
   variant?: CustomLinkVariant;
-  color?: CustomLinkColor;
-  minimalism?: CustomLinkMinimalismVariant;
   size?: CustomLinkSize;
+  color?: CustomLinkColor;
   direction?: CustomLinkDirection;
   isDisabled?: boolean;
   isExternal?: boolean;
+  isButton?: boolean;
+  onClick?: () => void;
   isHiddenLabeL?: boolean;
   children: string;
   Icon?: ReactNode;
@@ -40,28 +34,36 @@ interface CustomLinkProps extends LinkProps {
 export const CustomLink = memo((props: CustomLinkProps) => {
   const {
     className,
-    variant = "clear",
+    variant = "standart",
     color = "primary",
-    minimalism,
     direction = "horizontal",
     size = "medium",
     children,
     to,
     isExternal,
+    isButton,
     isHiddenLabeL,
+    onClick,
     Icon,
     tabIndex = 0,
   } = props;
 
-  const { isAnimating, startAnimation } = useAnimation();
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
+
   const location = useLocation();
 
   const isActive = location.pathname === to;
 
-  const handleKeyDown: KeyboardEventHandler<HTMLAnchorElement> = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
-      startAnimation();
+      handleRipple(rippleWrapperRef);
+      onClick?.()
     }
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
+    handleRippleMousePosition(rippleWrapperRef, event);
+    onClick?.()
   };
 
   const additionalClasses: Array<string | undefined> = [
@@ -70,45 +72,45 @@ export const CustomLink = memo((props: CustomLinkProps) => {
     styles[color],
     styles[direction],
     styles[size],
-    styles[`minimalism__${minimalism}`],
   ];
 
   const mods: Record<string, boolean | undefined> = {
     [styles["active"]]: isActive,
     [styles["hidden-label"]]: isHiddenLabeL,
-    [styles["minimalism"]]: !!minimalism,
+    [styles["is-button"]]: isButton
   };
 
-  const animationDirection: AnimationDirection =
-    (variant === "clear" && !minimalism) || isHiddenLabeL ? "left" : "center";
-  const animationVariant: AnimationVariant =
-    (variant === "clear" && minimalism !== "round") ||
-    minimalism === "square" ||
-    isHiddenLabeL
-      ? "square"
-      : "circle";
-  const animationColor: AnimationColor =
-    color === "primary" && variant === "filled" ? "light" : "dark";
+  if(isButton) {
+    return (
+      <button
+      className={classNames(styles["link"], additionalClasses, mods)}
+      onKeyDown={handleKeyDown}
+      tabIndex={tabIndex}
+      onClick={handleClick}
+    >
+      {Icon && variant !== "text" && (
+        <div className={styles["icon"]}>{Icon}</div>
+      )}
+      <span className={styles["label"]}>{children}</span>
+      <RippleWrapper ref={rippleWrapperRef} />
+    </button>
+    )
+  }
 
   if (isExternal) {
     return (
       <a
         className={classNames(styles["link"], additionalClasses)}
         href={to}
-        onMouseDown={startAnimation}
         onKeyDown={handleKeyDown}
         tabIndex={tabIndex}
+        onClick={handleClick}
       >
-        <span className={styles["label"]}>{children}</span>
         {Icon && variant !== "text" && (
           <div className={styles["icon"]}>{Icon}</div>
         )}
-        <ClickAnimation
-          direction={animationDirection}
-          variant={animationVariant}
-          color={animationColor}
-          isAnimating={isAnimating}
-        />
+        <span className={styles["label"]}>{children}</span>
+        <RippleWrapper ref={rippleWrapperRef} />
       </a>
     );
   }
@@ -117,20 +119,19 @@ export const CustomLink = memo((props: CustomLinkProps) => {
     <Link
       className={classNames(styles["link"], additionalClasses, mods)}
       to={to}
-      onMouseDown={startAnimation}
       onKeyDown={handleKeyDown}
       tabIndex={tabIndex}
+      onClick={handleClick}
     >
-      <span className={styles["label"]}>{children}</span>
       {Icon && variant !== "text" && (
         <div className={styles["icon"]}>{Icon}</div>
       )}
-      <ClickAnimation
-        direction={animationDirection}
-        variant={animationVariant}
-        color={animationColor}
-        isAnimating={isAnimating}
+      <span className={styles["label"]}>{children}</span>
+      <LinkCheckMark
+        position={direction === "vertical" ? "right" : "left"}
+        isActive={isActive}
       />
+      <RippleWrapper ref={rippleWrapperRef} />
     </Link>
   );
 });

@@ -2,6 +2,7 @@
   display: inline-flex;
   aspect-ratio: 1;
   flex-shrink: 0;
+  height: 1em;
 }
 
 // Variants
@@ -15,14 +16,20 @@
     }
     &.secondary {
       svg {
-        fill: var(--primary-200);
-        stroke: var(--primary-200);
+        fill: var(--secondary-600);
+        stroke: var(--secondary-600);
       }
     }
     &.light {
       svg {
         fill: var(--light);
         stroke: var(--light);
+      }
+    }
+    &.red {
+      svg {
+        fill: var(--red-500);
+        stroke: var(--red-500);
       }
     }
   }
@@ -34,7 +41,7 @@
     }
     &.secondary {
       svg {
-        stroke: var(--primary-200);
+        stroke: var(--secondary-600);
       }
     }
     &.light {
@@ -42,21 +49,29 @@
         stroke: var(--light);
       }
     }
+    &.red {
+      svg {
+        stroke: var(--red-500);
+      }
+    }
   }
 }
 
 // Sizes
 .icon {
-  &.small {
-    height: var(--icon-height-small)
+  &.small-s {
+    font-size: var(--font-size-small-s);
+  }
+  &.small-m {
+    font-size: var(--font-size-small-m);
+  }
+  &.small-l {
+    font-size: var(--font-size-small-l);
   }
   &.medium {
-    height: var(--icon-height-medium)
+    font-size: var(--font-size-medium);
   }
   &.large {
-    height: var(--icon-height-large)
-  }
-  &.custom-size {
-    width: 1em;
+    font-size: var(--font-size-large);
   }
 }

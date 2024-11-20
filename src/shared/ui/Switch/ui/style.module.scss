@@ -1,44 +1,58 @@
 @import "@/app/styles/mixins", "@/app/styles/media";
 
 .wrapper {
+  --height: var(--button-height-small-l);
+  --width: var(--height);
+  --translateX: calc((var(--width) - var(--height) / 2) / 2);
+  --trackColor: var(--secondary-200);
+  --trackColorActive: var(--primary-200);
+  --switchColor: var(--secondary-300);
+  --switchColorActive: var(--primary-500);
+  --hoverBgColor: var(--secondary-opacity);
   display: flex;
   align-items: center;
-  align-self: start;
-  column-gap: var(--gap-small-s);
   cursor: pointer;
-  --toggleHeight: var(--button-height-small-m);
-  --width: calc(var(--toggleHeight) * 1.8);
-  --translateX: calc(var(--width) - var(--toggleHeight));
-
+  height: var(--height);
+  @include user-select-off;
   @include hover {
-    .hover {
-      background-color: var(--primary-opacity);
+    .switch-wrapper {
+      background-color: var(--hoverBgColor);
     }
   }
   &:focus-visible {
-    .hover {
-      background-color: var(--primary-opacity);
+    .switch-wrapper {
+      background-color: var(--hoverBgColor);
     }
   }
-  @include user-select-off;
 }
 
-.toggle-switch {
-  height: calc(var(--toggleHeight) / 1.8);
+.track {
+  height: calc(var(--height) / 3);
   width: var(--width);
-  background-color: var(--primary-300);
+  background-color: var(--trackColor);
   border-radius: var(--border-radius-large);
+  transition-duration: 0.2s;
   display: flex;
   align-items: center;
-  transition-duration: 0.2s;
+  justify-content: center;
+}
+
+.switch-wrapper {
+  transform: translateX(calc(var(--translateX) * -1));
+  height: var(--height);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transition-duration: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .switch {
-  position: relative;
-  height: var(--toggleHeight);
+  height: 50%;
   aspect-ratio: 1;
-  border-radius: 50%;
-  background-color: var(--primary-200);
+  border-radius: inherit;
+  background-color: var(--switchColor);
   transition-duration: inherit;
 }
 
@@ -50,20 +64,17 @@
     }
 }
 
-.hover {
-  @include hover-effect;
-}
-
 // Mods
 .wrapper {
   &.checked {
-    .toggle-switch {
-      background-color: var(--primary-400);
+    .track {
+      background-color: var(--trackColorActive);
+    }
+    .switch-wrapper {
+      transform: translateX(var(--translateX));
     }
     .switch {
-      transform: translateX(var(--translateX));
-      background-color: var(--primary-500);
-      box-shadow: var(--box-shadow-secondary);
+      background-color: var(--switchColorActive);
     }
   }
 
@@ -84,7 +95,11 @@
 // Sizes
 .wrapper {
   &.small {
-    column-gap: var(--gap-small-s);
-    --toggleHeight: var(--button-height-small-s);
+    --height: var(--button-height-small-l);
+    column-gap: var(--padding-small-s);
+  }
+  &.medium {
+    --height: var(--button-height-medium);
+    column-gap: var(--padding-small-s);
   }
 }

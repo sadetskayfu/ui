@@ -1,110 +1,153 @@
-@import '@/app/styles/media', '@/app/styles/mixins';
+@import "@/app/styles/media", "@/app/styles/mixins";
 
 .wrapper {
-    display: flex;
-    align-items: center;
-    align-self: start;
-    column-gap: var(--gap-small-s);
-    cursor: pointer;
-    @include user-select-off;
-    @include hover {
-        .hover {
-            background-color: var(--primary-opacity);
-        }
+  --height: var(--button-height-small-l);
+  --bgColor: var(--secondary-200);
+  --checkedBgColor: var(--primary-500);
+  --hoverBgColor: var(--secondary-opacity);
+  height: var(--height);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  @include user-select-off;
+  @include hover {
+    .checkbox-wrapper {
+      background-color: var(--hoverBgColor);
     }
-    &:focus-visible {
-        .hover {
-            background-color: var(--primary-opacity);
-        }
+  }
+  &:focus-visible {
+    .checkbox-wrapper {
+      background-color: var(--hoverBgColor);
     }
+  }
+}
+
+.checkbox-wrapper {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transition-duration: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
 }
 
 .checkbox {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: var(--border-radius-small);
-    transition-duration: 0.2s;
-    color: var(--primary-200);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 50%;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius-small);
+  transition-duration: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bgColor);
 }
 
 .icon {
-    opacity: 0;
+  display: flex;
+  transition-duration: inherit;
+  opacity: 0;
+}
+
+.checked-icon {
+  position: absolute;
+  opacity: 0;
+  transition-duration: inherit;
 }
 
 .label {
-    &:after {
-        content: '*';
-        color: var(--red-500);
-        display: none;
-    }
+  &:after {
+    content: "*";
+    color: var(--red-500);
+    display: none;
+  }
 }
 
-.hover {
-    @include hover-effect;
+// Colors
+.wrapper {
+  &.primary {
+    &.outlined,
+    &.clear {
+      --hoverBgColor: var(--primary-opacity);
+      .ripple {
+        color: var(--primary-500);
+      }
+    }
+  }
+  &.red {
+    --hoverBgColor: var(--red-opacity);
+    --bgColor: var(--red-100);
+    --checkedBgColor: var(--red-500);
+    .ripple {
+        color: var(--red-500);
+    }
+  }
 }
 
 // Variants
 .wrapper {
-    &.filled {
-        .checkbox {
-            background-color: var(--primary-200);
-            border: 1px solid transparent;
-        }
+  &.outlined {
+    --bgColor: transparent;
+    .checkbox {
+      box-shadow: 0 0 0 1px currentColor;
     }
+  }
+  &.clear {
+    --bgColor: transparent;
+    .icon {
+      opacity: 1;
+    }
+  }
+}
 
-    &.outlined {
-        .checkbox {
-            background-color: transparent;
-            border: 1px solid var(--primary-500);
-        }
+// Sizes
+.wrapper {
+  &.small {
+    --height: var(--button-height-small-l);
+    .icon {
+      font-size: var(--font-size-small-l);
     }
+  }
+
+  &.medium {
+    height: var(--button-height-medium);
+    .icon {
+      font-size: var(--font-size-medium);
+    }
+  }
 }
 
 // Mods
 .wrapper {
-    &.disabled {
-        pointer-events: none;
-        opacity: var(--opacity-medium);
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
+  &.required {
+    .label {
+      &:after {
+        display: inline;
+      }
     }
-
-    &.required {
-        .label {
-            &:after {
-                display: inline;
-            }
-        }
+  }
+  &.checked:not(.clear) {
+    .checkbox {
+      background-color: var(--checkedBgColor);
     }
-
-    &.checked {
-        .checkbox {
-            background-color: var(--primary-500);
-        }
-        .icon {
-            opacity: 1;
-        }
+    .icon {
+      opacity: 1;
     }
-}
-
-// Sizes
-.wrapper {    
-    &.small {
-        .checkbox {
-            height: var(--button-height-small-s);
-        }
-        .icon {
-            font-size: 15px;
-        }
+  }
+  &.checked.clear {
+    .checked-icon {
+      opacity: 1;
     }
-
-    &.medium {
-        .checkbox {
-            height: var(--button-height-small-m);
-        }
-        .icon {
-            font-size: 20px;
-        }
+  }
+  &.hidden-label {
+    .label {
+      @include visually-hidden;
     }
+  }
 }

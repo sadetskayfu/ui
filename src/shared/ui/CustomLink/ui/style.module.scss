@@ -1,157 +1,69 @@
 @import "@/app/styles/media", "@/app/styles/mixins";
 
 .link {
+  --color: var(--secondary-600);
+  --activeColor: var(--primary-500);
+  --bgColor: transparent;
+  --hoverBgColor: var(--primary-opacity);
+  --focusColor: var(--primary-500);
+  --height: var(--button-height-medium);
+  --paddingInline: var(--padding-medium);
   position: relative;
-  overflow: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-radius: var(--border-radius-medium);
-  column-gap: var(--gap-small-s);
+  column-gap: var(--paddingInline);
   text-wrap: nowrap;
   @include user-select-off;
-  color: var(--primary-500);
+  color: var(--color);
   transition-duration: 0.2s;
+  width: 100%;
+  height: var(--height);
+  padding-inline: var(--paddingInline);
+  border-radius: var(--border-radius-small);
+  background-color: var(--bgColor);
+
+  &.is-button {
+    border: none;
+    cursor: pointer;
+  }
 }
 
 .icon {
   display: flex;
   svg {
     transition-duration: 0.2s;
-    stroke: var(--primary-500);
-    fill: var(--primary-500);
+    stroke: var(--color);
+    fill: var(--color);
   }
 }
 
-// Directions
+// Colors
 .link {
-  &.horizontal.clear,
-  &.horizontal.standart {
-    &:before {
-      @include underline-bottom;
-      height: 2px;
-    }
-    &.active {
-      &:before {
-        width: 100%;
-        background-color: var(--primary-500);
-      }
-    }
-  }
-
-  &.vertical.clear,
-  &.vertical.standart {
-    &:before {
-      @include underline-right;
-      width: 2px;
-    }
-    &.active {
-      border-radius: var(--border-radius-medium) 0 0 var(--border-radius-medium);
-      &:before {
-        height: 100%;
-        background-color: var(--primary-500);
-      }
-    }
-  }
-}
-
-// Variants
-.link {
-  &.filled {
-    &.primary {
-      background-color: var(--primary-500);
-      color: var(--light);
-      @include hover {
-        background-color: var(--primary-400);
-      }
-      .icon {
-        svg {
-          fill: var(--light);
-          stroke: var(--light);
-        }
-      }
-    }
-    &.secondary {
-      background-color: var(--primary-200);
-      @include hover {
-        background-color: var(--primary-opacity);
-      }
-    }
-  }
-  &.outlined {
-    &.primary {
-      border: var(--border-primary);
-      background-color: transparent;
-    }
-    &.secondary {
-      background-color: transparent;
-      border: var(--border-secondary);
-    }
-    @include hover {
-      background-color: var(--primary-opacity);
-    }
-  }
-  &.clear {
-    background-color: transparent;
-    @include hover {
-      background-color: var(--primary-opacity);
-    }
-  }
-  &.standart {
-    @include hover {
-      color: var(--primary-300);
-      .icon {
-        svg {
-          fill: var(--primary-300);
-          stroke: var(--primary-300);
-        }
-      }
-    }
-  }
-  &.text {
-    color: var(--primary-300);
-    @include hover {
-      color: var(--primary-400);
-    }
+  &.primary {
+    
   }
 }
 
 // Sizes
 .link {
-  &.small:not(.minimalism, .text) {
-    padding-inline: var(--padding-small-l);
-    height: var(--button-height-small-l);
-  }
-  &.small.minimalism {
-    height: var(--button-height-small-l);
-  }
-
-  &.medium:not(.minimalism, .text) {
-    padding-inline: var(--padding-medium);
-    height: var(--button-height-medium);
-  }
-  &.medium.minimalism {
-    height: var(--button-height-medium);
-  }
-
-  &.large:not(.minimalism, .text) {
-    padding-inline: var(--padding-large);
-    height: var(--button-height-large);
-  }
-  &.large.minimalism {
-    height: var(--button-height-large);
+  &.medium {
+    --height: var(--button-height-medium);
   }
 }
-// Minimalism variants
+
+// Variants
 .link {
-  &.minimalism {
-    justify-content: center;
-    aspect-ratio: 1;
-    &__round {
-      border-radius: 50%;
+  &.standart {
+    @include hover {
+      background-color: var(--hoverBgColor);
     }
-    .label {
-      @include visually-hidden;
+  }
+  &.text {
+    padding-inline: 0px;
+    height: auto;
+    --color: var(--primary-500);
+    @include hover {
+      --color: var(--primary-200);
     }
   }
 }
@@ -160,32 +72,19 @@
 .link {
   &.hidden-label {
     justify-content: center;
+    padding-inline: 0px;
     .label {
       @include visually-hidden;
     }
   }
-
+  &.disabled {
+    pointer-events: none;
+    opacity: var(--opacity-medium);
+  }
   &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
+    box-shadow: 0 0 5px 1px var(--focusColor);
   }
   &.active {
-    color: var(--primary-300);
-    .icon {
-      svg {
-        stroke: var(--primary-300);
-        fill: var(--primary-300);
-      }
-    }
-    &.standart {
-      @include hover {
-        color: var(--primary-400);
-        .icon {
-          svg {
-            stroke: var(--primary-400);
-            fill: var(--primary-400);
-          }
-        }
-      }
-    }
+    --color: var(--activeColor);
   }
 }

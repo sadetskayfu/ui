@@ -1,5 +1,13 @@
 import { classNames } from "@/shared/lib";
-import { ChangeEvent, memo, useRef, forwardRef, useState, useId, InputHTMLAttributes } from "react";
+import {
+  ChangeEvent,
+  memo,
+  useRef,
+  forwardRef,
+  useState,
+  useId,
+  InputHTMLAttributes,
+} from "react";
 import styles from "./style.module.scss";
 import { Icon } from "../../Icon";
 import { Button } from "../../Button";
@@ -8,7 +16,10 @@ export type FieldVariant = "outlined";
 export type FieldSize = "small" | "medium" | "large";
 export type FieldLabelVariant = "jump" | "static";
 
-type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size'>
+type HTMLInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "value" | "onChange" | "size"
+>;
 
 interface FieldProps extends HTMLInputProps {
   className?: string;
@@ -23,7 +34,6 @@ interface FieldProps extends HTMLInputProps {
   isRequired?: boolean;
   isVisibleEyeButton?: boolean;
   isVisibleOpenMenuButton?: boolean;
-  isSearch?: boolean;
   errorMessage?: string;
   value: string;
   type?: "text" | "password";
@@ -32,6 +42,7 @@ interface FieldProps extends HTMLInputProps {
   onBlur?: () => void;
   onFocus?: () => void;
   onChange?: (value: string) => void;
+  onSearch?: () => void
 }
 
 export const Field = memo(
@@ -51,13 +62,13 @@ export const Field = memo(
         isReadonly,
         isRequired,
         isDisabled,
-        isSearch,
         isVisibleEyeButton,
         isVisibleOpenMenuButton,
         tabIndex = 0,
         onClick,
         onBlur,
         onFocus,
+        onSearch,
         type = "text",
         ...otherProps
       } = props;
@@ -67,10 +78,20 @@ export const Field = memo(
 
       const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
 
+      const isDirty = value.length > 0;
       const id = useId();
 
       const inputRef = useRef<HTMLInputElement>(null);
       const input = ref ? (ref as React.RefObject<HTMLInputElement>) : inputRef;
+
+      const handleKeyDown = (event: React.KeyboardEvent) => {
+        console.log('keydown')
+        if(onSearch) {
+          if((event.key === 'Enter' || event.key === ' ') && isDirty) {
+            onSearch()
+          }
+        }
+      }
 
       const handleFocus = () => {
         setIsFocusedField(true);
@@ -83,8 +104,8 @@ export const Field = memo(
       };
 
       const handleSetFocus = () => {
-        input.current?.focus()
-      }
+        input.current?.focus();
+      };
 
       const toggleVisibilityPassword = () => {
         if (input.current && isVisibleEyeButton) {
@@ -105,7 +126,7 @@ export const Field = memo(
         input.current?.focus();
       };
 
-      const isDirty = value.length > 0
+
 
       const inputType: string =
         type === "password" ? (isPasswordVisible ? "text" : "password") : type;
@@ -115,7 +136,7 @@ export const Field = memo(
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: isDirty,
         [styles["errored"]]: !!errorMessage,
-        [styles['focused']]: isFocusedField,
+        [styles["focused"]]: isFocusedField,
         [styles["readonly"]]: isReadonly,
         [styles["disabled"]]: isDisabled,
         [styles["required"]]: isRequired,
@@ -152,6 +173,7 @@ export const Field = memo(
                 onBlur={handleBlur}
                 onFocus={handleFocus}
                 aria-errormessage={id + "error"}
+                onKeyDown={handleKeyDown}
                 {...otherProps}
               />
               <div className={styles["buttons"]}>
@@ -177,7 +199,6 @@ export const Field = memo(
                 )}
                 {type === "password" && isVisibleEyeButton && (
                   <Button
-                    className={styles['eye-button']}
                     onClick={toggleVisibilityPassword}
                     isStopFocus
                     size="small-m"
@@ -189,6 +210,25 @@ export const Field = memo(
                     }
                   >
                     Toggle visibility password
+                  </Button>
+                )}
+                {onSearch && (
+                  <Button
+                    onClick={onSearch}
+                    isStopFocus
+                    size="small-m"
+                    variant="clear"
+                    isHiddenLabel
+                    minimalism="round"
+                    Icon={
+                      <Icon
+                        variant="search"
+                        size="small"
+                        color="custom-color"
+                      />
+                    }
+                  >
+                    Search
                   </Button>
                 )}
                 {isVisibleOpenMenuButton && (

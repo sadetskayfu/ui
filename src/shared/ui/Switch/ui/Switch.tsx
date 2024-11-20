@@ -1,16 +1,14 @@
-import { classNames } from "@/shared/lib";
+import { classNames, handleRipple } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { useAnimation } from "@/shared/lib/hooks";
-import { ClickAnimation } from "../../ClickAnimation";
-import { memo } from "react";
+import { memo, useRef } from "react";
+import { RippleWrapper } from "../../RippleWrapper";
 
 export type SwitchSize = "small" | "medium"
 
 interface SwitchProps {
   className?: string;
   size?: SwitchSize;
-  id?: string
-  label?: string;
+  label: string;
   name?: string;
   isDisabled?: boolean
   isRequired?: boolean
@@ -22,7 +20,6 @@ interface SwitchProps {
 export const Switch = memo((props: SwitchProps) => {
   const {
     className,
-    id,
     size = "medium",
     label,
     name,
@@ -33,17 +30,18 @@ export const Switch = memo((props: SwitchProps) => {
     tabIndex = 0,
   } = props;
 
-  const { isAnimating, startAnimation } = useAnimation();
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const handleToggle = () => {
     onToggle()
-    startAnimation()
+    handleRipple(rippleWrapperRef, true)
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
     if (event.key === "Enter" || event.key === ' ') {
       event.preventDefault()
-      handleToggle()
+      inputRef.current?.click()
     }
   };
 
@@ -63,11 +61,13 @@ export const Switch = memo((props: SwitchProps) => {
       className={classNames(styles["wrapper"], additionalClasses, mods)}
       tabIndex={isDisabled? -1 : tabIndex}
       onKeyDown={handleKeyDown}
+      aria-checked={isChecked}
+      aria-disabled={isDisabled ? 'true' : 'false'}
     >
       <input
         className="visually-hidden"
+        ref={inputRef}
         type="checkbox"
-        id={id && id}
         value={name}
         name={name}
         onChange={handleToggle}
@@ -75,15 +75,15 @@ export const Switch = memo((props: SwitchProps) => {
         tabIndex={-1}
         disabled={isDisabled}
         required={isRequired}
+        aria-hidden={isDisabled ? 'true' : 'false'}
       ></input>
-      <div className={styles["toggle-switch"]}>
-        <span className={styles["switch"]}>
-          <span className={styles['hover']}>
-            <ClickAnimation isAnimating={isAnimating} />
-          </span>
-        </span>
+      <div className={styles["track"]}>
+        <div className={styles["switch-wrapper"]}>
+          <span className={styles['switch']}></span>
+          <RippleWrapper className={styles['ripple']} ref={rippleWrapperRef}/>
+        </div>
       </div>
-      {label && <span className={styles['label']}>{label}</span>}
+      <span className={styles['label']}>{label}</span>
     </label>
   );
 });

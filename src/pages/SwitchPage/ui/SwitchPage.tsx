@@ -45,7 +45,7 @@ const SwitchPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Switch</SectionTitle>
-        <Group direction="vertical">
+        <div>
           <Checkbox
             isChecked={isDisabled}
             label="Disabled"
@@ -55,10 +55,10 @@ const SwitchPage = () => {
           <Checkbox
             isChecked={isRequired}
             label="Required"
-            name="require"
+            name="required"
             onToggle={handleToggleRequired}
           />
-        </Group>
+        </div>
         <div className="subsections">
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
         </div>

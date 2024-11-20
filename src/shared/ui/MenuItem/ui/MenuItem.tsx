@@ -101,7 +101,7 @@ export const MenuItem = memo((props: MenuItemProps) => {
       >
         {children}
         {Icon && <>{Icon}</>}
-        {isSelected && <CheckMark variant="check-mark" size="small" />}
+        {isSelected && <CheckMark variant="check-mark" size="small-l" />}
       </button>
     </li>
   );

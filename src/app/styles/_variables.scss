@@ -5,8 +5,8 @@
 
 	--red-600: rgb(141, 17, 17);
 	--red-500: rgb(207, 20, 20);
-	--red-100: rgb(255, 245, 241);
-	--red-opacity: rgb(207, 20, 20, 0.2);
+	--red-100: rgb(255, 196, 196);
+	--red-opacity: rgb(207, 20, 20, 0.05);
 
 	--green-600: rgb(1, 49, 11);
 	--green-500: rgb(39, 128, 58);
@@ -24,16 +24,12 @@
 	--opacity-big: 0.2;
 
 	--font-size-small-s: 10px;
-	--font-size-small-m: 12px;
-	--font-size-small: 14px;
-	--font-size-medium: 18px;
-	--font-size-large: 20px;
+	--font-size-small-m: 13px;
+	--font-size-small-l: 16px;
+	--font-size-medium: 19px;
+	--font-size-large: 22px;
 
 	--header-height: 50px;
-
-	--icon-height-small: 13px;
-	--icon-height-medium: 18px;
-	--icon-height-large: 23px;
 
 	--button-height-small-s: 20px;
 	--button-height-small-m: 25px;
@@ -45,21 +41,20 @@
 	--input-height-medium: 55px;
 	--input-height-large: 65px;
 
-	--icon-size-small: 13px;
-
-    --padding-small-s: 5px;
-	--padding-small-l: 10px;
+    --padding-small-s: 8.5px;
+	--padding-small-m: 11.5px;
+	--padding-small-l: 11.5px;
 	--padding-medium: 15px;
 	--padding-large: 20px;
 	
 	--section-padding: 50px;
 
-	--gap-small-s: 10px;
-	--gap-small-m: 12.5px;
-	--gap-small-l: 17.5px;
-	--gap-medium-s: 20px;
-	--gap-medium-m: 25px;
-	--gap-medium-l: 35px;
+	--gap-small-s: 8.5px;
+	--gap-small-m: 11.5px;
+	--gap-small-l: 14px;
+	--gap-medium-s: 17px;
+	--gap-medium-m: 23px;
+	--gap-medium-l: 28px;
 
 	--z-index-drop-down-menu: 2500;
 	--z-index-close: -1000;

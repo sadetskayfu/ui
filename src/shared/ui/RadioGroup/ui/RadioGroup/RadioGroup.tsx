@@ -1,79 +1,63 @@
 import { classNames } from "@/shared/lib";
-import { memo, useMemo } from "react";
-import { Radio, RadioSize } from "../Radio/Radio";
-import { Group } from "@/shared/ui/Group";
+import { Children, cloneElement, ReactElement } from "react";
+import { RadioProps, RadioSize, RadioVariant } from "../Radio/Radio";
 import styles from "./style.module.scss";
 
 export type DirectionRadioGroup = "horizontal" | "vertical";
 
-
-interface RadioItem {
-  value: string;
-  label: string;
-}
-
 interface RadioGroupProps {
   className?: string;
-  classNameRadio?: string
-  size?: RadioSize
+  size?: RadioSize;
+  variant?: RadioVariant
   name: string;
-  title: string;
+  legend: string;
   selectedValue: string;
-  items: RadioItem[];
+  children: ReactElement[];
   onChange: (value: string) => void;
   direction?: DirectionRadioGroup;
-  isHiddenRadioLabel?: boolean
-  isHiddenTitle?: boolean
-  radioId?: string
-  tabIndex?: number
+  tabIndex?: number;
 }
 
-export const RadioGroup = memo((props: RadioGroupProps) => {
+export const RadioGroup = (props: RadioGroupProps) => {
   const {
     className,
-    classNameRadio,
-    size = 'medium',
-    title,
+    size = "medium",
+    variant = 'filled',
+    legend,
     selectedValue,
-    items,
     name,
+    children,
     onChange,
     direction = "vertical",
-    isHiddenRadioLabel,
-    isHiddenTitle,
-    radioId,
-    tabIndex = 0
+    tabIndex = 0,
   } = props;
-
-  const renderItems = useMemo(() => {
-    const radioProps = { selectedValue, onChange, name, tabIndex, size, className: classNameRadio, isHiddenLabel: isHiddenRadioLabel, id: radioId };
-
-    return items.map((item) => {
-      return (
-        <Radio
-          value={item.value}
-          label={item.label}
-          key={item.value}
-          {...radioProps}
-        />
-      );
-    });
-  }, [items, selectedValue, onChange, name, tabIndex, size, classNameRadio, isHiddenRadioLabel, radioId]);
 
   const additionalClasses: Array<string | undefined> = [
     className,
+    styles[direction],
+    styles[size],
   ];
 
-  const mods: Record<string, boolean | undefined> = {
-    [styles['hidden-title']]: isHiddenTitle
-  }
-
   return (
-    <fieldset className={classNames(styles["radios"], additionalClasses, mods)} role='group' aria-orientation={direction}>
-      <legend className={styles['title']}>{title}</legend>
-      <Group direction={direction} gap='small'>
-        {renderItems}
-      </Group>
+    <fieldset
+      className={classNames(styles["radios"], additionalClasses)}
+      role="group"
+    >
+      <legend className={styles["legend"]}>{legend}</legend>
+      {Children.map(children, (child) => {
+        const props: Partial<RadioProps> = {
+          legend,
+          name,
+          onChange,
+          tabIndex,
+          size,
+          variant,
+          selectedValue,
+        };
+        return cloneElement(child as ReactElement, {
+          ...props,
+        });
+      })}
     </fieldset>
   );
-});
+};

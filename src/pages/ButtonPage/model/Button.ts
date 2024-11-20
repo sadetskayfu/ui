@@ -1,21 +1,42 @@
-import { ButtonMinimalismVariant, ButtonVariant, ButtonSize } from "@/shared/ui/Button";
+import { IconButtonSize, IconButtonForm as Form } from "@/shared/ui/IconButton";
+import { ButtonSize, ButtonColor as Color, ButtonVariant as Variant } from "@/shared/ui/Button";
 
-export const buttonVariants: ButtonVariant[] = ['filled', 'outlined', 'clear']
-
-export const buttonSizes: ButtonSize[] = [
-    "small-l", 'medium', 'large'
-]
-
-export const minimalismButtonVariants: ButtonMinimalismVariant[] = [
-   'round', 'square'
-]
-
-interface colorVariant {
-    value: string
+interface ButtonColor {
+    value: Color,
     label: string
 }
 
-export const colorVariants: colorVariant[] = [
+interface ButtonVariant {
+    value: Variant
+    label: string
+}
+
+interface IconButtonForm {
+    value: Form,
+    label: string
+}
+
+export const buttonSizes: ButtonSize[] = [
+    "small", "medium", "large"
+]
+
+export const iconButtonSizes: IconButtonSize[] = [
+    "small-s", "small-m", "small-l", "medium", "large"
+]
+
+
+export const iconButtonForms: IconButtonForm[] = [
+    {
+        value: 'square',
+        label: 'Square'
+    },
+    {
+        value: 'round',
+        label: 'Round'
+    }
+]
+
+export const buttonColors: ButtonColor[] = [
     {
         value: 'primary',
         label: 'Primary'
@@ -23,5 +44,20 @@ export const colorVariants: colorVariant[] = [
     {
         value: 'secondary',
         label: 'Secondary'
+    }
+]
+
+export const buttonVariants: ButtonVariant[] = [
+    {
+        value: 'filled',
+        label: 'Filled'
     },
+    {
+        value: 'outlined',
+        label: 'Outlined'
+    },
+    {
+        value: 'clear',
+        label: 'Clear'
+    }
 ]

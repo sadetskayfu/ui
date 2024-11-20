@@ -1,13 +1,6 @@
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 import { memo } from "react";
-import {
-  AnimationColor,
-  AnimationDirection,
-  AnimationVariant,
-  ClickAnimation,
-} from "../../ClickAnimation";
-import { useAnimation } from "@/shared/lib/hooks";
 import { Icon } from "@/shared/ui/Icon";
 
 export type ChipVariant = "filled" | "outlined";
@@ -42,8 +35,6 @@ export const Chip = memo((props: ChipProps) => {
     isDisabled,
     tabIndex = 0,
   } = props;
-
-  const { isAnimating, startAnimation } = useAnimation();
 
   const handleKeyDownClose = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -94,13 +85,6 @@ export const Chip = memo((props: ChipProps) => {
 
   const currentTabIndex = isDisabled ? -1 : tabIndex;
 
-  const animationColor: AnimationColor =
-    variant === "filled" && (color === "primary" || color === 'error' || color === 'success') ? "light" : "dark";
-  const animationDirection: AnimationDirection =
-    variant === "outlined" ? "left" : "center";
-  const animationVariant: AnimationVariant =
-    variant === "outlined" ? "square" : "circle";
-
   if (isClickable) {
     return (
       <button
@@ -125,12 +109,6 @@ export const Chip = memo((props: ChipProps) => {
             <Icon className={styles['icon']} color='custom-color' variant="x-mark" size="custom-size"/>
           </button>
         )}
-        <ClickAnimation
-          isAnimating={isAnimating}
-          color={animationColor}
-          direction={animationDirection}
-          variant={animationVariant}
-        />
       </button>
     );
   }

@@ -1,0 +1,24 @@
+.check-mark {
+    position: absolute;
+    height: 25px;
+    width: 0%;
+    background-color: var(--primary-500);
+    clip-path: polygon(50% 0, 50% 100%, 0 50%);
+    transition-duration: 0.2s;
+    &.active {
+        width: 25px;
+    }
+}
+
+// Position
+.check-mark {
+    &.right {
+        right: 0;
+        translate: 50%;
+    }
+    &.left {
+        left: 0;
+        translate: -50%;
+        rotate: 180deg;
+    }
+}

@@ -1,34 +1,40 @@
-import { ButtonHTMLAttributes, forwardRef, memo, ReactNode} from "react";
-import { classNames } from "@/shared/lib";
-import { useAnimation } from "@/shared/lib/hooks";
-import { ClickAnimation, AnimationColor, AnimationDirection, AnimationVariant } from "../../ClickAnimation";
+import {
+  ButtonHTMLAttributes,
+  forwardRef,
+  memo,
+  ReactNode,
+  useRef,
+} from "react";
+import {
+  classNames,
+  handleRipple,
+  handleRippleMousePosition,
+} from "@/shared/lib";
 import styles from "./style.module.scss";
+import { RippleWrapper } from "../../RippleWrapper";
+import { Link } from "react-router-dom";
 
-
-export type ButtonVariant = "filled" | "outlined" | "clear"
-export type ButtonColor = 'primary' | 'secondary'
-export type ButtonMinimalismVariant = "round" | "square"
-export type ButtonSize = "small-s" | "small-m" | "small-l" | "medium" | "large"
+export type ButtonVariant = "filled" | "outlined" | "clear";
+export type ButtonColor = "primary" | "secondary";
+export type ButtonSize = "small" | "medium" | "large";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: ButtonVariant;
   color?: ButtonColor;
   size?: ButtonSize;
-  minimalism?: ButtonMinimalismVariant;
-  animateDirection?: AnimationDirection
-  animationColor?: AnimationColor
-  animationVariant?: AnimationVariant
   isDisabled?: boolean;
-  isReadonly?: boolean
+  isReadonly?: boolean;
   isKeyBlocked?: boolean;
-  isStopFocus?: boolean
-  isHiddenLabel?: boolean
+  isStopFocus?: boolean;
+  isLink?: boolean;
+  isExternalLink?: boolean;
+  to?: string;
   children: string;
   type?: "submit" | "reset" | "button" | undefined;
-  Icon?: ReactNode
+  Icon?: ReactNode;
   tabIndex?: number;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const Button = memo(
@@ -37,18 +43,16 @@ export const Button = memo(
       const {
         children,
         className,
-        animateDirection = 'center',
-        animationColor,
-        animationVariant,
         isDisabled,
         isReadonly,
         isKeyBlocked,
         isStopFocus,
-        isHiddenLabel,
+        isLink,
+        isExternalLink,
+        to = "",
         variant = "filled",
         size = "medium",
-        color = 'primary',
-        minimalism,
+        color = "primary",
         type = "button",
         Icon,
         tabIndex,
@@ -56,45 +60,74 @@ export const Button = memo(
         ...otherProps
       } = props;
 
-      const { isAnimating, startAnimation } = useAnimation();
+      const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
 
-      const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-          if (event.key === "Enter" || event.key === ' ') {
-            if(isKeyBlocked) {
-              event.preventDefault()
-            } else {
-              event.preventDefault()
-              onClick()
-              startAnimation();
-            }
-          }
+      const handleClick = (event: React.MouseEvent) => {
+        onClick?.();
+        handleRippleMousePosition(rippleWrapperRef, event);
       };
 
-      const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if(isStopFocus) {
+      const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+          if (isKeyBlocked) {
+            event.preventDefault();
+          } else {
+            event.preventDefault();
+            onClick?.();
+            handleRipple(rippleWrapperRef);
+          }
+        }
+      };
+
+      const handleMouseDown = (event: React.MouseEvent) => {
+        if (isStopFocus) {
           event.preventDefault();
         }
       };
 
-      const handleClick = () => {
-        onClick()
-        startAnimation()
-      }
-    
       const additionalClasses: Array<string | undefined> = [
         className,
         styles[variant],
         styles[color],
         styles[size],
-        styles[`minimalism__${minimalism}`],
       ];
 
       const mods: Record<string, boolean | undefined> = {
         [styles["disabled"]]: isDisabled,
-        [styles['readonly']]: isReadonly,
-        [styles['hidden-label']]: isHiddenLabel,
-        [styles['minimalism']]: !!minimalism
+        [styles["readonly"]]: isReadonly,
       };
+
+      if (isLink) {
+        return (
+          <Link
+            className={classNames(styles["button"], additionalClasses, mods)}
+            onKeyDown={handleKeyDown}
+            to={to}
+            onClick={handleClick}
+            tabIndex={tabIndex}
+          >
+            <span className={styles["label"]}>{children}</span>
+            {Icon && <div className={styles["icon"]}>{Icon}</div>}
+            <RippleWrapper ref={rippleWrapperRef} />
+          </Link>
+        );
+      }
+
+      if (isExternalLink) {
+        return (
+          <a
+            className={classNames(styles["button"], additionalClasses, mods)}
+            onKeyDown={handleKeyDown}
+            href={to}
+            onClick={handleClick}
+            tabIndex={tabIndex}
+          >
+            <span className={styles["label"]}>{children}</span>
+            {Icon && <div className={styles["icon"]}>{Icon}</div>}
+            <RippleWrapper ref={rippleWrapperRef} />
+          </a>
+        );
+      }
 
       return (
         <button
@@ -105,22 +138,13 @@ export const Button = memo(
           onClick={handleClick}
           tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
           disabled={isDisabled}
-          aria-readonly={isReadonly ? 'true' : 'false'}
+          aria-readonly={isReadonly ? "true" : "false"}
           ref={ref}
           {...otherProps}
         >
           <span className={styles["label"]}>{children}</span>
-          {Icon && (
-            <div className={styles["icon"]}>
-              {Icon}
-            </div>
-          )}
-          <ClickAnimation
-            variant={!animationVariant && minimalism === 'square' ? 'square' : animationVariant}
-            direction={animateDirection}
-            color={!animationColor && color === 'primary' && variant === 'filled' ? 'light' : animationColor}
-            isAnimating={isAnimating}
-          />
+          {Icon && <div className={styles["icon"]}>{Icon}</div>}
+          <RippleWrapper ref={rippleWrapperRef} />
         </button>
       );
     }

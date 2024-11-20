@@ -1,0 +1,109 @@
+@import "@/app/styles/media";
+
+.button {
+  --bgColor: transparent;
+  --color: var(--primary-500);
+  --hoverBgColor: var(--primary-opacity);
+  --focusColor: var(--primary-500);
+  aspect-ratio: 1;
+  border: none;
+  cursor: pointer;
+  background-color: var(--bgColor);
+  transition-duration: 0.2s;
+  color: var(--color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include hover {
+    background-color: var(--hoverBgColor);
+  }
+}
+
+.icon {
+  display: flex;
+  svg {
+    fill: var(--color);
+    stroke: var(--color);
+    transition-duration: 0.2s;
+  }
+}
+
+// Colors
+.button {
+  &.primary {
+  }
+  &.secondary {
+    --color: var(--secondary-600);
+    --hoverBgColor: var(--secondary-opacity);
+    --focusColor: var(--secondary-600);
+  }
+}
+
+// Variants
+.button {
+  &.filled {
+    &.primary {
+      --color: var(--light);
+      --hoverBgColor: var(--primary-600);
+      --bgColor: var(--primary-500);
+    }
+    &.secondary {
+      --color: var(--light);
+      --bgColor: var(--secondary-600);
+      --hoverBgColor: var(--secondary-500);
+    }
+  }
+  &.outlined {
+    box-shadow: 0 0 0 1px currentColor inset;
+  }
+}
+
+// Sizes
+.button {
+  &.small-s {
+    height: var(--button-height-small-s);
+    font-size: var(--font-size-small-s);
+  }
+  &.small-m {
+    height: var(--button-height-small-m);
+    font-size: var(--font-size-small-m);
+  }
+  &.small-l {
+    height: var(--button-height-small-l);
+    font-size: var(--font-size-small-l);
+  }
+  &.medium {
+    height: var(--button-height-medium);
+    font-size: var(--font-size-medium);
+  }
+  &.large {
+    height: var(--button-height-large);
+    font-size: var(--font-size-large);
+  }
+}
+
+// Forms
+.button {
+  &.square {
+    border-radius: var(--border-radius-small);
+  }
+  &.round {
+    border-radius: 50%;
+  }
+}
+
+// Mods
+.button {
+  &:focus-visible {
+    box-shadow: 0 0 5px 1px var(--focusColor);
+    background-color: var(--hoverBgColor);
+  }
+  &.disabled {
+    opacity: var(--opacity-medium);
+    pointer-events: none;
+  }
+  &.readonly {
+    pointer-events: none;
+  }
+}

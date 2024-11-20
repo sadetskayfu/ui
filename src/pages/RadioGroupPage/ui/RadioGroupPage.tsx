@@ -1,48 +1,77 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
+import {
+  Radio,
+  RadioColor,
+  RadioGroup,
+  RadioVariant,
+} from "@/shared/ui/RadioGroup";
 import { useCallback, useMemo, useState } from "react";
-import { items, radioSizes } from "../model/RadioGroup";
+import { radioColors, radioSizes, radioVariants } from "../model/RadioGroup";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { capitalizeFirstLetter } from "@/shared/lib";
 
 const RadioGroupPage = () => {
-  const [selectedValue, setSelectedValue] = useState<string>("1");
+  const [value, setValue] = useState<string>("option1");
+  const [variant, setVariant] = useState<RadioVariant>("filled");
 
-  const handleSelectValue = useCallback((value: string) => {
-    setSelectedValue(value);
+  const handleToggleValue = useCallback((value: string) => {
+    setValue(value);
+  }, []);
+  const handleToggleVariant = useCallback((value: string) => {
+    setVariant(value as RadioVariant);
   }, []);
 
   const renderSizes = useMemo(() => {
     return radioSizes.map((item) => {
       return (
         <RadioGroup
-          items={items}
-          onChange={handleSelectValue}
-          selectedValue={selectedValue}
+          onChange={handleToggleValue}
+          selectedValue={value}
           name={item}
-          title={capitalizeFirstLetter(item) as string}
           size={item}
-        />
+          variant={variant}
+          legend={capitalizeFirstLetter(item) as string}
+        >
+          <Radio label="Option 1" value="option1" />
+          <Radio label="Option 2" value="option2" />
+          <Radio label="Option 3" value="option3" isDisabled />
+        </RadioGroup>
       );
     });
-  }, [selectedValue, handleSelectValue]);
+  }, [handleToggleValue, value, variant]);
 
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Radio Group</SectionTitle>
-        <div className='subsections'>
+        <div className="mods">
+          <RadioGroup
+            legend="Variants"
+            name="variant"
+            onChange={handleToggleVariant}
+            selectedValue={variant}
+          >
+            {radioVariants.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+        </div>
+        <div className="subsections">
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
           <PreviewComponents title="Horizontal direction">
             <RadioGroup
-              items={items}
-              onChange={handleSelectValue}
-              selectedValue={selectedValue}
-              name="horizontal"
-              title="Horizontal"
+              onChange={handleToggleValue}
+              selectedValue={value}
+              name={"horizontal-radio"}
               size="small"
+              variant={variant}
+              legend="Horizontal radio group"
               direction="horizontal"
-            />
+            >
+              <Radio label="Option 1" value="option1" />
+              <Radio label="Option 2" value="option2" />
+              <Radio label="Option 3" value="option3" isDisabled />
+            </RadioGroup>
           </PreviewComponents>
         </div>
       </section>

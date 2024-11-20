@@ -1,6 +1,10 @@
 @import "@/app/styles/media", "@/app/styles/mixins";
 
 .button {
+  --bgColor: transparent;
+  --color: var(--primary-500);
+  --hoverBgColor: var(--primary-opacity);
+  --focusColor: var(--primary-500);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -8,121 +12,85 @@
   justify-content: space-between;
   cursor: pointer;
   border: none;
-  border-radius: var(--border-radius-medium);
+  border-radius: var(--border-radius-small);
   text-wrap: nowrap;
   @include user-select-off;
   gap: var(--gap-small-s);
-  color: var(--primary-500);
+  color: var(--color);
   transition-duration: 0.2s;
+  background-color: var(--bgColor);
+  @include hover {
+    background-color: var(--hoverBgColor);
+  }
 }
 
 .icon {
   display: flex;
+  svg {
+    fill: var(--color);
+    stroke: var(--color);
+    transition-duration: 0.2s;
+  }
+}
+
+// Colors
+.button {
+  &.primary {
+
+  }
+  &.secondary {
+      --focusColor: var(--secondary-600);
+      --color: var(--secondary-600);
+      --hoverBgColor: var(--secondary-opacity);
+  }
 }
 
 // Variants
 .button {
   &.filled {
-    &.primary {
-      background-color: var(--primary-500);
-      color: var(--light);
-      @include hover {
-        background-color: var(--primary-400);
+      &.primary {
+          --color: var(--light);
+          --hoverBgColor: var(--primary-600);
+          --bgColor: var(--primary-500);
       }
-    }
-    &.secondary {
-      background-color: var(--primary-200);
-      @include hover {
-        background-color: var(--primary-opacity);
+      &.secondary {
+          --color: var(--light);
+          --bgColor: var(--secondary-600);
+          --hoverBgColor: var(--secondary-500);
       }
-    }
   }
   &.outlined {
-    &.primary {
-      border: var(--border-primary);
-      background-color: transparent;
-    }
-    &.secondary {
-      background-color: transparent;
-      border: var(--border-secondary);
-    }
-    @include hover {
-      background-color: var(--primary-opacity);
-    }
-  }
-  &.clear {
-    background-color: transparent;
-    @include hover {
-      background-color: var(--primary-opacity);
-    }
+      box-shadow: 0 0 0 1px currentColor inset;
   }
 }
 
 // Sizes
 .button {
-  // Small-s, only minimalism mode
-  &.small-s.minimalism {
-    height: var(--button-height-small-s);
-  }
-  // Small-m, only minimalism mode
-  &.small-m.minimalism {
-    height: var(--button-height-small-m);
-  }
-  // Small-l
-  &.small-l:not(.minimalism) {
+  &.small {
     padding-inline: var(--padding-small-l);
     height: var(--button-height-small-l);
   }
-  &.small-l.minimalism {
-    height: var(--button-height-small-l);
-  }
-  // Medium
-  &.medium:not(.minimalism) {
+  &.medium {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
   }
-  &.medium.minimalism {
-    height: var(--button-height-medium);
-  }
-  // Large
-  &.large:not(.minimalism) {
+  &.large {
     padding-inline: var(--padding-large);
-    height: var(--button-height-large);
-  }
-  &.large.minimalism {
     height: var(--button-height-large);
   }
 }
 
 // Mods
 .button {
+  &:focus-visible {
+    box-shadow: 0 0 5px 1px var(--focusColor);
+    background-color: var(--hoverBgColor);
+  }
   &.disabled {
     opacity: var(--opacity-medium);
     pointer-events: none;
   }
-
   &.readonly {
     pointer-events: none;
-  }
-
-  &.hidden-label {
-    .label {
-      @include visually-hidden;
-    }
-  }
-  &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
-  }
-}
-
-// Minimalism variant
-.button {
-  &.minimalism {
-    justify-content: center;
-    aspect-ratio: 1;
-    padding: 0;
-    &__round {
-      border-radius: 50%;
-    }
   }
 }

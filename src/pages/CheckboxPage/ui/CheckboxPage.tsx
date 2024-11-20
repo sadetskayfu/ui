@@ -5,15 +5,14 @@ import { useCallback, useMemo, useState } from "react";
 import { checkboxSizes, checkboxVariants } from "../model/Checkbox";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { Group } from "@/shared/ui/Group";
 
 const CheckboxPage = () => {
-  const [isPreviewChecked, setIsPreviewChecked] = useState<boolean>(false);
   const [isRequired, setIsRequired] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
-  const handleTogglePreviewChecked = useCallback(() => {
-    setIsPreviewChecked((prev) => !prev);
+  const handleToggleLiked = useCallback(() => {
+    setIsLiked((prev) => !prev);
   }, []);
   const handleToggleRequired = useCallback(() => {
     setIsRequired((prev) => !prev);
@@ -27,59 +26,65 @@ const CheckboxPage = () => {
       return (
         <Checkbox
           key={item}
-          className={styles['checkbox']}
+          className={styles["checkbox"]}
           size={item}
           label={capitalizeFirstLetter(item) as string}
           name={item}
-          isChecked={isPreviewChecked}
-          onToggle={handleTogglePreviewChecked}
           isRequired={isRequired}
           isDisabled={isDisabled}
+          onToggle={() => undefined}
+          isChecked={false}
         />
       );
     });
-  }, [isDisabled, isRequired, isPreviewChecked, handleTogglePreviewChecked]);
+  }, [isDisabled, isRequired]);
 
   const renderVariants = useMemo(() => {
     return checkboxVariants.map((item) => {
       return (
         <Checkbox
           key={item}
-          className={styles['checkbox']}
+          className={styles["checkbox"]}
           variant={item}
           label={capitalizeFirstLetter(item) as string}
           name={item}
-          isChecked={isPreviewChecked}
-          onToggle={handleTogglePreviewChecked}
+          onToggle={() => undefined}
           isRequired={isRequired}
           isDisabled={isDisabled}
+          isChecked={false}
         />
       );
     });
-  }, [isDisabled, isRequired, isPreviewChecked, handleTogglePreviewChecked]);
+  }, [isDisabled, isRequired]);
 
   return (
-    <div className='page'>
+    <div className="page">
       <section className="section">
-      <SectionTitle>Checkbox</SectionTitle>
-      <Group direction="vertical">
-        <Checkbox
-          label="Required"
-          isChecked={isRequired}
-          name="required"
-          onToggle={handleToggleRequired}
-        />
-        <Checkbox
-          label="Disabled"
-          isChecked={isDisabled}
-          name="disabled"
-          onToggle={handleToggleDisabled}
-        />
-      </Group>
-      <div className='subsections'>
-        <PreviewComponents title="Variants">{renderVariants}</PreviewComponents>
-        <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
-      </div>
+        <SectionTitle>Checkbox</SectionTitle>
+        <div>
+          <Checkbox
+            label="Required"
+            isChecked={isRequired}
+            name="required"
+            onToggle={handleToggleRequired}
+            color="red"
+          />
+          <Checkbox
+            label="Disabled"
+            isChecked={isDisabled}
+            name="disabled"
+            onToggle={handleToggleDisabled}
+          />
+        </div>
+        <div className="subsections">
+          <PreviewComponents title="Variants">
+            {renderVariants}
+          </PreviewComponents>
+          <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
+          <PreviewComponents title="Favorite">
+            <Checkbox color="red" variant='clear' name="favorite" label="Favorite" iconVariant='favorite' onToggle={handleToggleLiked} isChecked={isLiked}/>
+          </PreviewComponents>
+        </div>
       </section>
     </div>
   );

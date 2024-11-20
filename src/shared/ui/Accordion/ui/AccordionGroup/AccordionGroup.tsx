@@ -1,22 +1,16 @@
 import { classNames } from "@/shared/lib";
 import {
   ReactElement,
-  ReactNode,
   useState,
   Children,
   cloneElement,
 } from "react";
 import styles from "./style.module.scss";
-
-export interface AccordionGroupChildrenProps {
-  index: number;
-  onChangeSelectedIndex: (index: number | null) => void;
-  selectedIndex: number | null;
-}
+import { AccordionProps } from "../Accordion/Accordion";
 
 interface AccordionGroupProps {
   className?: string;
-  children: ReactNode;
+  children: ReactElement[];
 }
 
 export const AccordionGroup = (props: AccordionGroupProps) => {
@@ -31,13 +25,13 @@ export const AccordionGroup = (props: AccordionGroupProps) => {
   return (
     <div className={classNames(styles["accordion-group"], [className])}>
       {Children.map(children, (child, index) => {
-        const AccordionGroupChildrenProps: AccordionGroupChildrenProps = {
+        const props: Partial<AccordionProps> = {
           index: index + 1,
           onChangeSelectedIndex: handleChangeSelectedIndex,
           selectedIndex,
         };
         return cloneElement(child as ReactElement, {
-          ...AccordionGroupChildrenProps,
+          ...props,
         });
       })}
     </div>

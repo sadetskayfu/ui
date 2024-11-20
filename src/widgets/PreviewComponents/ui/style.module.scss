@@ -17,9 +17,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--gap-medium-l);
+    gap: var(--gap-medium-s);
     padding-block: var(--section-padding);
     padding-inline: var(--padding-medium);
-    border: var(--border-secondary);
+    box-shadow: 0 0 0 1px var(--primary-200);
     border-radius: var(--border-radius-medium);
 }

@@ -51,16 +51,6 @@
 	flex-shrink: 0;
 }
 
-@mixin hover-effect {
-    @include abs-center;
-    content: '';
-    height: 40px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background-color: transparent;
-    transition-duration: 0.2s;
-}
-
 @mixin user-select-off {
 	-webkit-user-select: none; /* Chrome/Safari */
 	-moz-user-select: none; /* Firefox */
@@ -80,13 +70,13 @@
 }
 
 @mixin underline-right {
-	content: '';
 	position: absolute;
-	right: 0;
 	top: 50%;
+	right: 0;
 	translate: 0 -50%;
-	height: 0%;
+	height: 100%;
 	background-color: currentColor;
-	width: 2px;
+	width: 0%;
 	transition-duration: inherit;
+	border-radius: inherit;
 }

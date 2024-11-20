@@ -1,81 +1,94 @@
-import { ChangeEvent } from "react";
-import { classNames } from "@/shared/lib";
-import { useAnimation } from "@/shared/lib/hooks";
-import { ClickAnimation } from "@/shared/ui/ClickAnimation";
+import { memo, useRef } from "react";
+import { classNames, handleRipple } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { RippleWrapper } from "@/shared/ui/RippleWrapper";
 
 export type RadioSize = "small" | "medium"
+export type RadioVariant = "filled" | "outlined"
 
-interface RadioProps {
+export interface RadioProps {
   className?: string;
   size?: RadioSize;
-  name: string;
-  id?: string
-  isHiddenLabel?: boolean
+  variant?: RadioVariant
+  name?: string;
   label: string;
-  selectedValue: string;
+  legend?: string
+  selectedValue?: string;
   value: string;
-  onChange: (value: string) => void;
+  isDisabled?: boolean
+  onChange?: (value: string) => void;
   tabIndex?: number;
 }
 
-export const Radio = (props: RadioProps) => {
+export const Radio = memo((props: RadioProps) => {
   const {
     className,
     size = "medium",
-    id,
-    isHiddenLabel,
+    variant = 'filled',
     value,
     name,
     label,
+    legend,
     selectedValue,
+    isDisabled,
     onChange,
     tabIndex = 0,
   } = props;
 
-  const { isAnimating, startAnimation } = useAnimation();
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value);
-    startAnimation()
+  const isChecked = value === selectedValue
+
+  const handleChange = () => {
+    onChange?.(value);
+    handleRipple(rippleWrapperRef, true)
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (event.key === "Enter" || event.key === ' ') {
+    if ((event.key === "Enter" || event.key === ' ') && !isChecked) {
       event.preventDefault()
-      onChange(value);
-      startAnimation();
+      inputRef.current?.click()
     }
   };
 
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[size],
+    styles[variant],
   ];
+
+  const mods: Record<string, boolean | undefined> = {
+    [styles['disabled']]: isDisabled
+  }
 
   return (
     <label
-      className={classNames(styles["radio"], additionalClasses)}
+      className={classNames(styles["wrapper"], additionalClasses, mods)}
       onKeyDown={handleKeyDown}
-      tabIndex={tabIndex}
       role="radio"
+      tabIndex={isDisabled ? -1 : tabIndex}
+      aria-label={`${legend} ${label}`}
+      aria-checked={isChecked}
+      aria-disabled={isDisabled ? 'true' : 'false'}
     >
       <input
+        ref={inputRef}
         className="visually-hidden"
         type="radio"
-        id={id && id}
         name={name}
         value={value}
-        checked={value === selectedValue}
         onChange={handleChange}
+        checked={isChecked}
         tabIndex={-1}
+        disabled={isDisabled}
+        aria-hidden='true'
       />
-      <span className={styles["emulator"]}>
-        <span className={styles['hover']}>
-          <ClickAnimation isAnimating={isAnimating} />
-        </span>
-      </span>
-      {!isHiddenLabel && <span>{label}</span>}
+      <div className={styles["radio-wrapper"]}>
+          <span className={styles['radio']}></span>
+          <RippleWrapper className={styles['ripple']} ref={rippleWrapperRef}/>
+      </div>
+      <span>{label}</span>
     </label>
   );
-};
+});

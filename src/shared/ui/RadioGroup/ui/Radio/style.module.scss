@@ -1,60 +1,92 @@
 @import "@/app/styles/mixins", "@/app/styles/media";
 
-.radio {
+.wrapper {
+  --height: var(--button-height-small-l);
+  --hoverBgColor: var(--secondary-opacity);
   display: flex;
   align-items: center;
   cursor: pointer;
-  column-gap: var(--gap-small-s);
-
+  height: var(--height);
   @include user-select-off;
-  @include hover {
-    .hover {
-      background-color: var(--primary-opacity);
-    }
-  }
   &:focus-visible {
-      .hover {
-        background-color: var(--primary-opacity);
+    .radio-wrapper {
+      background-color: var(--hoverBgColor);
     }
   }
-  & input[type="radio"]:checked + .emulator:before {
-    height: 70%;
+  @include hover {
+    .radio-wrapper {
+      background-color: var(--hoverBgColor);
+    }
   }
 }
 
-.emulator {
+.radio-wrapper {
+  position: relative;
+  height: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--primary-200);
+  background-color: transparent;
   transition-duration: 0.2s;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.radio {
+  position: relative;
+  height: 50%;
+  aspect-ratio: 1;
+  border-radius: inherit;
+  transition-duration: inherit;
   &:before {
     @include abs-center;
     content: "";
     height: 0%;
     aspect-ratio: 1;
-    border-radius: 50%;
+    border-radius: inherit;
     background-color: var(--primary-500);
     transition-duration: inherit;
   }
 }
 
-.hover {
-  @include hover-effect;
+// Sizes
+.wrapper {
+  &.small {
+    --height: var(--button-height-small-l);
+  }
+  &.medium {
+    --height: var(--button-height-medium);
+  }
 }
 
-// Sizes
-.radio {
-  &.small {
-    .emulator {
-      height: var(--button-height-small-s);
+// Variants
+.wrapper {
+  &.filled {
+    .radio {
+      background-color: var(--secondary-200);
     }
   }
-
-  &.medium {
-    .emulator {
-      height: var(--button-height-small-m);
+  &.outlined {
+    --hoverBgColor: var(--primary-opacity);
+    .ripple {
+      color: var(--primary-500);
     }
+    .radio {
+      background-color: transparent;
+      box-shadow: 0 0 0 1px currentColor inset;
+    }
+  }
+}
+
+// Mods
+.wrapper {
+  & input[type="radio"]:checked + .radio-wrapper {
+    .radio:before {
+      height: 60%;
+    }
+  }
+  &.disabled {
+    opacity: var(--opacity-medium);
+    pointer-events: none;
   }
 }

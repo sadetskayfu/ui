@@ -13,7 +13,7 @@ import styles from "./style.module.scss";
 type AccordionVariant = "filled" | "outlined" | "clear";
 type AccordionTitleVariant = "h3" | "h4";
 
-interface AccordionProps {
+export interface AccordionProps {
   className?: string;
   children: ReactNode;
   title: string;
@@ -54,7 +54,7 @@ export const Accordion = memo((props: AccordionProps) => {
 
   const id = useId() + "accordion-body";
 
-  const toggleOpeningDetails = () => {
+  const handleToggleOpenMenu = () => {
     if (index && onChangeSelectedIndex) {
       if (index === selectedIndex) {
         onChangeSelectedIndex(null);
@@ -68,7 +68,7 @@ export const Accordion = memo((props: AccordionProps) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
-      toggleOpeningDetails();
+      handleToggleOpenMenu();
     }
   };
 
@@ -154,7 +154,7 @@ export const Accordion = memo((props: AccordionProps) => {
       <div
         className={styles["header"]}
         tabIndex={isDisabled ? -1 : tabIndex}
-        onClick={toggleOpeningDetails}
+        onClick={handleToggleOpenMenu}
         onKeyDown={handleKeyDown}
         role="button"
         aria-disabled={isDisabled ? "true" : "false"}
@@ -164,7 +164,7 @@ export const Accordion = memo((props: AccordionProps) => {
         {titleVariant === "h3" && <h3 className={styles["title"]}>{title}</h3>}
         {titleVariant === "h4" && <h4 className={styles["title"]}>{title}</h4>}
         <div className={styles["opening-icon"]}>
-          {Icon ? <>{Icon}</> : <ArrowIcon variant="arrow" size="small" />}
+          {Icon ? <>{Icon}</> : <ArrowIcon variant="arrow" size="small-m" color="custom-color"/>}
         </div>
       </div>
       <div

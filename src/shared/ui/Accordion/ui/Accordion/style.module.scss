@@ -1,17 +1,21 @@
 @import "@/app/styles/media", "@/app/styles/mixins";
 
 .accordion {
+  --color: var(--secondary-600);
+  --bgColor: transparent;
+  --hoverBgColor: var(--secondary-opacity);
   overflow: hidden;
   width: 100%;
   transition-duration: var(--transition-duration);
+  color: var(--color);
   &.border-radius {
-    border-radius: var(--border-radius-medium);
+    border-radius: var(--border-radius-small);
   }
   &:first-child:not(.border-radius) {
-    border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
   }
   &:last-child:not(.border-radius) {
-    border-radius: 0 0 var(--border-radius-medium) var(--border-radius-medium) ;
+    border-radius: 0 0 var(--border-radius-small) var(----border-radius-small);
   }
 }
 
@@ -25,6 +29,13 @@
   padding: var(--padding-medium);
   cursor: pointer;
   transition-duration: 0.2s;
+  background-color: var(--bgColor);
+  @include hover {
+    background-color: var(--hoverBgColor);
+  }
+  &:focus-visible {
+    background-color: var(--hoverBgColor);
+  }
   &:before {
     @include underline-bottom;
   }
@@ -51,6 +62,8 @@
 
 .opening-icon {
   svg {
+    fill: var(--color);
+    stroke: var(--color);
     transform: rotate(180deg);
     transition-duration: 0.2s;
   }
@@ -60,37 +73,15 @@
 .accordion {
   &.filled{
     .header {
-      background-color: var(--primary-200);
-      @include hover {
-        background-color: var(--primary-300);
-      }
-      &:focus-visible {
-        background-color: var(--primary-300);
-      }
+      --bgColor: var(--secondary-200);
     }
   }
   &.outlined {
-    background-color: transparent;
-    border: var(--border-secondary);
-    .header {
-      @include hover {
-        background-color: var(--primary-opacity);
-      }
-      &:focus-visible {
-        background-color: var(--primary-opacity);
-      }
-    }
+    box-shadow: 0 0 0 1px currentColor inset;
+
   }
   &.clear {
-    background-color: transparent;
-    .header {
-      @include hover {
-        background-color: var(--primary-opacity);
-      }
-      &:focus-visible {
-        background-color: var(--primary-opacity);
-      }
-    }
+    --hoverBgColor: var(--primary-opacity);
   }
 }
 

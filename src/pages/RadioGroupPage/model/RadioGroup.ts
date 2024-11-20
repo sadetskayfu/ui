@@ -1,26 +1,22 @@
-import { RadioSize } from "@/shared/ui/RadioGroup"
+import { RadioSize, RadioVariant as Variant} from "@/shared/ui/RadioGroup"
 
-export interface Item {
-    value: string
+interface RadioVariant {
+    value: Variant
     label: string
 }
 
-export const items: Item[] = [
-    {
-        value: '1',
-        label: 'One',
-    },
-    {
-        value: '2',
-        label: 'Two',
-    },
-    {
-        value: '3',
-        label: 'Three'
-    }
-]
-
 export const radioSizes: RadioSize[] = [
     'small', 'medium'
+]
+
+export const radioVariants: RadioVariant[] = [
+    {
+        value: 'filled',
+        label: 'Filled'
+    },
+    {
+        value: 'outlined',
+        label: 'Outlined'
+    }
 ]
 

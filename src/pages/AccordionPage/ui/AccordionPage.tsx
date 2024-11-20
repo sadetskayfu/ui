@@ -26,7 +26,6 @@ const AccordionPage = () => {
         <SectionTitle>Accordion</SectionTitle>
         <PreviewComponents title="Accordion variants" direction="vertical">
           <Accordion title="Filled" isBorderRadius>
-            <Group direction="vertical" gap="small">
               <Checkbox
                 label="Blue"
                 name="blue-color"
@@ -48,10 +47,8 @@ const AccordionPage = () => {
                 onToggle={handleToggleGreenColor}
                 size="small"
               />
-            </Group>
           </Accordion>
           <Accordion title="Outlined" variant="outlined" isBorderRadius>
-            <Group direction="vertical" gap="small">
               <Checkbox
                 label="Blue"
                 name="blue-color"
@@ -76,10 +73,8 @@ const AccordionPage = () => {
                 size="small"
                 variant="outlined"
               />
-            </Group>
           </Accordion>
           <Accordion title="Clear" variant="clear" isBorderRadius>
-            <Group direction="vertical" gap="small">
               <Checkbox
                 label="Blue"
                 name="blue-color"
@@ -104,13 +99,11 @@ const AccordionPage = () => {
                 size="small"
                 variant="outlined"
               />
-            </Group>
           </Accordion>
         </PreviewComponents>
         <PreviewComponents title="Accordion group">
           <AccordionGroup>
             <Accordion title="Accordion">
-              <Group direction="vertical" gap="small">
                 <Checkbox
                   label="Blue"
                   name="blue-color"
@@ -135,10 +128,8 @@ const AccordionPage = () => {
                   size="small"
                   variant="outlined"
                 />
-              </Group>
             </Accordion>
             <Accordion title="Accordion">
-              <Group direction="vertical" gap="small">
                 <Checkbox
                   label="Blue"
                   name="blue-color"
@@ -159,10 +150,8 @@ const AccordionPage = () => {
                   onToggle={handleToggleGreenColor}
                   size="small"
                 />
-              </Group>
             </Accordion>
             <Accordion title="Accordion">
-              <Group direction="vertical" gap="small">
                 <Checkbox
                   label="Blue"
                   name="blue-color"
@@ -184,7 +173,6 @@ const AccordionPage = () => {
                   onToggle={handleToggleGreenColor}
                   size="small"
                 />
-              </Group>
             </Accordion>
           </AccordionGroup>
         </PreviewComponents>

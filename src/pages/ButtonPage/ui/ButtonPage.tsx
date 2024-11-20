@@ -1,125 +1,92 @@
-import { Button, ButtonColor } from "@/shared/ui/Button";
-import { PreviewComponents } from "@/widgets/PreviewComponents";
-import { SectionTitle } from "@/shared/ui/SectionTitle";
-import { Checkbox } from "@/shared/ui/Checkbox";
-import { useCallback, useMemo, useState } from "react";
+import { Button, ButtonColor, ButtonVariant } from "@/shared/ui/Button";
+import { IconButton, IconButtonForm } from "@/shared/ui/IconButton";
+import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { useCallback, useState } from "react";
 import {
+  buttonColors,
   buttonSizes,
   buttonVariants,
-  colorVariants,
-  minimalismButtonVariants,
+  iconButtonForms,
+  iconButtonSizes,
 } from "../model/Button";
-import { capitalizeFirstLetter } from "@/shared/lib";
-import { Group } from "@/shared/ui/Group";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { SectionTitle } from "@/shared/ui/SectionTitle";
+import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { Icon } from "@/shared/ui/Icon";
+import { capitalizeFirstLetter } from "@/shared/lib";
 
 const ButtonPage = () => {
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const [icon, setIcon] = useState<boolean>(false);
   const [color, setColor] = useState<ButtonColor>("primary");
+  const [form, setForm] = useState<IconButtonForm>("round");
+  const [variant, setVariant] = useState<ButtonVariant>("filled");
 
   const handleToggleColor = useCallback((value: string) => {
     setColor(value as ButtonColor);
   }, []);
-  const handleToggleDisabled = useCallback(() => {
-    setIsDisabled((prev) => !prev);
+  const handleToggleForm = useCallback((value: string) => {
+    setForm(value as IconButtonForm);
   }, []);
-  const handleToggleIcon = useCallback(() => {
-    setIcon((prev) => !prev);
+  const handleToggleVariant = useCallback((value: string) => {
+    setVariant(value as ButtonVariant);
   }, []);
-
-  const renderVariants = useMemo(() => {
-    return buttonVariants.map((btn) => {
-      return (
-        <Button
-          key={btn}
-          onClick={() => undefined}
-          variant={btn}
-          Icon={icon && <Icon variant="heart" size="custom-size" color='custom-color'/>}
-          isDisabled={isDisabled}
-          color={color}
-        >
-          {capitalizeFirstLetter(btn) as string}
-        </Button>
-      );
-    });
-  }, [isDisabled, icon, color]);
-
-  const renderMinimalismVariants = useMemo(() => {
-    return minimalismButtonVariants.map((btn, index) => {
-      return (
-        <Button
-          key={index}
-          onClick={() => undefined}
-          Icon={<Icon variant="heart" size="custom-size" color='custom-color'/>}
-          isDisabled={isDisabled}
-          isHiddenLabel
-          minimalism={btn}
-          color={color}
-        >
-          {btn}
-        </Button>
-      );
-    });
-  }, [isDisabled, color]);
-
-  const renderSizes = useMemo(() => {
-    return buttonSizes.map((btn, index) => {
-      return (
-        <Button
-          key={index}
-          onClick={() => undefined}
-          size={btn}
-          isDisabled={isDisabled}
-          color={color}
-          Icon={icon && <Icon variant="heart" size="custom-size" color='custom-color'/>}
-        >
-          {capitalizeFirstLetter(btn) as string}
-        </Button>
-      );
-    });
-  }, [isDisabled, color, icon]);
 
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Button</SectionTitle>
-        <Group direction="vertical">
-          <Group direction="horizontal">
-            <Checkbox
-              isChecked={isDisabled}
-              label="Disabled"
-              name="disabled"
-              onToggle={handleToggleDisabled}
-              size="small"
-            />
-            <Checkbox
-              isChecked={icon}
-              label="Icon"
-              name="icon"
-              size="small"
-              onToggle={handleToggleIcon}
-            />
-          </Group>
+        <div className="mods">
           <RadioGroup
             direction="horizontal"
-            items={colorVariants}
-            selectedValue={color}
-            name="button-color"
-            title="Colors"
-            size="small"
+            legend="Colors"
             onChange={handleToggleColor}
-          />
-        </Group>
+            name="color"
+            selectedValue={color}
+          >
+            {buttonColors.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <RadioGroup
+            direction="horizontal"
+            legend="Variants"
+            onChange={handleToggleVariant}
+            name="variant"
+            selectedValue={variant}
+          >
+            {buttonVariants.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <RadioGroup
+            direction="horizontal"
+            legend="Icon buttons forms"
+            onChange={handleToggleForm}
+            name="form"
+            selectedValue={form}
+          >
+            {iconButtonForms.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+        </div>
         <div className="subsections">
-          <PreviewComponents title="Button variants">
-            {renderVariants}
+          <PreviewComponents title="Icon buttons sizes">
+            {iconButtonSizes.map((btn) => {
+              return (
+                <IconButton size={btn} variant={variant} color={color} form={form}>
+                  <Icon variant="house" size="custom-size" color="custom-color"/>
+                </IconButton>
+              );
+            })}
           </PreviewComponents>
-          <PreviewComponents title="Minimalism variants">
-            {renderMinimalismVariants}
+          <PreviewComponents title="Buttons sizes">
+            {buttonSizes.map((btn) => {
+              return (
+                <Button size={btn} variant={variant} color={color} form={form}>
+                  {capitalizeFirstLetter(btn) as string}
+                </Button>
+              );
+            })}
           </PreviewComponents>
-          <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
         </div>
       </section>
     </div>
