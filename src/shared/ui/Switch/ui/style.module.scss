@@ -97,9 +97,11 @@
   &.small {
     --height: var(--button-height-small-l);
     column-gap: var(--padding-small-s);
+    padding-left: var(--padding-small-s);
   }
   &.medium {
     --height: var(--button-height-medium);
     column-gap: var(--padding-small-s);
+    padding-left: var(--padding-small-l);
   }
 }

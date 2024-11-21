@@ -1,11 +1,13 @@
-import { classNames } from "@/shared/lib";
+import { classNames, handleRippleMousePosition } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { memo } from "react";
+import { memo, useCallback, useRef } from "react";
 import { Icon } from "@/shared/ui/Icon";
+import { RippleWrapper } from "../../RippleWrapper";
+import { IconButton } from "../../IconButton";
 
 export type ChipVariant = "filled" | "outlined";
 export type ChipColor = "primary" | "secondary" | "success" | "error";
-export type ChipSize = "small" | "medium" | "large";
+export type ChipSize = "small" | "medium"
 
 interface ChipProps {
   className?: string;
@@ -36,30 +38,23 @@ export const Chip = memo((props: ChipProps) => {
     tabIndex = 0,
   } = props;
 
-  const handleKeyDownClose = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.stopPropagation();
-      onClose?.();
-    }
-  };
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
 
   const handleKeyDownClick = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {
       event.stopPropagation();
       onClick?.();
-      startAnimation();
     }
   };
 
-  const handleClose = (event: React.MouseEvent) => {
-    event.stopPropagation();
+  const handleClose = useCallback(() => {
     onClose?.();
-  };
+  }, [onClose]);
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     onClick?.();
-    startAnimation();
+    handleRippleMousePosition(rippleWrapperRef, event);
   };
 
   const handleStopPropagation = (event: React.MouseEvent) => {
@@ -97,18 +92,16 @@ export const Chip = memo((props: ChipProps) => {
       >
         <span>{children}</span>
         {onClose && (
-          <button
-            className={styles["button"]}
-            onMouseDown={handleStopFocus}
-            onClick={handleClose}
-            onKeyDown={handleKeyDownClose}
-            tabIndex={currentTabIndex}
-            disabled={isDisabled}
-          >
-            <span className="visually-hidden">Delete</span>
-            <Icon className={styles['icon']} color='custom-color' variant="x-mark" size="custom-size"/>
-          </button>
+          <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="gray" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
+            <Icon
+              className={styles["icon"]}
+              color="custom-color"
+              variant="x-mark"
+              size="custom-size"
+            />
+          </IconButton>
         )}
+        <RippleWrapper ref={rippleWrapperRef} />
       </button>
     );
   }
@@ -120,17 +113,14 @@ export const Chip = memo((props: ChipProps) => {
     >
       <span>{children}</span>
       {onClose && (
-        <button
-          className={styles["button"]}
-          onMouseDown={handleStopFocus}
-          onClick={handleClose}
-          onKeyDown={handleKeyDownClose}
-          tabIndex={currentTabIndex}
-          disabled={isDisabled}
-        >
-          <span className="visually-hidden">Delete</span>
-          <Icon className={styles['icon']} color='custom-color' variant="x-mark" size="custom-size"/>
-        </button>
+        <IconButton size="small-s" color="gray" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
+          <Icon
+            className={styles["icon"]}
+            color="custom-color"
+            variant="x-mark"
+            size="custom-size"
+          />
+        </IconButton>
       )}
     </div>
   );

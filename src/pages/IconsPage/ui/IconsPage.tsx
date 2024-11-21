@@ -4,11 +4,11 @@ import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useState } from "react";
 import { iconColors, iconFillVariants, iconSizes } from "../model/Icon";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 
 const IconsPage = () => {
   const [fillVariant, setFillVariant] = useState<IconFillVariant>("filled");
-  const [size, setSize] = useState<IconSize>("small");
+  const [size, setSize] = useState<IconSize>("small-s");
   const [color, setColor] = useState<IconColor>("primary");
 
   const handleToggleFillVariant = useCallback((value: string) => {
@@ -25,35 +25,23 @@ const IconsPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Icons</SectionTitle>
-        <Group direction="vertical">
-          <RadioGroup
-            items={iconFillVariants}
-            name="icon-fill-variant"
-            selectedValue={fillVariant}
-            title="Fill variants"
-            direction="horizontal"
-            onChange={handleToggleFillVariant}
-            size="small"
-          />
-          <RadioGroup
-            items={iconSizes}
-            name="icon-size"
-            selectedValue={size}
-            title="Sizes"
-            direction="horizontal"
-            onChange={handleToggleSize}
-            size="small"
-          />
-          <RadioGroup
-            items={iconColors}
-            name="icon-color"
-            selectedValue={color}
-            title="Colors"
-            direction="horizontal"
-            onChange={handleToggleColor}
-            size="small"
-          />
-        </Group>
+        <div className="mods">
+          <RadioGroup legend="Colors" name="color" onChange={handleToggleColor} selectedValue={color} direction="horizontal">
+            {iconColors.map((radio) => {
+              return <Radio label={radio.label} value={radio.value}/>
+            })}
+          </RadioGroup>
+          <RadioGroup legend="Sizes" name="size" onChange={handleToggleSize} selectedValue={size} direction="horizontal">
+            {iconSizes.map((radio) => {
+              return <Radio label={radio.label} value={radio.value}/>
+            })}
+          </RadioGroup>
+          <RadioGroup legend="Fill variants" name="fill-variant" onChange={handleToggleFillVariant} selectedValue={fillVariant} direction="horizontal">
+            {iconFillVariants.map((radio) => {
+              return <Radio label={radio.label} value={radio.value}/>
+            })}
+          </RadioGroup>
+        </div>
         <div className="subsections">
           <PreviewComponents title="Variants">
             <Icon variant="arrow" size={size} fillVariant={fillVariant} color={color}/>

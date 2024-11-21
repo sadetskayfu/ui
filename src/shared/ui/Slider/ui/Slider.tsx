@@ -13,9 +13,6 @@ export interface SliderCustomMarker {
 interface SliderProps {
   className?: string;
   size?: SliderSize;
-  name: string;
-  minName?: string;
-  maxName?: string;
   label: string;
   min: number;
   max: number;
@@ -26,7 +23,7 @@ interface SliderProps {
   isDisabled?: boolean;
   customMarkers?: SliderCustomMarker[];
   initialValue: number | [number, number];
-  onChange?: (value: number | [number, number], name: string) => void;
+  onChange?: (value: number | [number, number]) => void;
   tabIndex?: number;
 }
 
@@ -34,9 +31,6 @@ export const Slider = memo((props: SliderProps) => {
   const {
     className,
     size = "medium",
-    name,
-    minName,
-    maxName,
     label = "Slider",
     min = 0,
     max = 100,
@@ -176,14 +170,14 @@ export const Slider = memo((props: SliderProps) => {
           ? findNearestMarker(newValue)
           : newValue;
         setValue(updatedValues);
-        onChange?.(updatedValues, name);
+        onChange?.(updatedValues);
       } else {
         // Default slider
         const updatedValue = isWalkingMarkers
           ? findNearestMarker(newValue)
           : newValue;
         setValue(updatedValue);
-        onChange?.(updatedValue, name);
+        onChange?.(updatedValue);
       }
     },
     [
@@ -196,7 +190,6 @@ export const Slider = memo((props: SliderProps) => {
       isActiveMinThumb,
       value,
       onChange,
-      name,
     ]
   );
 
@@ -263,11 +256,11 @@ export const Slider = memo((props: SliderProps) => {
       const currentValues: [number, number] = [...value];
       currentValues[thumbIndex] = newValue;
       setValue(currentValues);
-      onChange?.(currentValues, name);
+      onChange?.(currentValues);
       return;
     }
     setValue(newValue);
-    onChange?.(newValue, name);
+    onChange?.(newValue);
   };
 
   useEffect(() => {
@@ -336,6 +329,7 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemax={max}
               aria-orientation="horizontal"
               role="slider"
+              aria-disabled={isDisabled}
             >
               <Tooltip
                 parentRef={minThumbRef}
@@ -350,12 +344,11 @@ export const Slider = memo((props: SliderProps) => {
               <input
                 tabIndex={-1}
                 className="visually-hidden"
-                name={minName}
                 type="range"
                 max={max}
                 min={min}
                 value={value[0]}
-                aria-hidden
+                aria-hidden='true'
                 disabled={isDisabled}
               />
             </div>
@@ -376,6 +369,7 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemax={max}
               aria-orientation="horizontal"
               role="slider"
+              aria-disabled={isDisabled}
             >
               <Tooltip
                 parentRef={maxThumbRef}
@@ -390,12 +384,11 @@ export const Slider = memo((props: SliderProps) => {
               <input
                 tabIndex={-1}
                 className="visually-hidden"
-                name={maxName}
                 type="range"
                 max={max}
                 min={min}
                 value={value[1]}
-                aria-hidden
+                aria-hidden='true'
                 disabled={isDisabled}
               />
             </div>
@@ -421,6 +414,7 @@ export const Slider = memo((props: SliderProps) => {
               aria-valuemax={max}
               aria-orientation="horizontal"
               role="slider"
+              aria-disabled={isDisabled}
             >
               <Tooltip
                 parentRef={minThumbRef}
@@ -435,12 +429,11 @@ export const Slider = memo((props: SliderProps) => {
               <input
                 tabIndex={-1}
                 className="visually-hidden"
-                name={name}
                 type="range"
                 max={max}
                 min={min}
                 value={value}
-                aria-hidden
+                aria-hidden='true'
                 disabled={isDisabled}
               />
             </div>

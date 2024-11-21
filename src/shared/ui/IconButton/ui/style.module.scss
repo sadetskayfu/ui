@@ -1,4 +1,4 @@
-@import "@/app/styles/media";
+@import "@/app/styles/media", "@/app/styles/mixins";
 
 .button {
   --bgColor: transparent;
@@ -15,6 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  @include user-select-off;
   @include hover {
     background-color: var(--hoverBgColor);
   }
@@ -38,6 +39,11 @@
     --hoverBgColor: var(--secondary-opacity);
     --focusColor: var(--secondary-600);
   }
+  &.gray {
+    --color: var(--secondary-300);
+    --hoverBgColor: var(--secondary-100);
+    --focusColor: var(--secondary-300);
+  }
 }
 
 // Variants
@@ -52,6 +58,10 @@
       --color: var(--light);
       --bgColor: var(--secondary-600);
       --hoverBgColor: var(--secondary-500);
+    }
+    &.gray {
+      --color: var(--secondary-500);
+      --bgColor: var(--secondary-200);
     }
   }
   &.outlined {

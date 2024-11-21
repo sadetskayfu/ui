@@ -1,17 +1,18 @@
-import { Button } from "../../Button";
-import Arrow from "@/shared/assets/icons/arrow.svg?react";
 import { memo } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { IconButton } from "@/shared/ui/IconButton";
+import { Icon } from "@/shared/ui/Icon";
 
-export type PaginationVariant = "square" | "round";
-export type PaginationSize = "small" | "medium" | "large";
+export type PaginationVariant = 'filled' | 'outlined'
+export type PaginationForm = "square" | "round";
+export type PaginationSize = "small-l" | "medium" | "large";
 
 interface PaginationProps {
   className?: string;
-  variant?: PaginationVariant;
+  form?: PaginationForm;
   size?: PaginationSize;
-  ArrowIcon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  variant?: PaginationVariant
   isInfinity?: boolean;
   totalItems: number;
   totalItemsOnPage: number;
@@ -23,9 +24,9 @@ interface PaginationProps {
 export const Pagination = memo(
   ({
     className,
-    variant,
-    ArrowIcon,
-    size = "small",
+    form,
+    size = "small-l",
+    variant = 'outlined',
     isInfinity,
     totalItems,
     totalItemsOnPage,
@@ -87,50 +88,47 @@ export const Pagination = memo(
 
     return (
       <div className={classNames(styles["pagination"], additionalClasses)}>
-        <Button
-          className={styles["button-pref-slide"]}
+        <IconButton
           size={size}
-          minimalism={variant}
           variant="clear"
-          isHiddenLabel
-          Icon={ArrowIcon ? ArrowIcon : Arrow}
+          color="primary"
+          form={form}
           onClick={() => handlePageChange(currentPage - 1)}
           isDisabled={currentPage === 1 && !isInfinity}
-          animateDirection="right"
+          aria-label="Preview page"
         >
-          Previous page
-        </Button>
+          <Icon variant="arrow" color="custom-color" size="custom-size" />
+        </IconButton>
         {getPageNumbers().map((page, index) => {
           return (
-            <Button
+            <IconButton
               className={styles["button"]}
-              variant={currentPage === page ? "filled" : "clear"}
-              color="secondary"
-              minimalism={variant}
-              animateDirection="left"
+              variant={currentPage === page ? (variant === 'filled' ? 'filled' : 'outlined') : "clear"}
+              form={form}
+              color={currentPage === page ? 'primary' : 'secondary'}
               size={size}
               key={index}
               onClick={() => typeof page === "number" && handlePageChange(page)}
               isReadonly={typeof page === "string" || currentPage === page}
-              aria-current={currentPage === page ? "page" : undefined}
+              aria-current={currentPage === page ? 'page' : undefined}
               aria-label={`Page ${page}`}
             >
               {page.toString()}
-            </Button>
+            </IconButton>
           );
         })}
-        <Button
+        <IconButton
+          className={styles["button-next-page"]}
           size={size}
-          minimalism={variant}
           variant="clear"
-          isHiddenLabel
-          Icon={ArrowIcon ? ArrowIcon : Arrow}
+          color="primary"
+          form={form}
           onClick={() => handlePageChange(currentPage + 1)}
           isDisabled={currentPage === totalPages && !isInfinity}
-          animateDirection="left"
+          aria-label="Next page"
         >
-          Next page
-        </Button>
+          <Icon variant="arrow" color="custom-color" size="custom-size" />
+        </IconButton>
       </div>
     );
   }

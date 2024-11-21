@@ -44,6 +44,10 @@ export const buttonColors: ButtonColor[] = [
     {
         value: 'secondary',
         label: 'Secondary'
+    },
+    {
+        value: 'gray',
+        label: 'Gray'
     }
 ]
 

@@ -15,7 +15,7 @@ import { RippleWrapper } from "../../RippleWrapper";
 import { Link } from "react-router-dom";
 
 export type IconButtonVariant = "filled" | "outlined" | "clear";
-export type IconButtonColor = "primary" | "secondary";
+export type IconButtonColor = "primary" | "secondary" | "gray";
 export type IconButtonForm = "round" | "square";
 export type IconButtonSize =
   | "small-s"
@@ -84,6 +84,7 @@ export const IconButton = memo(
       };
 
       const handleClick = (event: React.MouseEvent) => {
+        event.stopPropagation()
         onClick?.();
         handleRippleMousePosition(rippleWrapperRef, event);
       };

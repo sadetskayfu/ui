@@ -1,6 +1,6 @@
 import { Chip, ChipVariant } from "@/shared/ui/Chip";
 import { Group } from "@/shared/ui/Group";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useState } from "react";
@@ -36,47 +36,33 @@ const ChipPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Chip</SectionTitle>
-        <Group direction="vertical">
-          <RadioGroup
-            items={chipVariants}
-            name="chip-variant"
-            selectedValue={variant}
-            title="Variants"
-            direction="horizontal"
-            onChange={handleToggleVariant}
-            size="small"
-          />
-          <RadioGroup
-            items={chipSizes}
-            name="chip-size"
-            selectedValue={size}
-            title="Sizes"
-            direction="horizontal"
-            onChange={handleToggleSize}
-            size="small"
-          />
-          <Switch
-            label="Close button"
-            name="visible-close-button"
-            size="small"
-            isChecked={isVisibleCloseButton}
-            onToggle={handleToggleVisibleCloseButton}
-          />
-          <Switch
-            label="Clickable"
-            name="clickable-chip"
-            size="small"
-            isChecked={isClickable}
-            onToggle={handleToggleClickable}
-          />
-          <Switch
-            label="Disabled"
-            name="disabled-chip"
-            size="small"
-            isChecked={isDisabled}
-            onToggle={handleToggleDisabled}
-          />
-        </Group>
+        <div className="mods">
+          <RadioGroup legend="Sizes" name="size" selectedValue={size} onChange={handleToggleSize}>
+            {chipSizes.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <div>
+            <Switch
+              label="Close button"
+              name="visible-close-button"
+              isChecked={isVisibleCloseButton}
+              onToggle={handleToggleVisibleCloseButton}
+            />
+            <Switch
+              label="Clickable"
+              name="clickable-chip"
+              isChecked={isClickable}
+              onToggle={handleToggleClickable}
+            />
+            <Switch
+              label="Disabled"
+              name="disabled-chip"
+              isChecked={isDisabled}
+              onToggle={handleToggleDisabled}
+            />
+          </div>
+        </div>
         <div className="subsections">
           <PreviewComponents title="Colors">
             <Chip

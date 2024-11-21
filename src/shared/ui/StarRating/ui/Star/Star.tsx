@@ -7,10 +7,8 @@ export type StarSize = 'small' | 'medium' | 'large'
 interface StarProps {
   className?: string;
   size?: StarSize
-  name: string;
   value: number;
-  index: number;
-  onChange: (value: number, name: string) => void;
+  onChange: (value: number) => void;
   onMouseEnter: (value: number) => void;
   onMouseLeave: () => void;
   isFilled: boolean;
@@ -26,9 +24,7 @@ export const Star = memo((props: StarProps) => {
   const {
     className,
     size = 'medium',
-    name,
     value,
-    index,
     onChange,
     onMouseEnter,
     onMouseLeave,
@@ -41,9 +37,9 @@ export const Star = memo((props: StarProps) => {
     isPrecise,
   } = props;
 
-  const starRef = useRef<HTMLLabelElement>(null);
+  const starRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter: MouseEventHandler<HTMLLabelElement> = (event) => {
+  const handleMouseEnter: MouseEventHandler<HTMLDivElement> = (event) => {
     const currentStar = starRef.current;
     
     if (currentStar && isPrecise) {
@@ -60,7 +56,7 @@ export const Star = memo((props: StarProps) => {
     }
   };
 
-  const handleChange: MouseEventHandler<HTMLLabelElement> = (event) => {
+  const handleChange: MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault()
     const currentStar = starRef.current;
 
@@ -72,9 +68,9 @@ export const Star = memo((props: StarProps) => {
       const isLeftHalf = clickPosition < starRect.width / 2;
       const localValue = isLeftHalf ? value - 0.5 : value;
 
-      onChange(localValue, name);
+      onChange(localValue);
     } else {
-      onChange(value, name)
+      onChange(value)
     }
     
   };
@@ -94,7 +90,7 @@ export const Star = memo((props: StarProps) => {
   ]
 
   return (
-    <label
+    <div
       role="radio"
       ref={starRef}
       onMouseMove={handleMouseEnter}
@@ -102,14 +98,7 @@ export const Star = memo((props: StarProps) => {
       onClick={(handleChange)}
       className={classNames(styles["star"], additionalClasses, mods)}
     >
-      <input
-        className="visually-hidden"
-        tabIndex={-1}
-        type="radio"
-        name={name}
-        value={index}
-      />
       <span className={styles["icon"]}></span>
-    </label>
+    </div>
   );
 });

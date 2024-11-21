@@ -28,8 +28,16 @@ export const iconFillVariants: IconVariant[] = [
 
 export const iconSizes: IconSize[] = [
     {
-        value: 'small',
-        label: 'Small'
+        value: 'small-s',
+        label: 'Small-s'
+    },
+    {
+        value: 'small-m',
+        label: 'Small-s'
+    },
+    {
+        value: 'small-l',
+        label: 'Small-l'
     },
     {
         value: 'medium',
@@ -49,5 +57,9 @@ export const iconColors: IconColor[] = [
     {
         value: 'secondary',
         label: 'Secondary'
+    },
+    {
+        value: 'red',
+        label: 'Red'
     }
 ]

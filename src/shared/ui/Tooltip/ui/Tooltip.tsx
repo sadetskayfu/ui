@@ -42,6 +42,10 @@ export const Tooltip = memo((props: TooltipProps) => {
     onToggle?.(true);
   }, [onToggle]);
 
+  const handleBlur = useCallback(() => {
+    setIsVisible(false)
+  }, [])
+
   const handleClose = useCallback(
     (event: MouseEvent) => {
       if (
@@ -59,7 +63,8 @@ export const Tooltip = memo((props: TooltipProps) => {
 
   useEffect(() => {
     const currentParentRef = parentRef.current;
-
+    currentParentRef?.addEventListener("focusin", handleOpen);
+    currentParentRef?.addEventListener("focusout", handleBlur);
     currentParentRef?.addEventListener("mouseenter", handleOpen);
     if (isVisible) {
       window.addEventListener("mousemove", handleClose);
@@ -67,6 +72,8 @@ export const Tooltip = memo((props: TooltipProps) => {
     return () => {
       window.removeEventListener("mousemove", handleClose);
       currentParentRef?.removeEventListener("mouseenter", handleOpen);
+      currentParentRef?.removeEventListener("focusin", handleOpen);
+      currentParentRef?.removeEventListener("focusout", handleBlur);
     };
   });
 

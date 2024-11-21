@@ -24,14 +24,14 @@ const PaginationPage = () => {
                 <Checkbox label='Infinity' name='infinity' isChecked={isInfinity} onToggle={handleToggleInfinity}/>
             <div className='subsections'>
                 <PreviewComponents title='Pagination Square' direction='vertical'>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='small' isInfinity={isInfinity} variant='square'/>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='medium' isInfinity={isInfinity} variant='square'/>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} variant='square'/>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='small-l' isInfinity={isInfinity} form='square'/>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='medium' isInfinity={isInfinity} form='square'/>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} form='square'/>
                 </PreviewComponents>
-                <PreviewComponents title='Pagination Round' direction='vertical' isCentering>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='small' isInfinity={isInfinity} variant='round'/>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='medium' isInfinity={isInfinity} variant='round'/>
-                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} variant='round'/>
+                <PreviewComponents title='Pagination Round' direction='vertical'>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='small-l' isInfinity={isInfinity} form='round'/>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='medium' isInfinity={isInfinity} form='round'/>
+                <Pagination totalItemsOnPage={10} totalItems={200} currentPage={currentPage} onChangePage={handleChangePage} maxDisplayedPages={5} size='large' isInfinity={isInfinity} form='round'/>
                 </PreviewComponents>
             </div>
             </section>

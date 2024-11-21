@@ -8,7 +8,7 @@ interface StarRatingProps {
   className?: string;
   size?: StarSize;
   initialRating: number;
-  onChange: (value: number, name: string) => void;
+  onChange: (value: number) => void;
   name: string;
   label: string;
   maxStars?: number;
@@ -24,7 +24,6 @@ export const StarRating = memo((props: StarRatingProps) => {
     size = "medium",
     initialRating = 0,
     onChange,
-    name,
     label,
     maxStars = 5,
     tabIndex = 0,
@@ -39,10 +38,10 @@ export const StarRating = memo((props: StarRatingProps) => {
   const handleChangeRating = useCallback(
     (value: number) => {
       setRating(value);
-      onChange(value, name);
+      onChange(value);
       startAnimation()
     },
-    [onChange, startAnimation, name]
+    [onChange, startAnimation]
   );
 
   const handleMouseEnter = useCallback((value: number) => {
@@ -92,7 +91,7 @@ export const StarRating = memo((props: StarRatingProps) => {
   }, [initialRating]);
 
   return (
-    <fieldset
+    <div
       className={classNames(styles["star-rating"], [className])}
       tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
       onKeyDown={handleKeyDown}
@@ -101,13 +100,11 @@ export const StarRating = memo((props: StarRatingProps) => {
       area-label={label}
       aria-valuemin={1}
       aria-valuemax={maxStars}
-      aria-valuenow={initialRating}
+      aria-valuenow={rating}
       aria-orientation="horizontal"
       aria-disabled={isDisabled}
       aria-readonly={isReadonly}
     >
-      <legend className="visually-hidden">{label}</legend>
-
       {[...Array(maxStars)].map((_, index) => {
         const starValue = index + 1;
         const isFilled = starValue <= rating;
@@ -127,11 +124,9 @@ export const StarRating = memo((props: StarRatingProps) => {
             size={size}
             key={starValue}
             value={starValue}
-            index={index}
             onChange={handleChangeRating}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            name={name}
             isReadonly={isAnimating || isReadonly}
             isDisabled={isDisabled}
             isPrecise={isPrecise}
@@ -139,6 +134,6 @@ export const StarRating = memo((props: StarRatingProps) => {
           />
         );
       })}
-    </fieldset>
+    </div>
   );
 });
