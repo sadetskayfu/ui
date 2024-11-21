@@ -3,23 +3,19 @@
 .chip {
   --height: var(--button-height-small-m);
   --chipBgColor: var(--primary-500);
-  --chipHoverBgColor: var(--primary-600);
-  --buttonBgColor: var(--primary-opacity);
-  --buttonHoverBgColor: var(--light);
-  --focusColor: var(--chipBgColor);
+  --chipHoverBgColor: var(--primary-200);
+  --focusColor: var(--primary-500);
   --color: var(--light);
+  --hoverColor: var(--secondary-600);
   height: var(--height);
   border-radius: var(--border-radius-large);
   display: flex;
   align-items: center;
-  column-gap: var(--padding-small-s);
+  column-gap: var(--gap-small-s);
   cursor: default;
   color: var(--color);
   background-color: var(--chipBgColor);
 
-  &.have-close-button {
-    
-  }
   &.clickable {
     cursor: pointer;
     border: none;
@@ -31,36 +27,8 @@
     }
     @include hover {
       background-color: var(--chipHoverBgColor);
+      --color: var(--hoverColor);
     }
-  }
-}
-
-.button {
-  border-radius: 50%;
-  height: 100%;
-  aspect-ratio: 1;
-  padding: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  background-color: var(--buttonBgColor);
-  transition-duration: 0.2s;
-  @include hover {
-    background-color: var(--buttonHoverBgColor);
-  }
-  &:focus-visible {
-    background-color: var(--buttonHoverBgColor);
-  }
-}
-
-.icon {
-  align-items: center;
-  justify-content: center;
-  svg {
-    fill: var(--color);
-    stroke: var(--color);
   }
 }
 
@@ -70,31 +38,57 @@
   
     }
     &.secondary {
-      --chipBgColor: var(--primary-200);
-      --chipHoverBgColor: var(--primary-100);
+      --chipBgColor: var(--secondary-200);
+      --chipHoverBgColor: var(--secondary-100);
       --color: var(--secondary-600);
       --focusColor: var(--secondary-600);
     }
     &.error {
       --chipBgColor: var(--red-500);
-      --chipHoverBgColor: var(--red-600);
+      --chipHoverBgColor: var(--red-100);
+      --focusColor: var(--red-500);
     }
     &.success {
         --chipBgColor: var(--green-500);
-        --chipHoverBgColor: var(--green-600);
+        --chipHoverBgColor: var(--green-100);
+        --focusColor: var(--green-500);
       }
+}
+
+// Variants
+.chip {
+  &.outlined {
+    --chipBgColor: transparent;
+    box-shadow: 0 0 0 1px var(--color) inset;
+    &.primary {
+      --color: var(--primary-500);
+      --chipHoverBgColor: var(--primary-100);
+    }
+    &.secondary {
+      --color: var(--secondary-600);
+      --chipHoverBgColor: var(--secondary-100);
+    }
+    &.success {
+      --color: var(--green-500);
+      --chipHoverBgColor: var(--green-100);
+    }
+    &.error {
+      --color: var(--red-500);
+      --chipHoverBgColor: var(--red-100);
+    }
+  }
 }
 
 .chip {
   &.small {
     --height: var(--button-height-small-m);
     font-size: var(--font-size-small-m);
-    padding-inline: var(--padding-small-s);
+    padding-inline: calc(var(--height) / 2)
   }
   &.medium {
     --height: var(--button-height-small-l);
-    font-size: var(--font-size-small);
-    padding-inline: var(--padding-small-l);
+    font-size: var(--font-size-small-l);
+    padding-inline: calc(var(--height) / 2)
   }
 }
 
@@ -102,5 +96,8 @@
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-medium);
+  }
+  &.have-close-button {
+    padding-right: 2.5px;
   }
 }

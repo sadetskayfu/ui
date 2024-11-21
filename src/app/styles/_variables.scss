@@ -5,7 +5,7 @@
 
 	--red-600: rgb(141, 17, 17);
 	--red-500: rgb(207, 20, 20);
-	--red-100: rgb(255, 196, 196);
+	--red-100: rgb(255, 241, 241);
 	--red-opacity: rgb(207, 20, 20, 0.05);
 
 	--yellow-500: rgb(240, 213, 96);
@@ -24,34 +24,35 @@
 	--opacity-big: 0.2;
 
 	--font-size-small-s: 10px;
-	--font-size-small-m: 13px;
-	--font-size-small-l: 16px;
-	--font-size-medium: 19px;
-	--font-size-large: 22px;
+	--font-size-small-m: 12.5px;
+	--font-size-small-l: 15px;
+	//--font-size-medium-s: 17.5px;
+	--font-size-medium: 20px;
+	--font-size-large: 27.5px;
 
 	--header-height: 50px;
 
 	--button-height-small-s: 20px;
 	--button-height-small-m: 25px;
-	--button-height-small-l: 30px;
-	--button-height-medium: 40px;
+	--button-height-small-l: 30px; // checkbox small 7.5 15px 7.5
+	--button-height-medium: 40px;  // checkbox medium 10 20px 10
 	--button-height-large: 55px;
 
-	--input-height-small: 45px;
+	--input-height-small: 40px;
 	--input-height-medium: 55px;
 	--input-height-large: 65px;
 
-    --padding-small-s: 8.5px;
-	--padding-small-m: 11.5px;
-	--padding-small-l: 11.5px;
-	--padding-medium: 15px;
-	--padding-large: 20px;
+    --padding-small-s: 7.5px;
+	--padding-small-m: 10px;
+	--padding-small-l: 12.5px;
+	--padding-medium: 17.5px;
+	--padding-large: 25px;
 	
 	--section-padding: 50px;
 
-	--gap-small-s: 8.5px;
-	--gap-small-m: 11.5px;
-	--gap-small-l: 14px;
+	--gap-small-s: 5px;
+	--gap-small-m: 10px;
+	--gap-small-l: 15px;
 	--gap-medium-s: 17px;
 	--gap-medium-m: 23px;
 	--gap-medium-l: 28px;

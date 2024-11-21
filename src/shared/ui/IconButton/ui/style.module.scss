@@ -3,7 +3,7 @@
 .button {
   --bgColor: transparent;
   --color: var(--primary-500);
-  --hoverBgColor: var(--primary-opacity);
+  --hoverBgColor: var(--primary-100);
   --focusColor: var(--primary-500);
   aspect-ratio: 1;
   border: none;
@@ -35,14 +35,9 @@
   &.primary {
   }
   &.secondary {
-    --color: var(--secondary-600);
-    --hoverBgColor: var(--secondary-opacity);
-    --focusColor: var(--secondary-600);
-  }
-  &.gray {
-    --color: var(--secondary-300);
+    --color: var(--secondary-500);
     --hoverBgColor: var(--secondary-100);
-    --focusColor: var(--secondary-300);
+    --focusColor: var(--secondary-500);
   }
 }
 
@@ -56,12 +51,8 @@
     }
     &.secondary {
       --color: var(--light);
-      --bgColor: var(--secondary-600);
-      --hoverBgColor: var(--secondary-500);
-    }
-    &.gray {
-      --color: var(--secondary-500);
-      --bgColor: var(--secondary-200);
+      --bgColor: var(--secondary-500);
+      --hoverBgColor: var(--secondary-600);
     }
   }
   &.outlined {

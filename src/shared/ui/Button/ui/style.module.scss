@@ -36,40 +36,30 @@
 // Colors
 .button {
   &.primary {
-
   }
   &.secondary {
-      --focusColor: var(--secondary-600);
-      --color: var(--secondary-600);
-      --hoverBgColor: var(--secondary-opacity);
-  }
-  &.gray {
-    --color: var(--secondary-300);
-    --hoverBgColor: var(--secondary-200);
-    --focusColor: var(--secondary-300);
+    --color: var(--secondary-500);
+    --hoverBgColor: var(--secondary-100);
+    --focusColor: var(--secondary-500);
   }
 }
 
 // Variants
 .button {
   &.filled {
-      &.primary {
-          --color: var(--light);
-          --hoverBgColor: var(--primary-600);
-          --bgColor: var(--primary-500);
-      }
-      &.secondary {
-          --color: var(--light);
-          --bgColor: var(--secondary-600);
-          --hoverBgColor: var(--secondary-500);
-      }
-      &.gray {
-        --color: var(--secondary-500);
-        --bgColor: var(--secondary-300);
-      }
+    &.primary {
+      --color: var(--light);
+      --hoverBgColor: var(--primary-600);
+      --bgColor: var(--primary-500);
+    }
+    &.secondary {
+      --color: var(--light);
+      --bgColor: var(--secondary-500);
+      --hoverBgColor: var(--secondary-600);
+    }
   }
   &.outlined {
-      box-shadow: 0 0 0 1px currentColor inset;
+    box-shadow: 0 0 0 1px currentColor inset;
   }
 }
 

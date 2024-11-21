@@ -1,4 +1,4 @@
-import { classNames, handleRippleMousePosition } from "@/shared/lib";
+import { classNames, handleRipple, handleRippleMousePosition } from "@/shared/lib";
 import styles from "./style.module.scss";
 import { memo, useCallback, useRef } from "react";
 import { Icon } from "@/shared/ui/Icon";
@@ -44,6 +44,7 @@ export const Chip = memo((props: ChipProps) => {
     if (event.key === "Enter" || event.key === " ") {
       event.stopPropagation();
       onClick?.();
+      handleRipple(rippleWrapperRef)
     }
   };
 
@@ -92,9 +93,8 @@ export const Chip = memo((props: ChipProps) => {
       >
         <span>{children}</span>
         {onClose && (
-          <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="gray" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
+          <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
             <Icon
-              className={styles["icon"]}
               color="custom-color"
               variant="x-mark"
               size="custom-size"
@@ -113,9 +113,8 @@ export const Chip = memo((props: ChipProps) => {
     >
       <span>{children}</span>
       {onClose && (
-        <IconButton size="small-s" color="gray" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
+        <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
           <Icon
-            className={styles["icon"]}
             color="custom-color"
             variant="x-mark"
             size="custom-size"

@@ -15,7 +15,7 @@ import { RippleWrapper } from "../../RippleWrapper";
 import { Link } from "react-router-dom";
 
 export type IconButtonVariant = "filled" | "outlined" | "clear";
-export type IconButtonColor = "primary" | "secondary" | "gray";
+export type IconButtonColor = "primary" | "secondary"
 export type IconButtonForm = "round" | "square";
 export type IconButtonSize =
   | "small-s"
@@ -72,6 +72,7 @@ export const IconButton = memo(
       const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
+          event.stopPropagation()
           onClick?.();
           handleRipple(rippleWrapperRef);
         }

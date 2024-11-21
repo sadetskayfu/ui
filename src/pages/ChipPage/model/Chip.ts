@@ -31,8 +31,4 @@ export const chipSizes: chipSize[] = [
         value: 'medium',
         label: 'Medium'
     },
-    {
-        value: 'large',
-        label: 'Large'
-    }
 ]

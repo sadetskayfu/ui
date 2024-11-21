@@ -15,7 +15,7 @@ import { RippleWrapper } from "../../RippleWrapper";
 import { Link } from "react-router-dom";
 
 export type ButtonVariant = "filled" | "outlined" | "clear";
-export type ButtonColor = "primary" | "secondary" | "gray";
+export type ButtonColor = "primary" | "secondary"
 export type ButtonSize = "small" | "medium" | "large";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

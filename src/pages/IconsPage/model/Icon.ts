@@ -33,7 +33,7 @@ export const iconSizes: IconSize[] = [
     },
     {
         value: 'small-m',
-        label: 'Small-s'
+        label: 'Small-m'
     },
     {
         value: 'small-l',

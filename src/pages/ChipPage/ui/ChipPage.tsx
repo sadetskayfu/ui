@@ -1,5 +1,4 @@
 import { Chip, ChipVariant } from "@/shared/ui/Chip";
-import { Group } from "@/shared/ui/Group";
 import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
@@ -39,6 +38,11 @@ const ChipPage = () => {
         <div className="mods">
           <RadioGroup legend="Sizes" name="size" selectedValue={size} onChange={handleToggleSize}>
             {chipSizes.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <RadioGroup legend="Variants" name="variant" selectedValue={variant} onChange={handleToggleVariant}>
+            {chipVariants.map((radio) => {
               return <Radio label={radio.label} value={radio.value} />;
             })}
           </RadioGroup>
