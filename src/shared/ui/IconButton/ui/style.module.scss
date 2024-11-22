@@ -15,6 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0px;
   @include user-select-off;
   @include hover {
     background-color: var(--hoverBgColor);
@@ -84,13 +85,22 @@
   }
 }
 
-// Forms
+// Border radius
 .button {
-  &.square {
+  &.all {
     border-radius: var(--border-radius-small);
+  }
+  &.left {
+    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
+  }
+  &.right {
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
   }
   &.round {
     border-radius: 50%;
+  }
+  &.none {
+    border-radius: 0px;
   }
 }
 

@@ -15,6 +15,7 @@
   cursor: default;
   color: var(--color);
   background-color: var(--chipBgColor);
+  text-wrap: nowrap;
 
   &.clickable {
     cursor: pointer;
@@ -59,7 +60,7 @@
 .chip {
   &.outlined {
     --chipBgColor: transparent;
-    box-shadow: 0 0 0 1px var(--color) inset;
+    box-shadow: 0 0 0 1px var(--color);
     &.primary {
       --color: var(--primary-500);
       --chipHoverBgColor: var(--primary-100);

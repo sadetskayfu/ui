@@ -1,0 +1,15 @@
+.divider {
+    flex-shrink: 0;
+    border-width: 0px 0px 0px thin;
+    border-style: solid;
+    border-color: var(--secondary-300);
+}
+
+.divider {
+    &.vertical {
+        height: 100%;
+    }
+    &.horizontal {
+        width: 100%;
+    }
+}

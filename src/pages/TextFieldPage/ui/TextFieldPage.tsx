@@ -1,26 +1,33 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
-import { Field, FieldLabelVariant } from "@/shared/ui/Field";
+import { Field, FieldLabelVariant, FieldVariant } from "@/shared/ui/Field";
 import { useCallback, useState } from "react";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { Group } from "@/shared/ui/Group";
 import styles from "./style.module.scss";
 import { Button } from "@/shared/ui/Button";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
-import { fieldLabelVariants } from "../model/Field";
+import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { fieldLabelVariants, fieldVariants } from "../model/Field";
 import { requiredValidate } from "@/shared/lib/validate";
+import { Divider } from "@/shared/ui/Divider";
 
 const TextFieldPage = () => {
   const [value, setValue] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [labelVariant, setLabelVariant] = useState<FieldLabelVariant>("jump");
+  const [labelVariant, setLabelVariant] =
+    useState<FieldLabelVariant>("visible");
+  const [variant, setVariant] = useState<FieldVariant>("outlined");
+
   const [isRequired, setIsRequired] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isReadonly, setIsReadonly] = useState<boolean>(false);
 
   const handleToggleLabelVariant = useCallback((value: string) => {
     setLabelVariant(value as FieldLabelVariant);
+  }, []);
+  const handleToggleVariant = useCallback((value: string) => {
+    setVariant(value as FieldVariant);
   }, []);
 
   const handleToggleRequired = useCallback(() => {
@@ -49,39 +56,48 @@ const TextFieldPage = () => {
   return (
     <div className="page">
       <section className="section">
-        <SectionTitle>Text Filed</SectionTitle>
-        <Group direction="vertical" gap="small">
-          <Checkbox
-            name="disabled"
-            label="Disabled"
-            isChecked={isDisabled}
-            onToggle={handleToggleDisabled}
-            size="small"
-          />
-          <Checkbox
-            name="readonly"
-            label="Readonly"
-            isChecked={isReadonly}
-            onToggle={handleToggleReadonly}
-            size="small"
-          />
-          <Checkbox
-            name="required"
-            label="Required"
-            isChecked={isRequired}
-            onToggle={handleToggleRequired}
-            size="small"
-          />
+        <SectionTitle>Field</SectionTitle>
+        <div className="mods">
           <RadioGroup
-            name="field-label-variant"
-            items={fieldLabelVariants}
-            title="Label variant"
+            legend="Variants"
+            name="variant"
+            direction="horizontal"
+            selectedValue={variant}
+            onChange={handleToggleVariant}
+          >
+            {fieldVariants.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <RadioGroup
+            legend="Label variants"
+            name="label-variant"
+            direction="horizontal"
             selectedValue={labelVariant}
             onChange={handleToggleLabelVariant}
-            size="small"
-            direction="horizontal"
-          />
-        </Group>
+          >
+            {fieldLabelVariants.map((radio) => {
+              return <Radio label={radio.label} value={radio.value} />;
+            })}
+          </RadioGroup>
+          <div>
+            <Checkbox
+              label="Required"
+              isChecked={isRequired}
+              onToggle={handleToggleRequired}
+            />
+            <Checkbox
+              label="Disabled"
+              isChecked={isDisabled}
+              onToggle={handleToggleDisabled}
+            />
+            <Checkbox
+              label="Readonly"
+              isChecked={isReadonly}
+              onToggle={handleToggleReadonly}
+            />
+          </div>
+        </div>
         <div className="subsections">
           <PreviewComponents title="Sizes" direction="vertical">
             <Field
@@ -99,6 +115,7 @@ const TextFieldPage = () => {
               onBlur={handleValidate}
               errorMessage={error}
               autoComplete="off"
+              variant={variant}
             />
             <Field
               name="medium"
@@ -113,6 +130,7 @@ const TextFieldPage = () => {
               isReadonly={isReadonly}
               isRequired={isRequired}
               autoComplete="off"
+              variant={variant}
             />
             <Field
               name="large"
@@ -128,6 +146,7 @@ const TextFieldPage = () => {
               isRequired={isRequired}
               autoComplete="off"
               type="text"
+              variant={variant}
             />
           </PreviewComponents>
           <PreviewComponents title="Password field">
@@ -145,8 +164,9 @@ const TextFieldPage = () => {
                 isReadonly={isReadonly}
                 isRequired={isRequired}
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 isVisibleEyeButton
+                variant={variant}
               />
             </form>
           </PreviewComponents>
@@ -166,11 +186,13 @@ const TextFieldPage = () => {
               autoComplete="off"
               isVisibleEyeButton
               onSearch={() => alert("Search")}
+              variant={variant}
             />
+            <textarea/>
           </PreviewComponents>
-          <ul className={styles['container']}>
+          <ul className={styles["container"]}>
             <li className={styles["block"]}></li>
-            <li className={styles["divider"]}></li>
+            <Divider orientation="vertical" />
             <li className={styles["block"]}></li>
           </ul>
         </div>

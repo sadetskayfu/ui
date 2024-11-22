@@ -77,7 +77,7 @@
     }
   }
   &.outlined {
-    box-shadow: 0 0 0 1px currentColor inset;
+    border: 1px solid var(--secondary-300);
 
   }
   &.clear {

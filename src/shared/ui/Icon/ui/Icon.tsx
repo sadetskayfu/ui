@@ -39,8 +39,8 @@ export const Icon = (props: IconProps) => {
     className,
     variant,
     fillVariant = "filled",
-    size = "small-l",
-    color = "primary",
+    size = "custom-size",
+    color = "custom-color",
     fontSize,
   } = props;
 

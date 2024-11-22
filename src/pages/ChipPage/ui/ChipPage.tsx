@@ -36,12 +36,22 @@ const ChipPage = () => {
       <section className="section">
         <SectionTitle>Chip</SectionTitle>
         <div className="mods">
-          <RadioGroup legend="Sizes" name="size" selectedValue={size} onChange={handleToggleSize}>
+          <RadioGroup
+            legend="Sizes"
+            name="size"
+            selectedValue={size}
+            onChange={handleToggleSize}
+          >
             {chipSizes.map((radio) => {
               return <Radio label={radio.label} value={radio.value} />;
             })}
           </RadioGroup>
-          <RadioGroup legend="Variants" name="variant" selectedValue={variant} onChange={handleToggleVariant}>
+          <RadioGroup
+            legend="Variants"
+            name="variant"
+            selectedValue={variant}
+            onChange={handleToggleVariant}
+          >
             {chipVariants.map((radio) => {
               return <Radio label={radio.label} value={radio.value} />;
             })}
@@ -76,9 +86,8 @@ const ChipPage = () => {
               color="primary"
               size={size}
               isDisabled={isDisabled}
-            >
-              Primary
-            </Chip>
+              label="Primary"
+            />
             <Chip
               isClickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
@@ -86,9 +95,8 @@ const ChipPage = () => {
               color="secondary"
               size={size}
               isDisabled={isDisabled}
-            >
-              Secondary
-            </Chip>
+              label="Secondary"
+            />
             <Chip
               isClickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
@@ -96,9 +104,8 @@ const ChipPage = () => {
               color="success"
               size={size}
               isDisabled={isDisabled}
-            >
-              Success
-            </Chip>
+              label="Success"
+            />
             <Chip
               isClickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
@@ -106,9 +113,8 @@ const ChipPage = () => {
               color="error"
               size={size}
               isDisabled={isDisabled}
-            >
-              Error
-            </Chip>
+              label="Error"
+            />
           </PreviewComponents>
         </div>
       </section>

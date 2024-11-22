@@ -10,26 +10,28 @@ import {
   handleRipple,
   handleRippleMousePosition,
 } from "@/shared/lib";
-import styles from "./style.module.scss";
 import { RippleWrapper } from "../../RippleWrapper";
 import { Link } from "react-router-dom";
+import styles from "./style.module.scss";
 
 export type IconButtonVariant = "filled" | "outlined" | "clear";
 export type IconButtonColor = "primary" | "secondary"
-export type IconButtonForm = "round" | "square";
 export type IconButtonSize =
   | "small-s"
   | "small-m"
   | "small-l"
   | "medium"
-  | "large";
+  | "large"
+  | "custom-size"
+
+export type IconButtonBorderRadius = 'left' | 'right' | 'everywhere' | 'round' | 'none'
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: IconButtonVariant;
   color?: IconButtonColor;
   size?: IconButtonSize;
-  form?: IconButtonForm;
+  borderRadius?: IconButtonBorderRadius
   isDisabled?: boolean;
   isReadonly?: boolean;
   isStopFocus?: boolean;
@@ -60,7 +62,7 @@ export const IconButton = memo(
         variant = "filled",
         size = "medium",
         color = "primary",
-        form = "round",
+        borderRadius = 'round',
         type = "button",
         tabIndex,
         onClick,
@@ -95,7 +97,7 @@ export const IconButton = memo(
         styles[variant],
         styles[color],
         styles[size],
-        styles[form],
+        styles[borderRadius]
       ];
 
       const mods: Record<string, boolean | undefined> = {

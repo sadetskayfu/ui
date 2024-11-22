@@ -14,7 +14,7 @@ interface ChipProps {
   variant?: ChipVariant;
   color?: ChipColor;
   size?: ChipSize;
-  children: string;
+  label: string
   onClose?: () => void;
   onClick?: () => void;
   isStopFocus?: boolean;
@@ -29,7 +29,7 @@ export const Chip = memo((props: ChipProps) => {
     variant = "filled",
     color = "primary",
     size = "medium",
-    children,
+    label,
     onClick,
     onClose,
     isStopFocus,
@@ -91,7 +91,7 @@ export const Chip = memo((props: ChipProps) => {
         tabIndex={currentTabIndex}
         disabled={isDisabled}
       >
-        <span>{children}</span>
+        <span>{label}</span>
         {onClose && (
           <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
             <Icon
@@ -111,7 +111,7 @@ export const Chip = memo((props: ChipProps) => {
       className={classNames(styles["chip"], additionalClasses, mods)}
       onClick={handleStopPropagation}
     >
-      <span>{children}</span>
+      <span>{label}</span>
       {onClose && (
         <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
           <Icon

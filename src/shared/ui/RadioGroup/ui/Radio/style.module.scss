@@ -73,7 +73,7 @@
     }
     .radio {
       background-color: transparent;
-      box-shadow: 0 0 0 1px currentColor inset;
+      border: 1px solid var(--secondary-300);
     }
   }
 }
@@ -82,7 +82,7 @@
 .wrapper {
   & input[type="radio"]:checked + .radio-wrapper {
     .radio:before {
-      height: 60%;
+      height: 70%;
     }
   }
   &.disabled {

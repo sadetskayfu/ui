@@ -91,7 +91,7 @@
   &.outlined {
     --bgColor: transparent;
     .checkbox {
-      box-shadow: 0 0 0 1px currentColor inset;
+      border: 1px solid var(--secondary-300);
     }
   }
   &.clear {
@@ -135,7 +135,7 @@
   &.checked:not(.clear) {
     .checkbox {
       background-color: var(--checkedBgColor);
-      box-shadow: 0 0 0 1px var(--checkedBgColor) inset;
+      border-color: var(--checkedBgColor);
     }
     .icon {
       opacity: 1;
