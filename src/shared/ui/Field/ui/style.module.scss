@@ -2,9 +2,9 @@
 
 .wrapper {
   --paddingInline: var(--padding-medium);
-  --paddingBlock: 6px;
-  --paddingTop: calc((var(--height) - 25px) / 2);
-  --paddingBottom: calc((var(--height) - 25px) / 2);
+  --paddingBlock: var(--gap-small-s);
+  --paddingTop: calc((var(--height) - var(--button-height-small-m)) / 2);
+  --paddingBottom: calc((var(--height) - var(--button-height-small-m)) / 2);
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
@@ -26,13 +26,16 @@
   row-gap: var(--gap-small-s);
 }
 
+.content {
+  width: 100%;
+}
+
 .field {
   position: relative;
   width: 100%;
   outline: none;
   transition-duration: 0.2s;
   min-height: var(--height);
-  height: var(--height);
   overflow: hidden;
   cursor: text;
   display: flex;
@@ -42,6 +45,9 @@
     --borderColor: var(--hoverBorderColor);
     --autofillBgColor: var(--hoverBgColor);
     background-color: var(--hoverBgColor);
+    .clear-field-button {
+      opacity: 1;
+    }
     .input:focus {
       --autofillBgColor: var(--bgColor);
     }
@@ -50,8 +56,7 @@
 
 .input {
   width: 100%;
-  height: 100%;
-  align-self: end;
+  height: var(--height);
   padding-left: var(--paddingInline);
   padding-right: calc(var(--paddingInline) - 6px);
   padding-top: var(--paddingTop);
@@ -89,7 +94,11 @@
 }
 
 .search-button {
-  height: 100%;
+  height: var(--height);
+}
+
+.clear-field-button {
+  opacity: 0;
 }
 
 .error-message {
@@ -215,7 +224,7 @@
   &.large {
     --paddingInline: var(--padding-medium);
     --height: var(--input-height-large);
-    --paddingBlock: 10px;
+    --paddingBlock: 8px;
   }
 }
 
@@ -240,8 +249,39 @@
       }
     }
   }
+  &.multiline {
+    .field {
+      padding-top: var(--paddingTop);
+      padding-bottom: var(--paddingBottom);
+    }
+    .input {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-right: var(--paddingInline);
+      overflow-y: hidden;
+      resize: none;
+    }
+  }
+  &.multi-autocomplete {
+    .content {
+      padding-bottom: var(--paddingBottom);
+      padding-top: var(--paddingTop);
+      padding-left: var(--paddingInline);
+      padding-right: calc(var(--paddingInline) - 6px);
+      display: flex;
+      gap: var(--gap-small-s);
+      flex-wrap: wrap;
+    }
+    .input {
+      padding: 0px;
+      height: var(--button-height-small-m);
+    }
+  }
   &.focused {
     --labelColor: var(--primary-500);
+    .clear-field-button {
+      opacity: 1;
+    }
     .field {
       background-color: var(--bgColor);
     }

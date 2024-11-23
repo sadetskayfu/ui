@@ -12,7 +12,6 @@ import {
 import styles from "./style.module.scss";
 import { Icon } from "../../Icon";
 import { IconButton } from "../../IconButton";
-import { Chip } from "../../Chip";
 
 export type FieldVariant = "outlined" | "filled";
 export type FieldSize = "small" | "medium" | "large";
@@ -38,6 +37,8 @@ interface FieldProps extends HTMLInputProps {
   isVisibleEyeButton?: boolean;
   isVisibleOpenMenuButton?: boolean;
   isHiddenLabel?: boolean;
+  isMultiline?: boolean;
+  isMultiAutocomplete?: boolean
   errorMessage?: string;
   value: string;
   type?: "text" | "password";
@@ -69,6 +70,8 @@ export const Field = memo(
         isVisibleMenu,
         isVisibleEyeButton,
         isVisibleOpenMenuButton,
+        isMultiline,
+        isMultiAutocomplete,
         tabIndex = 0,
         onClick,
         onBlur,
@@ -78,20 +81,22 @@ export const Field = memo(
         ...otherProps
       } = props;
 
+      const [textareaValue, setTextareaValue] = useState<string>("");
       const [isPasswordVisible, setIsPasswordVisible] =
         useState<boolean>(false);
-
       const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
-      const [transitionDuration, setTransitionDuration] = useState<string | undefined>(undefined); // 0s transition for skip autofill 
+      const [transitionDuration, setTransitionDuration] = useState<
+        string | undefined
+      >(undefined);
 
       const isDirty = value.length > 0;
       const id = useId();
 
       const inputRef = useRef<HTMLInputElement>(null);
       const input = ref ? (ref as React.RefObject<HTMLInputElement>) : inputRef;
+      const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
       const handleKeyDown = (event: React.KeyboardEvent) => {
-        console.log("keydown");
         if (onSearch) {
           if ((event.key === "Enter" || event.key === " ") && isDirty) {
             onSearch();
@@ -110,7 +115,11 @@ export const Field = memo(
       };
 
       const handleSetFocus = () => {
-        input.current?.focus();
+        if (isMultiline) {
+          textareaRef.current?.focus();
+        } else {
+          input.current?.focus();
+        }
       };
 
       const handleToggleVisibilityPassword = () => {
@@ -132,16 +141,32 @@ export const Field = memo(
         input.current?.focus();
       };
 
-      useEffect(() => {
-        setTimeout(() => {
-          setTransitionDuration('0.2s')
-        }, 1000)
-      }, [])
+      const handleChangeTextareaValue = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+      ) => {
+        setTextareaValue(event.target.value);
+        onChange?.(event.target.value);
+      };
 
       useEffect(() => {
-        isFocusedField && setTransitionDuration('0s')
-        !isFocusedField && transitionDuration && setTransitionDuration('0.2s')
-      }, [isFocusedField, transitionDuration])
+        const textarea = textareaRef.current;
+        if (textarea) {
+          textarea.style.height = "auto";
+          const newHeight = textarea.scrollHeight + 3;
+          textarea.style.height = `${newHeight}px`;
+        }
+      }, [textareaValue]);
+
+      useEffect(() => {
+        setTimeout(() => {
+          setTransitionDuration("0.2s");
+        }, 1000);
+      }, []);
+
+      useEffect(() => {
+        isFocusedField && setTransitionDuration("0s");
+        !isFocusedField && transitionDuration && setTransitionDuration("0.2s");
+      }, [isFocusedField, transitionDuration]);
 
       const inputType: string =
         type === "password" ? (isPasswordVisible ? "text" : "password") : type;
@@ -155,7 +180,9 @@ export const Field = memo(
         [styles["readonly"]]: isReadonly,
         [styles["disabled"]]: isDisabled,
         [styles["required"]]: isRequired,
-        [styles['visible-menu']]: isVisibleMenu,
+        [styles["multiline"]]: isMultiline,
+        [styles["visible-menu"]]: isVisibleMenu,
+        [styles['multi-autocomplete']]: isMultiAutocomplete
       };
 
       const additionalClasses: Array<string | undefined> = [
@@ -165,6 +192,46 @@ export const Field = memo(
         styles[size],
       ];
 
+      if (isMultiline) {
+        return (
+          <div
+            className={classNames(styles["wrapper"], additionalClasses, mods)}
+          >
+            <div className={styles["field-wrapper"]}>
+              <label className={styles["label"]} htmlFor={id}>
+                {label}
+              </label>
+              <div className={styles["field"]} onClick={handleSetFocus}>
+                <textarea
+                  rows={1}
+                  style={{ transitionDuration }}
+                  className={styles["input"]}
+                  name={name}
+                  tabIndex={currentTabIndex}
+                  placeholder={placeholder}
+                  id={id}
+                  value={value}
+                  onChange={handleChangeTextareaValue}
+                  ref={textareaRef}
+                  disabled={isDisabled}
+                  required={isRequired}
+                  readOnly={isReadonly}
+                  onClick={onClick}
+                  onBlur={handleBlur}
+                  onFocus={handleFocus}
+                  aria-errormessage={id + "error"}
+                />
+              </div>
+            </div>
+            {errorMessage && (
+              <div className={styles["error-message"]} id={id + "error"}>
+                <p>{errorMessage}</p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
       return (
         <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
           <div className={styles["field-wrapper"]}>
@@ -172,29 +239,33 @@ export const Field = memo(
               {label}
             </label>
             <div className={styles["field"]} onClick={handleSetFocus}>
-              <input
-                style={{transitionDuration}}
-                className={styles["input"]}
-                name={name}
-                tabIndex={currentTabIndex}
-                placeholder={placeholder}
-                id={id}
-                value={value}
-                onChange={handleChange}
-                type={inputType}
-                ref={input}
-                disabled={isDisabled}
-                required={isRequired}
-                readOnly={isReadonly}
-                onClick={onClick}
-                onBlur={handleBlur}
-                onFocus={handleFocus}
-                aria-errormessage={id + "error"}
-                onKeyDown={handleKeyDown}
-                {...otherProps}
-              />
+              <div className={styles['content']}>
+
+              {/*  */}
+                <input
+                  style={{ transitionDuration }}
+                  className={styles["input"]}
+                  name={name}
+                  tabIndex={currentTabIndex}
+                  placeholder={placeholder}
+                  id={id}
+                  value={value}
+                  onChange={handleChange}
+                  type={inputType}
+                  ref={input}
+                  disabled={isDisabled}
+                  required={isRequired}
+                  readOnly={isReadonly}
+                  onClick={onClick}
+                  onBlur={handleBlur}
+                  onFocus={handleFocus}
+                  aria-errormessage={id + "error"}
+                  onKeyDown={handleKeyDown}
+                  {...otherProps}
+                />
+              </div>
               <div className={styles["buttons"]}>
-                {isDirty && isFocusedField && !isReadonly && (
+                {isDirty && !isReadonly && !isDisabled && (
                   <IconButton
                     onClick={handleClear}
                     className={styles["clear-field-button"]}
@@ -226,7 +297,7 @@ export const Field = memo(
                 )}
                 {isVisibleOpenMenuButton && (
                   <IconButton
-                    className={styles['open-menu-button']}
+                    className={styles["open-menu-button"]}
                     onClick={onClick}
                     isStopFocus
                     size="small-m"

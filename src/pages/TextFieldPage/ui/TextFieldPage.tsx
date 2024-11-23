@@ -190,6 +190,27 @@ const TextFieldPage = () => {
             />
             <textarea/>
           </PreviewComponents>
+          <PreviewComponents title="Multiline">
+          <Field
+              name="large"
+              className={styles["field"]}
+              label="Large"
+              size="medium"
+              value={value}
+              onChange={handleChangeValue}
+              placeholder="Enter value..."
+              labelVariant={labelVariant}
+              isDisabled={isDisabled}
+              isReadonly={isReadonly}
+              isRequired={isRequired}
+              autoComplete="off"
+              type="text"
+              variant={variant}
+              //isMultiline
+              isMultiAutocomplete
+              isVisibleOpenMenuButton
+            />
+          </PreviewComponents>
           <ul className={styles["container"]}>
             <li className={styles["block"]}></li>
             <Divider orientation="vertical" />
