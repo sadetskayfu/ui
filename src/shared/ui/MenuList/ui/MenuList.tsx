@@ -6,13 +6,12 @@ import {
   useEffect,
   cloneElement,
   ReactElement,
-  ReactNode,
 } from "react";
 import { MenuItemProps } from "../../MenuItem";
 import styles from "./style.module.scss";
 
 interface MenuListProps {
-  children?: ReactNode;
+  children?: ReactElement[] | ReactElement;
   isVisible?: boolean;
   startIndex?: number;
   onOpen: () => void;
@@ -36,10 +35,6 @@ export const MenuList = (props: MenuListProps) => {
   const interactiveElements: NodeListOf<HTMLButtonElement> | undefined = menuRef.current?.querySelectorAll('button, a')
 
   const childrenArray = Children.toArray(children);
-
-  const handleMouseOver = useCallback((index: number) => {
-    setActiveIndex(index);
-  }, []);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -77,16 +72,18 @@ export const MenuList = (props: MenuListProps) => {
             setTimeout(() => {
               onClose()
             }, 0)
-          }}
+          }} else {
+            onOpen()
+          }
           break;
         case "Escape":
-          isVisible ? onClose() : parentRef.current?.blur();
+          isVisible && onClose();
           break;
         default:
           break;
       }
     },
-    [activeIndex, childrenArray, isVisible, onClose, onOpen, parentRef, interactiveElements]
+    [activeIndex, childrenArray, isVisible, onClose, onOpen, interactiveElements]
   );
 
   // Add handle keydown on parent
@@ -125,7 +122,8 @@ export const MenuList = (props: MenuListProps) => {
 
         const props: Partial<MenuItemProps> = {
           isHovered: isHovered,
-          onMouseMove: () => handleMouseOver(index),
+          index: index,
+          setActiveIndex: setActiveIndex
         }
 
         return cloneElement(child as ReactElement, {

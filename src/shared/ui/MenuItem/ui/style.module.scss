@@ -1,8 +1,9 @@
 .menu-item {
+    color: var(--secondary-600);
     &.selected {
         background-color: var(--primary-200);
     }
-    &.hovered:not(.readonly, .disabled) {
+    &.hovered:not(.disabled) {
         .button,
         .link {
             background-color: var(--primary-opacity);
@@ -15,29 +16,19 @@
             opacity: var(--opacity-medium);
         }
     }
-    &.readonly {
-        .button,
-        .link {
-            pointer-events: none;
-        }
-    }
 }
 
 .button,
 .link {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    column-gap: var(--padding-small);
+    column-gap: var(--padding-medium);
     width: 100%;
     min-height: var(--button-height-medium);
     padding-inline: var(--padding-medium);
     padding-block: var(--padding-small-s);
     cursor: pointer;
     color: inherit;
-    &:focus-visible {
-        background-color: var(--primary-300);
-    }
 }
 
 .button {
@@ -48,7 +39,14 @@
 
 .check-mark {
     opacity: 0;
-    animation: appearance-check-mark 0.2s forwards
+    animation: appearance-check-mark 0.2s forwards;
+    margin-left: auto;
+
+}
+
+.end-icon {
+    display: flex;
+    margin-left: auto;
 }
 
 @keyframes appearance-check-mark {

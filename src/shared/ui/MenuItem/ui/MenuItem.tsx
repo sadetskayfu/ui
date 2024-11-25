@@ -8,16 +8,19 @@ export interface MenuItemProps {
   className?: string;
   children: ReactNode;
   isHovered?: boolean;
-  isSelected?: boolean;
   isDisabled?: boolean;
-  isReadonly?: boolean;
   isLink?: boolean;
   isExternalLink?: boolean;
-  onClick?: () => void;
+  onClick?: (value?: string) => void;
   onMouseMove?: () => void;
   tabIndex?: number;
-  Icon?: ReactNode;
+  StartIcon?: ReactNode;
+  EndIcon?: ReactNode;
   to?: string;
+  index?: number;
+  setActiveIndex?: (index: number) => void;
+  selectedValue?: string | string[];
+  value?: string;
 }
 
 export const MenuItem = memo((props: MenuItemProps) => {
@@ -25,25 +28,37 @@ export const MenuItem = memo((props: MenuItemProps) => {
     className,
     children,
     isHovered,
-    isSelected,
     isDisabled,
-    isReadonly,
     isLink,
     isExternalLink,
     onClick,
-    onMouseMove,
     tabIndex = -1,
-    Icon,
+    StartIcon,
+    EndIcon,
     to = "",
+    index,
+    setActiveIndex,
+    selectedValue,
+    value,
   } = props;
 
-  const currentTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
+  const localTabIndex = isDisabled ? -1 : tabIndex;
+
+  const isSelected = Array.isArray(selectedValue)
+    ? selectedValue.filter((selectedValue) => selectedValue === value).length >
+      0
+    : value === selectedValue;
 
   const mods: Record<string, boolean | undefined> = {
     [styles["hovered"]]: isHovered,
     [styles["selected"]]: isSelected,
     [styles["disabled"]]: isDisabled,
-    [styles["readonly"]]: isReadonly,
+  };
+
+  const handleMouseMove = () => {
+    if (setActiveIndex && typeof index === "number") {
+      setActiveIndex(index);
+    }
   };
 
   if (isLink)
@@ -51,17 +66,16 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
-        aria-disabled={isDisabled ? "true" : "false"}
-        aria-readonly={isReadonly ? "true" : "false"}
       >
         <Link
           className={styles["link"]}
-          onMouseMove={onMouseMove}
-          tabIndex={currentTabIndex}
+          onMouseMove={handleMouseMove}
+          tabIndex={localTabIndex}
           to={to}
         >
+          {StartIcon && <>{StartIcon}</>}
           {children}
-          {Icon && <>{Icon}</>}
+          {EndIcon && <div className={styles["end-icon"]}>{EndIcon}</div>}
         </Link>
       </li>
     );
@@ -71,17 +85,16 @@ export const MenuItem = memo((props: MenuItemProps) => {
       <li
         className={classNames(styles["menu-item"], [className], mods)}
         role="menuitem"
-        aria-disabled={isDisabled ? "true" : "false"}
-        aria-readonly={isReadonly ? "true" : "false"}
       >
         <a
           className={styles["link"]}
-          onMouseMove={onMouseMove}
-          tabIndex={currentTabIndex}
+          onMouseMove={handleMouseMove}
+          tabIndex={localTabIndex}
           href={to}
         >
+          {StartIcon && <>{StartIcon}</>}
           {children}
-          {Icon && <>{Icon}</>}
+          {EndIcon && <div className={styles["end-icon"]}>{EndIcon}</div>}
         </a>
       </li>
     );
@@ -90,18 +103,25 @@ export const MenuItem = memo((props: MenuItemProps) => {
     <li
       className={classNames(styles["menu-item"], [className], mods)}
       role="menuitem"
-      aria-readonly={isReadonly ? "true" : "false"}
     >
       <button
         className={styles["button"]}
-        onClick={onClick}
-        onMouseMove={onMouseMove}
-        tabIndex={currentTabIndex}
+        onMouseMove={handleMouseMove}
+        tabIndex={localTabIndex}
         disabled={isDisabled}
+        onClick={() => onClick?.(value)}
       >
+        {StartIcon && <>{StartIcon}</>}
         {children}
-        {Icon && <>{Icon}</>}
-        {isSelected && <CheckMark variant="check-mark" size="small-l" />}
+        {EndIcon && <div className={styles["end-icon"]}>{EndIcon}</div>}
+        {isSelected && (
+          <CheckMark
+            className={styles["check-mark"]}
+            variant="check-mark"
+            size="small-l"
+            color="primary"
+          />
+        )}
       </button>
     </li>
   );

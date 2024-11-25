@@ -25,14 +25,6 @@
   position: relative;
   min-height: var(--height);
   padding-inline: var(--paddingInline);
-  &:focus {
-    .arrow-icon {
-      svg {
-        fill: var(--primary-500);
-        stroke: var(--primary-500);
-      }
-    }
-  }
 }
 
 .label {
@@ -47,13 +39,13 @@
 
 .placeholder {
   position: absolute;
-  opacity: var(--opacity-medium);
   pointer-events: none;
+  color: var(--secondary-500);
 }
 
 .chips {
   display: flex;
-  gap: 5px;
+  gap: var(--gap-small-s);
   flex-wrap: wrap;
 }
 
@@ -70,8 +62,6 @@
   svg {
     transition-duration: 0.2s;
     transform: rotate(-90deg);
-    fill: var(--primary-200);
-    stroke: var(--primary-200);
   }
 }
 
@@ -94,14 +84,12 @@
 // Sizes
 .select {
   &.medium {
-    --paddingInline: var(--padding-medium);
     --height: var(--input-height-medium);
     .field {
       padding-block: var(--padding-small-l);
     }
   }
   &.large {
-    --paddingInline: var(--padding-large);
     --height: var(--input-height-large);
     .field {
       padding-block: var(--padding-medium);

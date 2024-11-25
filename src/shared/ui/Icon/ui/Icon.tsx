@@ -9,6 +9,7 @@ const CheckMark = lazy(
 const Cart = lazy(() => import("@/shared/assets/icons/cart.svg?react"));
 const Envelope = lazy(() => import("@/shared/assets/icons/envelope.svg?react"));
 const Eye = lazy(() => import("@/shared/assets/icons/eye.svg?react"));
+const EyeSlash = lazy(() => import("@/shared/assets/icons/eye-slash.svg?react"));
 const Bell = lazy(() => import("@/shared/assets/icons/bell.svg?react"));
 const BookMark = lazy(() => import("@/shared/assets/icons/book-mark.svg?react"));
 const ThumbsUp = lazy(() => import("@/shared/assets/icons/thumbs-up.svg?react"));
@@ -20,7 +21,7 @@ const Heart = lazy(() => import("@/shared/assets/icons/heart.svg?react"));
 const House = lazy(() => import("@/shared/assets/icons/house.svg?react"));
 const Search = lazy(() => import("@/shared/assets/icons/search.svg?react"));
 
-export type IconVariant = "arrow" | "check-mark" | "cart" | "envelope" | "eye" | "bell" | "book-mark" | "thumbs-up" | "trash" | "user" | "x-mark" | "gear" | "heart" | "house" | "search";
+export type IconVariant = "arrow" | "check-mark" | "cart" | "envelope" | "eye" | "eye-slash" | "bell" | "book-mark" | "thumbs-up" | "trash" | "user" | "x-mark" | "gear" | "heart" | "house" | "search";
 export type IconFillVariant = "filled" | "outlined";
 export type IconSize = "small-s" | "small-m" | "small-l" | "medium" | "large" | "custom-size";
 export type IconColor = "primary" | "secondary" | "light" | "red" | "custom-color";
@@ -59,6 +60,7 @@ export const Icon = (props: IconProps) => {
         {variant === "cart" && <Cart />}
         {variant === "envelope" && <Envelope />}
         {variant === "eye" && <Eye />}
+        {variant === "eye-slash" && <EyeSlash />}
         {variant === "bell" && <Bell />}
         {variant === "book-mark" && <BookMark />}
         {variant === "thumbs-up" && <ThumbsUp />}

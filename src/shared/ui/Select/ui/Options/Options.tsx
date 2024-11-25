@@ -1,17 +1,17 @@
 import { DropdownMenu } from "@/shared/ui/DropdownMenu";
 import { MenuList } from "@/shared/ui/MenuList";
-import { useCallback, useMemo } from "react";
-import { MenuItem } from "@/shared/ui/MenuItem";
+import { Children, cloneElement, ReactElement, useCallback } from "react";
+import { MenuItemProps } from "@/shared/ui/MenuItem";
 import styles from "./style.module.scss";
-import { Option } from "../Select/Select";
+import { MenuItem } from "../Select/Select";
 
 interface OptionsProps {
   isVisible: boolean;
-  options: Option[];
-  selectedValue: string | string[] | null;
+  menuItems: MenuItem[];
+  selectedValue: string | string[]
   onClose: () => void;
   onOpen: () => void;
-  onSelect: (id: string) => void;
+  onSelect: (value: string) => void;
   isCloseAfterSelect?: boolean;
   parentRef: React.RefObject<HTMLDivElement>;
 }
@@ -19,7 +19,7 @@ interface OptionsProps {
 export const Options = (props: OptionsProps) => {
   const {
     isVisible,
-    options,
+    menuItems,
     selectedValue,
     onClose,
     onOpen,
@@ -29,8 +29,8 @@ export const Options = (props: OptionsProps) => {
   } = props;
 
   const handleSelect = useCallback(
-    (id: string) => {
-      onSelect(id);
+    (value: string | undefined) => {
+      onSelect(value as string);
       if (isCloseAfterSelect) {
         setTimeout(() => {
           onClose();
@@ -39,23 +39,6 @@ export const Options = (props: OptionsProps) => {
     },
     [onSelect, onClose, isCloseAfterSelect]
   );
-
-  const renderOptions = useMemo(() => {
-    return options.map((item) => {
-      const isSelected = Array.isArray(selectedValue)
-        ? selectedValue.filter((value) => value === item.id).length > 0
-        : item.id === selectedValue;
-      return (
-        <MenuItem
-          onClick={() => handleSelect(item.id)}
-          key={item.id}
-          isSelected={isSelected}
-        >
-          <span>{item.label}</span>
-        </MenuItem>
-      );
-    });
-  }, [options, selectedValue, handleSelect]);
 
   return (
     <DropdownMenu
@@ -70,7 +53,15 @@ export const Options = (props: OptionsProps) => {
         onOpen={onOpen}
         parentRef={parentRef}
       >
-        {renderOptions}
+        {Children.map(menuItems, (item) => {
+          const props: Partial<MenuItemProps> = {
+            onClick: handleSelect,
+            selectedValue
+          };
+          return cloneElement(item as ReactElement, {
+            ...props,
+          });
+        })}
       </MenuList>
     </DropdownMenu>
   );

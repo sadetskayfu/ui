@@ -3,5 +3,6 @@ export type {
   IconButtonVariant,
   IconButtonColor,
   IconButtonSize,
-  IconButtonBorderRadius
+  IconButtonBorderRadius,
+  IconButtonProps
 } from "./ui/IconButton";

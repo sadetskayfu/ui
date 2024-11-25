@@ -8,10 +8,12 @@ import {
   useId,
   InputHTMLAttributes,
   useEffect,
+  ReactElement,
 } from "react";
 import styles from "./style.module.scss";
 import { Icon } from "../../Icon";
 import { IconButton } from "../../IconButton";
+import type { InputAdornment } from "../../InputAdornment";
 
 export type FieldVariant = "outlined" | "filled";
 export type FieldSize = "small" | "medium" | "large";
@@ -33,16 +35,17 @@ interface FieldProps extends HTMLInputProps {
   isReadonly?: boolean;
   isDisabled?: boolean;
   isRequired?: boolean;
-  isVisibleMenu?: boolean;
-  isVisibleEyeButton?: boolean;
-  isVisibleOpenMenuButton?: boolean;
   isHiddenLabel?: boolean;
   isMultiline?: boolean;
-  isMultiAutocomplete?: boolean
+  isMultiAutocomplete?: boolean;
   errorMessage?: string;
   value: string;
   type?: "text" | "password";
   tabIndex?: number;
+  startAdornment?: ReactElement<typeof InputAdornment>;
+  endAdornment?:
+    | ReactElement<typeof InputAdornment>
+    | ReactElement<typeof InputAdornment>[];
   onClick?: () => void;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -67,12 +70,11 @@ export const Field = memo(
         isReadonly,
         isRequired,
         isDisabled,
-        isVisibleMenu,
-        isVisibleEyeButton,
-        isVisibleOpenMenuButton,
         isMultiline,
         isMultiAutocomplete,
         tabIndex = 0,
+        startAdornment,
+        endAdornment,
         onClick,
         onBlur,
         onFocus,
@@ -82,14 +84,12 @@ export const Field = memo(
       } = props;
 
       const [textareaValue, setTextareaValue] = useState<string>("");
-      const [isPasswordVisible, setIsPasswordVisible] =
-        useState<boolean>(false);
       const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
       const [transitionDuration, setTransitionDuration] = useState<
         string | undefined
       >(undefined);
 
-      const isDirty = value.length > 0;
+      const isDirty = value.length > 0 || !!startAdornment;
       const id = useId();
 
       const inputRef = useRef<HTMLInputElement>(null);
@@ -122,16 +122,6 @@ export const Field = memo(
         }
       };
 
-      const handleToggleVisibilityPassword = () => {
-        if (input.current && isVisibleEyeButton) {
-          const cursorPosition = input.current.selectionStart;
-          setIsPasswordVisible((prev) => !prev);
-          setTimeout(() => {
-            input.current!.setSelectionRange(cursorPosition, cursorPosition);
-          }, 0);
-        }
-      };
-
       const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         onChange?.(event.target.value);
       };
@@ -144,15 +134,16 @@ export const Field = memo(
       const handleChangeTextareaValue = (
         event: React.ChangeEvent<HTMLTextAreaElement>
       ) => {
-        setTextareaValue(event.target.value);
-        onChange?.(event.target.value);
+        const newValue = event.target.value;
+        setTextareaValue(newValue);
+        onChange?.(newValue);
       };
 
       useEffect(() => {
         const textarea = textareaRef.current;
         if (textarea) {
           textarea.style.height = "auto";
-          const newHeight = textarea.scrollHeight + 3;
+          const newHeight = textarea.scrollHeight;
           textarea.style.height = `${newHeight}px`;
         }
       }, [textareaValue]);
@@ -168,10 +159,7 @@ export const Field = memo(
         !isFocusedField && transitionDuration && setTransitionDuration("0.2s");
       }, [isFocusedField, transitionDuration]);
 
-      const inputType: string =
-        type === "password" ? (isPasswordVisible ? "text" : "password") : type;
-
-      const currentTabIndex: number = isDisabled ? -1 : tabIndex;
+      const localTabIndex: number = isDisabled ? -1 : tabIndex;
 
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: isDirty,
@@ -181,8 +169,7 @@ export const Field = memo(
         [styles["disabled"]]: isDisabled,
         [styles["required"]]: isRequired,
         [styles["multiline"]]: isMultiline,
-        [styles["visible-menu"]]: isVisibleMenu,
-        [styles['multi-autocomplete']]: isMultiAutocomplete
+        [styles["multi-autocomplete"]]: isMultiAutocomplete,
       };
 
       const additionalClasses: Array<string | undefined> = [
@@ -202,25 +189,50 @@ export const Field = memo(
                 {label}
               </label>
               <div className={styles["field"]} onClick={handleSetFocus}>
-                <textarea
-                  rows={1}
-                  style={{ transitionDuration }}
-                  className={styles["input"]}
-                  name={name}
-                  tabIndex={currentTabIndex}
-                  placeholder={placeholder}
-                  id={id}
-                  value={value}
-                  onChange={handleChangeTextareaValue}
-                  ref={textareaRef}
-                  disabled={isDisabled}
-                  required={isRequired}
-                  readOnly={isReadonly}
-                  onClick={onClick}
-                  onBlur={handleBlur}
-                  onFocus={handleFocus}
-                  aria-errormessage={id + "error"}
-                />
+                <div className={styles['start-adornment']}>{startAdornment}</div>
+                <div className={styles["content"]}>
+                  <textarea
+                    rows={1}
+                    style={{ transitionDuration }}
+                    className={styles["input"]}
+                    name={name}
+                    tabIndex={localTabIndex}
+                    placeholder={placeholder}
+                    id={id}
+                    value={value}
+                    onChange={handleChangeTextareaValue}
+                    ref={textareaRef}
+                    disabled={isDisabled}
+                    required={isRequired}
+                    readOnly={isReadonly}
+                    onClick={onClick}
+                    onBlur={handleBlur}
+                    onFocus={handleFocus}
+                    aria-errormessage={id + "error"}
+                  />
+                </div>
+                <div className={styles["buttons"]}>
+                {value.length > 0 && !isReadonly && !isDisabled && (
+                  <IconButton
+                    onClick={handleClear}
+                    className={styles["clear-field-button"]}
+                    isStopFocus
+                    size="small-l"
+                    variant="clear"
+                    color="secondary"
+                    tabIndex={-1}
+                    isDisabled={isDisabled}
+                    isReadonly={isReadonly}
+                  >
+                    <Icon variant="x-mark" />
+                  </IconButton>
+                )}
+                {Array.isArray(endAdornment)
+                  ? endAdornment.map((item, index) => {
+                      return <div key={index}>{item}</div>;
+                    })
+                  : endAdornment}
+              </div>
               </div>
             </div>
             {errorMessage && (
@@ -239,19 +251,18 @@ export const Field = memo(
               {label}
             </label>
             <div className={styles["field"]} onClick={handleSetFocus}>
-              <div className={styles['content']}>
-
-              {/*  */}
+              <div className={styles["start-adornment"]}>{startAdornment}</div>
+              <div className={styles["content"]}>
                 <input
                   style={{ transitionDuration }}
                   className={styles["input"]}
                   name={name}
-                  tabIndex={currentTabIndex}
+                  tabIndex={localTabIndex}
                   placeholder={placeholder}
                   id={id}
                   value={value}
                   onChange={handleChange}
-                  type={inputType}
+                  type={type}
                   ref={input}
                   disabled={isDisabled}
                   required={isRequired}
@@ -265,15 +276,14 @@ export const Field = memo(
                 />
               </div>
               <div className={styles["buttons"]}>
-                {isDirty && !isReadonly && !isDisabled && (
+                {value.length > 0 && !isReadonly && !isDisabled && (
                   <IconButton
                     onClick={handleClear}
                     className={styles["clear-field-button"]}
                     isStopFocus
-                    size="small-m"
+                    size="small-l"
                     variant="clear"
                     color="secondary"
-                    aria-label="Clear the field"
                     tabIndex={-1}
                     isDisabled={isDisabled}
                     isReadonly={isReadonly}
@@ -281,35 +291,11 @@ export const Field = memo(
                     <Icon variant="x-mark" />
                   </IconButton>
                 )}
-                {type === "password" && isVisibleEyeButton && (
-                  <IconButton
-                    onClick={handleToggleVisibilityPassword}
-                    isStopFocus
-                    size="small-m"
-                    variant="clear"
-                    color="secondary"
-                    aria-label="Toggle visible the password"
-                    tabIndex={currentTabIndex}
-                    isDisabled={isDisabled}
-                  >
-                    <Icon variant="eye" />
-                  </IconButton>
-                )}
-                {isVisibleOpenMenuButton && (
-                  <IconButton
-                    className={styles["open-menu-button"]}
-                    onClick={onClick}
-                    isStopFocus
-                    size="small-m"
-                    variant="clear"
-                    color="secondary"
-                    aria-label="Toggle visible the password"
-                    tabIndex={currentTabIndex}
-                    isDisabled={isDisabled}
-                  >
-                    <Icon variant="arrow" />
-                  </IconButton>
-                )}
+                {Array.isArray(endAdornment)
+                  ? endAdornment.map((item, index) => {
+                      return <div key={index}>{item}</div>;
+                    })
+                  : endAdornment}
               </div>
               {onSearch && (
                 <IconButton
@@ -318,9 +304,10 @@ export const Field = memo(
                   color="secondary"
                   borderRadius="none"
                   size="custom-size"
-                  tabIndex={currentTabIndex}
+                  tabIndex={-1}
+                  aria-label="Find by the entered value"
                 >
-                  <Icon variant="search" />
+                  <Icon variant="search" size="small-l" />
                 </IconButton>
               )}
             </div>

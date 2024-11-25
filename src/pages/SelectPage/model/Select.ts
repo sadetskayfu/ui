@@ -1,11 +1,11 @@
 import { Option } from "@/shared/ui/Select";
 
 export const options: Record<string, Option> = {
-    '1': { id: '1', label: 'Option 1'},
-    '2': { id: '2', label: 'Option 2'},
-    '3': { id: '3', label: 'Option 3'},
-    '4': { id: '4', label: 'Option 4'},
-    '5': { id: '5', label: 'Option 5'},
+    '10:30': { value: '10:30', label: '10:30'},
+    '11:00': { value: '11:00', label: '11:00'},
+    '11:30': { value: '11:30', label: '11:30'},
+    '12:00': { value: '12:00', label: '12:00'},
+    '12:30': { value: '12:30', label: '12:30'},
 }
 
 

@@ -1,19 +1,20 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { Field, FieldLabelVariant, FieldVariant } from "@/shared/ui/Field";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { Group } from "@/shared/ui/Group";
 import styles from "./style.module.scss";
-import { Button } from "@/shared/ui/Button";
 import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 import { fieldLabelVariants, fieldVariants } from "../model/Field";
 import { requiredValidate } from "@/shared/lib/validate";
-import { Divider } from "@/shared/ui/Divider";
+import { InputAdornment } from "@/shared/ui/InputAdornment";
+import { IconButton } from "@/shared/ui/IconButton";
+import { Icon } from "@/shared/ui/Icon";
 
 const TextFieldPage = () => {
   const [value, setValue] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [labelVariant, setLabelVariant] =
     useState<FieldLabelVariant>("visible");
@@ -22,6 +23,8 @@ const TextFieldPage = () => {
   const [isRequired, setIsRequired] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isReadonly, setIsReadonly] = useState<boolean>(false);
+
+  const passwordInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleToggleLabelVariant = useCallback((value: string) => {
     setLabelVariant(value as FieldLabelVariant);
@@ -53,6 +56,17 @@ const TextFieldPage = () => {
     setPassword(value);
   }, []);
 
+  const handleToggleVisibilityPassword = () => {
+    const input = passwordInputRef.current
+    if (input) {
+      const cursorPosition = input.selectionStart;
+      setShowPassword((prev) => !prev)
+      setTimeout(() => {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+      }, 0);
+    }
+  };
+
   return (
     <div className="page">
       <section className="section">
@@ -66,7 +80,7 @@ const TextFieldPage = () => {
             onChange={handleToggleVariant}
           >
             {fieldVariants.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+              return <Radio key={radio.value} label={radio.label} value={radio.value} />;
             })}
           </RadioGroup>
           <RadioGroup
@@ -77,7 +91,7 @@ const TextFieldPage = () => {
             onChange={handleToggleLabelVariant}
           >
             {fieldLabelVariants.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+              return <Radio key={radio.value} label={radio.label} value={radio.value} />;
             })}
           </RadioGroup>
           <div>
@@ -101,23 +115,6 @@ const TextFieldPage = () => {
         <div className="subsections">
           <PreviewComponents title="Sizes" direction="vertical">
             <Field
-              className={styles["field"]}
-              label="Small"
-              name="small"
-              size="small"
-              labelVariant={labelVariant}
-              value={value}
-              onChange={handleChangeValue}
-              placeholder="Enter value..."
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
-              onBlur={handleValidate}
-              errorMessage={error}
-              autoComplete="off"
-              variant={variant}
-            />
-            <Field
               name="medium"
               className={styles["field"]}
               label="Medium"
@@ -131,6 +128,8 @@ const TextFieldPage = () => {
               isRequired={isRequired}
               autoComplete="off"
               variant={variant}
+              errorMessage={error}
+              onBlur={handleValidate}
             />
             <Field
               name="large"
@@ -153,6 +152,7 @@ const TextFieldPage = () => {
             <form autoComplete="off">
               <Field
                 className={styles["field"]}
+                ref={passwordInputRef}
                 name="password"
                 label="Password"
                 size="medium"
@@ -163,9 +163,23 @@ const TextFieldPage = () => {
                 isDisabled={isDisabled}
                 isReadonly={isReadonly}
                 isRequired={isRequired}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
-                isVisibleEyeButton
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleToggleVisibilityPassword}
+                      size="small-l"
+                      variant="clear"
+                      color="secondary"
+                      aria-label={showPassword ? 'hide the password' : 'display the password'}
+                      isStopFocus
+                      tabIndex={isDisabled ? -1 : 0}
+                    >
+                      {showPassword ? <Icon variant="eye" /> : <Icon variant="eye-slash" />}
+                    </IconButton>
+                  </InputAdornment>
+                }
                 variant={variant}
               />
             </form>
@@ -184,15 +198,13 @@ const TextFieldPage = () => {
               isReadonly={isReadonly}
               isRequired={isRequired}
               autoComplete="off"
-              isVisibleEyeButton
               onSearch={() => alert("Search")}
               variant={variant}
             />
-            <textarea/>
           </PreviewComponents>
           <PreviewComponents title="Multiline">
-          <Field
-              name="large"
+            <Field
+              name="multiline"
               className={styles["field"]}
               label="Large"
               size="medium"
@@ -204,18 +216,32 @@ const TextFieldPage = () => {
               isReadonly={isReadonly}
               isRequired={isRequired}
               autoComplete="off"
-              type="text"
               variant={variant}
-              //isMultiline
-              isMultiAutocomplete
-              isVisibleOpenMenuButton
+              isMultiline
             />
           </PreviewComponents>
-          <ul className={styles["container"]}>
-            <li className={styles["block"]}></li>
-            <Divider orientation="vertical" />
-            <li className={styles["block"]}></li>
-          </ul>
+          <PreviewComponents title="With custom adornment">
+            <Field
+              name="custom-start-adornment"
+              className={styles["field"]}
+              label="Medium"
+              size="medium"
+              labelVariant={labelVariant}
+              value={value}
+              onChange={handleChangeValue}
+              placeholder="Enter value..."
+              isDisabled={isDisabled}
+              isReadonly={isReadonly}
+              isRequired={isRequired}
+              autoComplete="off"
+              variant={variant}
+              startAdornment={
+                <InputAdornment>
+                  <p>KG</p>
+                </InputAdornment>
+              }
+            />
+          </PreviewComponents>
         </div>
       </section>
     </div>

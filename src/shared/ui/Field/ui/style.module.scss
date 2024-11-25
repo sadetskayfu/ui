@@ -3,8 +3,8 @@
 .wrapper {
   --paddingInline: var(--padding-medium);
   --paddingBlock: var(--gap-small-s);
-  --paddingTop: calc((var(--height) - var(--button-height-small-m)) / 2);
-  --paddingBottom: calc((var(--height) - var(--button-height-small-m)) / 2);
+  --paddingTop: var(--paddingInline);
+  --paddingBottom: var(--paddingInline);
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
@@ -58,7 +58,7 @@
   width: 100%;
   height: var(--height);
   padding-left: var(--paddingInline);
-  padding-right: calc(var(--paddingInline) - 6px);
+  padding-right: calc(var(--paddingInline) - 7.5px);
   padding-top: var(--paddingTop);
   padding-bottom: var(--paddingBottom);
   background-color: transparent;
@@ -82,15 +82,9 @@
 }
 
 .buttons {
-  padding-right: calc(var(--paddingInline) - 6px);
+  padding-right: calc(var(--paddingInline) - 7.5px);
   display: flex;
   align-items: center;
-}
-
-.open-menu-button {
-  svg {
-    transform: rotate(-90deg);
-  }
 }
 
 .search-button {
@@ -105,7 +99,6 @@
   font-size: var(--font-size-small-l);
   color: var(--red-500);
   padding-left: var(--paddingInline);
-  user-select: text;
   max-width: 100%;
   animation: appearance-right 0.5s;
 }
@@ -188,7 +181,7 @@
     &.dirty,
     &.focused {
       .label {
-        top: 0;
+        top: -1px;
       }
     }
   }
@@ -201,6 +194,10 @@
         top: var(--paddingBottom);
         translate: 0;
       }
+    }
+    .start-adornment {
+      padding-top: var(--paddingTop);
+      padding-bottom: var(--paddingBottom);
     }
   }
 
@@ -215,14 +212,13 @@
 .wrapper {
   &.small {
     --height: var(--input-height-small);
-    --paddingInline: var(--padding-medium);
+    --paddingBottom: 0px;
+    --paddingTop: 0px;
   }
   &.medium {
-    --paddingInline: var(--padding-medium);
     --height: var(--input-height-medium);
   }
   &.large {
-    --paddingInline: var(--padding-medium);
     --height: var(--input-height-large);
     --paddingBlock: 8px;
   }
@@ -242,39 +238,31 @@
       animation: snaking 0.5s;
     }
   }
-  &.visible-menu {
-    .open-menu-button {
-      svg {
-        rotate: 180deg;
-      }
-    }
-  }
+  &.multi-autocomplete,
   &.multiline {
-    .field {
-      padding-top: var(--paddingTop);
-      padding-bottom: var(--paddingBottom);
-    }
-    .input {
-      padding-top: 0px;
-      padding-bottom: 0px;
-      padding-right: var(--paddingInline);
-      overflow-y: hidden;
-      resize: none;
-    }
-  }
-  &.multi-autocomplete {
     .content {
-      padding-bottom: var(--paddingBottom);
       padding-top: var(--paddingTop);
+      padding-bottom: var(--paddingBottom);
       padding-left: var(--paddingInline);
-      padding-right: calc(var(--paddingInline) - 6px);
+      padding-right: calc(var(--paddingInline) - 7.5px);
       display: flex;
       gap: var(--gap-small-s);
       flex-wrap: wrap;
+      align-items:center;
     }
     .input {
       padding: 0px;
-      height: var(--button-height-small-m);
+    }
+  }
+  &.multi-autocomplete {
+    .input {
+      height: auto;
+    }
+  }
+  &.multiline {
+    .input {
+      overflow-y: hidden;
+      resize: none;
     }
   }
   &.focused {

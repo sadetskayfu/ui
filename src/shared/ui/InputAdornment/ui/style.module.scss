@@ -1,0 +1,9 @@
+.adornment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--secondary-500);
+    &.start {
+        padding-left: var(--padding-medium);
+    }
+}

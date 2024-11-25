@@ -39,10 +39,11 @@ export const AppRouter = () => {
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
         
         <Route path={ROUTES.MODAL} element={<ModalPage />} />
-        <Route path={ROUTES.SELECT} element={<SelectPage />} />
+        
         
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
          */}
+        <Route path={ROUTES.SELECT} element={<SelectPage />} />
         <Route path={ROUTES.TEXT_FIELD} element={<TextFieldPage />} />
         <Route path={ROUTES.CHIP} element={<ChipPage />} />
         <Route path={ROUTES.ASIDE_MENU} element={<AsideMenuPage />} />

@@ -68,6 +68,7 @@ export const Accordion = memo((props: AccordionProps) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
       handleToggleOpenMenu();
     }
   };

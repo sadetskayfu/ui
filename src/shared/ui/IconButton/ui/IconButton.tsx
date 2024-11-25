@@ -1,7 +1,6 @@
 import {
   ButtonHTMLAttributes,
   forwardRef,
-  memo,
   ReactNode,
   useRef,
 } from "react";
@@ -26,7 +25,7 @@ export type IconButtonSize =
 
 export type IconButtonBorderRadius = 'left' | 'right' | 'everywhere' | 'round' | 'none'
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: IconButtonVariant;
   color?: IconButtonColor;
@@ -44,7 +43,7 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
 }
 
-export const IconButton = memo(
+export const IconButton = 
   forwardRef(
     (
       props: IconButtonProps,
@@ -155,5 +154,4 @@ export const IconButton = memo(
         </button>
       );
     }
-  )
-);
+  );
