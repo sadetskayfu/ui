@@ -1,18 +1,19 @@
 import { DropdownMenu } from "@/shared/ui/DropdownMenu";
 import { MenuList } from "@/shared/ui/MenuList";
-import { Children, cloneElement, ReactElement, useCallback } from "react";
-import { MenuItemProps } from "@/shared/ui/MenuItem";
+import { cloneElement, ReactElement, useMemo } from "react";
 import styles from "./style.module.scss";
-import { MenuItem } from "../Select/Select";
+import type { MenuItem as MenuItemType, Option } from "../Select/Select";
+import { MenuItemProps } from "@/shared/ui/MenuItem";
+import { MenuItemLazy } from "@/shared/ui/MenuItem";
 
 interface OptionsProps {
   isVisible: boolean;
-  menuItems: MenuItem[];
-  selectedValue: string | string[]
+  menuItems?: MenuItemType[];
+  options: Option[];
+  selectedValue: string | string[];
   onClose: () => void;
   onOpen: () => void;
   onSelect: (value: string) => void;
-  isCloseAfterSelect?: boolean;
   parentRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -20,25 +21,40 @@ export const Options = (props: OptionsProps) => {
   const {
     isVisible,
     menuItems,
+    options,
     selectedValue,
     onClose,
     onOpen,
     onSelect,
-    isCloseAfterSelect,
     parentRef,
   } = props;
 
-  const handleSelect = useCallback(
-    (value: string | undefined) => {
-      onSelect(value as string);
-      if (isCloseAfterSelect) {
-        setTimeout(() => {
-          onClose();
-        }, 0);
+  const renderOptions = useMemo(() => {
+    return options.map((option, index) => {
+      const isSelected = Array.isArray(selectedValue)
+        ? selectedValue.filter(
+            (selectedValue) => selectedValue === option.value
+          ).length > 0
+        : option.value === selectedValue;
+
+      const props: Partial<MenuItemProps> = {
+        onSelect,
+        isSelected,
+      };
+      if (menuItems) {
+        return cloneElement(menuItems[index] as ReactElement, {
+          ...props,
+          key: index,
+        });
+      } else {
+        return (
+          <MenuItemLazy key={index} value={option.value} {...props}>
+            {option.label}
+          </MenuItemLazy>
+        );
       }
-    },
-    [onSelect, onClose, isCloseAfterSelect]
-  );
+    });
+  }, [menuItems, selectedValue, onSelect, options]);
 
   return (
     <DropdownMenu
@@ -53,15 +69,11 @@ export const Options = (props: OptionsProps) => {
         onOpen={onOpen}
         parentRef={parentRef}
       >
-        {Children.map(menuItems, (item) => {
-          const props: Partial<MenuItemProps> = {
-            onClick: handleSelect,
-            selectedValue
-          };
-          return cloneElement(item as ReactElement, {
-            ...props,
-          });
-        })}
+        {(menuItems && menuItems?.length > 0) || options.length > 0 ? (
+          renderOptions
+        ) : (
+          <MenuItemLazy isDisabled>No options</MenuItemLazy>
+        )}
       </MenuList>
     </DropdownMenu>
   );

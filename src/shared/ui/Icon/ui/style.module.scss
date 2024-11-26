@@ -26,6 +26,12 @@
         stroke: var(--light);
       }
     }
+    &.dark {
+      svg {
+        fill: var(--secondary-500);
+        stroke: var(--secondary-500);
+      }
+    }
     &.red {
       svg {
         fill: var(--red-500);
@@ -47,6 +53,11 @@
     &.light {
       svg {
         stroke: var(--light);
+      }
+    }
+    &.dark {
+      svg {
+        stroke: var(--secondary-500);
       }
     }
     &.red {

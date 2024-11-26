@@ -68,6 +68,7 @@
     &.secondary {
       --color: var(--secondary-600);
       --chipHoverBgColor: var(--secondary-100);
+      box-shadow: 0 0 0 1px var(--secondary-500);
     }
     &.success {
       --color: var(--green-500);

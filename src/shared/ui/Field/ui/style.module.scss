@@ -3,8 +3,8 @@
 .wrapper {
   --paddingInline: var(--padding-medium);
   --paddingBlock: var(--gap-small-s);
-  --paddingTop: var(--paddingInline);
-  --paddingBottom: var(--paddingInline);
+  --paddingTop: var(--padding-small-l);
+  --paddingBottom: var(--padding-small-l);
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);

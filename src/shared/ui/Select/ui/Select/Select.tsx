@@ -14,17 +14,18 @@ import { Options } from "../Options/Options";
 import { Chip } from "@/shared/ui/Chip";
 import { Icon } from "@/shared/ui/Icon";
 import type { MenuItem } from "@/shared/ui/MenuItem";
+import type { InputAdornment } from "@/shared/ui/InputAdornment";
 
 export type SelectVariant = "outlined" | "filled";
 export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
 
 export interface Option {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
-export type MenuItem = ReactElement<typeof MenuItem>
+export type MenuItem = ReactElement<typeof MenuItem>;
 
 interface SelectProps {
   className?: string;
@@ -42,8 +43,9 @@ interface SelectProps {
   isDisabled?: boolean;
   errorMessage?: string;
   onFocus?: () => void;
-  onBlur?: () => void
-  children: MenuItem[]
+  onBlur?: () => void;
+  children?: MenuItem[];
+  startAdornment?: ReactElement<typeof InputAdornment>;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -64,13 +66,15 @@ export const Select = memo((props: SelectProps) => {
     errorMessage,
     onBlur,
     onFocus,
-    children
+    children,
+    startAdornment
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState<string | string[]>(
     value
   );
+  const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
 
   const fieldRef = useRef<HTMLDivElement | null>(null);
   const id = useId();
@@ -96,7 +100,9 @@ export const Select = memo((props: SelectProps) => {
         );
 
         if (alreadyExistingValue.length > 0) {
-          newValues = selectedValues.filter((selectedValue) => selectedValue !== value);
+          newValues = selectedValues.filter(
+            (selectedValue) => selectedValue !== value
+          );
         } else {
           newValues = [...selectedValues];
           newValues.push(value);
@@ -108,15 +114,18 @@ export const Select = memo((props: SelectProps) => {
         const newValue = selectedValues === value ? "" : value;
         setSelectedValues(newValue);
         onSelect(newValue);
+        handleCloseMenu();
       }
     },
-    [selectedValues, onSelect]
+    [selectedValues, onSelect, handleCloseMenu]
   );
 
   const handleDelete = useCallback(
     (value: string) => {
       if (Array.isArray(selectedValues)) {
-        const newValues = selectedValues.filter((selectedValue) => selectedValue !== value);
+        const newValues = selectedValues.filter(
+          (selectedValue) => selectedValue !== value
+        );
         setSelectedValues(newValues);
         onSelect(newValues);
       }
@@ -128,6 +137,12 @@ export const Select = memo((props: SelectProps) => {
   const handleBlur = () => {
     onBlur?.();
     handleCloseMenu();
+    setIsFocusedField(false);
+  };
+
+  const handleFocus = () => {
+    setIsFocusedField(true);
+    onFocus?.();
   };
 
   const getSelectedOptions = useMemo((): Option[] => {
@@ -151,8 +166,8 @@ export const Select = memo((props: SelectProps) => {
       return getSelectedOptions.map((option) => {
         return (
           <Chip
-            color="secondary"
-            variant="filled"
+            color={variant === 'filled' ? 'primary' : 'secondary'}
+            variant='filled'
             size="small"
             isStopFocus
             onClose={() => handleDelete(option.value)}
@@ -163,6 +178,8 @@ export const Select = memo((props: SelectProps) => {
       });
     }
   }, [getSelectedOptions, selectedValues, handleDelete]);
+
+  const optionsArray = useMemo(() => Object.values(options), [options]);
 
   useEffect(() => {
     setSelectedValues(value);
@@ -184,56 +201,45 @@ export const Select = memo((props: SelectProps) => {
     [styles["dirty"]]: isDirty,
     [styles["visible-menu"]]: isVisibleMenu,
     [styles["errored"]]: !!errorMessage,
+    [styles["focused"]]: isFocusedField,
   };
 
-  const currentTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
+  const localTabIndex = isDisabled ? -1 : tabIndex;
 
   return (
     <div className={classNames(styles["select"], additionalClasses, mods)}>
-      <div className={styles["field-container"]}>
+      <div className={styles["field-wrapper"]}>
+        <label className={styles["label"]}>{label}</label>
         <div
-          className={classNames(styles["field"], [], {
-            [styles["dirty"]]: isDirty,
-          })}
-          ref={fieldRef}
-          tabIndex={currentTabIndex}
+          className={styles["field"]}
+          tabIndex={localTabIndex}
           id={id}
+          ref={fieldRef}
           onClick={handleToggleVisibleMenu}
           onBlur={handleBlur}
-          onFocus={onFocus}
-          aria-readonly={isReadonly ? 'true' : 'false'}
-          aria-disabled={isDisabled ? 'true' : 'false'}
-          aria-errormessage={id + 'error'}
+          onFocus={handleFocus}
+          aria-errormessage={id + "error"}
         >
-          <span className={styles["label"]}>{label}</span>
-          {typeof selectedValues === "string" ? (
-            <span>{getSelectedOptions[0]?.label}</span>
-          ) : (
-            <div className={styles["chips"]}>{renderSelectedOptions}</div>
-          )}
-          <Icon
-            className={styles["arrow-icon"]}
-            variant="arrow"
-            size="small-l"
-            color="secondary"
-          />
-          {placeholder && (
-            <span className={styles["placeholder"]}>{placeholder}</span>
-          )}
+          <div className={styles["start-adornment"]}>{startAdornment}</div>
+          <div className={styles["content"]}>
+            <p className={styles["placeholder"]}>{placeholder}</p>
+            {Array.isArray(selectedValues) ? <div className={styles['chips']}>{renderSelectedOptions}</div> : <p>{getSelectedOptions[0]?.label}</p>}
+          </div>
+            <Icon className={styles['open-menu-button']} variant="arrow" size="small-l" color="dark"/>
         </div>
         <Options
           onSelect={handleSelect}
           menuItems={children}
+          options={optionsArray}
           isVisible={isVisibleMenu}
           parentRef={fieldRef}
           selectedValue={selectedValues}
           onClose={handleCloseMenu}
           onOpen={handleOpenMenu}
-          isCloseAfterSelect={Array.isArray(selectedValues) ? false : true}
         />
       </div>
       {errorMessage && (
-        <div className={styles["error-message"]} id={id + 'error'}>
+        <div className={styles["error-message"]} id={id + "error"}>
           <p>{errorMessage}</p>
         </div>
       )}

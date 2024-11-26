@@ -24,7 +24,7 @@ const Search = lazy(() => import("@/shared/assets/icons/search.svg?react"));
 export type IconVariant = "arrow" | "check-mark" | "cart" | "envelope" | "eye" | "eye-slash" | "bell" | "book-mark" | "thumbs-up" | "trash" | "user" | "x-mark" | "gear" | "heart" | "house" | "search";
 export type IconFillVariant = "filled" | "outlined";
 export type IconSize = "small-s" | "small-m" | "small-l" | "medium" | "large" | "custom-size";
-export type IconColor = "primary" | "secondary" | "light" | "red" | "custom-color";
+export type IconColor = "primary" | "secondary" | "light" | "red" | "dark" | "custom-color";
 
 interface IconProps {
   className?: string;

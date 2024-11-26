@@ -25,7 +25,8 @@ export default tseslint.config(
       ],
       'no-unused-vars': 'off',
       "no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-expressions": "off"
+      "no-case-declarations": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
     },
   },
 )

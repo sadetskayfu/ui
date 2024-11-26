@@ -8,46 +8,42 @@ export interface MenuItemProps {
   className?: string;
   children: ReactNode;
   isHovered?: boolean;
+  isSelected?: boolean;
   isDisabled?: boolean;
   isLink?: boolean;
   isExternalLink?: boolean;
-  onClick?: (value?: string) => void;
-  onMouseMove?: () => void;
+  onClick?: () => void;
+  onSelect?: (value: string) => void
   tabIndex?: number;
   StartIcon?: ReactNode;
   EndIcon?: ReactNode;
   to?: string;
   index?: number;
   setActiveIndex?: (index: number) => void;
-  selectedValue?: string | string[];
   value?: string;
 }
 
-export const MenuItem = memo((props: MenuItemProps) => {
+const MenuItem = memo((props: MenuItemProps) => {
   const {
     className,
     children,
     isHovered,
+    isSelected,
     isDisabled,
     isLink,
     isExternalLink,
     onClick,
+    onSelect,
     tabIndex = -1,
     StartIcon,
     EndIcon,
     to = "",
     index,
     setActiveIndex,
-    selectedValue,
     value,
   } = props;
 
   const localTabIndex = isDisabled ? -1 : tabIndex;
-
-  const isSelected = Array.isArray(selectedValue)
-    ? selectedValue.filter((selectedValue) => selectedValue === value).length >
-      0
-    : value === selectedValue;
 
   const mods: Record<string, boolean | undefined> = {
     [styles["hovered"]]: isHovered,
@@ -60,6 +56,13 @@ export const MenuItem = memo((props: MenuItemProps) => {
       setActiveIndex(index);
     }
   };
+
+  const handleClick = () => {
+    onClick?.()
+    if(value && onSelect) {
+      onSelect(value)
+    }
+  }
 
   if (isLink)
     return (
@@ -108,8 +111,9 @@ export const MenuItem = memo((props: MenuItemProps) => {
         className={styles["button"]}
         onMouseMove={handleMouseMove}
         tabIndex={localTabIndex}
+        data-disabled={isDisabled}
         disabled={isDisabled}
-        onClick={() => onClick?.(value)}
+        onClick={handleClick}
       >
         {StartIcon && <>{StartIcon}</>}
         {children}
@@ -126,3 +130,5 @@ export const MenuItem = memo((props: MenuItemProps) => {
     </li>
   );
 });
+
+export default MenuItem

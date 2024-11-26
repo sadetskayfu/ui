@@ -1,12 +1,12 @@
 .menu-item {
     color: var(--secondary-600);
     &.selected {
-        background-color: var(--primary-200);
+        background-color: var(--primary-100);
     }
     &.hovered:not(.disabled) {
         .button,
         .link {
-            background-color: var(--primary-opacity);
+            background-color: var(--secondary-opacity);
         }   
     }
     &.disabled {
