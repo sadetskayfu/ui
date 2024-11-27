@@ -8,10 +8,9 @@
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
-  --borderColor: var(--secondary-300);
-  --hoverBorderColor: var(--secondary-600);
-  --focusBorderColor: var(--primary-500);
+  --borderColor: var(--secondary-500);
   --labelColor: var(--secondary-500);
+  --boxShadowFocus: var(--box-shadow-focus-primary);
   display: flex;
   flex-direction: column;
   row-gap: var(--gap-small-s);
@@ -33,8 +32,10 @@
   align-items: center;
   background-color: var(--bgColor);
   padding-right: var(--paddingInline);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
   @include hover {
-    --borderColor: var(--hoverBorderColor);
+    --borderColor: var(--primary-500);
     background-color: var(--hoverBgColor);
   }
 }
@@ -93,37 +94,18 @@
 .select {
   &.outlined {
     .field {
-      box-shadow: 0 0 0 1px var(--borderColor);
-      border-radius: var(--border-radius-small);
-    }
-    &.focused {
-      .field {
-        box-shadow: 0 0 0 2px var(--focusBorderColor);
-      }
+      border: 1px solid var(--borderColor);
     }
   }
   &.filled {
     --hoverBgColor: var(--secondary-300);
     --bgColor: var(--secondary-200);
     .field {
-      border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
-      &:after {
+      &:before {
         @include underline-bottom;
         width: 100%;
         background-color: var(--borderColor);
-        height: 1px;
-        bottom: -1px;
-      }
-      &:before {
-        @include underline-bottom;
-        background-color: var(--focusBorderColor);
         z-index: 1;
-        bottom: -2px;
-      }
-    }
-    &.focused {
-      .field:before {
-        width: 100%;
       }
     }
   }
@@ -180,7 +162,7 @@
     &.dirty,
     &.focused {
       .label {
-        top: -1px;
+        top: 0;
       }
     }
   }
@@ -223,8 +205,15 @@
   }
   &.focused {
     --labelColor: var(--primary-500);
+    --borderColor: var(--primary-500);
     .field {
       background-color: var(--bgColor);
+      box-shadow: var(--boxShadowFocus);
+    }
+    &.filled {
+      .field:before {
+        width: 0%;
+      }
     }
   }
   &.disabled {

@@ -5,7 +5,6 @@
   --color: var(--primary-500);
   --hoverBgColor: var(--primary-opacity);
   --boxShadowFocus: var(--box-shadow-focus-primary);
-  --boxShadowHover: var(--box-shadow-hover-primary);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -19,7 +18,7 @@
   gap: var(--gap-small-s);
   color: var(--color);
   background-color: var(--bgColor);
-  transition-duration: 0.2s;
+  transition: box-shadow 0.4s, background-color 0.2s;
 }
 
 .icon {
@@ -40,7 +39,6 @@
     --color: var(--secondary-500);
     --hoverBgColor: var(--secondary-100);
     --boxShadowFocus: var(--box-shadow-focus-secondary);
-    --boxShadowHover: var(--box-shadow-hover-secondary);
   }
 }
 
@@ -83,7 +81,6 @@
 .button {
   @include hover {
     background-color: var(--hoverBgColor);
-    box-shadow: var(--boxShadowHover);
   }
   &:focus-visible {
     box-shadow: var(--boxShadowFocus);

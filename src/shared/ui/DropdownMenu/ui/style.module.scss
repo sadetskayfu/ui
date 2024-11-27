@@ -1,18 +1,21 @@
 .dropdown {
   position: absolute;
-  z-index: var(--z-index-drop-down-menu);
+  z-index: var(--z-index-close);
   opacity: 0;
   pointer-events: none;
   color: var(--primary-500);
   overflow: hidden;
   border-radius: var(--border-radius-small);
   background-color: var(--light);
-  box-shadow: 0 0 10px 2px var(--secondary-200), 0 0 0 1px var(--secondary-300);
+  box-shadow: var(--box-shadow-menu);
+  transform: translateY(-10%);
   
   &.visible {
     pointer-events: all;
     opacity: 1;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateY(0);
+    z-index: var(--z-index-drop-down-menu);
   }
 }
 

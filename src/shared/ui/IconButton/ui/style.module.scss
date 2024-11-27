@@ -89,10 +89,10 @@
     border-radius: var(--border-radius-small);
   }
   &.left {
-    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
+    border-radius: var(--border-radius-small) 0 0  var(--border-radius-small);
   }
   &.right {
-    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
   }
   &.round {
     border-radius: 50%;
