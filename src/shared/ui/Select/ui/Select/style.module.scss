@@ -112,11 +112,13 @@
         width: 100%;
         background-color: var(--borderColor);
         height: 1px;
+        bottom: -1px;
       }
       &:before {
         @include underline-bottom;
         background-color: var(--focusBorderColor);
         z-index: 1;
+        bottom: -2px;
       }
     }
     &.focused {

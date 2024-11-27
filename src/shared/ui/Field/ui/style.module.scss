@@ -8,11 +8,10 @@
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
-  --borderColor: var(--secondary-300);
-  --hoverBorderColor: var(--secondary-600);
-  --focusBorderColor: var(--primary-500);
+  --borderColor: var(--secondary-500);
   --labelColor: var(--secondary-500);
   --autofillBgColor: var(--bgColor);
+  --boxShadowFocus: var(--box-shadow-focus-primary);
   display: flex;
   flex-direction: column;
   row-gap: var(--gap-small-s);
@@ -34,15 +33,15 @@
   position: relative;
   width: 100%;
   outline: none;
-  transition-duration: 0.2s;
+  transition-duration: 0.4s;
   min-height: var(--height);
-  overflow: hidden;
   cursor: text;
   display: flex;
   align-items: center;
   background-color: var(--bgColor);
+  border-radius: var(--border-radius-small);
+  
   @include hover {
-    --borderColor: var(--hoverBorderColor);
     --autofillBgColor: var(--hoverBgColor);
     background-color: var(--hoverBgColor);
     .clear-field-button {
@@ -107,36 +106,14 @@
 .wrapper {
   &.outlined {
     .field {
-      box-shadow: 0 0 0 1px var(--borderColor);
-      border-radius: var(--border-radius-small);
-    }
-    &.focused {
-      .field {
-        box-shadow: 0 0 0 2px var(--focusBorderColor);
-      }
+      border: 1px solid var(--borderColor);
     }
   }
   &.filled {
     --hoverBgColor: var(--secondary-300);
     --bgColor: var(--secondary-200);
     .field {
-      border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
-      &:after {
-        @include underline-bottom;
-        width: 100%;
-        background-color: var(--borderColor);
-        height: 1px;
-      }
-      &:before {
-        @include underline-bottom;
-        background-color: var(--focusBorderColor);
-        z-index: 1;
-      }
-    }
-    &.focused {
-      .field:before {
-        width: 100%;
-      }
+      border: 1px solid var(--borderColor);
     }
   }
 }
@@ -267,11 +244,13 @@
   }
   &.focused {
     --labelColor: var(--primary-500);
+    --borderColor: var(--primary-500);
     .clear-field-button {
       opacity: 1;
     }
     .field {
       background-color: var(--bgColor);
+      box-shadow: var(--boxShadowFocus);
     }
   }
   &.disabled {

@@ -5,9 +5,9 @@
   pointer-events: none;
   color: var(--primary-500);
   overflow: hidden;
-  border-radius: var(--border-radius-medium);
+  border-radius: var(--border-radius-small);
   background-color: var(--light);
-  border: var(--border-secondary);
+  box-shadow: 0 0 10px 2px var(--secondary-200), 0 0 0 1px var(--secondary-300);
   
   &.visible {
     pointer-events: all;

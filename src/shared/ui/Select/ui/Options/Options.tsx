@@ -14,7 +14,11 @@ interface OptionsProps {
   onClose: () => void;
   onOpen: () => void;
   onSelect: (value: string) => void;
+  setActiveOptionId: (id: string) => void;
   parentRef: React.RefObject<HTMLDivElement>;
+  optionsMenuId: string
+  labelId: string
+  selectId: string
 }
 
 export const Options = (props: OptionsProps) => {
@@ -26,8 +30,14 @@ export const Options = (props: OptionsProps) => {
     onClose,
     onOpen,
     onSelect,
+    setActiveOptionId,
     parentRef,
+    optionsMenuId,
+    labelId,
+    selectId
   } = props;
+
+  const optionId = `${selectId}-option-`
 
   const renderOptions = useMemo(() => {
     return options.map((option, index) => {
@@ -40,6 +50,8 @@ export const Options = (props: OptionsProps) => {
       const props: Partial<MenuItemProps> = {
         onSelect,
         isSelected,
+        role: 'option',
+        id: `${optionId}${index}`
       };
       if (menuItems) {
         return cloneElement(menuItems[index] as ReactElement, {
@@ -54,7 +66,7 @@ export const Options = (props: OptionsProps) => {
         );
       }
     });
-  }, [menuItems, selectedValue, onSelect, options]);
+  }, [menuItems, onSelect, options, selectedValue, optionId]);
 
   return (
     <DropdownMenu
@@ -67,7 +79,12 @@ export const Options = (props: OptionsProps) => {
         isVisible={isVisible}
         onClose={onClose}
         onOpen={onOpen}
+        setActiveOptionId={setActiveOptionId}
         parentRef={parentRef}
+        id={optionsMenuId}
+        role='listbox'
+        labelId={labelId}
+        ariaMultiselectable={Array.isArray(selectedValue) ? 'true' : 'false'}
       >
         {(menuItems && menuItems?.length > 0) || options.length > 0 ? (
           renderOptions

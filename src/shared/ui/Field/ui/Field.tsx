@@ -150,7 +150,7 @@ export const Field = memo(
 
       useEffect(() => {
         setTimeout(() => {
-          setTransitionDuration("0.2s");
+          setTransitionDuration("0.4s");
         }, 1000);
       }, []);
 

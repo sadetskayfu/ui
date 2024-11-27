@@ -16,14 +16,10 @@
   --secondary-200: rgb(241, 241, 241);
   --secondary-100: rgb(248, 248, 248);
   --secondary-opacity: rgba(94, 94, 94, 0.04);
-  
-  
 
-  --border-primary: 1px solid var(--primary-500);
-	--border-secondary: 1px solid var(--primary-200);
-
-  --box-shadow-focus: 0 0 5px 1px var(--secondary-500);
- 
-	
-	--box-shadow-transparent: 0 0 1px transparent;
+  --box-shadow-menu: 0 0 10px 2px var(--secondary-200), 0 0 0 1px var(--secondary-300);
+  --box-shadow-focus-primary: 0 0 0 2px var(--light) inset, 3px 3px 0 2px var(--primary-600), -2px -2px 0 1px var(--primary-500);
+  --box-shadow-focus-secondary: 0 0 0 2px var(--light) inset, 3px 3px 0 2px var(--secondary-600), -2px -2px 0 1px var(--secondary-500);
+  --box-shadow-hover-primary: 0 0 0 1px var(--light) inset, 0 0 0 1px var(--primary-500);
+  --box-shadow-hover-secondary: 0 0 0 1px var(--light) inset, 0 0 0 1px var(--primary-500);
 }

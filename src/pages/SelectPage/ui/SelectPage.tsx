@@ -7,6 +7,7 @@ import styles from "./style.module.scss";
 import { MenuItem } from "@/shared/ui/MenuItem";
 import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 import { Checkbox } from "@/shared/ui/Checkbox";
+import { InputAdornment } from "@/shared/ui/InputAdornment";
 
 const SelectPage = () => {
   const [selectedOption, setSelectedOption] = useState<string>("");
@@ -105,6 +106,7 @@ const SelectPage = () => {
         <div className="subsections">
           <PreviewComponents title="Single select" direction="vertical">
             <Select
+              id="medium-single-select"
               className={styles["select"]}
               label="Medium"
               placeholder="Select option..."
@@ -117,6 +119,7 @@ const SelectPage = () => {
               isDisabled={isDisabled}
               isReadonly={isReadonly}
               isRequired={isRequired}
+              startAdornment={<InputAdornment>Time</InputAdornment>}
             >
               {optionsArray.map((option) => {
                 return (
@@ -133,6 +136,7 @@ const SelectPage = () => {
               })}
             </Select>
             <Select
+              id="large-single-select"
               className={styles["select"]}
               label="Large"
               placeholder="Select option..."
@@ -163,6 +167,7 @@ const SelectPage = () => {
           </PreviewComponents>
           <PreviewComponents title="Multi select" direction="vertical">
             <Select
+              id="medium-multi-select"
               className={styles["select"]}
               label="Medium"
               placeholder="Select options..."
@@ -174,6 +179,7 @@ const SelectPage = () => {
               labelVariant={labelVariant}
             ></Select>
             <Select
+              id="large-multi=select"
               className={styles["select"]}
               label="Large"
               placeholder="Select options..."

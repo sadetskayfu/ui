@@ -23,6 +23,7 @@ interface DropdownMenuProps {
   isVisible: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
+  id?: string
 }
 
 export const DropdownMenu = (props: DropdownMenuProps) => {
@@ -34,6 +35,7 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
     isVisible,
     onClose,
     parentRef,
+    id,
   } = props;
 
   const [verticalOpeningDirection, setVerticalOpeningDirection] =
@@ -126,7 +128,7 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
       className={classNames(styles["dropdown"], additionalClasses, mods)}
       ref={menuRef}
       onMouseDown={handleStopFocus}
-      aria-hidden={isVisible ? 'false' : 'true'}
+      id={id}
     >
       {children}
     </div>

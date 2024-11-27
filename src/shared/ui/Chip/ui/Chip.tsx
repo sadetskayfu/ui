@@ -1,6 +1,6 @@
 import { classNames, handleRipple, handleRippleMousePosition } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { memo, useCallback, useRef } from "react";
+import { memo, useRef } from "react";
 import { Icon } from "@/shared/ui/Icon";
 import { RippleWrapper } from "../../RippleWrapper";
 import { IconButton } from "../../IconButton";
@@ -48,9 +48,9 @@ export const Chip = memo((props: ChipProps) => {
     }
   };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     onClose?.();
-  }, [onClose]);
+  };
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();

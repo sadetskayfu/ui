@@ -4,22 +4,19 @@
   --bgColor: transparent;
   --color: var(--primary-500);
   --hoverBgColor: var(--primary-100);
-  --focusColor: var(--primary-500);
+  --boxShadowFocus: var(--box-shadow-focus-primary);
   aspect-ratio: 1;
   border: none;
   cursor: pointer;
   background-color: var(--bgColor);
-  transition-duration: 0.2s;
   color: var(--color);
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0px;
+  transition: background-color 0.2s, box-shadow 0.4s, opacity 0.2s;
   @include user-select-off;
-  @include hover {
-    background-color: var(--hoverBgColor);
-  }
 }
 
 .icon {
@@ -34,11 +31,12 @@
 // Colors
 .button {
   &.primary {
+    
   }
   &.secondary {
     --color: var(--secondary-500);
     --hoverBgColor: var(--secondary-100);
-    --focusColor: var(--secondary-500);
+    --boxShadowFocus: var(--box-shadow-focus-secondary);
   }
 }
 
@@ -57,7 +55,7 @@
     }
   }
   &.outlined {
-    box-shadow: 0 0 0 1px currentColor inset;
+    border: 1px solid currentColor;
   }
 }
 
@@ -106,8 +104,11 @@
 
 // Mods
 .button {
+  @include hover {
+    background-color: var(--hoverBgColor);
+  }
   &:focus-visible {
-    box-shadow: 0 0 5px 1px var(--focusColor);
+    box-shadow: var(--boxShadowFocus);
     background-color: var(--hoverBgColor);
   }
   &.disabled {

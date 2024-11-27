@@ -29,6 +29,7 @@ export type MenuItem = ReactElement<typeof MenuItem>;
 
 interface SelectProps {
   className?: string;
+  id: string
   variant?: SelectVariant;
   size?: SelectSize;
   labelVariant?: SelectLabelVariant;
@@ -51,6 +52,7 @@ interface SelectProps {
 export const Select = memo((props: SelectProps) => {
   const {
     className,
+    id,
     variant = "outlined",
     size = "medium",
     labelVariant = "visible",
@@ -75,9 +77,13 @@ export const Select = memo((props: SelectProps) => {
     value
   );
   const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
+  const [activeOptionId, setActiveOptionId] = useState<string | undefined>(undefined)
 
   const fieldRef = useRef<HTMLDivElement | null>(null);
-  const id = useId();
+
+  const optionsMenuId = useId() + id
+  const labelId = useId() + id
+  const errorMessageId = useId() + id
 
   const handleToggleVisibleMenu = () => {
     setIsVisibleMenu((prev) => !prev);
@@ -177,7 +183,7 @@ export const Select = memo((props: SelectProps) => {
         );
       });
     }
-  }, [getSelectedOptions, selectedValues, handleDelete]);
+  }, [getSelectedOptions, selectedValues, handleDelete, variant]);
 
   const optionsArray = useMemo(() => Object.values(options), [options]);
 
@@ -185,7 +191,7 @@ export const Select = memo((props: SelectProps) => {
     setSelectedValues(value);
   }, [value]);
 
-  const isDirty = selectedValues.length > 0;
+  const isDirty = selectedValues.length > 0 || !!startAdornment
 
   const additionalClasses: Array<string | undefined> = [
     className,
@@ -209,16 +215,21 @@ export const Select = memo((props: SelectProps) => {
   return (
     <div className={classNames(styles["select"], additionalClasses, mods)}>
       <div className={styles["field-wrapper"]}>
-        <label className={styles["label"]}>{label}</label>
+        <label id={labelId} className={styles["label"]}>{label}</label>
         <div
           className={styles["field"]}
           tabIndex={localTabIndex}
-          id={id}
           ref={fieldRef}
           onClick={handleToggleVisibleMenu}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          aria-errormessage={id + "error"}
+          role="combobox"
+          aria-haspopup='listbox'
+          aria-expanded={isVisibleMenu ? 'true' : 'false'}
+          aria-controls={optionsMenuId}
+          aria-errormessage={errorMessageId}
+          aria-labelledby={labelId}
+          aria-activedescendant={activeOptionId}
         >
           <div className={styles["start-adornment"]}>{startAdornment}</div>
           <div className={styles["content"]}>
@@ -236,10 +247,14 @@ export const Select = memo((props: SelectProps) => {
           selectedValue={selectedValues}
           onClose={handleCloseMenu}
           onOpen={handleOpenMenu}
+          setActiveOptionId={setActiveOptionId}
+          optionsMenuId={optionsMenuId}
+          labelId={labelId}
+          selectId={id}
         />
       </div>
       {errorMessage && (
-        <div className={styles["error-message"]} id={id + "error"}>
+        <div className={styles["error-message"]} id={errorMessageId}>
           <p>{errorMessage}</p>
         </div>
       )}

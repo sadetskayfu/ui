@@ -21,6 +21,8 @@ export interface MenuItemProps {
   index?: number;
   setActiveIndex?: (index: number) => void;
   value?: string;
+  id?: string
+  role?: string
 }
 
 const MenuItem = memo((props: MenuItemProps) => {
@@ -41,6 +43,8 @@ const MenuItem = memo((props: MenuItemProps) => {
     index,
     setActiveIndex,
     value,
+    id,
+    role,
   } = props;
 
   const localTabIndex = isDisabled ? -1 : tabIndex;
@@ -68,13 +72,16 @@ const MenuItem = memo((props: MenuItemProps) => {
     return (
       <li
         className={classNames(styles["menu-item"], [className], mods)}
-        role="menuitem"
+        role={role}
       >
         <Link
           className={styles["link"]}
           onMouseMove={handleMouseMove}
           tabIndex={localTabIndex}
+          data-disabled={isDisabled}
           to={to}
+          role={role}
+          id={id}
         >
           {StartIcon && <>{StartIcon}</>}
           {children}
@@ -87,13 +94,16 @@ const MenuItem = memo((props: MenuItemProps) => {
     return (
       <li
         className={classNames(styles["menu-item"], [className], mods)}
-        role="menuitem"
+        role={role}
       >
         <a
           className={styles["link"]}
           onMouseMove={handleMouseMove}
           tabIndex={localTabIndex}
+          data-disabled={isDisabled}
           href={to}
+          role={role}
+          id={id}
         >
           {StartIcon && <>{StartIcon}</>}
           {children}
@@ -105,7 +115,7 @@ const MenuItem = memo((props: MenuItemProps) => {
   return (
     <li
       className={classNames(styles["menu-item"], [className], mods)}
-      role="menuitem"
+      role={role}
     >
       <button
         className={styles["button"]}
@@ -114,6 +124,9 @@ const MenuItem = memo((props: MenuItemProps) => {
         data-disabled={isDisabled}
         disabled={isDisabled}
         onClick={handleClick}
+        role={role}
+        id={id}
+        aria-selected={isSelected ? 'true' : 'false'}
       >
         {StartIcon && <>{StartIcon}</>}
         {children}
