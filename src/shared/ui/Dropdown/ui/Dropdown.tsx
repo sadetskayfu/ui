@@ -1,17 +1,9 @@
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { Portal } from "../../Portal";
+import { throttle } from "lodash";
 
-type VerticalOpeningDirection =
-  | "row-down"
-  | "row-up"
-  | "column-down"
-  | "column-up";
-type HorizontalOpeningDirection =
-  | "row-left"
-  | "row-right"
-  | "column-left"
-  | "column-right";
 export type DropdownPositionVariant = "row" | "column";
 export type DropdownClosingVariant = "mousedown" | "mousemove";
 
@@ -23,7 +15,6 @@ interface DropdownMenuProps {
   isVisible: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
-  id?: string
 }
 
 export const Dropdown = (props: DropdownMenuProps) => {
@@ -35,13 +26,12 @@ export const Dropdown = (props: DropdownMenuProps) => {
     isVisible,
     onClose,
     parentRef,
-    id,
   } = props;
 
-  const [verticalOpeningDirection, setVerticalOpeningDirection] =
-    useState<VerticalOpeningDirection>("row-down");
-  const [horizontalOpeningDirection, setHorizontalOpeningDirection] =
-    useState<HorizontalOpeningDirection>("row-left");
+  const [position, setPosition] = useState({
+    left: "0",
+    top: "0",
+  });
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -64,43 +54,77 @@ export const Dropdown = (props: DropdownMenuProps) => {
 
   // Opening direction
   useEffect(() => {
-    if (menuRef.current && parentRef.current) {
+    if (!isVisible) return;;
+
+    const handleChanges = () => {
+      if (!menuRef.current || !parentRef.current) return;
+
+      const menuRect = menuRef.current.getBoundingClientRect();
+      const menuHeight = menuRect.height;
+      const menuWidth = menuRect.width;
+
       const parentRect = parentRef.current.getBoundingClientRect();
+      const parentBottomPosition = parentRect.bottom;
+      const parentRightPosition = parentRect.right;
       const spaceBottom = window.innerHeight - parentRect.bottom;
       const spaceTop = parentRect.top;
       const spaceRight = window.innerWidth - parentRect.right;
       const spaceLeft = parentRect.left;
 
-      // Vertical
-      if (spaceTop > spaceBottom) {
-        if (positionVariant === "row") {
-          setVerticalOpeningDirection("row-up");
+      const newPosition = { ...position };
+
+      // Row
+      if (positionVariant === "row") {
+        if (spaceTop > spaceBottom) {
+          newPosition.top = spaceTop - menuHeight + window.scrollY + "px";
         } else {
-          setVerticalOpeningDirection("column-up");
+          newPosition.top = parentBottomPosition + window.scrollY + "px";
         }
-      } else {
-        if (positionVariant === "row") {
-          setVerticalOpeningDirection("row-down");
+        if (spaceRight > spaceLeft) {
+          newPosition.left = spaceLeft + window.scrollX + "px";
         } else {
-          setVerticalOpeningDirection("column-down");
+          newPosition.left =
+            parentRightPosition + window.scrollX - menuWidth + "px";
+        }
+      }
+      // Column
+      if (positionVariant === "column") {
+        if (spaceTop > spaceBottom) {
+          newPosition.top =
+            parentBottomPosition - menuHeight + window.scrollY + "px";
+        } else {
+          newPosition.top = spaceTop + window.scrollY + "px";
+        }
+        if (spaceRight > spaceLeft) {
+          newPosition.left = parentRightPosition + window.scrollX + "px";
+        } else {
+          newPosition.left = spaceLeft + window.scrollX - menuWidth + "px";
         }
       }
 
-      // Horizontal
-      if (spaceRight > spaceLeft) {
-        if (positionVariant === "row") {
-          setHorizontalOpeningDirection("row-right");
-        } else {
-          setHorizontalOpeningDirection("column-right");
-        }
-      } else {
-        if (positionVariant === "row") {
-          setHorizontalOpeningDirection("row-left");
-        } else {
-          setHorizontalOpeningDirection("column-left");
-        }
-      }
+      setPosition(newPosition);
+    };
+
+    const throttledHandleChanges = throttle(handleChanges, 1000);
+
+    const resizeObserver = new ResizeObserver(throttledHandleChanges);
+
+    if (menuRef.current) {
+      resizeObserver.observe(menuRef.current);
     }
+
+    window.addEventListener("scroll", throttledHandleChanges);
+    window.addEventListener("resize", throttledHandleChanges);
+
+    handleChanges();
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("scroll", throttledHandleChanges);
+      window.removeEventListener("resize", throttledHandleChanges);
+      throttledHandleChanges.cancel();
+      console.log("remove");
+    };
   }, [isVisible, parentRef, positionVariant]);
 
   // Closing the menu by clicking outside the menu area
@@ -117,20 +141,18 @@ export const Dropdown = (props: DropdownMenuProps) => {
     [styles["visible"]]: isVisible,
   };
 
-  const additionalClasses: Array<string | undefined> = [
-    className,
-    styles[verticalOpeningDirection],
-    styles[horizontalOpeningDirection],
-  ];
+  const additionalClasses: Array<string | undefined> = [className];
 
   return (
-    <div
-      className={classNames(styles["dropdown"], additionalClasses, mods)}
-      ref={menuRef}
-      onMouseDown={handleStopFocus}
-      id={id}
-    >
-      {children}
-    </div>
+    <Portal>
+      <div
+        className={classNames(styles["dropdown"], additionalClasses, mods)}
+        ref={menuRef}
+        onMouseDown={handleStopFocus}
+        style={{ top: position.top, left: position.left }}
+      >
+        {children}
+      </div>
+    </Portal>
   );
 };

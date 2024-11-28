@@ -1,5 +1,9 @@
 import { classNames } from "@/shared/lib";
-import { Dropdown } from "@/shared/ui/Dropdown";
+import {
+  Dropdown,
+  DropdownClosingVariant,
+  DropdownPositionVariant,
+} from "@/shared/ui/Dropdown";
 import {
   ReactElement,
   RefObject,
@@ -16,12 +20,24 @@ interface MenuProps {
   isVisible: boolean;
   onClose: () => void;
   parentRef: RefObject<HTMLElement>;
-  id: string
-  labelId: string
+  id: string;
+  labelId: string;
+  positionVariant?: DropdownPositionVariant;
+  closingVariant?: DropdownClosingVariant;
 }
 
 export const Menu = (props: MenuProps) => {
-  const { className, children, isVisible, onClose, parentRef, id, labelId } = props;
+  const {
+    className,
+    children,
+    isVisible,
+    onClose,
+    parentRef,
+    id,
+    labelId,
+    positionVariant,
+    closingVariant,
+  } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
@@ -97,8 +113,8 @@ export const Menu = (props: MenuProps) => {
     if (isVisible) {
       window.addEventListener("keydown", handleKeyDown);
     }
-    if(!isVisible && activeIndex !== -1) {
-      setActiveIndex(-1)
+    if (!isVisible && activeIndex !== -1) {
+      setActiveIndex(-1);
       parentRef.current?.focus();
     }
     return () => {
@@ -107,7 +123,13 @@ export const Menu = (props: MenuProps) => {
   }, [handleKeyDown, isVisible, activeIndex, parentRef]);
 
   return (
-    <Dropdown isVisible={isVisible} onClose={onClose} parentRef={parentRef}>
+    <Dropdown
+      isVisible={isVisible}
+      onClose={onClose}
+      parentRef={parentRef}
+      closingVariant={closingVariant}
+      positionVariant={positionVariant}
+    >
       <ul
         className={classNames(styles["menu-list"], [className])}
         role="menu"

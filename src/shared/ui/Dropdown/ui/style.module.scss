@@ -17,35 +17,3 @@
     z-index: var(--z-index-drop-down-menu);
   }
 }
-
-// Vertical opening direction
-.dropdown {
-  &.row-up {
-    bottom: 100%;
-  }
-  &.row-down {
-    top: 100%;
-  }
-  &.column-up {
-    bottom: 0;
-  }
-  &.column-down {
-    top: 0;
-  }
-}
-
-// Horizontal opening direction
-.dropdown {
-  &.row-left {
-    right: 0;
-  }
-  &.row-right {
-    left: 0;
-  }
-  &.column-left {
-    right: 100%;
-  }
-  &.column-right {
-    left: 100%;
-  }
-}
