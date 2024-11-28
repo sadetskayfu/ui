@@ -8,7 +8,7 @@
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
-  --borderColor: var(--secondary-500);
+  --borderColor: var(--secondary-300);
   --labelColor: var(--secondary-500);
   --autofillBgColor: var(--bgColor);
   --boxShadowFocus: var(--box-shadow-focus-primary);
@@ -41,7 +41,6 @@
   background-color: var(--bgColor);
   border-radius: var(--border-radius-small);
   overflow: hidden;
-  
   @include hover {
     --autofillBgColor: var(--hoverBgColor);
     background-color: var(--hoverBgColor);
@@ -238,6 +237,7 @@
     }
     .input {
       padding: 0px;
+      margin: 0px;
     }
   }
   &.multi-autocomplete {

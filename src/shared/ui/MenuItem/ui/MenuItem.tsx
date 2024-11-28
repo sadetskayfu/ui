@@ -1,8 +1,9 @@
-import { memo, ReactNode } from "react";
-import { classNames } from "@/shared/lib";
+import { memo, ReactNode, useRef } from "react";
+import { classNames, handleRipple, handleRippleMousePosition } from "@/shared/lib";
 import { Icon as CheckMark } from "@/shared/ui/Icon";
 import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
+import { RippleWrapper } from "../../RippleWrapper";
 
 export interface MenuItemProps {
   className?: string;
@@ -44,8 +45,10 @@ const MenuItem = memo((props: MenuItemProps) => {
     setActiveIndex,
     value,
     id,
-    role,
+    role = 'menuitem',
   } = props;
+
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null)
 
   const localTabIndex = isDisabled ? -1 : tabIndex;
 
@@ -61,10 +64,20 @@ const MenuItem = memo((props: MenuItemProps) => {
     }
   };
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
     onClick?.()
     if(value && onSelect) {
       onSelect(value)
+    }
+    if(isExternalLink) return
+    handleRippleMousePosition(rippleWrapperRef, event)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if(event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onClick?.()
+      handleRipple(rippleWrapperRef)
     }
   }
 
@@ -77,6 +90,7 @@ const MenuItem = memo((props: MenuItemProps) => {
         <Link
           className={styles["link"]}
           onMouseMove={handleMouseMove}
+          onClick={handleClick}
           tabIndex={localTabIndex}
           data-disabled={isDisabled}
           to={to}
@@ -86,6 +100,7 @@ const MenuItem = memo((props: MenuItemProps) => {
           {StartIcon && <>{StartIcon}</>}
           {children}
           {EndIcon && <div className={styles["end-icon"]}>{EndIcon}</div>}
+          <RippleWrapper ref={rippleWrapperRef}/>
         </Link>
       </li>
     );
@@ -99,6 +114,7 @@ const MenuItem = memo((props: MenuItemProps) => {
         <a
           className={styles["link"]}
           onMouseMove={handleMouseMove}
+          onClick={handleClick}
           tabIndex={localTabIndex}
           data-disabled={isDisabled}
           href={to}
@@ -124,9 +140,10 @@ const MenuItem = memo((props: MenuItemProps) => {
         data-disabled={isDisabled}
         disabled={isDisabled}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         role={role}
         id={id}
-        aria-selected={isSelected ? 'true' : 'false'}
+        aria-selected={isSelected ? 'true' : undefined}
       >
         {StartIcon && <>{StartIcon}</>}
         {children}
@@ -139,6 +156,7 @@ const MenuItem = memo((props: MenuItemProps) => {
             color="primary"
           />
         )}
+        <RippleWrapper ref={rippleWrapperRef}/>
       </button>
     </li>
   );

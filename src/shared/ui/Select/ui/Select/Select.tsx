@@ -13,7 +13,6 @@ import styles from "./style.module.scss";
 import { Options } from "../Options/Options";
 import { Chip } from "@/shared/ui/Chip";
 import { Icon } from "@/shared/ui/Icon";
-import type { MenuItem } from "@/shared/ui/MenuItem";
 import type { InputAdornment } from "@/shared/ui/InputAdornment";
 
 export type SelectVariant = "outlined" | "filled";
@@ -25,8 +24,6 @@ export interface Option {
   label: string;
 }
 
-export type MenuItem = ReactElement<typeof MenuItem>;
-
 interface SelectProps {
   className?: string;
   id: string
@@ -37,7 +34,9 @@ interface SelectProps {
   label: string;
   value: string | string[];
   onSelect: (values: string | string[]) => void;
+  getDisabledOption?: (value: string) => boolean
   options: Record<string, Option>;
+  children?: ReactElement[];
   tabIndex?: number;
   isRequired?: boolean;
   isReadonly?: boolean;
@@ -45,7 +44,6 @@ interface SelectProps {
   errorMessage?: string;
   onFocus?: () => void;
   onBlur?: () => void;
-  children?: MenuItem[];
   startAdornment?: ReactElement<typeof InputAdornment>;
 }
 
@@ -60,7 +58,9 @@ export const Select = memo((props: SelectProps) => {
     label,
     value,
     options,
+    children,
     onSelect,
+    getDisabledOption,
     tabIndex = 0,
     isRequired,
     isReadonly,
@@ -68,7 +68,6 @@ export const Select = memo((props: SelectProps) => {
     errorMessage,
     onBlur,
     onFocus,
-    children,
     startAdornment
   } = props;
 
@@ -151,6 +150,15 @@ export const Select = memo((props: SelectProps) => {
     onFocus?.();
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if(event.key === 'Backspace' && Array.isArray(selectedValues) && selectedValues.length > 0) {
+      event.preventDefault()
+      const newValues = selectedValues.slice(0, -1)
+      setSelectedValues(newValues);
+      onSelect(newValues);
+    }
+  }
+
   const getSelectedOptions = useMemo((): Option[] => {
     const selectedOptions: Option[] = [];
 
@@ -172,13 +180,14 @@ export const Select = memo((props: SelectProps) => {
       return getSelectedOptions.map((option) => {
         return (
           <Chip
-            color={variant === 'filled' ? 'primary' : 'secondary'}
-            variant='filled'
+            color='secondary'
+            variant={variant === 'filled' ? 'outlined' : 'filled'}
             size="small"
             isStopFocus
             onClose={() => handleDelete(option.value)}
             key={option.value}
             label={option.label}
+            closeButtonTabIndex={-1}
           />
         );
       });
@@ -210,7 +219,7 @@ export const Select = memo((props: SelectProps) => {
     [styles["focused"]]: isFocusedField,
   };
 
-  const localTabIndex = isDisabled ? -1 : tabIndex;
+  const localTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
 
   return (
     <div className={classNames(styles["select"], additionalClasses, mods)}>
@@ -223,12 +232,13 @@ export const Select = memo((props: SelectProps) => {
           onClick={handleToggleVisibleMenu}
           onBlur={handleBlur}
           onFocus={handleFocus}
+          onKeyDown={handleKeyDown}
           role="combobox"
           aria-haspopup='listbox'
           aria-expanded={isVisibleMenu ? 'true' : 'false'}
-          aria-controls={optionsMenuId}
           aria-errormessage={errorMessageId}
           aria-labelledby={labelId}
+          aria-controls={optionsMenuId}
           aria-activedescendant={activeOptionId}
         >
           <div className={styles["start-adornment"]}>{startAdornment}</div>
@@ -240,8 +250,9 @@ export const Select = memo((props: SelectProps) => {
         </div>
         <Options
           onSelect={handleSelect}
-          menuItems={children}
+          getDisabledOption={getDisabledOption}
           options={optionsArray}
+          menuItems={children}
           isVisible={isVisibleMenu}
           parentRef={fieldRef}
           selectedValue={selectedValues}

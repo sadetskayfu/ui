@@ -26,7 +26,7 @@ interface DropdownMenuProps {
   id?: string
 }
 
-export const DropdownMenu = (props: DropdownMenuProps) => {
+export const Dropdown = (props: DropdownMenuProps) => {
   const {
     className,
     positionVariant = "row",

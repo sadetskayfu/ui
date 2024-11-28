@@ -8,7 +8,7 @@
   --height: var(--button-height-medium);
   --bgColor: var(--light);
   --hoverBgColor: var(--light);
-  --borderColor: var(--secondary-500);
+  --borderColor: var(--secondary-300);
   --labelColor: var(--secondary-500);
   --boxShadowFocus: var(--box-shadow-focus-primary);
   display: flex;
@@ -219,6 +219,9 @@
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-medium);
+  }
+  &.readonly {
+    pointer-events: none;
   }
   &.dirty {
     .placeholder {

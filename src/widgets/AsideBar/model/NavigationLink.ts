@@ -35,7 +35,7 @@ export const navigationLinks: NavigationLink[] = [
         path: ROUTES.LINK
     },
     {
-        label: 'Dropdown',
+        label: 'Menu',
         path: ROUTES.DROPDOWN
     },
     {

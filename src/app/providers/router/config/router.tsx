@@ -32,7 +32,7 @@ export const AppRouter = () => {
         
 
 
-        <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
+        
         <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
         
         <Route path={ROUTES.SLIDER} element={<SliderPage />} />
@@ -43,6 +43,7 @@ export const AppRouter = () => {
         
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
          */}
+        <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
         <Route path={ROUTES.SELECT} element={<SelectPage />} />
         <Route path={ROUTES.TEXT_FIELD} element={<TextFieldPage />} />
         <Route path={ROUTES.CHIP} element={<ChipPage />} />

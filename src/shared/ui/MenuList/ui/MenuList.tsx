@@ -109,8 +109,8 @@ export const MenuList = (props: MenuListProps) => {
             : onOpen();
 
           if (newIndex !== -1 && newIndex !== activeIndex && interactiveElementsRef.current) {
-            const hoveredItem = interactiveElementsRef.current[newIndex];
-            setActiveOptionId(hoveredItem.getAttribute("id") as string);
+            const focusedItem = interactiveElementsRef.current[newIndex];
+            setActiveOptionId(focusedItem.getAttribute("id") as string);
           }
           break;
         case "Enter":
@@ -156,8 +156,9 @@ export const MenuList = (props: MenuListProps) => {
   // Scroll list if selected item not visible
   useEffect(() => {
     const currentMenu = menuRef.current;
-    if (currentMenu && activeIndex !== -1) {
-      const selectedElement = currentMenu.children[activeIndex];
+    const currentInteractiveElements = interactiveElementsRef.current
+    if (currentMenu && activeIndex !== -1 && currentInteractiveElements && currentInteractiveElements.length > 1) {
+      const selectedElement = currentInteractiveElements[activeIndex];
       const menuRect = currentMenu.getBoundingClientRect();
 
       if (selectedElement) {
@@ -172,6 +173,8 @@ export const MenuList = (props: MenuListProps) => {
     }
   }, [activeIndex]);
 
+  let menuItemIndex = 0
+
   return (
     <ul
       className={styles["menu"]}
@@ -181,9 +184,15 @@ export const MenuList = (props: MenuListProps) => {
       aria-labelledby={labelId}
       id={id}
     >
-      {Children.map(children, (child, index) => {
-        const isHovered = index === activeIndex;
+      {Children.map(children, (child) => {
+        const childProps = (child as ReactElement).props
+        const value = childProps.value
+        if(!value) return cloneElement(child)
 
+        const index = menuItemIndex
+        menuItemIndex++
+
+        const isHovered = index === activeIndex;
         const props: Partial<MenuItemProps> = {
           isHovered,
           index,

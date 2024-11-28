@@ -254,7 +254,7 @@ export const Field = memo(
               <div className={styles["start-adornment"]}>{startAdornment}</div>
               <div className={styles["content"]}>
                 <input
-                  style={{ transitionDuration }}
+                  style={{transitionDuration}}
                   className={styles["input"]}
                   name={name}
                   tabIndex={localTabIndex}

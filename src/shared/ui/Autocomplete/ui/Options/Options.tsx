@@ -1,4 +1,4 @@
-import { DropdownMenu } from "@/shared/ui/DropdownMenu";
+import { DropdownMenu } from "@/shared/ui/Dropdown";
 import { MenuList } from "@/shared/ui/MenuList";
 import { useCallback, useMemo } from "react";
 import { countriesIcons } from "@/shared/constans/countriesIcons";

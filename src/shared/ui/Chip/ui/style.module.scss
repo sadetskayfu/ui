@@ -60,7 +60,7 @@
 .chip {
   &.outlined {
     --chipBgColor: transparent;
-    box-shadow: 0 0 0 1px var(--color);
+    border: 1px solid var(--color);
     &.primary {
       --color: var(--primary-500);
       --chipHoverBgColor: var(--primary-100);
@@ -68,7 +68,7 @@
     &.secondary {
       --color: var(--secondary-600);
       --chipHoverBgColor: var(--secondary-100);
-      box-shadow: 0 0 0 1px var(--secondary-500);
+      border-color: var(--secondary-500);
     }
     &.success {
       --color: var(--green-500);

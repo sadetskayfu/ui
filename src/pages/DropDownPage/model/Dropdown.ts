@@ -1,4 +1,4 @@
-import { DropdownClosingVariant, DropdownPositionVariant } from "@/shared/ui/DropdownMenu"
+import { DropdownClosingVariant, DropdownPositionVariant } from "@/shared/ui/Dropdown"
 
 interface Option {
     value: string

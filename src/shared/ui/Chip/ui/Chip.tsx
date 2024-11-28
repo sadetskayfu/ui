@@ -1,4 +1,8 @@
-import { classNames, handleRipple, handleRippleMousePosition } from "@/shared/lib";
+import {
+  classNames,
+  handleRipple,
+  handleRippleMousePosition,
+} from "@/shared/lib";
 import styles from "./style.module.scss";
 import { memo, useRef } from "react";
 import { Icon } from "@/shared/ui/Icon";
@@ -7,18 +11,19 @@ import { IconButton } from "../../IconButton";
 
 export type ChipVariant = "filled" | "outlined";
 export type ChipColor = "primary" | "secondary" | "success" | "error";
-export type ChipSize = "small" | "medium"
+export type ChipSize = "small" | "medium";
 
 interface ChipProps {
   className?: string;
   variant?: ChipVariant;
   color?: ChipColor;
   size?: ChipSize;
-  label: string
+  label: string;
   onClose?: () => void;
   onClick?: () => void;
   isStopFocus?: boolean;
   tabIndex?: number;
+  closeButtonTabIndex?: number;
   isDisabled?: boolean;
   isClickable?: boolean;
 }
@@ -36,6 +41,7 @@ export const Chip = memo((props: ChipProps) => {
     isClickable,
     isDisabled,
     tabIndex = 0,
+    closeButtonTabIndex = 0,
   } = props;
 
   const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
@@ -44,7 +50,7 @@ export const Chip = memo((props: ChipProps) => {
     if (event.key === "Enter" || event.key === " ") {
       event.stopPropagation();
       onClick?.();
-      handleRipple(rippleWrapperRef)
+      handleRipple(rippleWrapperRef);
     }
   };
 
@@ -79,7 +85,8 @@ export const Chip = memo((props: ChipProps) => {
     styles[size],
   ];
 
-  const currentTabIndex = isDisabled ? -1 : tabIndex;
+  const localTabIndex = isDisabled ? -1 : tabIndex;
+  const localCloseButtonTabIndex = isDisabled ? -1 : closeButtonTabIndex;
 
   if (isClickable) {
     return (
@@ -88,17 +95,20 @@ export const Chip = memo((props: ChipProps) => {
         onClick={handleClick}
         onKeyDown={handleKeyDownClick}
         onMouseDown={handleStopFocus}
-        tabIndex={currentTabIndex}
+        tabIndex={localTabIndex}
         disabled={isDisabled}
       >
         <span>{label}</span>
         {onClose && (
-          <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
-            <Icon
-              color="custom-color"
-              variant="x-mark"
-              size="custom-size"
-            />
+          <IconButton
+            size={size === "small" ? "small-s" : "small-m"}
+            color="secondary"
+            variant="filled"
+            onClick={handleClose}
+            isDisabled={isDisabled}
+            tabIndex={localCloseButtonTabIndex}
+          >
+            <Icon color="custom-color" variant="x-mark" size="custom-size" />
           </IconButton>
         )}
         <RippleWrapper ref={rippleWrapperRef} />
@@ -113,12 +123,15 @@ export const Chip = memo((props: ChipProps) => {
     >
       <span>{label}</span>
       {onClose && (
-        <IconButton size={size === 'small' ? 'small-s' : 'small-m'} color="secondary" variant="filled" onClick={handleClose} isDisabled={isDisabled} tabIndex={currentTabIndex}>
-          <Icon
-            color="custom-color"
-            variant="x-mark"
-            size="custom-size"
-          />
+        <IconButton
+          size={size === "small" ? "small-s" : "small-m"}
+          color="secondary"
+          variant="filled"
+          onClick={handleClose}
+          isDisabled={isDisabled}
+          tabIndex={localCloseButtonTabIndex}
+        >
+          <Icon color="custom-color" variant="x-mark" size="custom-size" />
         </IconButton>
       )}
     </div>

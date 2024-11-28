@@ -1,5 +1,6 @@
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { memo } from "react";
 
 type DividerOrientation = "horizontal" | "vertical";
 type DividerComponent = "li" | "hr";
@@ -10,7 +11,7 @@ interface DividerProps {
   component?: DividerComponent;
 }
 
-export const Divider = (props: DividerProps) => {
+export const Divider = memo((props: DividerProps) => {
   const { orientation = "vertical", component, className } = props;
 
   const additionalClasses: Array<string | undefined> = [
@@ -44,4 +45,4 @@ export const Divider = (props: DividerProps) => {
         ></div>
       );
   }
-};
+});

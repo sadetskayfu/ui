@@ -1,15 +1,17 @@
 .divider {
-    flex-shrink: 0;
-    border-width: 0px 0px 0px thin;
-    border-style: solid;
-    border-color: var(--secondary-300);
+    background-color: var(--secondary-300);
+    border: none;
 }
 
 .divider {
     &.vertical {
         height: 100%;
+        width: 1px;
+        margin-inline: var(--gap-small-s);
     }
     &.horizontal {
         width: 100%;
+        height: 1px;
+        margin-block: var(--gap-small-s);
     }
 }

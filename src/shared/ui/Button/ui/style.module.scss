@@ -58,6 +58,9 @@
   }
   &.outlined {
     border: 1px solid currentColor;
+    &.secondary {
+      border-color: var(--secondary-300);
+    }
   }
 }
 

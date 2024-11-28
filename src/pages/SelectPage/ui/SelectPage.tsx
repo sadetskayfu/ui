@@ -44,6 +44,13 @@ const SelectPage = () => {
     setIsReadonly((prev) => !prev);
   }, []);
 
+  const getDisabledOption = useCallback((value: string) => {
+    if (value === "2" || value === "5") {
+      return true;
+    }
+    return false;
+  }, []);
+
   const optionsArray = useMemo(() => Object.values(options), []);
 
   return (
@@ -119,22 +126,9 @@ const SelectPage = () => {
               isDisabled={isDisabled}
               isReadonly={isReadonly}
               isRequired={isRequired}
-              startAdornment={<InputAdornment>Time</InputAdornment>}
-            >
-              {optionsArray.map((option) => {
-                return (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                    isDisabled={
-                      option.value === "10:30" || option.value === "12:00"
-                    }
-                  >
-                    <span>{option.label}</span>
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              startAdornment={<InputAdornment>Move</InputAdornment>}
+              getDisabledOption={getDisabledOption}
+            ></Select>
             <Select
               id="large-single-select"
               className={styles["select"]}
@@ -149,21 +143,7 @@ const SelectPage = () => {
               isDisabled={isDisabled}
               isReadonly={isReadonly}
               isRequired={isRequired}
-            >
-              {optionsArray.map((option) => {
-                return (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                    isDisabled={
-                      option.value === "10:30" || option.value === "12:00"
-                    }
-                  >
-                    <span>{option.label}</span>
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            ></Select>
           </PreviewComponents>
           <PreviewComponents title="Multi select" direction="vertical">
             <Select
@@ -177,7 +157,21 @@ const SelectPage = () => {
               onSelect={handleSelectOptions}
               variant={variant}
               labelVariant={labelVariant}
-            ></Select>
+              isDisabled={isDisabled}
+              isReadonly={isReadonly}
+              isRequired={isRequired}
+              getDisabledOption={getDisabledOption}
+            >
+              {optionsArray.map((option) => {
+                return (
+                  <MenuItem
+                    value={option.value}
+                  >
+                    {option.label}
+                  </MenuItem>
+                );
+              })}
+            </Select>
             <Select
               id="large-multi=select"
               className={styles["select"]}
@@ -189,7 +183,17 @@ const SelectPage = () => {
               onSelect={handleSelectOptions}
               variant={variant}
               labelVariant={labelVariant}
-            ></Select>
+              isDisabled={isDisabled}
+              isReadonly={isReadonly}
+              isRequired={isRequired}
+            >
+              <li role="option">Group 1</li>
+              <MenuItem value="1">Option 1</MenuItem>
+              <MenuItem value="2">Option 2</MenuItem>
+              <li role="option">Group 2</li>
+              <MenuItem value="3">Option 3</MenuItem>
+              <MenuItem value="4">Option 4</MenuItem>
+            </Select>
           </PreviewComponents>
         </div>
       </section>
