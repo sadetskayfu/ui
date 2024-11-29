@@ -1,24 +1,18 @@
 import { classNames, getItemOnId } from "@/shared/lib";
-import { Input } from "../../../Field";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Options } from "../Options/Options";
-import { InputVariant, InputLabelVariant } from "@/shared/ui/Field/ui/Field";
+import { FieldVariant, FieldLabelVariant, Field } from "@/shared/ui/Field";
 import styles from "./style.module.scss";
 
-export type AutocompleteVariant = 'text' | 'countries'
-
-export interface Option {
+interface Option {
   id: string;
   label: string;
-  phone?: string;
 }
 
 interface AutocompleteProps {
   className?: string;
-  variant?: AutocompleteVariant
-  inputVariant?: InputVariant
-  labelVariant?: InputLabelVariant
-  strict?: boolean
+  variant?: FieldVariant
+  labelVariant?: FieldLabelVariant
+  isStrict?: boolean
   name: string;
   label: string;
   value: string;
@@ -35,10 +29,9 @@ interface AutocompleteProps {
 export const Autocomplete = (props: AutocompleteProps) => {
   const {
     className,
-    variant = 'text',
-    inputVariant = 'transparent',
-    labelVariant = 'jump',
-    strict = true,
+    variant = 'outlined',
+    labelVariant = 'visible',
+    isStrict = true,
     name,
     label,
     value,
@@ -120,7 +113,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
 
   return (
     <div className={classNames(styles["wrapper"], [className])}>
-      <Input
+      <Field
         variant={inputVariant}
         labelVariant={labelVariant}
         name={name}
@@ -134,16 +127,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
         ref={inputRef}
         tabIndex={tabIndex}
         type="text"
-      />
-      <Options
-        isVisible={isVisibleMenu}
-        onClose={handleCloseMenu}
-        onOpen={handleOpenMenu}
-        onSelect={handleSelect}
-        parentRef={inputRef}
-        options={filteredOptions}
-        selectedValue={selectedValue}
-        variant={variant}
       />
     </div>
   );

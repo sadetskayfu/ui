@@ -74,6 +74,7 @@ export const IconButton =
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           event.stopPropagation()
+          if(isReadonly) return
           onClick?.();
           handleRipple(rippleWrapperRef);
         }
@@ -87,6 +88,7 @@ export const IconButton =
 
       const handleClick = (event: React.MouseEvent) => {
         event.stopPropagation()
+        if(isReadonly) return
         onClick?.();
         handleRippleMousePosition(rippleWrapperRef, event);
       };
@@ -104,6 +106,8 @@ export const IconButton =
         [styles["readonly"]]: isReadonly,
       };
 
+      const localTabIndex = isDisabled ? -1 : tabIndex
+
       if (isLink) {
         return (
           <Link
@@ -111,7 +115,8 @@ export const IconButton =
             onKeyDown={handleKeyDown}
             to={to}
             onClick={handleClick}
-            tabIndex={tabIndex}
+            tabIndex={localTabIndex}
+            aria-readonly={isReadonly ? 'true' : undefined}
           >
             <span className={styles["label"]}>{children}</span>
             <div className={styles["icon"]}>{children}</div>
@@ -127,7 +132,8 @@ export const IconButton =
             onKeyDown={handleKeyDown}
             href={to}
             onClick={handleClick}
-            tabIndex={tabIndex}
+            tabIndex={localTabIndex}
+            aria-readonly={isReadonly ? 'true' : undefined}
           >
             <span className={styles["label"]}>{children}</span>
             <div className={styles["icon"]}>{children}</div>
@@ -143,9 +149,9 @@ export const IconButton =
           onMouseDown={handleMouseDown}
           onKeyDown={handleKeyDown}
           onClick={handleClick}
-          tabIndex={isDisabled || isReadonly ? -1 : tabIndex}
+          tabIndex={localTabIndex}
           disabled={isDisabled}
-          aria-readonly={isReadonly ? "true" : "false"}
+          aria-readonly={isReadonly ? 'true' : undefined}
           ref={ref}
           {...otherProps}
         >

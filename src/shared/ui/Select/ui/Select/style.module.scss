@@ -34,10 +34,6 @@
   padding-right: var(--paddingInline);
   border-radius: var(--border-radius-small);
   overflow: hidden;
-  @include hover {
-    --borderColor: var(--primary-500);
-    background-color: var(--hoverBgColor);
-  }
 }
 
 .content {
@@ -207,12 +203,20 @@
     --labelColor: var(--primary-500);
     --borderColor: var(--primary-500);
     .field {
-      background-color: var(--bgColor);
       box-shadow: var(--boxShadowFocus);
     }
     &.filled {
       .field:before {
         width: 0%;
+      }
+    }
+  }
+  &:not(.focused) {
+    .field {
+      @include hover {
+        background-color: var(--hoverBgColor);
+        --borderColor: var(--primary-500);
+        filter: drop-shadow(0 0 1px var(--borderColor));
       }
     }
   }

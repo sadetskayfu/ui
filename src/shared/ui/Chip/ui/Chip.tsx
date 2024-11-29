@@ -25,6 +25,7 @@ interface ChipProps {
   tabIndex?: number;
   closeButtonTabIndex?: number;
   isDisabled?: boolean;
+  isReadonly?: boolean;
   isClickable?: boolean;
 }
 
@@ -40,6 +41,7 @@ export const Chip = memo((props: ChipProps) => {
     isStopFocus,
     isClickable,
     isDisabled,
+    isReadonly,
     tabIndex = 0,
     closeButtonTabIndex = 0,
   } = props;
@@ -49,17 +51,21 @@ export const Chip = memo((props: ChipProps) => {
   const handleKeyDownClick = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {
       event.stopPropagation();
+      event.preventDefault()
+      if(isReadonly) return
       onClick?.();
       handleRipple(rippleWrapperRef);
     }
   };
 
   const handleClose = () => {
+    if(isReadonly) return
     onClose?.();
   };
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    if(isReadonly) return
     onClick?.();
     handleRippleMousePosition(rippleWrapperRef, event);
   };
@@ -76,6 +82,7 @@ export const Chip = memo((props: ChipProps) => {
     [styles["have-close-button"]]: !!onClose,
     [styles["clickable"]]: isClickable,
     [styles["disabled"]]: isDisabled,
+    [styles['readonly']]: isReadonly,
   };
 
   const additionalClasses: Array<string | undefined> = [
@@ -97,8 +104,9 @@ export const Chip = memo((props: ChipProps) => {
         onMouseDown={handleStopFocus}
         tabIndex={localTabIndex}
         disabled={isDisabled}
+        aria-readonly={isReadonly ? 'true' : undefined}
       >
-        <span>{label}</span>
+        <p>{label}</p>
         {onClose && (
           <IconButton
             size={size === "small" ? "small-s" : "small-m"}
@@ -106,6 +114,7 @@ export const Chip = memo((props: ChipProps) => {
             variant="filled"
             onClick={handleClose}
             isDisabled={isDisabled}
+            isReadonly={isReadonly}
             tabIndex={localCloseButtonTabIndex}
           >
             <Icon color="custom-color" variant="x-mark" size="custom-size" />
@@ -121,7 +130,7 @@ export const Chip = memo((props: ChipProps) => {
       className={classNames(styles["chip"], additionalClasses, mods)}
       onClick={handleStopPropagation}
     >
-      <span>{label}</span>
+      <p>{label}</p>
       {onClose && (
         <IconButton
           size={size === "small" ? "small-s" : "small-m"}
@@ -129,6 +138,7 @@ export const Chip = memo((props: ChipProps) => {
           variant="filled"
           onClick={handleClose}
           isDisabled={isDisabled}
+          isReadonly={isReadonly}
           tabIndex={localCloseButtonTabIndex}
         >
           <Icon color="custom-color" variant="x-mark" size="custom-size" />

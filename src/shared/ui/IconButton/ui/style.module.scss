@@ -116,6 +116,6 @@
     pointer-events: none;
   }
   &.readonly {
-    pointer-events: none;
+    cursor: default;
   }
 }

@@ -19,7 +19,7 @@ export type SelectVariant = "outlined" | "filled";
 export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
 
-export interface OptionProps {
+interface OptionProps {
   menuWidth: string;
   menuHeight: string;
 }
@@ -161,6 +161,7 @@ export const Select = memo((props: SelectProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    if(isReadonly) return
     if (
       event.key === "Backspace" &&
       Array.isArray(selectedValues) &&
@@ -202,11 +203,12 @@ export const Select = memo((props: SelectProps) => {
             key={option.value}
             label={option.label}
             closeButtonTabIndex={-1}
+            isReadonly={isReadonly}
           />
         );
       });
     }
-  }, [getSelectedOptions, selectedValues, handleDelete, variant]);
+  }, [getSelectedOptions, selectedValues, handleDelete, variant, isReadonly]);
 
   const optionsArray = useMemo(() => Object.values(options), [options]);
 
@@ -232,7 +234,7 @@ export const Select = memo((props: SelectProps) => {
     [styles["focused"]]: isFocusedField,
   };
 
-  const localTabIndex = isDisabled || isReadonly ? -1 : tabIndex;
+  const localTabIndex = isDisabled ? -1 : tabIndex;
 
   return (
     <div className={classNames(styles["select"], additionalClasses, mods)}>
@@ -255,6 +257,7 @@ export const Select = memo((props: SelectProps) => {
           aria-labelledby={labelId}
           aria-controls={isVisibleMenu ? optionsListId : undefined}
           aria-activedescendant={activeOptionId}
+          aria-readonly={isReadonly ? 'true' : undefined}
         >
           {startAdornment && (
             <div className={styles["start-adornment"]}>{startAdornment}</div>

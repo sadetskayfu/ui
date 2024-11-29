@@ -42,15 +42,8 @@
   border-radius: var(--border-radius-small);
   overflow: hidden;
   @include hover {
-    --autofillBgColor: var(--hoverBgColor);
-    background-color: var(--hoverBgColor);
-    --borderColor: var(--primary-500);
-    .clear-field-button {
-      opacity: 1;
-    }
-    .input:focus {
-      --autofillBgColor: var(--bgColor);
-    }
+    
+
   }
 }
 
@@ -153,15 +146,15 @@
   }
   &.visible.outlined {
     .label:before {
-        z-index: -1;
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 120%;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        background-color: var(--light);
+      z-index: -1;
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 120%;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      background-color: var(--light);
     }
     &.dirty,
     &.focused {
@@ -171,7 +164,9 @@
     }
   }
   &.visible.filled {
-    --paddingTop: calc((var(--height) - var(--button-height-small-m)) - var(--paddingBlock) );
+    --paddingTop: calc(
+      (var(--height) - var(--button-height-small-m)) - var(--paddingBlock)
+    );
     --paddingBottom: var(--paddingBlock);
     &.dirty,
     &.focused {
@@ -213,7 +208,7 @@
 .wrapper {
   &.required {
     .label:after {
-        display: inline;
+      display: inline;
     }
   }
   &.errored {
@@ -233,7 +228,7 @@
       display: flex;
       gap: var(--gap-small-s);
       flex-wrap: wrap;
-      align-items:center;
+      align-items: center;
     }
     .input {
       padding: 0px;
@@ -258,12 +253,24 @@
       opacity: 1;
     }
     .field {
-      background-color: var(--bgColor);
       box-shadow: var(--boxShadowFocus);
     }
     &.filled {
       .field:before {
         width: 0%;
+      }
+    }
+  }
+  &:not(.focused) {
+    .field {
+      @include hover {
+        filter: drop-shadow(0 0 1px var(--borderColor));
+        background-color: var(--hoverBgColor);
+        --borderColor: var(--primary-500);
+        --autofillBgColor: var(--hoverBgColor);
+        .clear-field-button {
+          opacity: 1;
+        }
       }
     }
   }

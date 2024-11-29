@@ -12,10 +12,10 @@
   display: flex;
   align-items: center;
   column-gap: var(--gap-small-s);
-  cursor: default;
   color: var(--color);
   background-color: var(--chipBgColor);
   text-wrap: nowrap;
+  cursor: default;
 
   &.clickable {
     cursor: pointer;
@@ -98,6 +98,9 @@
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-medium);
+  }
+  &.readonly {
+    cursor: default;
   }
   &.have-close-button {
     padding-right: 2.5px;

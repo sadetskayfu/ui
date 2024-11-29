@@ -97,6 +97,7 @@ const MenuItem = memo((props: MenuItemProps) => {
           onClick={handleClick}
           tabIndex={localTabIndex}
           data-disabled={isDisabled || isReadonly}
+          aria-readonly = {isReadonly ? 'true' : undefined}
           to={to}
           role={role}
           id={id}
@@ -121,6 +122,7 @@ const MenuItem = memo((props: MenuItemProps) => {
           onClick={handleClick}
           tabIndex={localTabIndex}
           data-disabled={isDisabled || isReadonly}
+          aria-readonly = {isReadonly ? 'true' : undefined}
           href={to}
           role={role}
           id={id}
@@ -148,6 +150,7 @@ const MenuItem = memo((props: MenuItemProps) => {
         role={role}
         id={id}
         aria-selected={isSelected ? 'true' : undefined}
+        aria-readonly = {isReadonly ? 'true' : undefined}
       >
         {StartIcon && <>{StartIcon}</>}
         {children}
