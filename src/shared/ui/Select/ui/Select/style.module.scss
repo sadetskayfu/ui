@@ -220,9 +220,6 @@
     pointer-events: none;
     opacity: var(--opacity-medium);
   }
-  &.readonly {
-    pointer-events: none;
-  }
   &.dirty {
     .placeholder {
       opacity: 0;

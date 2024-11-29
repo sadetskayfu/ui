@@ -15,6 +15,7 @@ interface DropdownMenuProps {
   isVisible: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
+  width?: string
 }
 
 export const Dropdown = (props: DropdownMenuProps) => {
@@ -26,6 +27,7 @@ export const Dropdown = (props: DropdownMenuProps) => {
     isVisible,
     onClose,
     parentRef,
+    width
   } = props;
 
   const [position, setPosition] = useState({
@@ -149,7 +151,7 @@ export const Dropdown = (props: DropdownMenuProps) => {
         className={classNames(styles["dropdown"], additionalClasses, mods)}
         ref={menuRef}
         onMouseDown={handleStopFocus}
-        style={{ top: position.top, left: position.left }}
+        style={{ top: position.top, left: position.left, width }}
       >
         {children}
       </div>

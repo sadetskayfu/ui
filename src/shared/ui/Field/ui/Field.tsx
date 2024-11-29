@@ -189,7 +189,7 @@ export const Field = memo(
                 {label}
               </label>
               <div className={styles["field"]} onClick={handleSetFocus}>
-                <div className={styles['start-adornment']}>{startAdornment}</div>
+                {startAdornment && <div className={styles['start-adornment']}>{startAdornment}</div>}
                 <div className={styles["content"]}>
                   <textarea
                     rows={1}

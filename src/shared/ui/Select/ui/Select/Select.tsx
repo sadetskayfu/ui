@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import styles from "./style.module.scss";
-import { Options } from "../Options/Options";
+import { Options } from "@/shared/ui/Options";
 import { Chip } from "@/shared/ui/Chip";
 import { Icon } from "@/shared/ui/Icon";
 import type { InputAdornment } from "@/shared/ui/InputAdornment";
@@ -19,6 +19,11 @@ export type SelectVariant = "outlined" | "filled";
 export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
 
+export interface OptionProps {
+  menuWidth: string;
+  menuHeight: string;
+}
+
 export interface Option {
   value: string;
   label: string;
@@ -26,7 +31,7 @@ export interface Option {
 
 interface SelectProps {
   className?: string;
-  id: string
+  id: string;
   variant?: SelectVariant;
   size?: SelectSize;
   labelVariant?: SelectLabelVariant;
@@ -34,7 +39,7 @@ interface SelectProps {
   label: string;
   value: string | string[];
   onSelect: (values: string | string[]) => void;
-  getDisabledOption?: (value: string) => boolean
+  getDisabledOption?: (value: string) => boolean;
   options: Record<string, Option>;
   children?: ReactElement[];
   tabIndex?: number;
@@ -45,6 +50,7 @@ interface SelectProps {
   onFocus?: () => void;
   onBlur?: () => void;
   startAdornment?: ReactElement<typeof InputAdornment>;
+  optionsProps?: OptionProps;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -68,7 +74,8 @@ export const Select = memo((props: SelectProps) => {
     errorMessage,
     onBlur,
     onFocus,
-    startAdornment
+    startAdornment,
+    optionsProps,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -76,15 +83,18 @@ export const Select = memo((props: SelectProps) => {
     value
   );
   const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
-  const [activeOptionId, setActiveOptionId] = useState<string | undefined>(undefined)
+  const [activeOptionId, setActiveOptionId] = useState<string | undefined>(
+    undefined
+  );
 
   const fieldRef = useRef<HTMLDivElement | null>(null);
 
-  const optionsMenuId = useId() + id
-  const labelId = useId() + id
-  const errorMessageId = useId() + id
+  const optionsListId = useId() + id;
+  const labelId = useId() + id;
+  const errorMessageId = useId() + id;
 
   const handleToggleVisibleMenu = () => {
+    if(isReadonly) return
     setIsVisibleMenu((prev) => !prev);
   };
 
@@ -151,13 +161,17 @@ export const Select = memo((props: SelectProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if(event.key === 'Backspace' && Array.isArray(selectedValues) && selectedValues.length > 0) {
-      event.preventDefault()
-      const newValues = selectedValues.slice(0, -1)
+    if (
+      event.key === "Backspace" &&
+      Array.isArray(selectedValues) &&
+      selectedValues.length > 0
+    ) {
+      event.preventDefault();
+      const newValues = selectedValues.slice(0, -1);
       setSelectedValues(newValues);
       onSelect(newValues);
     }
-  }
+  };
 
   const getSelectedOptions = useMemo((): Option[] => {
     const selectedOptions: Option[] = [];
@@ -180,8 +194,8 @@ export const Select = memo((props: SelectProps) => {
       return getSelectedOptions.map((option) => {
         return (
           <Chip
-            color='secondary'
-            variant={variant === 'filled' ? 'outlined' : 'filled'}
+            color="secondary"
+            variant={variant === "filled" ? "outlined" : "filled"}
             size="small"
             isStopFocus
             onClose={() => handleDelete(option.value)}
@@ -200,7 +214,7 @@ export const Select = memo((props: SelectProps) => {
     setSelectedValues(value);
   }, [value]);
 
-  const isDirty = selectedValues.length > 0 || !!startAdornment
+  const isDirty = selectedValues.length > 0 || !!startAdornment;
 
   const additionalClasses: Array<string | undefined> = [
     className,
@@ -212,7 +226,6 @@ export const Select = memo((props: SelectProps) => {
   const mods: Record<string, boolean | undefined> = {
     [styles["required"]]: isRequired,
     [styles["disabled"]]: isDisabled,
-    [styles["readonly"]]: isReadonly,
     [styles["dirty"]]: isDirty,
     [styles["visible-menu"]]: isVisibleMenu,
     [styles["errored"]]: !!errorMessage,
@@ -224,7 +237,9 @@ export const Select = memo((props: SelectProps) => {
   return (
     <div className={classNames(styles["select"], additionalClasses, mods)}>
       <div className={styles["field-wrapper"]}>
-        <label id={labelId} className={styles["label"]}>{label}</label>
+        <label id={labelId} className={styles["label"]}>
+          {label}
+        </label>
         <div
           className={styles["field"]}
           tabIndex={localTabIndex}
@@ -234,41 +249,57 @@ export const Select = memo((props: SelectProps) => {
           onFocus={handleFocus}
           onKeyDown={handleKeyDown}
           role="combobox"
-          aria-haspopup='listbox'
-          aria-expanded={isVisibleMenu ? 'true' : 'false'}
+          aria-haspopup="listbox"
+          aria-expanded={isVisibleMenu ? "true" : undefined}
           aria-errormessage={errorMessageId}
           aria-labelledby={labelId}
-          aria-controls={optionsMenuId}
+          aria-controls={isVisibleMenu ? optionsListId : undefined}
           aria-activedescendant={activeOptionId}
         >
-          <div className={styles["start-adornment"]}>{startAdornment}</div>
+          {startAdornment && (
+            <div className={styles["start-adornment"]}>{startAdornment}</div>
+          )}
           <div className={styles["content"]}>
             <p className={styles["placeholder"]}>{placeholder}</p>
-            {Array.isArray(selectedValues) ? <div className={styles['chips']}>{renderSelectedOptions}</div> : <p>{getSelectedOptions[0]?.label}</p>}
+            {Array.isArray(selectedValues) ? (
+              <div className={styles["chips"]}>{renderSelectedOptions}</div>
+            ) : (
+              <p>{getSelectedOptions[0]?.label}</p>
+            )}
           </div>
-            <Icon className={styles['open-menu-button']} variant="arrow" size="small-l" color="dark"/>
+          <Icon
+            className={styles["open-menu-button"]}
+            variant="arrow"
+            size="small-l"
+            color="dark"
+          />
         </div>
-        <Options
-          onSelect={handleSelect}
-          getDisabledOption={getDisabledOption}
-          options={optionsArray}
-          menuItems={children}
-          isVisible={isVisibleMenu}
-          parentRef={fieldRef}
-          selectedValue={selectedValues}
-          onClose={handleCloseMenu}
-          onOpen={handleOpenMenu}
-          setActiveOptionId={setActiveOptionId}
-          optionsMenuId={optionsMenuId}
-          labelId={labelId}
-          selectId={id}
-        />
       </div>
       {errorMessage && (
         <div className={styles["error-message"]} id={errorMessageId}>
           <p>{errorMessage}</p>
         </div>
       )}
+      {!isReadonly &&
+        (!isDisabled && (
+          <Options
+            onSelect={handleSelect}
+            getDisabledOption={getDisabledOption}
+            options={optionsArray}
+            menuItems={children}
+            isVisible={isVisibleMenu}
+            parentRef={fieldRef}
+            selectedValue={selectedValues}
+            onClose={handleCloseMenu}
+            onOpen={handleOpenMenu}
+            setActiveOptionId={setActiveOptionId}
+            optionsListId={optionsListId}
+            labelId={labelId}
+            parentId={id}
+            menuWidth={optionsProps?.menuWidth}
+            menuHeight={optionsProps?.menuHeight}
+          />
+        ))}
     </div>
   );
 });

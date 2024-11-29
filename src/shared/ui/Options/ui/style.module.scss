@@ -1,0 +1,9 @@
+.menu {
+    width: 300px;
+}
+
+.list {
+    max-height: calc(var(--button-height-medium) * 7);
+    background-color: transparent;
+    overflow-y: auto;
+}

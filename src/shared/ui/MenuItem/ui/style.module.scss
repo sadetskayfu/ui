@@ -18,6 +18,23 @@
             opacity: var(--opacity-big);
         }
     }
+    &.readonly {
+        .button,
+        .link {
+            pointer-events: none;
+        }
+    }
+    &:not(.is-option) {
+        .button,
+        .link {
+            @include hover {
+                background-color: var(--secondary-opacity);
+            }
+            &:focus-visible {
+                background-color: var(--secondary-200);
+            }
+        }
+    }
 }
 
 .button,
@@ -34,12 +51,6 @@
     color: inherit;
     text-align: start;
     border-radius: inherit;
-    @include hover {
-        background-color: var(--secondary-opacity);
-    }
-    &:focus-visible {
-        background-color: var(--secondary-200);
-    }
 }
 
 .button {

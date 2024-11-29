@@ -187,12 +187,6 @@ const SelectPage = () => {
               isReadonly={isReadonly}
               isRequired={isRequired}
             >
-              <li role="option">Group 1</li>
-              <MenuItem value="1">Option 1</MenuItem>
-              <MenuItem value="2">Option 2</MenuItem>
-              <li role="option">Group 2</li>
-              <MenuItem value="3">Option 3</MenuItem>
-              <MenuItem value="4">Option 4</MenuItem>
             </Select>
           </PreviewComponents>
         </div>

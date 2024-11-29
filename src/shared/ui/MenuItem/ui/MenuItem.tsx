@@ -11,6 +11,7 @@ export interface MenuItemProps {
   isHovered?: boolean;
   isSelected?: boolean;
   isDisabled?: boolean;
+  isReadonly?: boolean
   isLink?: boolean;
   isExternalLink?: boolean;
   onClick?: () => void;
@@ -33,6 +34,7 @@ const MenuItem = memo((props: MenuItemProps) => {
     isHovered,
     isSelected,
     isDisabled,
+    isReadonly,
     isLink,
     isExternalLink,
     onClick,
@@ -56,6 +58,8 @@ const MenuItem = memo((props: MenuItemProps) => {
     [styles["hovered"]]: isHovered,
     [styles["selected"]]: isSelected,
     [styles["disabled"]]: isDisabled,
+    [styles["readonly"]]: isReadonly,
+    [styles['is-option']]: role === 'option'
   };
 
   const handleMouseMove = () => {
@@ -85,14 +89,14 @@ const MenuItem = memo((props: MenuItemProps) => {
     return (
       <li
         className={classNames(styles["menu-item"], [className], mods)}
-        role={role}
+        role='none'
       >
         <Link
           className={styles["link"]}
           onMouseMove={handleMouseMove}
           onClick={handleClick}
           tabIndex={localTabIndex}
-          data-disabled={isDisabled}
+          data-disabled={isDisabled || isReadonly}
           to={to}
           role={role}
           id={id}
@@ -109,14 +113,14 @@ const MenuItem = memo((props: MenuItemProps) => {
     return (
       <li
         className={classNames(styles["menu-item"], [className], mods)}
-        role={role}
+        role='none'
       >
         <a
           className={styles["link"]}
           onMouseMove={handleMouseMove}
           onClick={handleClick}
           tabIndex={localTabIndex}
-          data-disabled={isDisabled}
+          data-disabled={isDisabled || isReadonly}
           href={to}
           role={role}
           id={id}
@@ -131,13 +135,13 @@ const MenuItem = memo((props: MenuItemProps) => {
   return (
     <li
       className={classNames(styles["menu-item"], [className], mods)}
-      role={role}
+      role='none'
     >
       <button
         className={styles["button"]}
         onMouseMove={handleMouseMove}
         tabIndex={localTabIndex}
-        data-disabled={isDisabled}
+        data-disabled={isDisabled || isReadonly}
         disabled={isDisabled}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
