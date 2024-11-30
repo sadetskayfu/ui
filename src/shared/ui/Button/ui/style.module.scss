@@ -18,7 +18,7 @@
   gap: var(--gap-small-s);
   color: var(--color);
   background-color: var(--bgColor);
-  transition: box-shadow 0.4s, background-color 0.2s;
+  transition: box-shadow 0.4s, background-color 0.2s, filter 0.2s;
 }
 
 .icon {
@@ -84,6 +84,11 @@
 .button {
   @include hover {
     background-color: var(--hoverBgColor);
+  }
+  &:not(:focus-visible) {
+    @include hover {
+      filter: drop-shadow(0 0 1px var(--bgColor));
+    }
   }
   &:focus-visible {
     box-shadow: var(--boxShadowFocus);

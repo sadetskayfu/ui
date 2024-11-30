@@ -19,9 +19,9 @@ export type SelectVariant = "outlined" | "filled";
 export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
 
-interface OptionProps {
-  menuWidth: string;
-  menuHeight: string;
+interface OptionsMenuProps {
+  width: string;
+  height: string;
 }
 
 export interface Option {
@@ -50,7 +50,7 @@ interface SelectProps {
   onFocus?: () => void;
   onBlur?: () => void;
   startAdornment?: ReactElement<typeof InputAdornment>;
-  optionsProps?: OptionProps;
+  optionsMenuProps?: OptionsMenuProps;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -75,7 +75,7 @@ export const Select = memo((props: SelectProps) => {
     onBlur,
     onFocus,
     startAdornment,
-    optionsProps,
+    optionsMenuProps,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -107,28 +107,28 @@ export const Select = memo((props: SelectProps) => {
   }, []);
 
   const handleSelect = useCallback(
-    (value: string) => {
+    (optionValue: string) => {
       if (Array.isArray(selectedValues)) {
-        let newValues: string[] = [];
+        let newSelectedValues: string[] = [];
         const alreadyExistingValue = selectedValues.filter(
-          (selectedValue) => selectedValue === value
+          (selectedValue) => selectedValue === optionValue
         );
 
         if (alreadyExistingValue.length > 0) {
-          newValues = selectedValues.filter(
-            (selectedValue) => selectedValue !== value
+          newSelectedValues = selectedValues.filter(
+            (selectedValue) => selectedValue !== optionValue
           );
         } else {
-          newValues = [...selectedValues];
-          newValues.push(value);
+          newSelectedValues = [...selectedValues];
+          newSelectedValues.push(optionValue);
         }
-        setSelectedValues(newValues);
-        onSelect(newValues);
+        setSelectedValues(newSelectedValues);
+        onSelect(newSelectedValues);
       }
       if (typeof selectedValues === "string") {
-        const newValue = selectedValues === value ? "" : value;
-        setSelectedValues(newValue);
-        onSelect(newValue);
+        const newSelectedValue = selectedValues === optionValue ? "" : optionValue;
+        setSelectedValues(newSelectedValue);
+        onSelect(newSelectedValue);
         handleCloseMenu();
       }
     },
@@ -136,13 +136,13 @@ export const Select = memo((props: SelectProps) => {
   );
 
   const handleDelete = useCallback(
-    (value: string) => {
+    (optionValue: string) => {
       if (Array.isArray(selectedValues)) {
-        const newValues = selectedValues.filter(
-          (selectedValue) => selectedValue !== value
+        const newSelectedValues = selectedValues.filter(
+          (selectedValue) => selectedValue !== optionValue
         );
-        setSelectedValues(newValues);
-        onSelect(newValues);
+        setSelectedValues(newSelectedValues);
+        onSelect(newSelectedValues);
       }
       fieldRef.current?.focus();
     },
@@ -299,8 +299,7 @@ export const Select = memo((props: SelectProps) => {
             optionsListId={optionsListId}
             labelId={labelId}
             parentId={id}
-            menuWidth={optionsProps?.menuWidth}
-            menuHeight={optionsProps?.menuHeight}
+            {...optionsMenuProps}
           />
         ))}
     </div>

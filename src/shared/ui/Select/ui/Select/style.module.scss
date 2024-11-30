@@ -215,8 +215,7 @@
     .field {
       @include hover {
         background-color: var(--hoverBgColor);
-        --borderColor: var(--primary-500);
-        filter: drop-shadow(0 0 1px var(--borderColor));
+        --borderColor: var(--secondary-500);
       }
     }
   }

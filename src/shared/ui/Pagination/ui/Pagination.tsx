@@ -105,11 +105,12 @@ export const Pagination = memo(
               className={styles["button"]}
               variant={currentPage === page ? (variant === 'filled' ? 'filled' : 'outlined') : "clear"}
               form={form}
-              color={currentPage === page ? 'primary' : 'secondary'}
+              color='secondary'
               size={size}
               key={index}
               onClick={() => typeof page === "number" && handlePageChange(page)}
-              isReadonly={typeof page === "string" || currentPage === page}
+              isReadonly={currentPage === page}
+              isDisabled={typeof page === "string"}
               aria-current={currentPage === page ? 'page' : undefined}
               aria-label={`Page ${page}`}
             >

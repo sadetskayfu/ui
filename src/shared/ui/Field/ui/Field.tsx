@@ -28,6 +28,8 @@ interface FieldProps extends HTMLInputProps {
   className?: string;
   label: string;
   name?: string;
+  id: string;
+  labelId: string
   placeholder?: string;
   variant?: FieldVariant;
   labelVariant?: FieldLabelVariant;
@@ -42,6 +44,7 @@ interface FieldProps extends HTMLInputProps {
   value: string;
   type?: "text" | "password";
   tabIndex?: number;
+  chips?: ReactElement[]
   startAdornment?: ReactElement<typeof InputAdornment>;
   endAdornment?:
     | ReactElement<typeof InputAdornment>
@@ -57,6 +60,8 @@ export const Field = memo(
   forwardRef(
     (props: FieldProps, ref: React.ForwardedRef<HTMLInputElement | null>) => {
       const {
+        id,
+        labelId,
         value,
         onChange,
         className,
@@ -75,6 +80,7 @@ export const Field = memo(
         tabIndex = 0,
         startAdornment,
         endAdornment,
+        chips,
         onClick,
         onBlur,
         onFocus,
@@ -90,7 +96,8 @@ export const Field = memo(
       >(undefined);
 
       const isDirty = value.length > 0 || !!startAdornment;
-      const id = useId();
+      
+      const errorMessageId = useId() + id
 
       const inputRef = useRef<HTMLInputElement>(null);
       const input = ref ? (ref as React.RefObject<HTMLInputElement>) : inputRef;
@@ -98,7 +105,7 @@ export const Field = memo(
 
       const handleKeyDown = (event: React.KeyboardEvent) => {
         if (onSearch) {
-          if ((event.key === "Enter" || event.key === " ") && isDirty) {
+          if ((event.key === "Enter") && isDirty) {
             onSearch();
           }
         }
@@ -114,12 +121,13 @@ export const Field = memo(
         onBlur?.();
       };
 
-      const handleSetFocus = () => {
+      const handleClick = () => {
         if (isMultiline) {
           textareaRef.current?.focus();
         } else {
           input.current?.focus();
         }
+        onClick?.()
       };
 
       const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -185,10 +193,10 @@ export const Field = memo(
             className={classNames(styles["wrapper"], additionalClasses, mods)}
           >
             <div className={styles["field-wrapper"]}>
-              <label className={styles["label"]} htmlFor={id}>
+              <label className={styles["label"]} htmlFor={id} id={labelId}>
                 {label}
               </label>
-              <div className={styles["field"]} onClick={handleSetFocus}>
+              <div className={styles["field"]} onClick={handleClick}>
                 {startAdornment && <div className={styles['start-adornment']}>{startAdornment}</div>}
                 <div className={styles["content"]}>
                   <textarea
@@ -205,10 +213,9 @@ export const Field = memo(
                     disabled={isDisabled}
                     required={isRequired}
                     readOnly={isReadonly}
-                    onClick={onClick}
                     onBlur={handleBlur}
                     onFocus={handleFocus}
-                    aria-errormessage={id + "error"}
+                    aria-errormessage={errorMessageId}
                   />
                 </div>
                 <div className={styles["buttons"]}>
@@ -236,7 +243,7 @@ export const Field = memo(
               </div>
             </div>
             {errorMessage && (
-              <div className={styles["error-message"]} id={id + "error"}>
+              <div className={styles["error-message"]} id={errorMessageId}>
                 <p>{errorMessage}</p>
               </div>
             )}
@@ -247,12 +254,13 @@ export const Field = memo(
       return (
         <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
           <div className={styles["field-wrapper"]}>
-            <label className={styles["label"]} htmlFor={id}>
+            <label className={styles["label"]} htmlFor={id} id={labelId}>
               {label}
             </label>
-            <div className={styles["field"]} onClick={handleSetFocus}>
+            <div className={styles["field"]} onClick={handleClick}>
               <div className={styles["start-adornment"]}>{startAdornment}</div>
               <div className={styles["content"]}>
+                <div>{chips}</div>
                 <input
                   style={{transitionDuration}}
                   className={styles["input"]}
@@ -267,10 +275,9 @@ export const Field = memo(
                   disabled={isDisabled}
                   required={isRequired}
                   readOnly={isReadonly}
-                  onClick={onClick}
                   onBlur={handleBlur}
                   onFocus={handleFocus}
-                  aria-errormessage={id + "error"}
+                  aria-errormessage={errorMessageId}
                   onKeyDown={handleKeyDown}
                   {...otherProps}
                 />
@@ -313,7 +320,7 @@ export const Field = memo(
             </div>
           </div>
           {errorMessage && (
-            <div className={styles["error-message"]} id={id + "error"}>
+            <div className={styles["error-message"]} id={errorMessageId}>
               <p>{errorMessage}</p>
             </div>
           )}

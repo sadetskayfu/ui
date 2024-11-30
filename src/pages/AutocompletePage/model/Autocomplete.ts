@@ -1,35 +1,50 @@
+import { Option } from "@/shared/ui/Autocomplete"
+
 interface Country {
-    id: string
+    value: string
     label: string
     phone: string
 }
 
 export const countries: Record<string, Country> = {
     'BY': {
-        id: 'BY', label: 'Belarus', phone: '375'
+        value: 'BY', label: 'Belarus', phone: '375'
     },
     'RU': {
-        id: 'RU', label: 'Russian Federation', phone: '7'
+        value: 'RU', label: 'Russian Federation', phone: '7'
     },
     'US': {
-        id: 'US', label: 'United States', phone: '1'
+        value: 'US', label: 'United States', phone: '1'
     },
     'AD': {
-        id: 'AD', label: 'Andorra', phone: '376'
+        value: 'AD', label: 'Andorra', phone: '376'
     },
     'AF': {
-        id: 'AF', label: 'Afghanistan', phone: '93'
+        value: 'AF', label: 'Afghanistan', phone: '93'
     },
     'AG': {
-        id: 'AG', label: 'Antigua and Barbuda', phone: '1-268'
+        value: 'AG', label: 'Antigua and Barbuda', phone: '1-268'
     },
     'AM': {
-        id: 'AM', label: 'Armenia', phone: '374'
+        value: 'AM', label: 'Armenia', phone: '374'
     },
     'BO': {
-        id: 'BO', label: 'Bolivia', phone: '591'
+        value: 'BO', label: 'Bolivia', phone: '591'
     },
     'CU': {
-        id: 'CU', label: 'Cuba', phone: '53'
+        value: 'CU', label: 'Cuba', phone: '53'
     }
+}
+
+export const options: Record<string, Option> = {
+    '1': { value: '1', label: 'Belonging To The Apocolypse'},
+    '2': { value: '2', label: 'Hunted By My Dreams'},
+    '3': { value: '3', label: 'Praise The Maze'},
+    '4': { value: '4', label: 'Mending The Demons'},
+    '5': { value: '5', label: 'Songs Of The Future'},
+    '6': { value: '6', label: 'Breaking The Titans'},
+    '7': { value: '7', label: 'Answering My Destiny'},
+    '8': { value: '8', label: 'Praise'},
+    '9': { value: '9', label: 'Killer'},
+    '10': { value: '10', label: 'Answering My Destiny adn Y'},
 }

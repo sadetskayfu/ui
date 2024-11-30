@@ -28,7 +28,7 @@ export const AppRouter = () => {
         {/* 
         <Route path={ROUTES.LINK} element={<LinkPage />} />
         
-        <Route path={ROUTES.AUTOCOMPLETE} element={<AutocompletePage />} />
+        
         
 
 
@@ -43,6 +43,7 @@ export const AppRouter = () => {
         
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
          */}
+        <Route path={ROUTES.AUTOCOMPLETE} element={<AutocompletePage />} />
         <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
         <Route path={ROUTES.SELECT} element={<SelectPage />} />
         <Route path={ROUTES.TEXT_FIELD} element={<TextFieldPage />} />

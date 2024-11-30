@@ -32,8 +32,9 @@ interface OptionsProps {
   optionsListId: string;
   labelId: string;
   parentId: string;
-  menuWidth?: string
-  menuHeight?: string
+  width?: string
+  height?: string
+  isAutocomplete?: boolean
 }
 
 export const Options = (props: OptionsProps) => {
@@ -51,8 +52,9 @@ export const Options = (props: OptionsProps) => {
     optionsListId,
     labelId,
     parentId,
-    menuWidth,
-    menuHeight,
+    width,
+    height,
+    isAutocomplete,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -135,7 +137,17 @@ export const Options = (props: OptionsProps) => {
           }
           break;
         case "Enter":
-        case " ":
+          event.preventDefault();
+          if (isVisible) {
+            activeIndex <= -1
+              ? onClose()
+              : interactiveElementsRef.current[activeIndex].click();
+          } else {
+            onOpen();
+          }
+          break;
+        case ' ':
+          if(isAutocomplete) return
           event.preventDefault();
           if (isVisible) {
             activeIndex <= -1
@@ -279,7 +291,7 @@ export const Options = (props: OptionsProps) => {
       isVisible={isVisible}
       onClose={onClose}
       parentRef={parentRef}
-      width={menuWidth}
+      width={width}
     >
       <ul
         className={styles['list']}
@@ -288,7 +300,7 @@ export const Options = (props: OptionsProps) => {
         aria-labelledby={labelId}
         role="listbox"
         aria-multiselectable={Array.isArray(selectedValue) ? "true" : "false"}
-        style={{maxHeight: menuHeight}}
+        style={{maxHeight: height}}
       >
         {(options.length >= 0 || (menuItems && menuItems?.length >= 0)) ? renderOptions : <MenuItem isReadonly>No options</MenuItem>}
       </ul>
