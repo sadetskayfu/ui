@@ -10,6 +10,7 @@ import {
   useEffect,
   ReactElement,
 } from "react";
+import { debounce } from 'lodash';
 import styles from "./style.module.scss";
 import { Icon } from "../../Icon";
 import { IconButton } from "../../IconButton";
@@ -49,6 +50,7 @@ interface FieldProps extends HTMLInputProps {
   endAdornment?:
     | ReactElement<typeof InputAdornment>
     | ReactElement<typeof InputAdornment>[];
+  debounceTime?: number
   onClick?: () => void;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -62,7 +64,7 @@ export const Field = memo(
       const {
         id,
         labelId,
-        value,
+        value: externalValue,
         onChange,
         className,
         name,
@@ -86,10 +88,11 @@ export const Field = memo(
         onFocus,
         onSearch,
         type = "text",
+        debounceTime = 0,
         ...otherProps
       } = props;
 
-      const [textareaValue, setTextareaValue] = useState<string>("");
+      const [value, setValue] = useState<string>(externalValue)
       const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
       const [transitionDuration, setTransitionDuration] = useState<
         string | undefined
@@ -130,22 +133,29 @@ export const Field = memo(
         onClick?.()
       };
 
-      const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onChange?.(event.target.value);
+      const debouncedOnChange = useRef(
+        debounce((value: string) => {
+          onChange?.(value);
+        }, debounceTime)
+      ).current;
+
+      const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const newValue = event.target.value;
+        setValue(newValue)
+        debounceTime ? debouncedOnChange(newValue) : onChange?.(newValue)
       };
 
       const handleClear = () => {
+        setValue('')
         onChange?.("");
         input.current?.focus();
       };
 
-      const handleChangeTextareaValue = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
-      ) => {
-        const newValue = event.target.value;
-        setTextareaValue(newValue);
-        onChange?.(newValue);
-      };
+      useEffect(() => {
+        return () => {
+          debouncedOnChange.cancel();
+        };
+      }, [debouncedOnChange]);
 
       useEffect(() => {
         const textarea = textareaRef.current;
@@ -154,7 +164,7 @@ export const Field = memo(
           const newHeight = textarea.scrollHeight;
           textarea.style.height = `${newHeight}px`;
         }
-      }, [textareaValue]);
+      }, [value]);
 
       useEffect(() => {
         setTimeout(() => {
@@ -166,6 +176,11 @@ export const Field = memo(
         isFocusedField && setTransitionDuration("0s");
         !isFocusedField && transitionDuration && setTransitionDuration("0.2s");
       }, [isFocusedField, transitionDuration]);
+
+      // Update value
+      useEffect(() => {
+        setValue(externalValue)
+      }, [externalValue])
 
       const localTabIndex: number = isDisabled ? -1 : tabIndex;
 
@@ -208,7 +223,7 @@ export const Field = memo(
                     placeholder={placeholder}
                     id={id}
                     value={value}
-                    onChange={handleChangeTextareaValue}
+                    onChange={handleChange}
                     ref={textareaRef}
                     disabled={isDisabled}
                     required={isRequired}
@@ -260,7 +275,7 @@ export const Field = memo(
             <div className={styles["field"]} onClick={handleClick}>
               <div className={styles["start-adornment"]}>{startAdornment}</div>
               <div className={styles["content"]}>
-                <div>{chips}</div>
+                {chips}
                 <input
                   style={{transitionDuration}}
                   className={styles["input"]}

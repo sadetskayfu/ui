@@ -9,6 +9,9 @@ const AutocompletePage = () => {
   const [movieValue, setMovieValue] = useState<string>("");
   const [selectedMovie, setSelectedMovie] = useState<string>("");
 
+  const [movieMultiValue, setMovieMultiValue] = useState<string>('')
+  const [selectedMovies, setSelectedMovies] = useState<string[]>([])
+
   const handleChangeMovieValue = useCallback((value: string) => {
     setMovieValue(value);
   }, []);
@@ -16,10 +19,18 @@ const AutocompletePage = () => {
     setSelectedMovie(value as string);
   }, []);
 
+  const handleChangeMovieMultiValue = useCallback((value: string) => {
+    setMovieMultiValue(value);
+  }, []);
+  const handleSelectMovies = useCallback((value: string | string[]) => {
+    setSelectedMovies(value as string[]);
+  }, []);
+
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Autocomplete</SectionTitle>
+        {selectedMovies}
         <div className="subsections">
           <PreviewComponents title="Single autocomplete">
             <Autocomplete
@@ -31,6 +42,18 @@ const AutocompletePage = () => {
               value={movieValue}
               selectedValue={selectedMovie}
               fieldProps={{ label: "Movie", placeholder: "Select movie"}}
+            />
+          </PreviewComponents>
+          <PreviewComponents title="Multi autocomplete">
+            <Autocomplete
+              className={styles['autocomplete']}
+              id="multi-movies-autocomplete"
+              onChange={handleChangeMovieMultiValue}
+              onSelect={handleSelectMovies}
+              options={options}
+              value={movieMultiValue}
+              selectedValue={selectedMovies}
+              fieldProps={{ label: "Movies", placeholder: "Select movies"}}
             />
           </PreviewComponents>
         </div>

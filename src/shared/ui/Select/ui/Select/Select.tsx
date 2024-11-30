@@ -198,7 +198,6 @@ export const Select = memo((props: SelectProps) => {
             color="secondary"
             variant={variant === "filled" ? "outlined" : "filled"}
             size="small"
-            isStopFocus
             onClose={() => handleDelete(option.value)}
             key={option.value}
             label={option.label}
@@ -252,7 +251,7 @@ export const Select = memo((props: SelectProps) => {
           onKeyDown={handleKeyDown}
           role="combobox"
           aria-haspopup="listbox"
-          aria-expanded={isVisibleMenu ? "true" : undefined}
+          aria-expanded={isVisibleMenu}
           aria-errormessage={errorMessage ? errorMessageId : undefined}
           aria-labelledby={labelId}
           aria-controls={isVisibleMenu ? optionsListId : undefined}

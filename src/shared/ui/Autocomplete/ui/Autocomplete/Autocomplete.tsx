@@ -17,6 +17,7 @@ import {
 import styles from "./style.module.scss";
 import type { InputAdornment } from "@/shared/ui/InputAdornment";
 import { Options } from "@/shared/ui/Options";
+import { Chip } from "@/shared/ui/Chip";
 
 export interface Option {
   value: string;
@@ -99,7 +100,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
 
   const handleCloseMenu = useCallback(() => {
     setIsVisibleMenu(false);
-    setStopFilter(true)
   }, []);
 
   const handleChange = useCallback((value: string) => {
@@ -107,7 +107,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
     if(value.length > 0) {
       handleOpenMenu()
     }
-    setActiveIndex(-1);
+    setTimeout(() => {
+      setActiveIndex(-1);
+    }, 0)
     setStopFilter(false)
   }, [onChange, handleOpenMenu])
 
@@ -141,6 +143,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
     [selectedValue, onSelect, onChange, handleCloseMenu, options]
   );
 
+  console.log(selectedValue)
+
   const handleDelete = useCallback(
     (optionValue: string) => {
       if (Array.isArray(selectedValue)) {
@@ -169,10 +173,16 @@ export const Autocomplete = (props: AutocompleteProps) => {
 
   // Clear single selected value
   useEffect(() => {
-    if(typeof value === 'string' && value === '' && selectedValue.length > 0) {
+    if(typeof selectedValue === 'string' && value === '' && selectedValue.length > 0) {
       onSelect('')
     }
   }, [onSelect, value, selectedValue])
+
+  useEffect(() => {
+    if(typeof selectedValue === 'string' && value === options[selectedValue]?.label && !isVisibleMenu) {
+      setStopFilter(true)
+    }
+  }, [value, selectedValue, options, isVisibleMenu])
 
   const optionsArray = useMemo(() => Object.values(options), [options]);
 
@@ -184,17 +194,38 @@ export const Autocomplete = (props: AutocompleteProps) => {
     return  newOptions
   }, [optionsArray, value, isStopFilter])
 
+  const renderSelectedOptions = useMemo(() => {
+    if (Array.isArray(selectedValue) && selectedValue.length > 0) {
+      return selectedValue.map((option) => {
+        return (
+          <Chip
+            color="secondary"
+            variant={fieldProps.variant === "filled" ? "outlined" : "filled"}
+            size="medium"
+            isStopFocus
+            onClose={() => handleDelete(option)}
+            key={option}
+            label={options[option].label}
+            closeButtonTabIndex={-1}
+            isReadonly={isReadonly}
+          />
+        );
+      });
+    }
+  }, [fieldProps.variant, handleDelete, isReadonly, options, selectedValue]);
+
   return (
     <div ref={autocompleteRef} className={classNames(styles["autocomplete"], [className])}>
-      {activeOptionId}
+      {/* {activeOptionId}
       <div>{isStopFilter ? 'true' : 'false'}</div>
       <div>selectedValue: {selectedValue}</div>
-      <div>Value: {value}</div>
+      <div>Value: {value}</div> */}
       <Field
         id={id}
         ref={fieldRef}
         labelId={labelId}
         value={value}
+        debounceTime={300}
         isDisabled={isDisabled}
         isReadonly={isReadonly}
         isRequired={isRequired}
@@ -202,10 +233,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onFocus={onFocus}
         onClick={handleToggleVisibleMenu}
         onChange={handleChange}
+        isMultiAutocomplete={Array.isArray(selectedValue) ? true : false}
+        chips={renderSelectedOptions}
         autoComplete="off"
         role="combobox"
         aria-haspopup="listbox"
-        aria-expanded={isVisibleMenu ? "true" : undefined}
+        aria-expanded={isVisibleMenu}
         aria-labelledby={labelId}
         aria-controls={isVisibleMenu ? optionsListId : undefined}
         aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}

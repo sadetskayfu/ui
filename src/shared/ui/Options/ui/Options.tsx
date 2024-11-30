@@ -216,16 +216,6 @@ export const Options = (props: OptionsProps) => {
     }
   }, [localActiveIndex]);
 
-  // Update index on selected option after open menu or change selected value
-  useEffect(() => {
-    if(selectedValue.length === 0 || !isVisible) return
-    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
-      return item.getAttribute('data-value') === (Array.isArray(selectedValue) ? selectedValue[selectedValue.length - 1] : selectedValue)
-    })
-    const index = lastSelectedOption[0]?.getAttribute('data-index')
-    handleChangeActiveIndex(Number(index))
-  }, [handleChangeActiveIndex, selectedValue, isVisible])
-
   // Update the id of the focused element
   useEffect(() => {
     if(localActiveIndex === -1) {
@@ -233,8 +223,20 @@ export const Options = (props: OptionsProps) => {
       return
     }
     const focusedItem = interactiveElementsRef.current[localActiveIndex]; 
-    setActiveOptionId(focusedItem.getAttribute("id") as string);
-  }, [localActiveIndex, setActiveOptionId])
+    setActiveOptionId(focusedItem ? focusedItem.getAttribute("id") as string : undefined);
+  }, [setActiveOptionId, localActiveIndex])
+
+  // Update index on selected option after open menu or change selected value
+  useEffect(() => {
+    if(selectedValue.length === 0 || !isVisible) return
+    if(interactiveElementsRef.current.length === 0) return
+   
+    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
+      return item.getAttribute('data-value') === (Array.isArray(selectedValue) ? selectedValue[selectedValue.length - 1] : selectedValue)
+    })
+    const index = lastSelectedOption[0] ? Number(lastSelectedOption[0].getAttribute('data-index')) : -1
+    handleChangeActiveIndex(index)
+  }, [handleChangeActiveIndex, selectedValue, isVisible])
 
   const optionId = `${parentId}-option-`;
 

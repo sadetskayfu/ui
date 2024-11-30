@@ -221,10 +221,11 @@
       padding-bottom: var(--paddingBottom);
       padding-left: var(--paddingInline);
       padding-right: calc(var(--paddingInline) - 7.5px);
-      display: flex;
+      display: inline-flex;
       gap: var(--gap-small-s);
-      flex-wrap: wrap;
       align-items: center;
+      flex-wrap: wrap;
+      
     }
     .input {
       padding: 0px;
@@ -234,6 +235,10 @@
   &.multi-autocomplete {
     .input {
       height: auto;
+      width: 0;
+      min-width: 30px;
+      flex-grow: 1;
+      text-overflow: ellipsis;
     }
   }
   &.multiline {

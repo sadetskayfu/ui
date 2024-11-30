@@ -64,7 +64,7 @@ export const Chip = memo((props: ChipProps) => {
   };
 
   const handleClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
+    //event.stopPropagation();
     if(isReadonly) return
     onClick?.();
     handleRippleMousePosition(rippleWrapperRef, event);
@@ -128,7 +128,8 @@ export const Chip = memo((props: ChipProps) => {
   return (
     <div
       className={classNames(styles["chip"], additionalClasses, mods)}
-      onClick={handleStopPropagation}
+      //onClick={handleStopPropagation}
+      onMouseDown={handleStopFocus}
     >
       <p>{label}</p>
       {onClose && (

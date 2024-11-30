@@ -15,7 +15,7 @@
   color: var(--color);
   background-color: var(--chipBgColor);
   text-wrap: nowrap;
-  cursor: default;
+  cursor: inherit;
 
   &.clickable {
     cursor: pointer;
@@ -98,9 +98,6 @@
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-medium);
-  }
-  &.readonly {
-    cursor: default;
   }
   &.have-close-button {
     padding-right: 2.5px;

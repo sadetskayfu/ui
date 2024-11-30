@@ -107,11 +107,12 @@ export const Dropdown = (props: DropdownMenuProps) => {
       setPosition(newPosition);
     };
 
-    const throttledHandleChanges = throttle(handleChanges, 1000);
+    const throttledHandleChanges = throttle(handleChanges, 300);
 
     const resizeObserver = new ResizeObserver(throttledHandleChanges);
 
-    if (menuRef.current) {
+    if (parentRef.current && menuRef.current) {
+      resizeObserver.observe(parentRef.current);
       resizeObserver.observe(menuRef.current);
     }
 
