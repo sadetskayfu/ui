@@ -23,10 +23,12 @@ interface OptionsProps {
   options: Option[];
   menuItems?: ReactElement[];
   selectedValue: string | string[];
+  activeIndex?: number,
+  setActiveIndex?: (index: number) => void,
   onClose: () => void;
   onOpen: () => void;
   onSelect: (value: string) => void;
-  setActiveOptionId: (id: string) => void;
+  setActiveOptionId: (id: string | undefined) => void;
   getDisabledOption?: (value: string) => boolean;
   parentRef: React.RefObject<HTMLDivElement>;
   optionsListId: string;
@@ -55,14 +57,21 @@ export const Options = (props: OptionsProps) => {
     width,
     height,
     isAutocomplete,
+    activeIndex,
+    setActiveIndex
   } = props;
 
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [localActiveIndex, setLocalActiveIndex] = useState<number>(activeIndex || -1);
 
   const listRef = useRef<HTMLUListElement | null>(null);
   const interactiveElementsRef = useRef<
     Array<HTMLButtonElement | HTMLLinkElement>
   >([]);
+
+  const handleChangeActiveIndex = useCallback((index: number) => {
+    setLocalActiveIndex(index)
+    setActiveIndex?.(index)
+  }, [setActiveIndex])
 
   // Get interactive elements
   useEffect(() => {
@@ -93,7 +102,7 @@ export const Options = (props: OptionsProps) => {
     (currentIndex: number, direction: 1 | -1) => {
       const currentInteractiveElements = interactiveElementsRef.current;
 
-      let nextIndex = activeIndex;
+      let nextIndex = localActiveIndex;
 
       for (let i = 1; i <= currentInteractiveElements.length; i++) {
         const step = direction * i;
@@ -111,12 +120,12 @@ export const Options = (props: OptionsProps) => {
 
       return -1;
     },
-    [activeIndex]
+    [localActiveIndex]
   );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      let newIndex = activeIndex;
+      let newIndex = localActiveIndex;
 
       switch (event.key) {
         case "ArrowDown":
@@ -124,24 +133,15 @@ export const Options = (props: OptionsProps) => {
           event.preventDefault();
           const direction = event.key === "ArrowDown" ? 1 : -1;
           isVisible && interactiveElementsRef.current.length > 0
-            ? (newIndex = findNextEnabledItem(activeIndex, direction))
+            ? (newIndex = findNextEnabledItem(localActiveIndex, direction))
             : onOpen();
-
-          if (
-            newIndex !== -1 &&
-            newIndex !== activeIndex &&
-            interactiveElementsRef.current
-          ) {
-            const focusedItem = interactiveElementsRef.current[newIndex];
-            setActiveOptionId(focusedItem.getAttribute("id") as string);
-          }
           break;
         case "Enter":
           event.preventDefault();
           if (isVisible) {
-            activeIndex <= -1
+            localActiveIndex <= -1
               ? onClose()
-              : interactiveElementsRef.current[activeIndex].click();
+              : interactiveElementsRef.current[localActiveIndex].click();
           } else {
             onOpen();
           }
@@ -150,9 +150,9 @@ export const Options = (props: OptionsProps) => {
           if(isAutocomplete) return
           event.preventDefault();
           if (isVisible) {
-            activeIndex <= -1
+            localActiveIndex <= -1
               ? onClose()
-              : interactiveElementsRef.current[activeIndex].click();
+              : interactiveElementsRef.current[localActiveIndex].click();
           } else {
             onOpen();
           }
@@ -165,17 +165,22 @@ export const Options = (props: OptionsProps) => {
           return;
       }
 
-      newIndex !== activeIndex &&  setActiveIndex(newIndex);
+      newIndex !== localActiveIndex &&  handleChangeActiveIndex(newIndex);
     },
     [
-      activeIndex,
+      handleChangeActiveIndex,
+      localActiveIndex,
       isVisible,
       onClose,
       onOpen,
       findNextEnabledItem,
-      setActiveOptionId,
+      isAutocomplete
     ]
   );
+
+  useEffect(() => {
+    activeIndex && setLocalActiveIndex(activeIndex)
+  }, [activeIndex])
 
   // Add handle keydown on parent
   useEffect(() => {
@@ -192,11 +197,11 @@ export const Options = (props: OptionsProps) => {
     const currentInteractiveElements = interactiveElementsRef.current;
     if (
       currentList &&
-      activeIndex !== -1 &&
+      localActiveIndex !== -1 &&
       currentInteractiveElements &&
       currentInteractiveElements.length > 1
     ) {
-      const selectedElement = currentInteractiveElements[activeIndex];
+      const selectedElement = currentInteractiveElements[localActiveIndex];
       const menuRect = currentList.getBoundingClientRect();
 
       if (selectedElement) {
@@ -209,7 +214,27 @@ export const Options = (props: OptionsProps) => {
         }
       }
     }
-  }, [activeIndex]);
+  }, [localActiveIndex]);
+
+  // Update index on selected option after open menu or change selected value
+  useEffect(() => {
+    if(selectedValue.length === 0 || !isVisible) return
+    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
+      return item.getAttribute('data-value') === (Array.isArray(selectedValue) ? selectedValue[selectedValue.length - 1] : selectedValue)
+    })
+    const index = lastSelectedOption[0]?.getAttribute('data-index')
+    handleChangeActiveIndex(Number(index))
+  }, [handleChangeActiveIndex, selectedValue, isVisible])
+
+  // Update the id of the focused element
+  useEffect(() => {
+    if(localActiveIndex === -1) {
+      setActiveOptionId(undefined)
+      return
+    }
+    const focusedItem = interactiveElementsRef.current[localActiveIndex]; 
+    setActiveOptionId(focusedItem.getAttribute("id") as string);
+  }, [localActiveIndex, setActiveOptionId])
 
   const optionId = `${parentId}-option-`;
 
@@ -235,7 +260,7 @@ export const Options = (props: OptionsProps) => {
         const index = menuItemIndex;
         menuItemIndex++;
 
-        const isHovered = index === activeIndex;
+        const isHovered = index === localActiveIndex;
         const isSelected = getSelectedValue(value);
         const isDisabled = getDisabledOption?.(value);
 
@@ -247,14 +272,14 @@ export const Options = (props: OptionsProps) => {
           role: "option",
           id: `${optionId}${index}`,
           index,
-          setActiveIndex,
+          setActiveIndex: handleChangeActiveIndex,
         };
 
         return cloneElement(menuItem as ReactElement, { ...props });
       });
     } else {
       return options.map((option, index) => {
-        const isHovered = index === activeIndex;
+        const isHovered = index === localActiveIndex;
         const isSelected = getSelectedValue(option.value);
         const isDisabled = getDisabledOption?.(option.value);
 
@@ -266,7 +291,7 @@ export const Options = (props: OptionsProps) => {
           role: "option",
           id: `${optionId}${index}`,
           index,
-          setActiveIndex,
+          setActiveIndex: handleChangeActiveIndex,
         };
         return (
           <MenuItem key={index} value={option.value} {...props}>
@@ -282,7 +307,8 @@ export const Options = (props: OptionsProps) => {
     selectedValue,
     optionId,
     getDisabledOption,
-    activeIndex,
+    localActiveIndex,
+    handleChangeActiveIndex
   ]);
 
   return (
@@ -302,7 +328,8 @@ export const Options = (props: OptionsProps) => {
         aria-multiselectable={Array.isArray(selectedValue) ? "true" : "false"}
         style={{maxHeight: height}}
       >
-        {(options.length >= 0 || (menuItems && menuItems?.length >= 0)) ? renderOptions : <MenuItem isReadonly>No options</MenuItem>}
+        {localActiveIndex}
+        {(options.length > 0 || (menuItems && menuItems?.length > 0)) ? renderOptions : <MenuItem isReadonly>No options</MenuItem>}
       </ul>
     </Dropdown>
   );

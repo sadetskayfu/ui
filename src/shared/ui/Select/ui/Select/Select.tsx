@@ -253,11 +253,12 @@ export const Select = memo((props: SelectProps) => {
           role="combobox"
           aria-haspopup="listbox"
           aria-expanded={isVisibleMenu ? "true" : undefined}
-          aria-errormessage={errorMessageId}
+          aria-errormessage={errorMessage ? errorMessageId : undefined}
           aria-labelledby={labelId}
           aria-controls={isVisibleMenu ? optionsListId : undefined}
-          aria-activedescendant={activeOptionId}
+          aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}
           aria-readonly={isReadonly ? 'true' : undefined}
+          aria-required={isRequired ? 'true' : undefined}
         >
           {startAdornment && (
             <div className={styles["start-adornment"]}>{startAdornment}</div>

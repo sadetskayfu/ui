@@ -79,6 +79,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
   const [activeOptionId, setActiveOptionId] = useState<string | undefined>(
     undefined
   );
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [isStopFilter, setStopFilter] = useState<boolean>(false)
 
   const fieldRef = useRef<HTMLInputElement | null>(null);
   const autocompleteRef = useRef<HTMLDivElement | null>(null)
@@ -97,7 +99,17 @@ export const Autocomplete = (props: AutocompleteProps) => {
 
   const handleCloseMenu = useCallback(() => {
     setIsVisibleMenu(false);
+    setStopFilter(true)
   }, []);
+
+  const handleChange = useCallback((value: string) => {
+    onChange(value)
+    if(value.length > 0) {
+      handleOpenMenu()
+    }
+    setActiveIndex(-1);
+    setStopFilter(false)
+  }, [onChange, handleOpenMenu])
 
   const handleSelect = useCallback(
     (optionValue: string) => {
@@ -155,17 +167,29 @@ export const Autocomplete = (props: AutocompleteProps) => {
     handleCloseMenu();
   }, [handleCloseMenu, onBlur, isStrict, onChange, options, selectedValue]);
 
-  // Clear value
+  // Clear single selected value
   useEffect(() => {
-    if(typeof value === 'string' && value === '') {
+    if(typeof value === 'string' && value === '' && selectedValue.length > 0) {
       onSelect('')
     }
-  }, [onSelect, value])
+  }, [onSelect, value, selectedValue])
 
   const optionsArray = useMemo(() => Object.values(options), [options]);
 
+  const filteredOptions = useMemo(() => {
+    if(isStopFilter) return optionsArray
+
+    let newOptions: Option[] = []
+    newOptions = optionsArray.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()))
+    return  newOptions
+  }, [optionsArray, value, isStopFilter])
+
   return (
     <div ref={autocompleteRef} className={classNames(styles["autocomplete"], [className])}>
+      {activeOptionId}
+      <div>{isStopFilter ? 'true' : 'false'}</div>
+      <div>selectedValue: {selectedValue}</div>
+      <div>Value: {value}</div>
       <Field
         id={id}
         ref={fieldRef}
@@ -177,8 +201,14 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onBlur={handleBlur}
         onFocus={onFocus}
         onClick={handleToggleVisibleMenu}
-        onChange={onChange}
+        onChange={handleChange}
         autoComplete="off"
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={isVisibleMenu ? "true" : undefined}
+        aria-labelledby={labelId}
+        aria-controls={isVisibleMenu ? optionsListId : undefined}
+        aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}
         {...fieldProps}
       />
       <Options
@@ -192,8 +222,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
         setActiveOptionId={setActiveOptionId}
         optionsListId={optionsListId}
         selectedValue={selectedValue}
-        options={optionsArray}
+        options={filteredOptions}
         isAutocomplete
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
       />
     </div>
   );

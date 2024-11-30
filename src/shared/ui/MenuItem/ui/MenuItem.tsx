@@ -144,6 +144,8 @@ const MenuItem = memo((props: MenuItemProps) => {
         onMouseMove={handleMouseMove}
         tabIndex={localTabIndex}
         data-disabled={isDisabled || isReadonly}
+        data-index={typeof index === 'number' ? index : undefined}
+        data-value={value || undefined}
         disabled={isDisabled}
         onClick={handleClick}
         onKeyDown={handleKeyDown}

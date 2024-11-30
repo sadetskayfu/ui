@@ -277,7 +277,7 @@ export const Field = memo(
                   readOnly={isReadonly}
                   onBlur={handleBlur}
                   onFocus={handleFocus}
-                  aria-errormessage={errorMessageId}
+                  aria-errormessage={errorMessage ? errorMessageId : undefined}
                   onKeyDown={handleKeyDown}
                   {...otherProps}
                 />
