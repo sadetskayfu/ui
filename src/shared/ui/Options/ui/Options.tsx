@@ -10,12 +10,13 @@ import {
   useState,
 } from "react";
 import styles from "./style.module.scss";
-import { MenuItemProps } from "@/shared/ui/MenuItem";
+import type { MenuItemProps } from "@/shared/ui/MenuItem";
 import { MenuItem } from "@/shared/ui/MenuItem";
+import { GroupHeader } from "../../GroupHeader";
 
 interface Option {
-    value: string
-    label: string
+  value: string;
+  label: string;
 }
 
 interface OptionsProps {
@@ -23,8 +24,8 @@ interface OptionsProps {
   options: Option[];
   menuItems?: ReactElement[];
   selectedValue: string | string[];
-  activeIndex?: number,
-  setActiveIndex?: (index: number) => void,
+  activeIndex?: number;
+  setActiveIndex?: (index: number) => void;
   onClose: () => void;
   onOpen: () => void;
   onSelect: (value: string) => void;
@@ -34,9 +35,10 @@ interface OptionsProps {
   optionsListId: string;
   labelId: string;
   parentId: string;
-  width?: string
-  height?: string
-  isAutocomplete?: boolean
+  width?: string;
+  height?: string;
+  isAutocomplete?: boolean;
+  groupBy?: keyof Option | 'first-latter'
 }
 
 export const Options = (props: OptionsProps) => {
@@ -58,20 +60,26 @@ export const Options = (props: OptionsProps) => {
     height,
     isAutocomplete,
     activeIndex,
-    setActiveIndex
+    setActiveIndex,
+    groupBy,
   } = props;
 
-  const [localActiveIndex, setLocalActiveIndex] = useState<number>(activeIndex || -1);
+  const [localActiveIndex, setLocalActiveIndex] = useState<number>(
+    activeIndex || -1
+  );
 
   const listRef = useRef<HTMLUListElement | null>(null);
   const interactiveElementsRef = useRef<
     Array<HTMLButtonElement | HTMLLinkElement>
   >([]);
 
-  const handleChangeActiveIndex = useCallback((index: number) => {
-    setLocalActiveIndex(index)
-    setActiveIndex?.(index)
-  }, [setActiveIndex])
+  const handleChangeActiveIndex = useCallback(
+    (index: number) => {
+      setLocalActiveIndex(index);
+      setActiveIndex?.(index);
+    },
+    [setActiveIndex]
+  );
 
   // Get interactive elements
   useEffect(() => {
@@ -126,33 +134,25 @@ export const Options = (props: OptionsProps) => {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       let newIndex = localActiveIndex;
+      const currentInteractiveElements = interactiveElementsRef.current;
 
       switch (event.key) {
         case "ArrowDown":
         case "ArrowUp":
           event.preventDefault();
           const direction = event.key === "ArrowDown" ? 1 : -1;
-          isVisible && interactiveElementsRef.current.length > 0
+          isVisible && currentInteractiveElements.length > 0
             ? (newIndex = findNextEnabledItem(localActiveIndex, direction))
             : onOpen();
           break;
         case "Enter":
+        case " ":
+          if (isAutocomplete && event.key === " ") return;
           event.preventDefault();
           if (isVisible) {
             localActiveIndex <= -1
               ? onClose()
-              : interactiveElementsRef.current[localActiveIndex].click();
-          } else {
-            onOpen();
-          }
-          break;
-        case ' ':
-          if(isAutocomplete) return
-          event.preventDefault();
-          if (isVisible) {
-            localActiveIndex <= -1
-              ? onClose()
-              : interactiveElementsRef.current[localActiveIndex].click();
+              : currentInteractiveElements[localActiveIndex].click();
           } else {
             onOpen();
           }
@@ -165,7 +165,7 @@ export const Options = (props: OptionsProps) => {
           return;
       }
 
-      newIndex !== localActiveIndex &&  handleChangeActiveIndex(newIndex);
+      newIndex !== localActiveIndex && handleChangeActiveIndex(newIndex);
     },
     [
       handleChangeActiveIndex,
@@ -174,13 +174,13 @@ export const Options = (props: OptionsProps) => {
       onClose,
       onOpen,
       findNextEnabledItem,
-      isAutocomplete
+      isAutocomplete,
     ]
   );
 
   useEffect(() => {
-    activeIndex && setLocalActiveIndex(activeIndex)
-  }, [activeIndex])
+    activeIndex && setLocalActiveIndex(activeIndex);
+  }, [activeIndex]);
 
   // Add handle keydown on parent
   useEffect(() => {
@@ -218,30 +218,52 @@ export const Options = (props: OptionsProps) => {
 
   // Update the id of the focused element
   useEffect(() => {
-    if(localActiveIndex === -1) {
-      setActiveOptionId(undefined)
-      return
+    if (localActiveIndex === -1) {
+      setActiveOptionId(undefined);
+      return;
     }
-    const focusedItem = interactiveElementsRef.current[localActiveIndex]; 
-    setActiveOptionId(focusedItem ? focusedItem.getAttribute("id") as string : undefined);
-  }, [setActiveOptionId, localActiveIndex])
+    const focusedItem = interactiveElementsRef.current[localActiveIndex];
+    setActiveOptionId(
+      focusedItem ? (focusedItem.getAttribute("id") as string) : undefined
+    );
+  }, [setActiveOptionId, localActiveIndex]);
 
   // Update index on selected option after open menu or change selected value
   useEffect(() => {
-    if(selectedValue.length === 0 || !isVisible) return
-    if(interactiveElementsRef.current.length === 0) return
-   
-    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
-      return item.getAttribute('data-value') === (Array.isArray(selectedValue) ? selectedValue[selectedValue.length - 1] : selectedValue)
-    })
-    const index = lastSelectedOption[0] ? Number(lastSelectedOption[0].getAttribute('data-index')) : -1
-    handleChangeActiveIndex(index)
-  }, [handleChangeActiveIndex, selectedValue, isVisible])
+    if (selectedValue.length === 0 || !isVisible) return;
+    if (interactiveElementsRef.current.length === 0) return;
 
-  const optionId = `${parentId}-option-`;
+    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
+      return (
+        item.getAttribute("data-value") ===
+        (Array.isArray(selectedValue)
+          ? selectedValue[selectedValue.length - 1]
+          : selectedValue)
+      );
+    });
+    const index = lastSelectedOption[0]
+      ? Number(lastSelectedOption[0].getAttribute("data-index"))
+      : -1;
+    handleChangeActiveIndex(index);
+  }, [handleChangeActiveIndex, selectedValue, isVisible]);
+
+  const groupOptions = useCallback((options: Option[]) => {
+    return options.reduce((groups, option) => {
+      const groupKey = (groupBy && groupBy !== 'first-latter') ? option[groupBy].toUpperCase() : option.label.charAt(0).toUpperCase();
+
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+
+      groups[groupKey].push(option);
+
+      return groups;
+    }, {} as { [key: string]: Option[] });
+  }, [groupBy]);
 
   const renderOptions = useMemo(() => {
-    if (options.length <= 0 || (menuItems && menuItems?.length <= 0)) return;
+
+    if(options.length === 0) return
 
     const getSelectedValue = (value: string): boolean => {
       return Array.isArray(selectedValue)
@@ -250,68 +272,100 @@ export const Options = (props: OptionsProps) => {
         : value === selectedValue;
     };
 
-    let menuItemIndex = 0;
+    let optionIndex = 0;
 
-    if (menuItems) {
-      return Children.map(menuItems, (menuItem) => {
-        const childProps = (menuItem as ReactElement).props;
-        const value = childProps.value;
+    if(groupBy) {
+      const groupedOptions = groupOptions(options);
 
-        if (!value) return cloneElement(menuItem);
-
-        const index = menuItemIndex;
-        menuItemIndex++;
-
-        const isHovered = index === localActiveIndex;
-        const isSelected = getSelectedValue(value);
-        const isDisabled = getDisabledOption?.(value);
-
-        const props: Partial<MenuItemProps> = {
-          onSelect,
-          isSelected,
-          isDisabled,
-          isHovered,
-          role: "option",
-          id: `${optionId}${index}`,
-          index,
-          setActiveIndex: handleChangeActiveIndex,
-        };
-
-        return cloneElement(menuItem as ReactElement, { ...props });
-      });
-    } else {
-      return options.map((option, index) => {
-        const isHovered = index === localActiveIndex;
-        const isSelected = getSelectedValue(option.value);
-        const isDisabled = getDisabledOption?.(option.value);
-
-        const props: Partial<MenuItemProps> = {
-          onSelect,
-          isSelected,
-          isDisabled,
-          isHovered,
-          role: "option",
-          id: `${optionId}${index}`,
-          index,
-          setActiveIndex: handleChangeActiveIndex,
-        };
+      return Object.keys(groupedOptions).map((groupKey) => {
+        const groupHeaderId = `${parentId}-group-header-${groupKey}`;
+  
         return (
-          <MenuItem key={index} value={option.value} {...props}>
-            {option.label}
-          </MenuItem>
+          <li key={groupKey}>
+            <GroupHeader id={groupHeaderId}>{groupKey}</GroupHeader>
+            <ul
+              className="group-items"
+              role="listbox"
+              aria-labelledby={groupHeaderId}
+            >
+              {groupedOptions[groupKey].map((option) => {
+                const index = optionIndex;
+                optionIndex++;
+                const optionId = `${parentId}-option-${index}`;
+
+                const isHovered = localActiveIndex === index;
+                const isDisabled = getDisabledOption?.(option.value);
+                const isSelected = getSelectedValue(option.value);
+  
+                const props: Partial<MenuItemProps> = {
+                  isDisabled,
+                  isSelected,
+                  isHovered,
+                  role: "option",
+                  id: optionId,
+                  index,
+                  setActiveIndex: handleChangeActiveIndex,
+                  onSelect,
+                  value: option.value,
+                };
+  
+                return (
+                  <MenuItem key={index} {...props}>
+                    {option.label}
+                  </MenuItem>
+                );
+              })}
+            </ul>
+          </li>
         );
       });
     }
+    return options.map((option, index) => {
+      const optionId = `${parentId}-option-${index}`;
+
+      const isHovered = localActiveIndex === index;
+      const isDisabled = getDisabledOption?.(option.value);
+      const isSelected = getSelectedValue(option.value);
+
+      const props: Partial<MenuItemProps> = {
+        isDisabled,
+        isSelected,
+        isHovered,
+        role: "option",
+        id: optionId,
+        index,
+        setActiveIndex: handleChangeActiveIndex,
+        onSelect,
+        value: option.value,
+      };
+      return (
+        <MenuItem key={index} {...props}>{option.label}</MenuItem>
+      )
+    })
   }, [
-    onSelect,
     options,
-    menuItems,
-    selectedValue,
-    optionId,
     getDisabledOption,
+    handleChangeActiveIndex,
+    onSelect,
+    selectedValue,
     localActiveIndex,
-    handleChangeActiveIndex
+    parentId,
+    groupOptions,
+    groupBy
   ]);
+
+  // const renderMenuItems = useMemo(() => {
+  //   if(!menuItems || menuItems.length <= 0) return
+
+  //   let menuItemIndex = 0
+
+  //   return Children.map(menuItems, (menuItem: ReactElement<MenuItemProps>) => {
+  //     const value = menuItem.props.value
+  //     if(!value) return cloneElement(menuItem)
+
+  //   })
+
+  // }, [menuItems])
 
   return (
     <Dropdown
@@ -322,16 +376,20 @@ export const Options = (props: OptionsProps) => {
       width={width}
     >
       <ul
-        className={styles['list']}
+        className={styles["list"]}
         ref={listRef}
         id={optionsListId}
         aria-labelledby={labelId}
         role="listbox"
         aria-multiselectable={Array.isArray(selectedValue) ? "true" : "false"}
-        style={{maxHeight: height}}
+        style={{ maxHeight: height }}
       >
         {localActiveIndex}
-        {(options.length > 0 || (menuItems && menuItems?.length > 0)) ? renderOptions : <MenuItem isReadonly>No options</MenuItem>}
+        {options.length > 0 || (menuItems && menuItems?.length > 0) ? (
+          renderOptions
+        ) : (
+          <MenuItem isReadonly>No options</MenuItem>
+        )}
       </ul>
     </Dropdown>
   );

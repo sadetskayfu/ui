@@ -55,6 +55,7 @@ interface AutocompleteProps {
   isReadonly?: boolean;
   isDisabled?: boolean;
   isRequired?: boolean;
+  groupBy?: keyof Option | 'first-latter'
   fieldProps: FieldProps;
 }
 
@@ -74,6 +75,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
     isDisabled,
     isRequired,
     fieldProps,
+    groupBy,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -131,6 +133,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         }
         onSelect(newSelectedValues);
         onChange("");
+        
       }
       if (typeof selectedValue === "string") {
         const newSelectedValue =
@@ -142,8 +145,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
     },
     [selectedValue, onSelect, onChange, handleCloseMenu, options]
   );
-
-  console.log(selectedValue)
 
   const handleDelete = useCallback(
     (optionValue: string) => {
@@ -201,7 +202,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
           <Chip
             color="secondary"
             variant={fieldProps.variant === "filled" ? "outlined" : "filled"}
-            size="medium"
+            size="small"
             isStopFocus
             onClose={() => handleDelete(option)}
             key={option}
@@ -259,6 +260,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         isAutocomplete
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
+        groupBy={groupBy}
       />
     </div>
   );

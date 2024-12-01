@@ -4,8 +4,7 @@
 }
 
 .list {
-    max-height: calc(var(--button-height-medium) * 7);
+    max-height: calc(var(--button-height-medium) * 10);
     background-color: transparent;
     overflow-y: auto;
-    
 }

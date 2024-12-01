@@ -3,7 +3,7 @@
 .menu-item {
     color: var(--secondary-600);
     &.selected {
-        background-color: var(--primary-100);
+        background-color: var(--primary-200);
     }
     &.hovered:not(.disabled) {
         .button,
