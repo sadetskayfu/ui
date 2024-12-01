@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { options } from "../model/Autocomplete";
 import { Autocomplete } from "@/shared/ui/Autocomplete";
 import styles from './style.module.scss'
+import { MenuItem } from "@/shared/ui/MenuItem";
 
 const AutocompletePage = () => {
   const [movieValue, setMovieValue] = useState<string>("");
@@ -54,7 +55,12 @@ const AutocompletePage = () => {
               value={movieMultiValue}
               selectedValue={selectedMovies}
               fieldProps={{ label: "Movies", placeholder: "Select movies"}}
-            />
+              groupBy="first-letter"
+            >
+              {options.map((option) => (
+                <MenuItem key={option.value} label={option.label} value={option.value}>{option.label}</MenuItem>
+              ))}
+            </Autocomplete>
           </PreviewComponents>
         </div>
       </section>

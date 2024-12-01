@@ -36,15 +36,17 @@ export const countries: Record<string, Country> = {
     }
 }
 
-export const options: Record<string, Option> = {
-    '1': { value: '1', label: 'Belonging To The Apocolypse'},
-    '2': { value: '2', label: 'Hunted By My Dreams'},
-    '3': { value: '3', label: 'Praise The Maze'},
-    '4': { value: '4', label: 'Mending The Demons'},
-    '5': { value: '5', label: 'Songs Of The Future'},
-    '6': { value: '6', label: 'Breaking The Titans'},
-    '7': { value: '7', label: 'Answering My Destiny'},
-    '8': { value: '8', label: 'Praise'},
-    '9': { value: '9', label: 'Killer'},
-    '10': { value: '10', label: 'Answering My Destiny adn Y'},
-}
+export const options: Option[] = [
+    { value: '1', label: '12 Belonging To The Apocolypse'},
+    { value: '2', label: '3 Hunted By My Dreams'},
+    { value: '3', label: '5 Praise The Maze'},
+    { value: '4', label: 'Mending The Demons'},
+    { value: '5', label: 'Songs Of The Future'},
+    { value: '6', label: 'Breaking The Titans'},
+    { value: '7', label: 'Answering My Destiny'},
+    { value: '8', label: 'Praise'},
+    { value: '9', label: 'Killer'},
+    { value: '10', label: 'Answering My Destiny adn Y'},
+]
+
+

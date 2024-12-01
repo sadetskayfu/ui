@@ -240,6 +240,11 @@
       flex-grow: 1;
       text-overflow: ellipsis;
     }
+    &.dirty {
+      .input::placeholder {
+        opacity: 1;
+      }
+    }
   }
   &.multiline {
     .input {

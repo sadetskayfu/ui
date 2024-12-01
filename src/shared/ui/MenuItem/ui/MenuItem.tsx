@@ -23,6 +23,7 @@ export interface MenuItemProps {
   index?: number;
   setActiveIndex?: (index: number) => void;
   value?: string;
+  label?: string
   id?: string
   role?: string
 }
@@ -46,6 +47,7 @@ const MenuItem = memo((props: MenuItemProps) => {
     index,
     setActiveIndex,
     value,
+    label,
     id,
     role = 'menuitem',
   } = props;
@@ -64,7 +66,7 @@ const MenuItem = memo((props: MenuItemProps) => {
 
   const handleMouseMove = () => {
     if (setActiveIndex && typeof index === "number") {
-      setActiveIndex(index);
+      //setActiveIndex(index);
     }
   };
 

@@ -12,7 +12,7 @@ import {
 import styles from "./style.module.scss";
 import type { MenuItemProps } from "@/shared/ui/MenuItem";
 import { MenuItem } from "@/shared/ui/MenuItem";
-import { GroupHeader } from "../../GroupHeader";
+import { GroupHeader } from "@/shared/ui/GroupHeader";
 
 interface Option {
   value: string;
@@ -21,8 +21,8 @@ interface Option {
 
 interface OptionsProps {
   isVisible: boolean;
-  options: Option[];
-  menuItems?: ReactElement[];
+  options: Option[] | undefined;
+  childrenOptions?: ReactElement<MenuItemProps>[] | ReactElement[] | ReactElement | ReactElement<MenuItemProps>;
   selectedValue: string | string[];
   activeIndex?: number;
   setActiveIndex?: (index: number) => void;
@@ -38,14 +38,14 @@ interface OptionsProps {
   width?: string;
   height?: string;
   isAutocomplete?: boolean;
-  groupBy?: keyof Option | 'first-latter'
+  groupBy?: keyof Option | "first-letter";
 }
 
 export const Options = (props: OptionsProps) => {
   const {
     isVisible,
     options,
-    menuItems,
+    childrenOptions,
     selectedValue,
     onClose,
     onOpen,
@@ -216,7 +216,7 @@ export const Options = (props: OptionsProps) => {
     }
   }, [localActiveIndex]);
 
-  // Update the id of the focused element
+  // Update the id on the focused element
   useEffect(() => {
     if (localActiveIndex === -1) {
       setActiveOptionId(undefined);
@@ -247,39 +247,83 @@ export const Options = (props: OptionsProps) => {
     handleChangeActiveIndex(index);
   }, [handleChangeActiveIndex, selectedValue, isVisible]);
 
-  const groupOptions = useCallback((options: Option[]) => {
-    return options.reduce((groups, option) => {
-      const groupKey = (groupBy && groupBy !== 'first-latter') ? option[groupBy].toUpperCase() : option.label.charAt(0).toUpperCase();
+  const groupOptions = useCallback(
+    (options: Option[]) => {
+      return options.reduce((groups, option) => {
+        let groupKey: string = "";
 
-      if (!groups[groupKey]) {
-        groups[groupKey] = [];
-      }
+        if (groupBy === "first-letter") {
+          const firstLetter = option.label.charAt(0);
+          groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
+        }
+        if (groupBy && groupBy !== "first-letter") {
+          groupKey = option[groupBy];
+        }
 
-      groups[groupKey].push(option);
+        groupKey.toUpperCase();
+
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+
+        groups[groupKey].push(option);
+
+        return groups;
+      }, {} as { [key: string]: Option[] });
+    },
+    [groupBy]
+  );
+
+  const groupChildrenOptions = useCallback(
+    (childrenOptions: ReactElement<MenuItemProps>[] | ReactElement<MenuItemProps>) => {
+      const groups = {} as { [key: string]: ReactElement<MenuItemProps>[] };
+
+      Children.map(childrenOptions, (option) => {
+        const props = option.props;
+        let groupKey: string = "";
+
+        if (groupBy === "first-letter") {
+          const firstLetter = props.label!.charAt(0);
+          groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
+        }
+        if (groupBy && groupBy !== "first-letter") {
+          groupKey = props[groupBy as keyof MenuItemProps] as string;
+        }
+
+        groupKey.toUpperCase();
+
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+        groups[groupKey].push(option);
+      });
 
       return groups;
-    }, {} as { [key: string]: Option[] });
-  }, [groupBy]);
+    },
+    [groupBy]
+  );
 
-  const renderOptions = useMemo(() => {
-
-    if(options.length === 0) return
-
-    const getSelectedValue = (value: string): boolean => {
+  const getSelectedValue = useCallback(
+    (value: string): boolean => {
       return Array.isArray(selectedValue)
         ? selectedValue.filter((selectedValue) => selectedValue === value)
             .length > 0
         : value === selectedValue;
-    };
+    },
+    [selectedValue]
+  );
+
+  const renderOptions = useMemo(() => {
+    if (childrenOptions || !options || options.length === 0) return;
 
     let optionIndex = 0;
 
-    if(groupBy) {
+    if (groupBy) {
       const groupedOptions = groupOptions(options);
 
       return Object.keys(groupedOptions).map((groupKey) => {
         const groupHeaderId = `${parentId}-group-header-${groupKey}`;
-  
+
         return (
           <li key={groupKey}>
             <GroupHeader id={groupHeaderId}>{groupKey}</GroupHeader>
@@ -296,7 +340,7 @@ export const Options = (props: OptionsProps) => {
                 const isHovered = localActiveIndex === index;
                 const isDisabled = getDisabledOption?.(option.value);
                 const isSelected = getSelectedValue(option.value);
-  
+
                 const props: Partial<MenuItemProps> = {
                   isDisabled,
                   isSelected,
@@ -308,7 +352,7 @@ export const Options = (props: OptionsProps) => {
                   onSelect,
                   value: option.value,
                 };
-  
+
                 return (
                   <MenuItem key={index} {...props}>
                     {option.label}
@@ -339,33 +383,113 @@ export const Options = (props: OptionsProps) => {
         value: option.value,
       };
       return (
-        <MenuItem key={index} {...props}>{option.label}</MenuItem>
-      )
-    })
+        <MenuItem key={index} {...props}>
+          {option.label}
+        </MenuItem>
+      );
+    });
   }, [
     options,
     getDisabledOption,
     handleChangeActiveIndex,
     onSelect,
-    selectedValue,
     localActiveIndex,
     parentId,
     groupOptions,
-    groupBy
+    groupBy,
+    childrenOptions,
+    getSelectedValue,
   ]);
 
-  // const renderMenuItems = useMemo(() => {
-  //   if(!menuItems || menuItems.length <= 0) return
+  const renderChildrenOptions = useMemo(() => {
+    if (options || !childrenOptions || (childrenOptions as ReactElement[]).length <= 0) return;
 
-  //   let menuItemIndex = 0
+    let optionIndex = 0;
 
-  //   return Children.map(menuItems, (menuItem: ReactElement<MenuItemProps>) => {
-  //     const value = menuItem.props.value
-  //     if(!value) return cloneElement(menuItem)
+    if (groupBy) {
+      const groupedChildrenOptions = groupChildrenOptions(childrenOptions);
 
-  //   })
+      return Object.keys(groupedChildrenOptions).map((groupKey) => {
+        const groupHeaderId = `${parentId}-group-header-${groupKey}`;
 
-  // }, [menuItems])
+        return (
+          <li key={groupKey}>
+            <GroupHeader id={groupHeaderId}>{groupKey}</GroupHeader>
+            <ul
+              className="group-items"
+              role="listbox"
+              aria-labelledby={groupHeaderId}
+            >
+              {Children.map(groupedChildrenOptions[groupKey], (option) => {
+                const index = optionIndex;
+                optionIndex++;
+                const optionId = `${parentId}-option-${index}`;
+
+                const value = option.props.value;
+
+                const isHovered = localActiveIndex === index;
+                const isDisabled = getDisabledOption?.(value!);
+                const isSelected = getSelectedValue(value!);
+
+                const props: Partial<MenuItemProps> = {
+                  isDisabled,
+                  isSelected,
+                  isHovered,
+                  role: "option",
+                  id: optionId,
+                  index,
+                  setActiveIndex: handleChangeActiveIndex,
+                  onSelect,
+                };
+                return cloneElement(option, { ...props });
+              })}
+            </ul>
+          </li>
+        );
+      });
+    }
+
+    return Children.map(
+      childrenOptions,
+      (option: ReactElement<MenuItemProps>) => {
+        const value = option.props.value;
+        if(!value) return cloneElement(option)
+  
+        const index = optionIndex;
+        optionIndex++;
+
+        const optionId = `${parentId}-option-${index}`;
+
+        const isHovered = localActiveIndex === index;
+        const isDisabled = getDisabledOption?.(value);
+        const isSelected = getSelectedValue(value);
+
+        const props: Partial<MenuItemProps> = {
+          isDisabled,
+          isSelected,
+          isHovered,
+          role: "option",
+          id: optionId,
+          index,
+          setActiveIndex: handleChangeActiveIndex,
+          onSelect,
+        };
+
+        return cloneElement(option, { ...props });
+      }
+    );
+  }, [
+    childrenOptions,
+    getDisabledOption,
+    getSelectedValue,
+    handleChangeActiveIndex,
+    localActiveIndex,
+    onSelect,
+    parentId,
+    groupBy,
+    options,
+    groupChildrenOptions,
+  ]);
 
   return (
     <Dropdown
@@ -385,8 +509,15 @@ export const Options = (props: OptionsProps) => {
         style={{ maxHeight: height }}
       >
         {localActiveIndex}
-        {options.length > 0 || (menuItems && menuItems?.length > 0) ? (
-          renderOptions
+
+        {options ? (
+          options.length > 0 ? (
+            renderOptions
+          ) : (
+            <MenuItem isReadonly>No options</MenuItem>
+          )
+        ) : childrenOptions && (childrenOptions as ReactElement[]).length > 0 ? (
+          renderChildrenOptions
         ) : (
           <MenuItem isReadonly>No options</MenuItem>
         )}

@@ -98,7 +98,7 @@ export const Field = memo(
         string | undefined
       >(undefined);
 
-      const isDirty = value.length > 0 || !!startAdornment;
+      const isDirty = value.length > 0 || !!startAdornment || !!chips;
       
       const errorMessageId = useId() + id
 
@@ -157,6 +157,7 @@ export const Field = memo(
         };
       }, [debouncedOnChange]);
 
+      // Update height textarea
       useEffect(() => {
         const textarea = textareaRef.current;
         if (textarea) {
@@ -166,6 +167,7 @@ export const Field = memo(
         }
       }, [value]);
 
+      // Add lazy transition for skip autofill
       useEffect(() => {
         setTimeout(() => {
           setTransitionDuration("0.2s");
