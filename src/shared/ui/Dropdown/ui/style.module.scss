@@ -8,12 +8,12 @@
   border-radius: var(--border-radius-small);
   background-color: var(--light);
   box-shadow: var(--box-shadow-menu);
-  transition: opacity 0.3s, z-index 3s;
+  //transition: opacity 0.3s, z-index 3s;
   
   &.visible {
     pointer-events: all;
     opacity: 1;
-    transition: opacity 0.3s, z-index 0s;
+    //transition: opacity 0.3s, z-index 0s;
     z-index: var(--z-index-drop-down-menu);
   }
 }

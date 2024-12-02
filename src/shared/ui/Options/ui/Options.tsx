@@ -13,6 +13,7 @@ import styles from "./style.module.scss";
 import type { MenuItemProps } from "@/shared/ui/MenuItem";
 import { MenuItem } from "@/shared/ui/MenuItem";
 import { GroupHeader } from "@/shared/ui/GroupHeader";
+import { updateScrollList } from "@/shared/lib";
 
 interface Option {
   value: string;
@@ -22,7 +23,11 @@ interface Option {
 interface OptionsProps {
   isVisible: boolean;
   options: Option[] | undefined;
-  childrenOptions?: ReactElement<MenuItemProps>[] | ReactElement[] | ReactElement | ReactElement<MenuItemProps>;
+  childrenOptions?:
+    | ReactElement<MenuItemProps>[]
+    | ReactElement[]
+    | ReactElement
+    | ReactElement<MenuItemProps>;
   selectedValue: string | string[];
   activeIndex?: number;
   setActiveIndex?: (index: number) => void;
@@ -68,10 +73,17 @@ export const Options = (props: OptionsProps) => {
     activeIndex || -1
   );
 
-  const listRef = useRef<HTMLUListElement | null>(null);
-  const interactiveElementsRef = useRef<
-    Array<HTMLButtonElement | HTMLLinkElement>
-  >([]);
+  const optionsListRef = useRef<HTMLUListElement | null>(null);
+  const optionsRef = useRef<Array<HTMLButtonElement>>([]);
+
+  const baseGroupedOptionsRef = useRef<Record<string, Option[]> | null>(null);
+  const baseGroupedOptionsLengthRef = useRef<number | null>(null);
+
+  const baseGroupedChildrenOptionsRef = useRef<Record<
+    string,
+    ReactElement<MenuItemProps>[]
+  > | null>(null);
+  const baseGroupedChildrenOptionsLengthRef = useRef<number | null>(null);
 
   const handleChangeActiveIndex = useCallback(
     (index: number) => {
@@ -81,48 +93,44 @@ export const Options = (props: OptionsProps) => {
     [setActiveIndex]
   );
 
-  // Get interactive elements
+  // Get options
   useEffect(() => {
-    const currentList = listRef.current;
-    if (!currentList) return;
+    const optionsList = optionsListRef.current;
+    if (!optionsList) return;
 
-    const updateInteractiveElements = () => {
-      const interactiveElements = currentList.querySelectorAll<
-        HTMLButtonElement | HTMLLinkElement
-      >("a, button");
-      interactiveElementsRef.current = Array.from(interactiveElements);
+    const updateOptions = () => {
+      const options =
+        optionsList.querySelectorAll<HTMLButtonElement>("[role='option']");
+      optionsRef.current = Array.from(options);
     };
 
-    const observer = new MutationObserver(updateInteractiveElements);
+    const observer = new MutationObserver(updateOptions);
 
-    observer.observe(currentList, {
+    observer.observe(optionsList, {
       childList: true,
     });
 
-    updateInteractiveElements();
+    updateOptions();
 
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [optionsListRef]);
 
-  const findNextEnabledItem = useCallback(
+  const findNextEnabledOption = useCallback(
     (currentIndex: number, direction: 1 | -1) => {
-      const currentInteractiveElements = interactiveElementsRef.current;
+      const options = optionsRef.current;
 
       let nextIndex = localActiveIndex;
 
-      for (let i = 1; i <= currentInteractiveElements.length; i++) {
+      for (let i = 1; i <= options.length; i++) {
         const step = direction * i;
         nextIndex =
           currentIndex === -1 && direction === -1
-            ? currentInteractiveElements.length - 1
-            : (currentIndex + step + currentInteractiveElements.length) %
-              currentInteractiveElements.length;
+            ? options.length - 1
+            : (currentIndex + step + options.length) % options.length;
         const isDisabled =
-          currentInteractiveElements[nextIndex].getAttribute(
-            "data-disabled"
-          ) === "true";
+          options[nextIndex].getAttribute("data-disabled") === "true";
         if (!isDisabled) return nextIndex;
       }
 
@@ -133,16 +141,16 @@ export const Options = (props: OptionsProps) => {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      let newIndex = localActiveIndex;
-      const currentInteractiveElements = interactiveElementsRef.current;
+      let nextIndex = localActiveIndex;
+      const options = optionsRef.current;
 
       switch (event.key) {
         case "ArrowDown":
         case "ArrowUp":
           event.preventDefault();
           const direction = event.key === "ArrowDown" ? 1 : -1;
-          isVisible && currentInteractiveElements.length > 0
-            ? (newIndex = findNextEnabledItem(localActiveIndex, direction))
+          isVisible && options.length > 0
+            ? (nextIndex = findNextEnabledOption(localActiveIndex, direction))
             : onOpen();
           break;
         case "Enter":
@@ -152,7 +160,7 @@ export const Options = (props: OptionsProps) => {
           if (isVisible) {
             localActiveIndex <= -1
               ? onClose()
-              : currentInteractiveElements[localActiveIndex].click();
+              : options[localActiveIndex].click();
           } else {
             onOpen();
           }
@@ -165,7 +173,7 @@ export const Options = (props: OptionsProps) => {
           return;
       }
 
-      newIndex !== localActiveIndex && handleChangeActiveIndex(newIndex);
+      nextIndex !== localActiveIndex && handleChangeActiveIndex(nextIndex);
     },
     [
       handleChangeActiveIndex,
@@ -173,7 +181,7 @@ export const Options = (props: OptionsProps) => {
       isVisible,
       onClose,
       onOpen,
-      findNextEnabledItem,
+      findNextEnabledOption,
       isAutocomplete,
     ]
   );
@@ -184,37 +192,21 @@ export const Options = (props: OptionsProps) => {
 
   // Add handle keydown on parent
   useEffect(() => {
-    const currentParent = parentRef.current;
-    currentParent?.addEventListener("keydown", handleKeyDown);
+    const parent = parentRef.current;
+    parent?.addEventListener("keydown", handleKeyDown);
     return () => {
-      currentParent?.removeEventListener("keydown", handleKeyDown);
+      parent?.removeEventListener("keydown", handleKeyDown);
     };
   }, [parentRef, handleKeyDown]);
 
-  // Scroll list if selected item not visible
+  // Update scroll
   useEffect(() => {
-    const currentList = listRef.current;
-    const currentInteractiveElements = interactiveElementsRef.current;
-    if (
-      currentList &&
-      localActiveIndex !== -1 &&
-      currentInteractiveElements &&
-      currentInteractiveElements.length > 1
-    ) {
-      const selectedElement = currentInteractiveElements[localActiveIndex];
-      const menuRect = currentList.getBoundingClientRect();
-
-      if (selectedElement) {
-        const selectedRect = selectedElement.getBoundingClientRect();
-
-        if (selectedRect.bottom > menuRect.bottom) {
-          currentList.scrollTop += selectedRect.bottom - menuRect.bottom;
-        } else if (selectedRect.top < menuRect.top) {
-          currentList.scrollTop -= menuRect.top - selectedRect.top;
-        }
-      }
+    const options = optionsRef.current;
+    const optionsList = optionsListRef.current;
+    if (isVisible) {
+      updateScrollList(localActiveIndex, options, optionsList, 6);
     }
-  }, [localActiveIndex]);
+  }, [isVisible, localActiveIndex]);
 
   // Update the id on the focused element
   useEffect(() => {
@@ -222,20 +214,23 @@ export const Options = (props: OptionsProps) => {
       setActiveOptionId(undefined);
       return;
     }
-    const focusedItem = interactiveElementsRef.current[localActiveIndex];
+    const focusedOption = optionsRef.current[localActiveIndex];
     setActiveOptionId(
-      focusedItem ? (focusedItem.getAttribute("id") as string) : undefined
+      focusedOption ? (focusedOption.getAttribute("id") as string) : undefined
     );
   }, [setActiveOptionId, localActiveIndex]);
 
   // Update index on selected option after open menu or change selected value
   useEffect(() => {
     if (selectedValue.length === 0 || !isVisible) return;
-    if (interactiveElementsRef.current.length === 0) return;
 
-    const lastSelectedOption = interactiveElementsRef.current.filter((item) => {
+    const options = optionsRef.current;
+
+    if (options.length === 0) return;
+
+    const lastSelectedOption = options.filter((option) => {
       return (
-        item.getAttribute("data-value") ===
+        option.getAttribute("data-value") ===
         (Array.isArray(selectedValue)
           ? selectedValue[selectedValue.length - 1]
           : selectedValue)
@@ -247,81 +242,107 @@ export const Options = (props: OptionsProps) => {
     handleChangeActiveIndex(index);
   }, [handleChangeActiveIndex, selectedValue, isVisible]);
 
-  const groupOptions = useCallback(
-    (options: Option[]) => {
-      return options.reduce((groups, option) => {
-        let groupKey: string = "";
+  const groupedOptions = useMemo(() => {
+    if (!options || !groupBy) return;
 
-        if (groupBy === "first-letter") {
-          const firstLetter = option.label.charAt(0);
-          groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
-        }
-        if (groupBy && groupBy !== "first-letter") {
-          groupKey = option[groupBy];
-        }
+    const optionsLength = options.length;
+    const baseGroupedOptions = baseGroupedOptionsRef.current;
 
-        groupKey.toUpperCase();
+    if (
+      baseGroupedOptions &&
+      baseGroupedOptionsLengthRef.current === optionsLength
+    )
+      return baseGroupedOptions;
 
-        if (!groups[groupKey]) {
-          groups[groupKey] = [];
-        }
+    const groups: Record<string, Option[]> = {};
 
-        groups[groupKey].push(option);
+    options.map((option) => {
+      let groupKey: string = "";
+      console.log("grouped options");
+      if (groupBy === "first-letter") {
+        const firstLetter = option.label.charAt(0);
+        groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
+      }
+      if (groupBy && groupBy !== "first-letter") {
+        groupKey = option[groupBy];
+      }
 
-        return groups;
-      }, {} as { [key: string]: Option[] });
-    },
-    [groupBy]
-  );
+      groupKey.toUpperCase();
 
-  const groupChildrenOptions = useCallback(
-    (childrenOptions: ReactElement<MenuItemProps>[] | ReactElement<MenuItemProps>) => {
-      const groups = {} as { [key: string]: ReactElement<MenuItemProps>[] };
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(option);
+    });
 
-      Children.map(childrenOptions, (option) => {
-        const props = option.props;
-        let groupKey: string = "";
+    if (!baseGroupedOptions) {
+      baseGroupedOptionsRef.current = groups;
+      baseGroupedOptionsLengthRef.current = optionsLength;
+    }
 
-        if (groupBy === "first-letter") {
-          const firstLetter = props.label!.charAt(0);
-          groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
-        }
-        if (groupBy && groupBy !== "first-letter") {
-          groupKey = props[groupBy as keyof MenuItemProps] as string;
-        }
+    return groups;
+  }, [groupBy, options]);
 
-        groupKey.toUpperCase();
+  const groupedChildrenOptions = useMemo(() => {
+    if (!childrenOptions || !groupBy) return;
 
-        if (!groups[groupKey]) {
-          groups[groupKey] = [];
-        }
-        groups[groupKey].push(option);
-      });
+    const optionsLength = (childrenOptions as ReactElement[]).length;
+    const baseGroupedChildrenOptions = baseGroupedChildrenOptionsRef.current;
 
-      return groups;
-    },
-    [groupBy]
-  );
+    if (
+      baseGroupedChildrenOptions &&
+      baseGroupedChildrenOptionsLengthRef.current === optionsLength
+    )
+      return baseGroupedChildrenOptions;
+    
+    const groups: Record<string, ReactElement<MenuItemProps>[]> = {};
+
+    Children.map(childrenOptions, (option) => {
+      console.log('grouped children options')
+      const props = option.props;
+      let groupKey: string = "";
+
+      if (groupBy === "first-letter") {
+        const firstLetter = props.label!.charAt(0);
+        groupKey = /[0-9]/.test(firstLetter) ? "0-9" : firstLetter;
+      }
+      if (groupBy && groupBy !== "first-letter") {
+        groupKey = props[groupBy as keyof MenuItemProps] as string;
+      }
+
+      groupKey.toUpperCase();
+
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(option);
+    });
+
+    if (!baseGroupedChildrenOptions) {
+      baseGroupedChildrenOptionsRef.current = groups;
+      baseGroupedChildrenOptionsLengthRef.current = optionsLength;
+    }
+
+    return groups;
+  }, [groupBy, childrenOptions]);
 
   const getSelectedValue = useCallback(
-    (value: string): boolean => {
+    (value: string, selectedValue: string | string[]): boolean => {
       return Array.isArray(selectedValue)
         ? selectedValue.filter((selectedValue) => selectedValue === value)
             .length > 0
         : value === selectedValue;
     },
-    [selectedValue]
+    []
   );
 
   const renderOptions = useMemo(() => {
-    if (childrenOptions || !options || options.length === 0) return;
+    if (!options || options.length === 0) return;
 
     let optionIndex = 0;
 
     if (groupBy) {
-      const groupedOptions = groupOptions(options);
-
-      return Object.keys(groupedOptions).map((groupKey) => {
+      return Object.keys(groupedOptions!).map((groupKey) => {
         const groupHeaderId = `${parentId}-group-header-${groupKey}`;
 
         return (
@@ -332,14 +353,17 @@ export const Options = (props: OptionsProps) => {
               role="listbox"
               aria-labelledby={groupHeaderId}
             >
-              {groupedOptions[groupKey].map((option) => {
+              {groupedOptions![groupKey].map((option) => {
                 const index = optionIndex;
                 optionIndex++;
                 const optionId = `${parentId}-option-${index}`;
 
                 const isHovered = localActiveIndex === index;
                 const isDisabled = getDisabledOption?.(option.value);
-                const isSelected = getSelectedValue(option.value);
+                const isSelected = getSelectedValue(
+                  option.value,
+                  selectedValue
+                );
 
                 const props: Partial<MenuItemProps> = {
                   isDisabled,
@@ -348,7 +372,6 @@ export const Options = (props: OptionsProps) => {
                   role: "option",
                   id: optionId,
                   index,
-                  setActiveIndex: handleChangeActiveIndex,
                   onSelect,
                   value: option.value,
                 };
@@ -369,7 +392,7 @@ export const Options = (props: OptionsProps) => {
 
       const isHovered = localActiveIndex === index;
       const isDisabled = getDisabledOption?.(option.value);
-      const isSelected = getSelectedValue(option.value);
+      const isSelected = getSelectedValue(option.value, selectedValue);
 
       const props: Partial<MenuItemProps> = {
         isDisabled,
@@ -378,7 +401,6 @@ export const Options = (props: OptionsProps) => {
         role: "option",
         id: optionId,
         index,
-        setActiveIndex: handleChangeActiveIndex,
         onSelect,
         value: option.value,
       };
@@ -391,25 +413,23 @@ export const Options = (props: OptionsProps) => {
   }, [
     options,
     getDisabledOption,
-    handleChangeActiveIndex,
     onSelect,
     localActiveIndex,
     parentId,
-    groupOptions,
+    groupedOptions,
     groupBy,
-    childrenOptions,
     getSelectedValue,
+    selectedValue,
   ]);
 
   const renderChildrenOptions = useMemo(() => {
-    if (options || !childrenOptions || (childrenOptions as ReactElement[]).length <= 0) return;
+    if (!childrenOptions || (childrenOptions as ReactElement[]).length === 0)
+      return;
 
     let optionIndex = 0;
 
     if (groupBy) {
-      const groupedChildrenOptions = groupChildrenOptions(childrenOptions);
-
-      return Object.keys(groupedChildrenOptions).map((groupKey) => {
+      return Object.keys(groupedChildrenOptions!).map((groupKey) => {
         const groupHeaderId = `${parentId}-group-header-${groupKey}`;
 
         return (
@@ -420,7 +440,8 @@ export const Options = (props: OptionsProps) => {
               role="listbox"
               aria-labelledby={groupHeaderId}
             >
-              {Children.map(groupedChildrenOptions[groupKey], (option) => {
+              {Children.map(groupedChildrenOptions![groupKey], (option) => {
+                console.log('children map')
                 const index = optionIndex;
                 optionIndex++;
                 const optionId = `${parentId}-option-${index}`;
@@ -429,7 +450,7 @@ export const Options = (props: OptionsProps) => {
 
                 const isHovered = localActiveIndex === index;
                 const isDisabled = getDisabledOption?.(value!);
-                const isSelected = getSelectedValue(value!);
+                const isSelected = getSelectedValue(value!, selectedValue);
 
                 const props: Partial<MenuItemProps> = {
                   isDisabled,
@@ -438,7 +459,6 @@ export const Options = (props: OptionsProps) => {
                   role: "option",
                   id: optionId,
                   index,
-                  setActiveIndex: handleChangeActiveIndex,
                   onSelect,
                 };
                 return cloneElement(option, { ...props });
@@ -453,8 +473,8 @@ export const Options = (props: OptionsProps) => {
       childrenOptions,
       (option: ReactElement<MenuItemProps>) => {
         const value = option.props.value;
-        if(!value) return cloneElement(option)
-  
+        if (!value) return cloneElement(option);
+
         const index = optionIndex;
         optionIndex++;
 
@@ -462,7 +482,7 @@ export const Options = (props: OptionsProps) => {
 
         const isHovered = localActiveIndex === index;
         const isDisabled = getDisabledOption?.(value);
-        const isSelected = getSelectedValue(value);
+        const isSelected = getSelectedValue(value, selectedValue);
 
         const props: Partial<MenuItemProps> = {
           isDisabled,
@@ -471,7 +491,6 @@ export const Options = (props: OptionsProps) => {
           role: "option",
           id: optionId,
           index,
-          setActiveIndex: handleChangeActiveIndex,
           onSelect,
         };
 
@@ -482,13 +501,12 @@ export const Options = (props: OptionsProps) => {
     childrenOptions,
     getDisabledOption,
     getSelectedValue,
-    handleChangeActiveIndex,
     localActiveIndex,
     onSelect,
     parentId,
     groupBy,
-    options,
-    groupChildrenOptions,
+    groupedChildrenOptions,
+    selectedValue,
   ]);
 
   return (
@@ -501,22 +519,21 @@ export const Options = (props: OptionsProps) => {
     >
       <ul
         className={styles["list"]}
-        ref={listRef}
+        ref={optionsListRef}
         id={optionsListId}
         aria-labelledby={labelId}
         role="listbox"
         aria-multiselectable={Array.isArray(selectedValue) ? "true" : "false"}
         style={{ maxHeight: height }}
       >
-        {localActiveIndex}
-
         {options ? (
           options.length > 0 ? (
             renderOptions
           ) : (
             <MenuItem isReadonly>No options</MenuItem>
           )
-        ) : childrenOptions && (childrenOptions as ReactElement[]).length > 0 ? (
+        ) : childrenOptions &&
+          (childrenOptions as ReactElement[]).length > 0 ? (
           renderChildrenOptions
         ) : (
           <MenuItem isReadonly>No options</MenuItem>

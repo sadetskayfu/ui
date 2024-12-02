@@ -1,6 +1,6 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { options } from "../model/Autocomplete";
 import { Autocomplete } from "@/shared/ui/Autocomplete";
 import styles from './style.module.scss'
@@ -27,11 +27,16 @@ const AutocompletePage = () => {
     setSelectedMovies(value as string[]);
   }, []);
 
+  const renderChildrenOptions = useMemo(() => {
+    return options.map((option) => (
+      <MenuItem key={option.value} label={option.label} value={option.value}>{option.label}</MenuItem>
+    ))
+  }, [])
+
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Autocomplete</SectionTitle>
-        {selectedMovies}
         <div className="subsections">
           <PreviewComponents title="Single autocomplete">
             <Autocomplete
@@ -43,11 +48,13 @@ const AutocompletePage = () => {
               value={movieValue}
               selectedValue={selectedMovie}
               fieldProps={{ label: "Movie", placeholder: "Select movie"}}
+              groupBy="first-letter"
             />
           </PreviewComponents>
+          
           <PreviewComponents title="Multi autocomplete">
             <Autocomplete
-              className={styles['autocomplete']}
+              className={styles['multi-autocomplete']}
               id="multi-movies-autocomplete"
               onChange={handleChangeMovieMultiValue}
               onSelect={handleSelectMovies}
@@ -55,11 +62,10 @@ const AutocompletePage = () => {
               value={movieMultiValue}
               selectedValue={selectedMovies}
               fieldProps={{ label: "Movies", placeholder: "Select movies"}}
+              optionsMenuProps={{width: '500px'}}
               groupBy="first-letter"
             >
-              {options.map((option) => (
-                <MenuItem key={option.value} label={option.label} value={option.value}>{option.label}</MenuItem>
-              ))}
+              {renderChildrenOptions}
             </Autocomplete>
           </PreviewComponents>
         </div>

@@ -20,8 +20,8 @@ export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
 
 interface OptionsMenuProps {
-  width: string;
-  height: string;
+  width?: string;
+  height?: string;
 }
 
 export interface Option {

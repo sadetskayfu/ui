@@ -21,7 +21,6 @@ export interface MenuItemProps {
   EndIcon?: ReactNode;
   to?: string;
   index?: number;
-  setActiveIndex?: (index: number) => void;
   value?: string;
   label?: string
   id?: string
@@ -45,7 +44,6 @@ const MenuItem = memo((props: MenuItemProps) => {
     EndIcon,
     to = "",
     index,
-    setActiveIndex,
     value,
     label,
     id,
@@ -57,25 +55,19 @@ const MenuItem = memo((props: MenuItemProps) => {
   const localTabIndex = isDisabled ? -1 : tabIndex;
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["hovered"]]: isHovered,
+    [styles["focused"]]: isHovered,
     [styles["selected"]]: isSelected,
     [styles["disabled"]]: isDisabled,
     [styles["readonly"]]: isReadonly,
-    [styles['is-option']]: role === 'option'
-  };
-
-  const handleMouseMove = () => {
-    if (setActiveIndex && typeof index === "number") {
-      //setActiveIndex(index);
-    }
   };
 
   const handleClick = (event: React.MouseEvent) => {
     onClick?.()
+
     if(value && onSelect) {
       onSelect(value)
     }
-    if(isExternalLink) return
+
     handleRippleMousePosition(rippleWrapperRef, event)
   }
 
@@ -95,14 +87,10 @@ const MenuItem = memo((props: MenuItemProps) => {
       >
         <Link
           className={styles["link"]}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}
-          tabIndex={localTabIndex}
-          data-disabled={isDisabled || isReadonly}
-          aria-readonly = {isReadonly ? 'true' : undefined}
-          to={to}
-          role={role}
           id={id}
+          role={role}
+          tabIndex={localTabIndex}
+          to={to}
         >
           {StartIcon && <>{StartIcon}</>}
           {children}
@@ -120,14 +108,10 @@ const MenuItem = memo((props: MenuItemProps) => {
       >
         <a
           className={styles["link"]}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}
-          tabIndex={localTabIndex}
-          data-disabled={isDisabled || isReadonly}
-          aria-readonly = {isReadonly ? 'true' : undefined}
-          href={to}
-          role={role}
           id={id}
+          role={role}
+          tabIndex={localTabIndex}
+          href={to}
         >
           {StartIcon && <>{StartIcon}</>}
           {children}
@@ -143,18 +127,16 @@ const MenuItem = memo((props: MenuItemProps) => {
     >
       <button
         className={styles["button"]}
-        onMouseMove={handleMouseMove}
+        id={id}
+        role={role}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
         tabIndex={localTabIndex}
-        data-disabled={isDisabled || isReadonly}
+        data-disabled={(isDisabled || isReadonly) ? true : undefined}
         data-index={typeof index === 'number' ? index : undefined}
         data-value={value || undefined}
         disabled={isDisabled}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        role={role}
-        id={id}
         aria-selected={isSelected ? 'true' : undefined}
-        aria-readonly = {isReadonly ? 'true' : undefined}
       >
         {StartIcon && <>{StartIcon}</>}
         {children}

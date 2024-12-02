@@ -5,10 +5,10 @@
     &.selected {
         background-color: var(--primary-200);
     }
-    &.hovered:not(.disabled) {
+    &.focused:not(.disabled) {
         .button,
         .link {
-            background-color: var(--secondary-opacity);
+            box-shadow: 0 0 0 4px var(--primary-500) inset,
         }   
     }
     &.disabled {
@@ -22,17 +22,6 @@
         .button,
         .link {
             pointer-events: none;
-        }
-    }
-    &:not(.is-option) {
-        .button,
-        .link {
-            @include hover {
-                background-color: var(--secondary-opacity);
-            }
-            &:focus-visible {
-                background-color: var(--secondary-200);
-            }
         }
     }
 }
@@ -51,6 +40,12 @@
     color: inherit;
     text-align: start;
     border-radius: inherit;
+    @include hover {
+        background-color: var(--secondary-opacity);
+    }
+    &:focus-visible {
+        background-color: var(--secondary-200);
+    }
 }
 
 .button {

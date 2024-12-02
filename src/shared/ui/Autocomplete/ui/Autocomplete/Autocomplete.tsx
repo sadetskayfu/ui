@@ -29,8 +29,8 @@ export interface Option {
 }
 
 interface OptionsMenuProps {
-  width: string;
-  height: string;
+  width?: string;
+  height?: string;
 }
 
 interface FieldProps {
@@ -68,7 +68,7 @@ interface AutocompleteProps {
   getDisabledOption?: (value: string) => boolean;
   fieldProps: FieldProps;
   children?: ReactElement<MenuItemProps> | ReactElement<MenuItemProps>[];
-  optionsMenuProps?: OptionsMenuProps
+  optionsMenuProps?: OptionsMenuProps;
 }
 
 export const Autocomplete = memo((props: AutocompleteProps) => {
@@ -90,7 +90,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     groupBy,
     children,
     getDisabledOption,
-    optionsMenuProps
+    optionsMenuProps,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
@@ -98,7 +98,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     undefined
   );
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const [isStopFilter, setStopFilter] = useState<boolean>(false);
+  const [isStopFilter, setStopFilter] = useState<boolean>(true);
 
   const fieldRef = useRef<HTMLInputElement | null>(null);
   const autocompleteRef = useRef<HTMLDivElement | null>(null);
@@ -106,14 +106,17 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
   const optionsListId = useId() + id;
   const labelId = useId() + id;
 
-  const isMultiAutocomplete = Array.isArray(selectedValue)
+  const isMultiAutocomplete = Array.isArray(selectedValue);
 
   // Options for easy access to the label
   const localOptions = useMemo(() => {
-    return options.reduce((keys, option) => {
-      keys[option.value] = option;
-      return keys;
-    }, {} as Record<string, Option>);
+    return options.reduce(
+      (keys, option) => {
+        keys[option.value] = option;
+        return keys;
+      },
+      {} as Record<string, Option>
+    );
   }, [options]);
 
   // handlers for toggle visible options menu
@@ -127,7 +130,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
   const handleCloseMenu = useCallback(() => {
     setIsVisibleMenu(false);
   }, []);
-  
+
   const handleChange = useCallback(
     (value: string) => {
       onChange(value);
@@ -144,7 +147,6 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
 
   const handleSelect = useCallback(
     (optionValue: string) => {
-
       if (isMultiAutocomplete) {
         let newSelectedValues: string[] = [];
         const alreadyExistingValue = selectedValue.filter(
@@ -174,7 +176,14 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         handleCloseMenu();
       }
     },
-    [selectedValue, onSelect, onChange, handleCloseMenu, localOptions, isMultiAutocomplete]
+    [
+      selectedValue,
+      onSelect,
+      onChange,
+      handleCloseMenu,
+      localOptions,
+      isMultiAutocomplete,
+    ]
   );
 
   const handleDelete = useCallback(
@@ -196,8 +205,8 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
       isMultiAutocomplete
         ? onChange("")
         : selectedValue
-        ? onChange(localOptions[selectedValue].label)
-        : onChange("");
+          ? onChange(localOptions[selectedValue].label)
+          : onChange("");
     }
     onBlur?.();
     handleCloseMenu();
@@ -208,16 +217,20 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     onChange,
     localOptions,
     selectedValue,
-    isMultiAutocomplete
+    isMultiAutocomplete,
   ]);
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if(event.key === 'Backspace' && value === '' && isMultiAutocomplete && selectedValue.length > 0) {
+      event.preventDefault();
+      const newValues = selectedValue.slice(0, -1);
+      onSelect(newValues);
+    }
+  }
 
   // Clear the selected value if input value = ''
   useEffect(() => {
-    if (
-      !isMultiAutocomplete &&
-      value === "" &&
-      selectedValue.length > 0
-    ) {
+    if (!isMultiAutocomplete && value === "" && selectedValue.length > 0) {
       onSelect("");
     }
   }, [onSelect, value, selectedValue, isMultiAutocomplete]);
@@ -242,24 +255,26 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     newOptions = options.filter((option) =>
       option.label.toLowerCase().includes(value.toLowerCase())
     );
+
     return newOptions;
   }, [options, value, isStopFilter, children]);
 
   // Filter the children options
   const filteredChildrenOptions = useMemo(() => {
     if (!children) return;
-    if(isStopFilter) return children
+    if (isStopFilter) return children;
 
-    const filteredItems: ReactElement<MenuItemProps>[] = []
+    const filteredItems: ReactElement<MenuItemProps>[] = [];
 
     Children.map(children, (menuItem: ReactElement<MenuItemProps>) => {
       const label = menuItem.props.label;
-      if (label!.toLocaleLowerCase().includes(value.toLowerCase())) filteredItems.push(cloneElement(menuItem));
+      if (label!.toLocaleLowerCase().includes(value.toLowerCase()))
+        filteredItems.push(cloneElement(menuItem));
     });
 
-    return filteredItems
+    return filteredItems;
   }, [children, value, isStopFilter]);
-  
+
   // Render chips for multi autocomplete
   const renderSelectedOptions = useMemo(() => {
     if (isMultiAutocomplete && selectedValue.length > 0) {
@@ -285,10 +300,8 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     isReadonly,
     localOptions,
     selectedValue,
-    isMultiAutocomplete
+    isMultiAutocomplete,
   ]);
-
-  console.log('render')
 
   return (
     <div
@@ -308,6 +321,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         onFocus={onFocus}
         onClick={handleToggleVisibleMenu}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         isMultiAutocomplete={isMultiAutocomplete}
         chips={renderSelectedOptions}
         autoComplete="off"
@@ -319,26 +333,28 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}
         {...fieldProps}
       />
-      <Options
-        isVisible={isVisibleMenu}
-        onClose={handleCloseMenu}
-        onOpen={handleOpenMenu}
-        onSelect={handleSelect}
-        labelId={labelId}
-        parentRef={autocompleteRef}
-        parentId={id}
-        setActiveOptionId={setActiveOptionId}
-        optionsListId={optionsListId}
-        selectedValue={selectedValue}
-        options={filteredOptions}
-        childrenOptions={filteredChildrenOptions}
-        isAutocomplete
-        activeIndex={activeIndex}
-        setActiveIndex={setActiveIndex}
-        groupBy={groupBy}
-        getDisabledOption={getDisabledOption}
-        {...optionsMenuProps}
-      />
+      {!isDisabled && !isReadonly && (
+        <Options
+          isVisible={isVisibleMenu}
+          onClose={handleCloseMenu}
+          onOpen={handleOpenMenu}
+          onSelect={handleSelect}
+          labelId={labelId}
+          parentRef={autocompleteRef}
+          parentId={id}
+          setActiveOptionId={setActiveOptionId}
+          optionsListId={optionsListId}
+          selectedValue={selectedValue}
+          options={filteredOptions}
+          childrenOptions={filteredChildrenOptions}
+          isAutocomplete
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          groupBy={groupBy}
+          getDisabledOption={getDisabledOption}
+          {...optionsMenuProps}
+        />
+      )}
     </div>
   );
 });

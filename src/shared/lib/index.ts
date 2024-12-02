@@ -9,3 +9,4 @@ export {
   handleRippleMousePosition,
   handleRipple,
 } from "./handleRipple/handleRipple";
+export { updateScrollList } from "./updateScrollList/updateScrollList";

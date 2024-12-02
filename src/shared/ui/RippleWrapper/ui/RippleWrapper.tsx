@@ -3,17 +3,21 @@ import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
 interface RippleWrapperProps {
-  className?: string
+  className?: string;
 }
 
-export const RippleWrapper = forwardRef((props: RippleWrapperProps, ref: React.ForwardedRef<HTMLSpanElement | null>) => {
+export const RippleWrapper = forwardRef(
+  (
+    props: RippleWrapperProps,
+    ref: React.ForwardedRef<HTMLSpanElement | null>
+  ) => {
+    const { className } = props;
 
-  const {className} = props
-
-  return (
-    <span
-      ref={ref && ref}
-      className={classNames(styles['wrapper'], [className])}
-    ></span>
-  );
-});
+    return (
+      <span
+        ref={ref && ref}
+        className={classNames(styles["wrapper"], [className])}
+      ></span>
+    );
+  }
+);
