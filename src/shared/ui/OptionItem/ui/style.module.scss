@@ -1,11 +1,5 @@
-@import '@/app/styles/media';
-
 .menu-item {
     color: var(--secondary-600);
-}
-
-.button,
-.link {
     position: relative;
     display: flex;
     align-items: center;
@@ -15,21 +9,27 @@
     padding-inline: var(--padding-medium);
     padding-block: var(--padding-small-s);
     cursor: pointer;
-    color: inherit;
     text-align: start;
-    border-radius: inherit;
-    &:focus-visible {
-        background-color: var(--secondary-200);
+    &.selected {
+        .bg {
+            background-color: var(--primary-200);
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
     }
-    @include hover {
-        background-color: var(--secondary-opacity);
+    &.disabled {
+        pointer-events: none;
+        opacity: var(--opacity-big);
+    }
+    &.readonly {
+        pointer-events: none;
     }
 }
 
-.button {
-    background-color: transparent;
-    border: none;
-    padding: none;
+.check-mark {
+    opacity: 1;
+    margin-left: auto;
 }
 
 .end-icon {

@@ -41,16 +41,6 @@
 	overflow: hidden !important;
 }
 
-@mixin check-mark {
-	width: 16px;
-	height: 8px;
-	border-left: 1px solid var(--primary-500);
-	border-bottom: 1px solid var(--primary-500);
-	rotate: -45deg;
-    transition-duration: 0.2s;
-	flex-shrink: 0;
-}
-
 @mixin user-select-off {
 	-webkit-user-select: none; /* Chrome/Safari */
 	-moz-user-select: none; /* Firefox */

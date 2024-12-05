@@ -1,0 +1,10 @@
+.list {
+    background-color: transparent;
+    overflow-y: auto;
+    width: 100%;
+    max-height: calc(var(--button-height-medium) * 10);
+}
+
+.focused {
+    background-color: var(--secondary-opacity);
+}

@@ -33,7 +33,6 @@
   position: relative;
   width: 100%;
   outline: none;
-  transition-duration: 0.2s;
   min-height: var(--height);
   cursor: text;
   display: flex;
@@ -41,11 +40,12 @@
   background-color: var(--bgColor);
   border-radius: var(--border-radius-small);
   overflow: hidden;
+  transition: background-color 0.2s, box-shadow 0s, border 0.2s;
 }
 
 .input {
   width: 100%;
-  height: var(--height);
+  height: calc(var(--height) - 4px);
   margin-left: 4px;
   padding-left: calc(var(--paddingInline) - 4px);
   padding-right: calc(var(--paddingInline) - 7.5px);
@@ -55,6 +55,7 @@
   border: none;
   border-radius: var(--border-radius-small);
   color: inherit;
+  text-overflow: ellipsis;
   &::placeholder {
     color: var(--secondary-500);
   }
@@ -238,7 +239,6 @@
       width: 0;
       min-width: 30px;
       flex-grow: 1;
-      text-overflow: ellipsis;
     }
     &.dirty {
       .input::placeholder {
@@ -260,6 +260,7 @@
     }
     .field {
       box-shadow: var(--boxShadowFocus);
+      transition: background-color 0.2s, box-shadow 0.2s, border 0.2s;
     }
     &.filled {
       .field:before {

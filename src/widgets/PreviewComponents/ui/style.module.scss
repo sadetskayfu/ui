@@ -3,7 +3,7 @@
     flex-direction: column;
     row-gap: var(--gap-small-s);
     align-items: start;
-    min-width: 800px;
+    max-width: 100%;
 
     &.vertical {
         .components {

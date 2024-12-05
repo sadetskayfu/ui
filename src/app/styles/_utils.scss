@@ -31,18 +31,6 @@
 	row-gap: var(--gap-small-l);
 }
 
-.active-link-check-mark-right {
-	position: absolute;
-	top: 50%;
-	right: 0;
-	translate: 0 -50%;
-	height: 100%;
-	background-color: currentColor;
-	width: 0%;
-	transition-duration: inherit;
-	border-radius: inherit;
-}
-
 .visually-hidden {
 	@include visually-hidden;
 }

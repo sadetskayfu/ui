@@ -1,18 +1,28 @@
 import { Option } from "@/shared/ui/Select";
 import { SelectLabelVariant as LabelVariant, SelectVariant as Variant } from "@/shared/ui/Select";
 
-export const options: Record<string, Option> = {
-    '1': { value: '1', label: 'Belonging To The Apocolypse'},
-    '2': { value: '2', label: 'Hunted By My Dreams'},
-    '3': { value: '3', label: 'Praise The Maze'},
-    '4': { value: '4', label: 'Mending The Demons'},
-    '5': { value: '5', label: 'Songs Of The Future'},
-    '6': { value: '6', label: 'Breaking The Titans'},
-    '7': { value: '7', label: 'Answering My Destiny'},
-    '8': { value: '8', label: 'Praise'},
-    '9': { value: '9', label: 'Killer'},
-    '10': { value: '10', label: 'Answering My Destiny adn Y'},
-}
+export const options: Option[] = [
+    { value: '1', label: "The Shawshank Redemption" },
+    { value: '2', label: "The Godfather" },
+    { value: '3', label: "The Dark Knight" },
+    { value: '4', label: "Pulp Fiction" },
+    { value: '5', label: "The Lord of the Rings: The Return of the King" },
+    { value: '6', label: "Forrest Gump" },
+    { value: '7', label: "Inception" },
+    { value: '8', label: "Fight Club" },
+    { value: '9', label: "The Matrix" },
+    { value: '10', label: "Goodfellas" },
+    { value: '11', label: "The Empire Strikes Back" },
+    { value: '12', label: "Interstellar" },
+    { value: '13', label: "One Flew Over the Cuckoo's Nest" },
+    { value: '14', label: "Seven Samurai" },
+    { value: '15', label: "City of God" },
+    { value: '16', label: "The Silence of the Lambs" },
+    { value: '17', label: "It's a Wonderful Life" },
+    { value: '18', label: "Life Is Beautiful" },
+    { value: '19', label: "The Usual Suspects" },
+    { value: '20', label: "Se7en" },
+]
 
 interface SelectLabelVariant {
     value: LabelVariant

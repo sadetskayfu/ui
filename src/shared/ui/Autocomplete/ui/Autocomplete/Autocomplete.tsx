@@ -1,12 +1,9 @@
 import { classNames } from "@/shared/lib";
 import {
-  Children,
-  cloneElement,
   memo,
   ReactElement,
   useCallback,
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
@@ -18,36 +15,20 @@ import {
   Field,
 } from "@/shared/ui/Field";
 import styles from "./style.module.scss";
-import type { InputAdornment } from "@/shared/ui/InputAdornment";
-import { Options } from "@/shared/ui/Options";
+import { InputAdornment } from "@/shared/ui/InputAdornment";
+import { Options } from "../Options/Options";
 import { Chip } from "@/shared/ui/Chip";
-import type { MenuItemProps } from "@/shared/ui/MenuItem";
+import { Icon } from "@/shared/ui/Icon";
+import { IconButton } from "@/shared/ui/IconButton";
+import { OptionItemProps } from "@/shared/ui/OptionItem";
+import {
+  Dropdown,
+  DropdownPositionVariant,
+} from "@/shared/ui/Dropdown";
 
 export interface Option {
   value: string;
   label: string;
-}
-
-interface OptionsMenuProps {
-  width?: string;
-  height?: string;
-}
-
-interface FieldProps {
-  className?: string;
-  variant?: FieldVariant;
-  labelVariant?: FieldLabelVariant;
-  size?: FieldSize;
-  label: string;
-  name?: string;
-  placeholder?: string;
-  errorMessage?: string;
-  tabIndex?: number;
-  isHiddenLabel?: boolean;
-  startAdornment?: ReactElement<typeof InputAdornment>;
-  endAdornment?:
-    | ReactElement<typeof InputAdornment>
-    | ReactElement<typeof InputAdornment>[];
 }
 
 interface AutocompleteProps {
@@ -64,11 +45,20 @@ interface AutocompleteProps {
   isReadonly?: boolean;
   isDisabled?: boolean;
   isRequired?: boolean;
-  groupBy?: keyof Option | "first-letter";
   getDisabledOption?: (value: string) => boolean;
-  fieldProps: FieldProps;
-  children?: ReactElement<MenuItemProps> | ReactElement<MenuItemProps>[];
-  optionsMenuProps?: OptionsMenuProps;
+  children: ReactElement<OptionItemProps>[];
+  variant?: FieldVariant;
+  labelVariant?: FieldLabelVariant;
+  size?: FieldSize;
+  name?: string;
+  placeholder?: string;
+  errorMessage?: string;
+  tabIndex?: number;
+  startAdornment?: ReactElement;
+  label: string;
+  menuHeight?: string;
+  menuWidth?: string;
+  menuPosition?: DropdownPositionVariant;
 }
 
 export const Autocomplete = memo((props: AutocompleteProps) => {
@@ -86,27 +76,39 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     isReadonly,
     isDisabled,
     isRequired,
-    fieldProps,
-    groupBy,
     children,
     getDisabledOption,
-    optionsMenuProps,
+    variant,
+    labelVariant,
+    size,
+    name,
+    placeholder,
+    errorMessage,
+    tabIndex,
+    startAdornment,
+    label,
+    menuHeight,
+    menuWidth = "parent",
+    menuPosition,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
-  const [activeOptionId, setActiveOptionId] = useState<string | undefined>(
+  const [isStopFilter, setStopFilter] = useState<boolean>(true);
+  const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
+
+  const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(
     undefined
   );
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const [isStopFilter, setStopFilter] = useState<boolean>(true);
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
+  const [isMountingMenu, setIsMountingMenu] = useState<boolean>(false);
 
   const fieldRef = useRef<HTMLInputElement | null>(null);
   const autocompleteRef = useRef<HTMLDivElement | null>(null);
 
-  const optionsListId = useId() + id;
-  const labelId = useId() + id;
+  const optionsListId = id + "option-list";
+  const labelId = id + "label";
 
-  const isMultiAutocomplete = Array.isArray(selectedValue);
+  const isMulti = Array.isArray(selectedValue);
 
   // Options for easy access to the label
   const localOptions = useMemo(() => {
@@ -119,14 +121,19 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     );
   }, [options]);
 
-  // handlers for toggle visible options menu
   const handleToggleVisibleMenu = useCallback(() => {
     if (isReadonly) return;
+    if (!isMountingMenu) setIsMountingMenu(true);
+
+    fieldRef.current?.focus();
     setIsVisibleMenu((prev) => !prev);
-  }, [isReadonly]);
+  }, [isReadonly, isMountingMenu]);
+
   const handleOpenMenu = useCallback(() => {
+    if (!isMountingMenu) setIsMountingMenu(true);
     setIsVisibleMenu(true);
-  }, []);
+  }, [isMountingMenu]);
+
   const handleCloseMenu = useCallback(() => {
     setIsVisibleMenu(false);
   }, []);
@@ -137,9 +144,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
       if (value.length > 0) {
         handleOpenMenu();
       }
-      setTimeout(() => {
-        setActiveIndex(-1);
-      }, 0);
+      setFocusedOptionIndex(-1);
       setStopFilter(false);
     },
     [onChange, handleOpenMenu]
@@ -147,7 +152,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
 
   const handleSelect = useCallback(
     (optionValue: string) => {
-      if (isMultiAutocomplete) {
+      if (isMulti) {
         let newSelectedValues: string[] = [];
         const alreadyExistingValue = selectedValue.filter(
           (value) => value === optionValue
@@ -163,8 +168,9 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         }
         onSelect(newSelectedValues);
         onChange("");
+        return;
       }
-      if (!isMultiAutocomplete) {
+      if (!isMulti) {
         const newSelectedValue =
           selectedValue === optionValue ? "" : optionValue;
         onSelect(newSelectedValue);
@@ -173,22 +179,17 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
             ? localOptions[newSelectedValue].label
             : ""
         );
-        handleCloseMenu();
+        setTimeout(() => {
+          handleCloseMenu();
+        }, 0);
       }
     },
-    [
-      selectedValue,
-      onSelect,
-      onChange,
-      handleCloseMenu,
-      localOptions,
-      isMultiAutocomplete,
-    ]
+    [selectedValue, onSelect, onChange, handleCloseMenu, localOptions, isMulti]
   );
 
   const handleDelete = useCallback(
     (optionValue: string) => {
-      if (isMultiAutocomplete) {
+      if (isMulti) {
         const newSelectedValues = selectedValue.filter(
           (selectedValue) => selectedValue !== optionValue
         );
@@ -197,18 +198,19 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
       }
       fieldRef.current?.focus();
     },
-    [selectedValue, onSelect, onChange, isMultiAutocomplete]
+    [selectedValue, onSelect, onChange, isMulti]
   );
 
   const handleBlur = useCallback(() => {
     if (isStrict) {
-      isMultiAutocomplete
+      isMulti
         ? onChange("")
         : selectedValue
           ? onChange(localOptions[selectedValue].label)
           : onChange("");
     }
     onBlur?.();
+    setIsFocusedField(false);
     handleCloseMenu();
   }, [
     handleCloseMenu,
@@ -217,112 +219,112 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     onChange,
     localOptions,
     selectedValue,
-    isMultiAutocomplete,
+    isMulti,
   ]);
 
+  const handleFocus = useCallback(() => {
+    setIsFocusedField(true);
+    onFocus?.();
+  }, [onFocus]);
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if(event.key === 'Backspace' && value === '' && isMultiAutocomplete && selectedValue.length > 0) {
-      event.preventDefault();
-      const newValues = selectedValue.slice(0, -1);
-      onSelect(newValues);
+    if (isReadonly) return;
+
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowDown":
+      case "Enter":
+        if (!isVisibleMenu) {
+          event.preventDefault();
+          handleOpenMenu();
+        }
+        break;
+      case "Escape":
+        if (isVisibleMenu) {
+          event.preventDefault();
+          handleCloseMenu();
+        }
+        break;
+      case "Backspace":
+        if (isMulti && value === "" && selectedValue.length > 0) {
+          event.preventDefault();
+          const newValues = selectedValue.slice(0, -1);
+          onSelect(newValues);
+        }
     }
-  }
+  };
 
   // Clear the selected value if input value = ''
   useEffect(() => {
-    if (!isMultiAutocomplete && value === "" && selectedValue.length > 0) {
+    if (!isMulti && value === "" && selectedValue.length > 0) {
       onSelect("");
     }
-  }, [onSelect, value, selectedValue, isMultiAutocomplete]);
+  }, [onSelect, value, selectedValue, isMulti]);
 
   // Clear the filter if value === selected value
   useEffect(() => {
     if (
-      !isMultiAutocomplete &&
+      !isMulti &&
       value === localOptions[selectedValue]?.label &&
       !isVisibleMenu
     ) {
       setStopFilter(true);
     }
-  }, [value, selectedValue, localOptions, isVisibleMenu, isMultiAutocomplete]);
-
-  // Filter the options, if you not have children options
-  const filteredOptions = useMemo(() => {
-    if (children) return;
-    if (isStopFilter) return options;
-
-    let newOptions: Option[] = [];
-    newOptions = options.filter((option) =>
-      option.label.toLowerCase().includes(value.toLowerCase())
-    );
-
-    return newOptions;
-  }, [options, value, isStopFilter, children]);
-
-  // Filter the children options
-  const filteredChildrenOptions = useMemo(() => {
-    if (!children) return;
-    if (isStopFilter) return children;
-
-    const filteredItems: ReactElement<MenuItemProps>[] = [];
-
-    Children.map(children, (menuItem: ReactElement<MenuItemProps>) => {
-      const label = menuItem.props.label;
-      if (label!.toLocaleLowerCase().includes(value.toLowerCase()))
-        filteredItems.push(cloneElement(menuItem));
-    });
-
-    return filteredItems;
-  }, [children, value, isStopFilter]);
+  }, [value, selectedValue, localOptions, isVisibleMenu, isMulti]);
 
   // Render chips for multi autocomplete
   const renderSelectedOptions = useMemo(() => {
-    if (isMultiAutocomplete && selectedValue.length > 0) {
-      return selectedValue.map((option) => {
+    if (isMulti && selectedValue.length > 0) {
+      return selectedValue.map((value) => {
         return (
           <Chip
             color="secondary"
-            variant={fieldProps.variant === "filled" ? "outlined" : "filled"}
+            variant={variant === "filled" ? "outlined" : "filled"}
             size="small"
             isStopFocus
-            onClose={() => handleDelete(option)}
-            key={option}
-            label={localOptions[option].label}
+            onClose={() => handleDelete(value)}
+            key={value}
+            label={localOptions[value].label}
             closeButtonTabIndex={-1}
             isReadonly={isReadonly}
           />
         );
       });
     }
-  }, [
-    fieldProps.variant,
-    handleDelete,
-    isReadonly,
-    localOptions,
-    selectedValue,
-    isMultiAutocomplete,
-  ]);
+  }, [variant, handleDelete, isReadonly, localOptions, selectedValue, isMulti]);
+
+  const mods: Record<string, boolean | undefined> = {
+    [styles["visible-menu"]]: isVisibleMenu,
+  };
 
   return (
     <div
       ref={autocompleteRef}
-      className={classNames(styles["autocomplete"], [className])}
+      className={classNames(styles["autocomplete"], [className], mods)}
     >
       <Field
         id={id}
         ref={fieldRef}
         labelId={labelId}
+        label={label}
+        placeholder={placeholder}
+        errorMessage={errorMessage}
+        name={name}
         value={value}
-        debounceTime={300}
+        variant={variant}
+        size={size}
+        labelVariant={labelVariant}
+        tabIndex={tabIndex}
+        debounceTime={100}
         isDisabled={isDisabled}
         isReadonly={isReadonly}
         isRequired={isRequired}
         onBlur={handleBlur}
-        onFocus={onFocus}
+        onFocus={handleFocus}
         onClick={handleToggleVisibleMenu}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        isMultiAutocomplete={isMultiAutocomplete}
+        isMultiAutocomplete={isMulti}
         chips={renderSelectedOptions}
         autoComplete="off"
         role="combobox"
@@ -330,31 +332,56 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         aria-expanded={isVisibleMenu}
         aria-labelledby={labelId}
         aria-controls={isVisibleMenu ? optionsListId : undefined}
-        aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}
-        {...fieldProps}
+        aria-activedescendant={isVisibleMenu ? focusedOptionId : undefined}
+        startAdornment={startAdornment}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              size="small-l"
+              variant="clear"
+              color="secondary"
+              isStopFocus
+              onClick={handleToggleVisibleMenu}
+              tabIndex={-1}
+              isReadonly={isReadonly}
+            >
+              <Icon className={styles["open-menu-icon"]} variant="arrow" />
+            </IconButton>
+          </InputAdornment>
+        }
       />
-      {!isDisabled && !isReadonly && (
-        <Options
-          isVisible={isVisibleMenu}
-          onClose={handleCloseMenu}
-          onOpen={handleOpenMenu}
-          onSelect={handleSelect}
-          labelId={labelId}
-          parentRef={autocompleteRef}
-          parentId={id}
-          setActiveOptionId={setActiveOptionId}
-          optionsListId={optionsListId}
-          selectedValue={selectedValue}
-          options={filteredOptions}
-          childrenOptions={filteredChildrenOptions}
-          isAutocomplete
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-          groupBy={groupBy}
-          getDisabledOption={getDisabledOption}
-          {...optionsMenuProps}
-        />
-      )}
+      <Dropdown
+        className={styles["menu"]}
+        isVisible={isVisibleMenu}
+        onClose={handleCloseMenu}
+        parentRef={autocompleteRef}
+        isStopAnimation
+        width={menuWidth}
+        positionVariant={menuPosition}
+      >
+        {!isDisabled && !isReadonly && isMountingMenu && (
+          <Options
+            isVisible={isVisibleMenu}
+            onClose={handleCloseMenu}
+            onSelect={handleSelect}
+            labelId={labelId}
+            autocompleteRef={autocompleteRef}
+            fieldRef={fieldRef}
+            parentId={id}
+            optionsListId={optionsListId}
+            options={children}
+            getDisabledOption={getDisabledOption}
+            focusedOptionIndex={focusedOptionIndex}
+            setFocusedOptionIndex={setFocusedOptionIndex}
+            setFocusedOptionId={setFocusedOptionId}
+            value={value}
+            selectedValue={selectedValue}
+            isStopFilter={isStopFilter}
+            isFocusedField={isFocusedField}
+            height={menuHeight}
+          />
+        )}
+      </Dropdown>
     </div>
   );
 });

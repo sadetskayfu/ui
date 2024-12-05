@@ -1,6 +1,27 @@
+.autocomplete {
+    position: relative;
+}
 .chips {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
 
+.open-menu-icon {
+    svg {
+      rotate: -90deg;
+      transition-duration: 0.2s;
+    }
+}
+
+.visible-menu {
+    .open-menu-icon {
+        svg {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.menu {
+    padding-block: var(--gap-small-s);
+}

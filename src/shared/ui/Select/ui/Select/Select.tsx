@@ -3,26 +3,20 @@ import {
   memo,
   ReactElement,
   useCallback,
-  useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
 } from "react";
-import styles from "./style.module.scss";
-import { Options } from "@/shared/ui/Options";
 import { Chip } from "@/shared/ui/Chip";
 import { Icon } from "@/shared/ui/Icon";
-import type { InputAdornment } from "@/shared/ui/InputAdornment";
+import { Options } from "../Options/Options";
+import { OptionItemProps } from "@/shared/ui/OptionItem";
+import styles from "./style.module.scss";
+import { DropdownPortal, DropdownPositionVariant } from "@/shared/ui/Dropdown";
 
 export type SelectVariant = "outlined" | "filled";
 export type SelectSize = "medium" | "large";
 export type SelectLabelVariant = "visible" | "hidden";
-
-interface OptionsMenuProps {
-  width?: string;
-  height?: string;
-}
 
 export interface Option {
   value: string;
@@ -40,8 +34,8 @@ interface SelectProps {
   value: string | string[];
   onSelect: (values: string | string[]) => void;
   getDisabledOption?: (value: string) => boolean;
-  options: Record<string, Option>;
-  children?: ReactElement[];
+  options: Option[];
+  children: ReactElement<OptionItemProps>[];
   tabIndex?: number;
   isRequired?: boolean;
   isReadonly?: boolean;
@@ -49,8 +43,10 @@ interface SelectProps {
   errorMessage?: string;
   onFocus?: () => void;
   onBlur?: () => void;
-  startAdornment?: ReactElement<typeof InputAdornment>;
-  optionsMenuProps?: OptionsMenuProps;
+  startAdornment?: ReactElement;
+  menuHeight?: string;
+  menuWidth?: string;
+  menuPosition?: DropdownPositionVariant;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -75,32 +71,49 @@ export const Select = memo((props: SelectProps) => {
     onBlur,
     onFocus,
     startAdornment,
-    optionsMenuProps,
+    menuHeight,
+    menuWidth = 'parent',
+    menuPosition,
   } = props;
 
   const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
-  const [selectedValues, setSelectedValues] = useState<string | string[]>(
-    value
-  );
   const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
-  const [activeOptionId, setActiveOptionId] = useState<string | undefined>(
+  const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(
     undefined
   );
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
+  const [isMountingMenu, setIsMountingMenu] = useState<boolean>(false);
 
   const fieldRef = useRef<HTMLDivElement | null>(null);
+  const selectRef = useRef<HTMLDivElement | null>(null);
 
-  const optionsListId = useId() + id;
-  const labelId = useId() + id;
-  const errorMessageId = useId() + id;
+  const isMulti = Array.isArray(value);
+
+  const optionsListId = id + "options-list";
+  const labelId = id + "label";
+  const errorMessageId = id + "error-message";
+
+  // Options for easy access to the label
+  const localOptions = useMemo(() => {
+    return options.reduce(
+      (keys, option) => {
+        keys[option.value] = option;
+        return keys;
+      },
+      {} as Record<string, Option>
+    );
+  }, [options]);
 
   const handleToggleVisibleMenu = () => {
-    if(isReadonly) return
+    if (isReadonly) return;
+    if (!isMountingMenu) setIsMountingMenu(true);
     setIsVisibleMenu((prev) => !prev);
   };
 
-  const handleOpenMenu = useCallback(() => {
+  const handleOpenMenu = () => {
+    if (!isMountingMenu) setIsMountingMenu(true);
     setIsVisibleMenu(true);
-  }, []);
+  };
 
   const handleCloseMenu = useCallback(() => {
     setIsVisibleMenu(false);
@@ -108,45 +121,45 @@ export const Select = memo((props: SelectProps) => {
 
   const handleSelect = useCallback(
     (optionValue: string) => {
-      if (Array.isArray(selectedValues)) {
+      if (isMulti) {
         let newSelectedValues: string[] = [];
-        const alreadyExistingValue = selectedValues.filter(
+        const alreadyExistingValue = value.filter(
           (selectedValue) => selectedValue === optionValue
         );
 
         if (alreadyExistingValue.length > 0) {
-          newSelectedValues = selectedValues.filter(
+          newSelectedValues = value.filter(
             (selectedValue) => selectedValue !== optionValue
           );
         } else {
-          newSelectedValues = [...selectedValues];
+          newSelectedValues = [...value];
           newSelectedValues.push(optionValue);
         }
-        setSelectedValues(newSelectedValues);
         onSelect(newSelectedValues);
+        return;
       }
-      if (typeof selectedValues === "string") {
-        const newSelectedValue = selectedValues === optionValue ? "" : optionValue;
-        setSelectedValues(newSelectedValue);
+      if (!isMulti) {
+        const newSelectedValue = value === optionValue ? "" : optionValue;
         onSelect(newSelectedValue);
-        handleCloseMenu();
+        setTimeout(() => {
+          handleCloseMenu();
+        }, 0);
       }
     },
-    [selectedValues, onSelect, handleCloseMenu]
+    [onSelect, handleCloseMenu, value, isMulti]
   );
 
   const handleDelete = useCallback(
     (optionValue: string) => {
-      if (Array.isArray(selectedValues)) {
-        const newSelectedValues = selectedValues.filter(
+      if (isMulti) {
+        const newSelectedValues = value.filter(
           (selectedValue) => selectedValue !== optionValue
         );
-        setSelectedValues(newSelectedValues);
         onSelect(newSelectedValues);
       }
       fieldRef.current?.focus();
     },
-    [selectedValues, onSelect]
+    [value, onSelect, isMulti]
   );
 
   const handleBlur = () => {
@@ -161,61 +174,53 @@ export const Select = memo((props: SelectProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if(isReadonly) return
-    if (
-      event.key === "Backspace" &&
-      Array.isArray(selectedValues) &&
-      selectedValues.length > 0
-    ) {
-      event.preventDefault();
-      const newValues = selectedValues.slice(0, -1);
-      setSelectedValues(newValues);
-      onSelect(newValues);
+    if (isReadonly) return;
+
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowDown":
+      case "Enter":
+      case " ":
+        if (!isVisibleMenu) {
+          event.preventDefault();
+          handleOpenMenu();
+        }
+        break;
+      case "Escape":
+        if (isVisibleMenu) {
+          event.preventDefault();
+          handleCloseMenu();
+        }
+        break;
+      case "Backspace":
+        if (isMulti && value.length > 0) {
+          event.preventDefault();
+          const newValues = value.slice(0, -1);
+          onSelect(newValues);
+        }
     }
   };
 
-  const getSelectedOptions = useMemo((): Option[] => {
-    const selectedOptions: Option[] = [];
-
-    if (Array.isArray(selectedValues) && selectedValues.length > 0) {
-      selectedValues.forEach((value) => {
-        selectedOptions.push(options[value]);
-      });
-      return selectedOptions;
-    }
-    if (typeof selectedValues === "string" && selectedValues.length > 0) {
-      selectedOptions.push(options[selectedValues]);
-      return selectedOptions;
-    }
-    return [];
-  }, [options, selectedValues]);
-
   const renderSelectedOptions = useMemo(() => {
-    if (Array.isArray(selectedValues) && selectedValues.length > 0) {
-      return getSelectedOptions.map((option) => {
+    if (isMulti && value.length > 0) {
+      return value.map((optionValue) => {
         return (
           <Chip
             color="secondary"
             variant={variant === "filled" ? "outlined" : "filled"}
             size="small"
-            onClose={() => handleDelete(option.value)}
-            key={option.value}
-            label={option.label}
+            onClose={() => handleDelete(optionValue)}
+            key={optionValue}
+            label={localOptions[optionValue].label}
             closeButtonTabIndex={-1}
             isReadonly={isReadonly}
           />
         );
       });
     }
-  }, [getSelectedOptions, selectedValues, handleDelete, variant, isReadonly]);
+  }, [value, isMulti, handleDelete, variant, isReadonly, localOptions]);
 
-  const optionsArray = useMemo(() => Object.values(options), [options]);
-
-  useEffect(() => {
-    setSelectedValues(value);
-  }, [value]);
-
-  const isDirty = selectedValues.length > 0 || !!startAdornment;
+  const isDirty = value.length > 0 || !!startAdornment;
 
   const additionalClasses: Array<string | undefined> = [
     className,
@@ -236,7 +241,10 @@ export const Select = memo((props: SelectProps) => {
   const localTabIndex = isDisabled ? -1 : tabIndex;
 
   return (
-    <div className={classNames(styles["select"], additionalClasses, mods)}>
+    <div
+      ref={selectRef}
+      className={classNames(styles["select"], additionalClasses, mods)}
+    >
       <div className={styles["field-wrapper"]}>
         <label id={labelId} className={styles["label"]}>
           {label}
@@ -255,23 +263,23 @@ export const Select = memo((props: SelectProps) => {
           aria-errormessage={errorMessage ? errorMessageId : undefined}
           aria-labelledby={labelId}
           aria-controls={isVisibleMenu ? optionsListId : undefined}
-          aria-activedescendant={isVisibleMenu ? activeOptionId : undefined}
-          aria-readonly={isReadonly ? 'true' : undefined}
-          aria-required={isRequired ? 'true' : undefined}
+          aria-activedescendant={isVisibleMenu ? focusedOptionId : undefined}
+          aria-readonly={isReadonly ? "true" : undefined}
+          aria-required={isRequired ? "true" : undefined}
         >
           {startAdornment && (
             <div className={styles["start-adornment"]}>{startAdornment}</div>
           )}
           <div className={styles["content"]}>
             <p className={styles["placeholder"]}>{placeholder}</p>
-            {Array.isArray(selectedValues) ? (
+            {isMulti ? (
               <div className={styles["chips"]}>{renderSelectedOptions}</div>
             ) : (
-              <p>{getSelectedOptions[0]?.label}</p>
+              value && <p>{localOptions[value].label}</p>
             )}
           </div>
           <Icon
-            className={styles["open-menu-button"]}
+            className={styles["open-menu-icon"]}
             variant="arrow"
             size="small-l"
             color="dark"
@@ -283,25 +291,34 @@ export const Select = memo((props: SelectProps) => {
           <p>{errorMessage}</p>
         </div>
       )}
-      {!isReadonly &&
-        (!isDisabled && (
+      {!isDisabled && !isReadonly && isMountingMenu && (
+        <DropdownPortal
+          className={styles["menu"]}
+          isVisible={isVisibleMenu}
+          onClose={handleCloseMenu}
+          parentRef={selectRef}
+          isStopAnimation
+          width={menuWidth}
+          positionVariant={menuPosition}
+        >
           <Options
-            onSelect={handleSelect}
-            getDisabledOption={getDisabledOption}
-            options={optionsArray}
-            menuItems={children}
+            fieldRef={fieldRef}
+            isFocusedField={isFocusedField}
             isVisible={isVisibleMenu}
-            parentRef={fieldRef}
-            selectedValue={selectedValues}
-            onClose={handleCloseMenu}
-            onOpen={handleOpenMenu}
-            setActiveOptionId={setActiveOptionId}
+            onSelect={handleSelect}
+            options={children}
+            parentId={id}
             optionsListId={optionsListId}
             labelId={labelId}
-            parentId={id}
-            {...optionsMenuProps}
+            focusedOptionIndex={focusedOptionIndex}
+            setFocusedOptionId={setFocusedOptionId}
+            setFocusedOptionIndex={setFocusedOptionIndex}
+            selectedValue={value}
+            getDisabledOption={getDisabledOption}
+            height={menuHeight}
           />
-        ))}
+        </DropdownPortal>
+      )}
     </div>
   );
 });

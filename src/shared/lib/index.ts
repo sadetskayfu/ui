@@ -10,3 +10,4 @@ export {
   handleRipple,
 } from "./handleRipple/handleRipple";
 export { updateScrollList } from "./updateScrollList/updateScrollList";
+export { getSelectedValue } from "./getSelectedValue/getSelectedValue";

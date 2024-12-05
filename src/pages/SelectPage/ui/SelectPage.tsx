@@ -4,10 +4,10 @@ import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useMemo, useState } from "react";
 import { options, selectLabelVariants, selectVariants } from "../model/Select";
 import styles from "./style.module.scss";
-import { MenuItem } from "@/shared/ui/MenuItem";
 import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { InputAdornment } from "@/shared/ui/InputAdornment";
+import { OptionItem } from "@/shared/ui/OptionItem";
 
 const SelectPage = () => {
   const [selectedOption, setSelectedOption] = useState<string>("");
@@ -51,7 +51,11 @@ const SelectPage = () => {
     return false;
   }, []);
 
-  const optionsArray = useMemo(() => Object.values(options), []);
+  const renderOptions = useMemo(() => {
+    return options.map((option) => {
+      return <OptionItem key={option.value} value={option.value} label={option.label}/>
+    })
+  }, [])
 
   return (
     <div className="page">
@@ -126,9 +130,11 @@ const SelectPage = () => {
               isDisabled={isDisabled}
               isReadonly={isReadonly}
               isRequired={isRequired}
-              startAdornment={<InputAdornment>Move</InputAdornment>}
+              startAdornment={<InputAdornment>Movie</InputAdornment>}
               getDisabledOption={getDisabledOption}
-            ></Select>
+            >
+              {renderOptions}
+            </Select>
             <Select
               id="large-single-select"
               className={styles["select"]}
@@ -143,7 +149,9 @@ const SelectPage = () => {
               isDisabled={isDisabled}
               isReadonly={isReadonly}
               isRequired={isRequired}
-            ></Select>
+            >
+              {renderOptions}
+            </Select>
           </PreviewComponents>
           <PreviewComponents title="Multi select" direction="vertical">
             <Select
@@ -162,15 +170,7 @@ const SelectPage = () => {
               isRequired={isRequired}
               getDisabledOption={getDisabledOption}
             >
-              {optionsArray.map((option) => {
-                return (
-                  <MenuItem
-                    value={option.value}
-                  >
-                    {option.label}
-                  </MenuItem>
-                );
-              })}
+              {renderOptions}
             </Select>
             <Select
               id="large-multi=select"
@@ -187,6 +187,7 @@ const SelectPage = () => {
               isReadonly={isReadonly}
               isRequired={isRequired}
             >
+              {renderOptions}
             </Select>
           </PreviewComponents>
         </div>
