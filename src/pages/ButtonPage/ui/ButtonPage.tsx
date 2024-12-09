@@ -1,29 +1,31 @@
 import { Button, ButtonColor, ButtonVariant } from "@/shared/ui/Button";
-import { IconButton, IconButtonForm } from "@/shared/ui/IconButton";
-import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { IconButton, IconButtonBorderRadius } from "@/shared/ui/IconButton";
+import { Radio } from "@/shared/ui/Radio";
 import { useCallback, useState } from "react";
 import {
   buttonColors,
   buttonSizes,
   buttonVariants,
-  iconButtonForms,
+  iconButtonBorderRadius,
   iconButtonSizes,
 } from "../model/Button";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { Icon } from "@/shared/ui/Icon";
 import { capitalizeFirstLetter } from "@/shared/lib";
+import { FormGroup } from "@/shared/ui/FormGroup";
+import { FormLabel } from "@/shared/ui/FormLabel";
 
 const ButtonPage = () => {
   const [color, setColor] = useState<ButtonColor>("primary");
-  const [form, setForm] = useState<IconButtonForm>("round");
+  const [borderRadius, setBorderRadius] = useState<IconButtonBorderRadius>("round");
   const [variant, setVariant] = useState<ButtonVariant>("filled");
 
   const handleToggleColor = useCallback((value: string) => {
     setColor(value as ButtonColor);
   }, []);
-  const handleToggleForm = useCallback((value: string) => {
-    setForm(value as IconButtonForm);
+  const handleToggleBorderRadius = useCallback((value: string) => {
+    setBorderRadius(value as IconButtonBorderRadius);
   }, []);
   const handleToggleVariant = useCallback((value: string) => {
     setVariant(value as ButtonVariant);
@@ -34,46 +36,64 @@ const ButtonPage = () => {
       <section className="section">
         <SectionTitle>Button</SectionTitle>
         <div className="mods">
-          <RadioGroup
-            direction="horizontal"
-            legend="Colors"
-            onChange={handleToggleColor}
-            name="color"
-            selectedValue={color}
-          >
+          <FormGroup label="Colors">
             {buttonColors.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+              return (
+                <FormLabel
+                  label={radio.label}
+                  Component={
+                    <Radio
+                      name="button-colors"
+                      onChange={handleToggleColor}
+                      value={radio.value}
+                      selectedValue={color}
+                    />
+                  }
+                />
+              );
             })}
-          </RadioGroup>
-          <RadioGroup
-            direction="horizontal"
-            legend="Variants"
-            onChange={handleToggleVariant}
-            name="variant"
-            selectedValue={variant}
-          >
+          </FormGroup>
+          <FormGroup label="Variants">
             {buttonVariants.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+              return (
+                <FormLabel
+                  label={radio.label}
+                  Component={
+                    <Radio
+                      name="button-variants"
+                      onChange={handleToggleVariant}
+                      value={radio.value}
+                      selectedValue={variant}
+                    />
+                  }
+                />
+              );
             })}
-          </RadioGroup>
-          <RadioGroup
-            direction="horizontal"
-            legend="Icon buttons forms"
-            onChange={handleToggleForm}
-            name="form"
-            selectedValue={form}
-          >
-            {iconButtonForms.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+          </FormGroup>
+          <FormGroup label="Border radius">
+            {iconButtonBorderRadius.map((radio) => {
+              return (
+                <FormLabel
+                  label={capitalizeFirstLetter(radio) as string}
+                  Component={
+                    <Radio
+                      name="button-border-radius"
+                      onChange={handleToggleBorderRadius}
+                      value={radio}
+                      selectedValue={borderRadius}
+                    />
+                  }
+                />
+              );
             })}
-          </RadioGroup>
+          </FormGroup>
         </div>
         <div className="subsections">
           <PreviewComponents title="Icon buttons sizes">
             {iconButtonSizes.map((btn) => {
               return (
-                <IconButton size={btn} variant={variant} color={color} form={form}>
-                  <Icon variant="house" size="custom-size" color="custom-color"/>
+                <IconButton size={btn} variant={variant} color={color} borderRadius={borderRadius}>
+                  <Icon variant="house" />
                 </IconButton>
               );
             })}
@@ -81,7 +101,7 @@ const ButtonPage = () => {
           <PreviewComponents title="Buttons sizes">
             {buttonSizes.map((btn) => {
               return (
-                <Button size={btn} variant={variant} color={color} form={form}>
+                <Button size={btn} variant={variant} color={color}>
                   {capitalizeFirstLetter(btn) as string}
                 </Button>
               );

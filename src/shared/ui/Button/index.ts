@@ -3,5 +3,4 @@ export type {
   ButtonVariant,
   ButtonColor,
   ButtonSize,
-  ButtonMinimalismVariant,
 } from "./ui/Button";

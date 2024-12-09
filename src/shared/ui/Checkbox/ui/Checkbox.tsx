@@ -1,28 +1,40 @@
 import { classNames, handleRipple } from "@/shared/lib";
-import { memo, useRef } from "react";
-import styles from "./style.module.scss";
+import { InputHTMLAttributes, memo, ReactElement, useRef } from "react";
 import { RippleWrapper } from "../../RippleWrapper";
-import { Icon } from "@/shared/ui/Icon";
+import { Icon as Checkmark, IconProps } from "@/shared/ui/Icon";
+import styles from "./style.module.scss";
 
 export type CheckboxVariant = "filled" | "outlined" | "clear";
 export type CheckboxSize = "small" | "medium";
-export type CheckboxIconVariant = "favorite" | null;
-export type CheckboxColor = 'primary' | 'red'
+export type CheckboxColor = "primary" | "red";
+
+type InputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  | "onChange"
+  | "checked"
+  | "name"
+  | "disabled"
+  | "required"
+  | "tabIndex"
+  | "aria-labelledby"
+  | "type"
+>;
 
 interface CheckboxProps {
   className?: string;
   size?: CheckboxSize;
   variant?: CheckboxVariant;
-  color?: CheckboxColor
-  iconVariant?: CheckboxIconVariant;
-  label: string;
+  color?: CheckboxColor;
   name?: string;
-  isChecked: boolean;
-  isRequired?: boolean;
-  isDisabled?: boolean;
-  isHiddenLabeL?: boolean;
-  onToggle: () => void;
+  labelId?: string;
+  required?: boolean;
+  disabled?: boolean;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
   tabIndex?: number;
+  Icon?: ReactElement<IconProps>;
+  CheckedIcon?: ReactElement<IconProps>;
+  inputProps?: InputProps;
 }
 
 export const Checkbox = memo((props: CheckboxProps) => {
@@ -30,97 +42,67 @@ export const Checkbox = memo((props: CheckboxProps) => {
     className,
     size = "medium",
     variant = "filled",
-    color = 'primary',
-    iconVariant = null,
-    label,
+    color = "primary",
     name,
-    isDisabled,
-    isRequired,
-    isChecked,
-    isHiddenLabeL,
-    onToggle,
+    labelId,
+    disabled,
+    required,
+    checked,
+    onChange,
     tabIndex = 0,
+    Icon,
+    CheckedIcon,
+    inputProps,
   } = props;
 
   const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleToggle = () => {
-    onToggle();
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.checked);
     handleRipple(rippleWrapperRef, true);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      inputRef.current?.click();
-    }
   };
 
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[size],
     styles[variant],
-    styles[color]
+    styles[color],
   ];
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["checked"]]: isChecked,
-    [styles["required"]]: isRequired,
-    [styles["disabled"]]: isDisabled,
-    [styles["hidden-label"]]: isHiddenLabeL,
+    [styles["checked"]]: checked,
+    [styles["required"]]: required,
+    [styles["disabled"]]: disabled,
   };
 
   return (
     <label
-      className={classNames(styles["wrapper"], additionalClasses, mods)}
-      tabIndex={isDisabled ? -1 : tabIndex}
-      onKeyDown={handleKeyDown}
-      role="checkbox"
-      aria-disabled={isDisabled ? "true" : "false"}
-      aria-checked={isChecked}
+      className={classNames(
+        styles["checkbox-wrapper"],
+        additionalClasses,
+        mods
+      )}
     >
       <input
-        ref={inputRef}
-        className="visually-hidden"
+        className={styles["input"]}
         type="checkbox"
         value={name}
         name={name}
-        onChange={handleToggle}
-        tabIndex={-1}
-        disabled={isDisabled}
-        required={isRequired}
-        checked={isChecked}
-        aria-hidden="true"
-      ></input>
-      <div className={styles["checkbox-wrapper"]}>
-        <div className={styles["checkbox"]}>
-          <div className={styles["icon"]}>
-            {!iconVariant && (
-              <Icon color="light" variant="check-mark" size="custom-size" />
-            )}
-            {iconVariant === "favorite" && (
-              <>
-                <Icon
-                  variant="heart"
-                  size="custom-size"
-                  color='secondary'
-                  fillVariant={"outlined"}
-                />
-                <Icon
-                  className={styles['checked-icon']}
-                  variant="heart"
-                  size="custom-size"
-                  color={color}
-                  fillVariant={"filled"}
-                />
-              </>
-            )}
-          </div>
-        </div>
-        <RippleWrapper className={styles['ripple']} ref={rippleWrapperRef} />
+        onChange={handleChange}
+        tabIndex={tabIndex}
+        disabled={disabled}
+        required={required}
+        checked={checked}
+        aria-labelledby={labelId ? labelId : undefined}
+        {...inputProps}
+      />
+      <div className={styles["checkbox"]}>
+        {Icon ? <span className={styles["icon"]}>{Icon}</span> : undefined}
+        <span className={styles["checked-icon"]}>
+          {CheckedIcon ? CheckedIcon : <Checkmark variant="check-mark" color="light" />}
+        </span>
+        <RippleWrapper ref={rippleWrapperRef} />
       </div>
-      <span className={styles["label"]}>{label}</span>
     </label>
   );
 });

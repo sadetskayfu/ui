@@ -33,7 +33,7 @@ export const AppRouter = () => {
 
 
         
-        <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
+        
         
         <Route path={ROUTES.SLIDER} element={<SliderPage />} />
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
@@ -43,7 +43,7 @@ export const AppRouter = () => {
         
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
          */}
-        <Route path={ROUTES.AUTOCOMPLETE} element={<AutocompletePage />} />
+        {/* <Route path={ROUTES.AUTOCOMPLETE} element={<AutocompletePage />} />
         <Route path={ROUTES.DROPDOWN} element={<DropdownPage />} />
         <Route path={ROUTES.SELECT} element={<SelectPage />} />
         <Route path={ROUTES.TEXT_FIELD} element={<TextFieldPage />} />
@@ -52,13 +52,15 @@ export const AppRouter = () => {
         <Route path={ROUTES.STAR_RATING} element={<StarRatingPage />} />
         <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
-        <Route path={ROUTES.CHECKBOX} element={<CheckboxPage />} />
-        <Route path={ROUTES.RADIO_GROUP} element={<RadioGroupPage />} />
-        <Route path={ROUTES.SWITCH} element={<SwitchPage />} />
-        <Route path={ROUTES.BUTTON} element={<ButtonPage />} />
+        
         <Route path={ROUTES.ACCORDION} element={<AccordionPage />} />
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
-        <Route path={ROUTES.ICONS} element={<IconsPage />} />
+        <Route path={ROUTES.ICONS} element={<IconsPage />} /> */}
+        <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
+        <Route path={ROUTES.BUTTON} element={<ButtonPage />} />
+        <Route path={ROUTES.SWITCH} element={<SwitchPage />} />
+        <Route path={ROUTES.CHECKBOX} element={<CheckboxPage />} />
+        <Route path={ROUTES.RADIO_GROUP} element={<RadioGroupPage />} />
       </Routes>
     </Suspense>
   );

@@ -1,6 +1,7 @@
 import {
   ButtonHTMLAttributes,
   forwardRef,
+  LinkHTMLAttributes,
   ReactNode,
   useRef,
 } from "react";
@@ -25,15 +26,18 @@ export type IconButtonSize =
 
 export type IconButtonBorderRadius = 'left' | 'right' | 'everywhere' | 'round' | 'none'
 
-export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type LinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex">
+type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "type" | "tabIndex" | "disabled">
+
+export interface IconButtonProps {
   className?: string;
   variant?: IconButtonVariant;
   color?: IconButtonColor;
   size?: IconButtonSize;
   borderRadius?: IconButtonBorderRadius
-  isDisabled?: boolean;
-  isReadonly?: boolean;
-  isStopFocus?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  stopFocus?: boolean;
   isLink?: boolean;
   isExternalLink?: boolean;
   to?: string;
@@ -41,6 +45,8 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   type?: "submit" | "reset" | "button" | undefined;
   tabIndex?: number;
   onClick?: () => void;
+  linkProps?: LinkProps;
+  buttonProps?: ButtonProps;
 }
 
 export const IconButton = 
@@ -52,9 +58,9 @@ export const IconButton =
       const {
         children,
         className,
-        isDisabled,
-        isReadonly,
-        isStopFocus,
+        disabled,
+        readonly,
+        stopFocus,
         isLink,
         isExternalLink,
         to = "",
@@ -65,30 +71,41 @@ export const IconButton =
         type = "button",
         tabIndex,
         onClick,
-        ...otherProps
+        linkProps,
+        buttonProps,
       } = props;
 
       const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
+      const linkRef = useRef<HTMLAnchorElement | null>(null)
 
       const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           event.stopPropagation()
-          if(isReadonly) return
-          onClick?.();
+          
+          if(readonly) return
+
+          if(isLink || isExternalLink) {
+            linkRef.current?.click()
+          } else {
+            onClick?.();
+          }
+          
           handleRipple(rippleWrapperRef);
         }
       };
 
       const handleMouseDown = (event: React.MouseEvent) => {
-        if (isStopFocus) {
+        if (stopFocus) {
           event.preventDefault();
         }
       };
 
       const handleClick = (event: React.MouseEvent) => {
         event.stopPropagation()
-        if(isReadonly) return
+
+        if(readonly) return
+
         onClick?.();
         handleRippleMousePosition(rippleWrapperRef, event);
       };
@@ -102,24 +119,24 @@ export const IconButton =
       ];
 
       const mods: Record<string, boolean | undefined> = {
-        [styles["disabled"]]: isDisabled,
-        [styles["readonly"]]: isReadonly,
+        [styles["disabled"]]: disabled,
+        [styles["readonly"]]: readonly,
       };
 
-      const localTabIndex = isDisabled ? -1 : tabIndex
+      const localTabIndex = disabled ? -1 : tabIndex
 
       if (isLink) {
         return (
           <Link
             className={classNames(styles["button"], additionalClasses, mods)}
-            onKeyDown={handleKeyDown}
             to={to}
-            onClick={handleClick}
             tabIndex={localTabIndex}
-            aria-readonly={isReadonly ? 'true' : undefined}
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            ref={linkRef}
+            {...linkProps}
           >
-            <span className={styles["label"]}>{children}</span>
-            <div className={styles["icon"]}>{children}</div>
+            {children}
             <RippleWrapper ref={rippleWrapperRef} />
           </Link>
         );
@@ -129,14 +146,14 @@ export const IconButton =
         return (
           <a
             className={classNames(styles["button"], additionalClasses, mods)}
-            onKeyDown={handleKeyDown}
             href={to}
-            onClick={handleClick}
             tabIndex={localTabIndex}
-            aria-readonly={isReadonly ? 'true' : undefined}
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            ref={linkRef}
+            {...linkProps}
           >
-            <span className={styles["label"]}>{children}</span>
-            <div className={styles["icon"]}>{children}</div>
+            {children}
             <RippleWrapper ref={rippleWrapperRef} />
           </a>
         );
@@ -150,12 +167,12 @@ export const IconButton =
           onKeyDown={handleKeyDown}
           onClick={handleClick}
           tabIndex={localTabIndex}
-          disabled={isDisabled}
-          aria-readonly={isReadonly ? 'true' : undefined}
+          disabled={disabled}
+          aria-readonly={readonly ? 'true' : undefined}
           ref={ref}
-          {...otherProps}
+          {...buttonProps}
         >
-          <div className={styles["icon"]}>{children}</div>
+          {children}
           <RippleWrapper ref={rippleWrapperRef} />
         </button>
       );

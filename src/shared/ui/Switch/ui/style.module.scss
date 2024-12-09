@@ -1,27 +1,23 @@
-@import "@/app/styles/mixins", "@/app/styles/media";
+@import "@/app/styles/mixins", "@/app/styles/media", "@/app/styles/animations";
 
-.wrapper {
-  --height: var(--button-height-small-l);
+.switch {
+  --height: var(--button-height-medium);
   --width: var(--height);
   --translateX: calc((var(--width) - var(--height) / 2) / 2);
   --trackColor: var(--secondary-200);
-  --trackColorActive: var(--primary-200);
-  --switchColor: var(--secondary-300);
-  --switchColorActive: var(--primary-500);
-  --hoverBgColor: var(--secondary-opacity);
-  display: flex;
-  align-items: center;
+  --trackColorChecked: var(--primary-200);
+  --thumbColor: var(--secondary-300);
+  --thumbColorChecked: var(--primary-500);
+  --thumbColorHover: var(--secondary-opacity);
+  --borderColor: var(--secondary-300);
+  --borderColorChecked: var(--primary-500);
+  --color: var(--secondary-500);
+  --marginInline: var(--padding-small-m);
   cursor: pointer;
-  height: var(--height);
-  @include user-select-off;
+  margin-inline: var(--marginInline);
   @include hover {
-    .switch-wrapper {
-      background-color: var(--hoverBgColor);
-    }
-  }
-  &:focus-visible {
-    .switch-wrapper {
-      background-color: var(--hoverBgColor);
+    .thumb {
+      background-color: var(--thumbColorHover);
     }
   }
 }
@@ -35,9 +31,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--borderColor);
 }
 
-.switch-wrapper {
+.thumb {
   transform: translateX(calc(var(--translateX) * -1));
   height: var(--height);
   aspect-ratio: 1;
@@ -46,62 +43,54 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  color: var(--color);
+  &:before {
+    content: '';
+    height: 50%;
+    aspect-ratio: 1;
+    border-radius: inherit;
+    background-color: var(--thumbColor);
+    transition-duration: inherit;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
 }
 
-.switch {
-  height: 50%;
-  aspect-ratio: 1;
-  border-radius: inherit;
-  background-color: var(--switchColor);
-  transition-duration: inherit;
-}
-
-.label {
-    &:after {
-        content: '*';
-        color: var(--red-500);
-        display: none;
+.input {
+  @include visually-hidden;
+  &:focus-visible + .track {
+    .thumb:after {
+      background-color: var(--thumbColorHover);
+      animation: ripple 1s infinite;
     }
+  }
 }
 
 // Mods
-.wrapper {
+.switch {
   &.checked {
-    .track {
-      background-color: var(--trackColorActive);
-    }
-    .switch-wrapper {
+    --trackColor: var(--trackColorChecked);
+    --thumbColor: var(--thumbColorChecked);
+    --borderColor: var(--borderColorChecked);
+    .thumb {
       transform: translateX(var(--translateX));
     }
-    .switch {
-      background-color: var(--switchColorActive);
-    }
   }
-
   &.disabled {
     pointer-events: none;
     opacity: var(--opacity-medium);
   }
-
-  &.required {
-    .label {
-        &:after {
-            display: inline;
-        }
-    }
-  }
 }
 
 // Sizes
-.wrapper {
+.switch {
   &.small {
     --height: var(--button-height-small-l);
-    column-gap: var(--padding-small-s);
-    padding-left: var(--padding-small-s);
-  }
-  &.medium {
-    --height: var(--button-height-medium);
-    column-gap: var(--padding-small-m);
-    padding-left: var(--padding-small-m);
+    --marginInline: var(--padding-small-s);
   }
 }

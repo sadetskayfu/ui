@@ -1,7 +1,11 @@
 .pagination {
+
+}
+
+.list {
     display: flex;
     align-items: center;
-    column-gap: var(--gap-small-s);
+    column-gap: 5px;
 }
 
 .button-next-page {

@@ -1,5 +1,6 @@
-import { IconButtonSize, IconButtonForm as Form } from "@/shared/ui/IconButton";
+import { IconButtonSize, IconButtonBorderRadius } from "@/shared/ui/IconButton";
 import { ButtonSize, ButtonColor as Color, ButtonVariant as Variant } from "@/shared/ui/Button";
+
 
 interface ButtonColor {
     value: Color,
@@ -11,10 +12,9 @@ interface ButtonVariant {
     label: string
 }
 
-interface IconButtonForm {
-    value: Form,
-    label: string
-}
+export const iconButtonBorderRadius: IconButtonBorderRadius[] = [
+    'none', 'round', 'everywhere', 'left', 'right'
+]
 
 export const buttonSizes: ButtonSize[] = [
     "small", "medium", "large"
@@ -22,18 +22,6 @@ export const buttonSizes: ButtonSize[] = [
 
 export const iconButtonSizes: IconButtonSize[] = [
     "small-s", "small-m", "small-l", "medium", "large"
-]
-
-
-export const iconButtonForms: IconButtonForm[] = [
-    {
-        value: 'square',
-        label: 'Square'
-    },
-    {
-        value: 'round',
-        label: 'Round'
-    }
 ]
 
 export const buttonColors: ButtonColor[] = [

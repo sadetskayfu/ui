@@ -1,0 +1,49 @@
+.label-wrapper {
+    --marginLeft: var(--padding-small-m);
+    --marginRight: var(--padding-small-m);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: var(--marginLeft);
+    margin-right: var(--marginRight);
+}
+
+// Mods
+.label-wrapper {
+    &.required {
+        .label:after {
+            content: "*";
+            color: var(--red-500);
+            position: absolute;
+        }
+    }
+    &.disabled {
+        pointer-events: none;
+        opacity: var(--opacity-medium);
+    }
+}
+
+// Size
+.label-wrapper {
+    &.small {
+        --marginLeft: var(--padding-small-s);
+        --marginRight: var(--padding-small-s);
+    }
+}
+
+// Position
+.label-wrapper {
+    &.right {
+        --marginLeft: 0px;
+    }
+    &.left {
+        flex-direction: row-reverse;
+        --marginRight: 0px;   
+    }
+    &.top {
+        flex-direction: column-reverse;
+    }
+    &.bottom {
+        flex-direction: column;
+    }
+}

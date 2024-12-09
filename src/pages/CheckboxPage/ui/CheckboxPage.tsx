@@ -4,36 +4,39 @@ import { Checkbox } from "@/shared/ui/Checkbox";
 import { useCallback, useMemo, useState } from "react";
 import { checkboxSizes, checkboxVariants } from "../model/Checkbox";
 import { capitalizeFirstLetter } from "@/shared/lib";
-import styles from "./style.module.scss";
+import { FormLabel } from "@/shared/ui/FormLabel";
+import { Icon } from "@/shared/ui/Icon";
 
 const CheckboxPage = () => {
   const [isRequired, setIsRequired] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
-  const handleToggleLiked = useCallback(() => {
-    setIsLiked((prev) => !prev);
+  const handleChangeLiked = useCallback((checked: boolean) => {
+    setIsLiked(checked);
   }, []);
-  const handleToggleRequired = useCallback(() => {
-    setIsRequired((prev) => !prev);
+  const handleChangeRequired = useCallback((checked: boolean) => {
+    setIsRequired(checked);
   }, []);
-  const handleToggleDisabled = useCallback(() => {
-    setIsDisabled((prev) => !prev);
+  const handleChangeDisabled = useCallback((checked: boolean) => {
+    setIsDisabled(checked);
   }, []);
 
   const renderSizes = useMemo(() => {
     return checkboxSizes.map((item) => {
       return (
-        <Checkbox
-          key={item}
-          className={styles["checkbox"]}
-          size={item}
+        <FormLabel
           label={capitalizeFirstLetter(item) as string}
-          name={item}
-          isRequired={isRequired}
-          isDisabled={isDisabled}
-          onToggle={() => undefined}
-          isChecked={false}
+          labelPosition="right"
+          disabled={isDisabled}
+          required={isRequired}
+          size={item}
+          Component={
+            <Checkbox
+              checked={false}
+              onChange={() => undefined}
+            />
+          }
         />
       );
     });
@@ -42,16 +45,18 @@ const CheckboxPage = () => {
   const renderVariants = useMemo(() => {
     return checkboxVariants.map((item) => {
       return (
-        <Checkbox
-          key={item}
-          className={styles["checkbox"]}
-          variant={item}
+        <FormLabel
           label={capitalizeFirstLetter(item) as string}
-          name={item}
-          onToggle={() => undefined}
-          isRequired={isRequired}
-          isDisabled={isDisabled}
-          isChecked={false}
+          labelPosition="bottom"
+          disabled={isDisabled}
+          required={isRequired}
+          Component={
+            <Checkbox
+              checked={false}
+              onChange={() => undefined}
+              variant={item}
+            />
+          }
         />
       );
     });
@@ -61,19 +66,18 @@ const CheckboxPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Checkbox</SectionTitle>
-        <div>
-          <Checkbox
+        <div className="mods">
+          <FormLabel
             label="Required"
-            isChecked={isRequired}
-            name="required"
-            onToggle={handleToggleRequired}
-            color="red"
+            Component={
+              <Checkbox checked={isRequired} onChange={handleChangeRequired} />
+            }
           />
-          <Checkbox
+          <FormLabel
             label="Disabled"
-            isChecked={isDisabled}
-            name="disabled"
-            onToggle={handleToggleDisabled}
+            Component={
+              <Checkbox checked={isDisabled} onChange={handleChangeDisabled} />
+            }
           />
         </div>
         <div className="subsections">
@@ -81,8 +85,17 @@ const CheckboxPage = () => {
             {renderVariants}
           </PreviewComponents>
           <PreviewComponents title="Sizes">{renderSizes}</PreviewComponents>
-          <PreviewComponents title="Favorite">
-            <Checkbox color="red" variant='clear' name="favorite" label="Favorite" iconVariant='favorite' onToggle={handleToggleLiked} isChecked={isLiked}/>
+          <PreviewComponents title="Custom icon">
+            <Checkbox
+              color="red"
+              variant="clear"
+              onChange={handleChangeLiked}
+              checked={isLiked}
+              disabled={isDisabled}
+              inputProps={{"aria-label": 'favorite'}}
+              Icon={<Icon variant="heart" color="secondary" fillVariant="outlined"/>}
+              CheckedIcon={<Icon variant="heart" color="red"/>}
+            />
           </PreviewComponents>
         </div>
       </section>

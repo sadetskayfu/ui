@@ -1,12 +1,14 @@
-import { classNames, handleRipple } from "@/shared/lib";
 import { InputHTMLAttributes, memo, useRef } from "react";
-import { RippleWrapper } from "../../RippleWrapper";
+import { classNames, handleRipple } from "@/shared/lib";
 import styles from "./style.module.scss";
+import { RippleWrapper } from "@/shared/ui/RippleWrapper";
 
-export type SwitchSize = "small" | "medium";
+export type RadioSize = "small" | "medium"
+export type RadioVariant = "filled" | "outlined"
 
 type InputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
+  | "value"
   | "onChange"
   | "checked"
   | "name"
@@ -17,72 +19,74 @@ type InputProps = Omit<
   | "type"
 >;
 
-interface SwitchProps {
+export interface RadioProps {
   className?: string;
-  size?: SwitchSize;
-  name?: string;
+  size?: RadioSize;
+  variant?: RadioVariant
+  name: string;
   labelId?: string;
-  required?: boolean;
   disabled?: boolean;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
+  onChange: (value: string) => void;
+  value: string;
+  selectedValue: string;
   tabIndex?: number;
   inputProps?: InputProps;
 }
 
-export const Switch = memo((props: SwitchProps) => {
+export const Radio = memo((props: RadioProps) => {
   const {
     className,
     size = "medium",
+    variant = 'filled',
     name,
+    value,
+    selectedValue,
     labelId,
     disabled,
-    required,
-    checked,
     onChange,
     tabIndex = 0,
     inputProps,
   } = props;
 
-  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
+  const rippleWrapperRef = useRef<HTMLSpanElement | null>(null)
 
+  const isChecked = value === selectedValue
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.checked);
+    onChange(event.target.value);
     handleRipple(rippleWrapperRef, true);
   };
 
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[size],
+    styles[variant],
   ];
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["checked"]]: checked,
-    [styles["required"]]: required,
-    [styles["disabled"]]: disabled,
-  };
+    [styles['disabled']]: disabled,
+    [styles['checked']]: isChecked
+  }
 
   return (
     <label
-      className={classNames(styles["switch"], additionalClasses, mods)}
+      className={classNames(styles["radio-wrapper"], additionalClasses, mods)}
     >
       <input
         className={styles["input"]}
-        type="checkbox"
-        value={name}
+        type="radio"
         name={name}
+        value={value}
         onChange={handleChange}
+        checked={isChecked}
         tabIndex={tabIndex}
         disabled={disabled}
-        required={required}
-        checked={checked}
         aria-labelledby={labelId ? labelId : undefined}
         {...inputProps}
       />
-      <div className={styles["track"]}>
-        <div className={styles["thumb"]}>
-          <RippleWrapper ref={rippleWrapperRef} />
-        </div>
+      <div className={styles["radio"]}>
+          <span className={styles['emulator']}></span>
+          <RippleWrapper ref={rippleWrapperRef}/>
       </div>
     </label>
   );

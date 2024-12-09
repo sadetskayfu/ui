@@ -1,0 +1,54 @@
+@import '@/app/styles/animations', '@/app/styles/mixins';
+
+.form-group {
+    --marginLeft: var(--padding-small-m);
+    --legendColor: var(--secondary-600);
+    &:focus-within {
+        --legendColor: var(--primary-500);
+    }
+    &.errored {
+        --legendColor: var(--red-500);
+    }
+    &.required {
+        .legend:after {
+            content: '*';
+            color: var(--red-500);
+            position: absolute;
+        }
+    }
+    &.hidden-legend {
+        .legend {
+            @include visually-hidden;
+        }
+    }
+}
+
+.legend {
+    padding: 0px;
+    margin-left: var(--marginLeft);
+    color: var(--legendColor);
+}
+
+.error-message {
+    margin-left: var(--marginLeft);
+    font-size: var(--font-size-small-l);
+    color: var(--red-500);
+    animation: appearance-right 0.5s;
+}
+
+// Sizes
+.form-group {
+    &.small {
+        --marginLeft: var(--padding-small-s);
+    }
+}
+
+// Directions
+.form-group {
+    &.vertical {
+        .items {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

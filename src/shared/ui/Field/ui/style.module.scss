@@ -27,12 +27,13 @@
 
 .content {
   width: 100%;
+  padding-top: var(--paddingTop);
+  padding-bottom: var(--paddingBottom);
 }
 
 .field {
   position: relative;
   width: 100%;
-  outline: none;
   min-height: var(--height);
   cursor: text;
   display: flex;
@@ -45,14 +46,12 @@
 
 .input {
   width: 100%;
-  height: calc(var(--height) - 4px);
   margin-left: 4px;
   padding-left: calc(var(--paddingInline) - 4px);
   padding-right: calc(var(--paddingInline) - 7.5px);
-  padding-top: var(--paddingTop);
-  padding-bottom: var(--paddingBottom);
   background-color: transparent;
   border: none;
+  outline: none;
   border-radius: var(--border-radius-small);
   color: inherit;
   text-overflow: ellipsis;
@@ -147,7 +146,7 @@
       content: "";
       position: absolute;
       height: 100%;
-      width: 120%;
+      width: calc(100% + 10px);
       top: 50%;
       left: 50%;
       translate: -50% -50%;
@@ -218,15 +217,12 @@
   &.multi-autocomplete,
   &.multiline {
     .content {
-      padding-top: var(--paddingTop);
-      padding-bottom: var(--paddingBottom);
       padding-left: var(--paddingInline);
       padding-right: calc(var(--paddingInline) - 7.5px);
       display: inline-flex;
       gap: var(--gap-small-s);
       align-items: center;
       flex-wrap: wrap;
-      
     }
     .input {
       padding: 0px;

@@ -1,4 +1,4 @@
-import { RadioSize, RadioVariant as Variant} from "@/shared/ui/RadioGroup"
+import { RadioSize, RadioVariant as Variant} from "@/shared/ui/Radio"
 
 interface RadioVariant {
     value: Variant

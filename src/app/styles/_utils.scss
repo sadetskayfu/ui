@@ -27,8 +27,9 @@
 
 .mods {
 	display: flex;
+	align-items: start;
 	flex-direction: column;
-	row-gap: var(--gap-small-l);
+	row-gap: 10px;
 }
 
 .visually-hidden {

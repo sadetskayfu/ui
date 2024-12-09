@@ -4,7 +4,7 @@ import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useState } from "react";
 import { iconColors, iconFillVariants, iconSizes } from "../model/Icon";
-import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/Radio";
 
 const IconsPage = () => {
   const [fillVariant, setFillVariant] = useState<IconFillVariant>("filled");

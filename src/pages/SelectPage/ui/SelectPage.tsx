@@ -4,7 +4,7 @@ import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useMemo, useState } from "react";
 import { options, selectLabelVariants, selectVariants } from "../model/Select";
 import styles from "./style.module.scss";
-import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/Radio";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { InputAdornment } from "@/shared/ui/InputAdornment";
 import { OptionItem } from "@/shared/ui/OptionItem";

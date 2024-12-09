@@ -5,58 +5,60 @@ import { Switch } from "@/shared/ui/Switch";
 import { useCallback, useMemo, useState } from "react";
 import { capitalizeFirstLetter } from "@/shared/lib";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { Group } from "@/shared/ui/Group";
+import { FormLabel } from "@/shared/ui/FormLabel";
 
 const SwitchPage = () => {
   const [isPreviewChecked, setIsPreviewChecked] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isRequired, setIsRequired] = useState<boolean>(false);
 
-  const handleToggleDisabled = useCallback(() => {
-    setIsDisabled((prev) => !prev);
+  const handleChangeDisabled = useCallback((checked: boolean) => {
+    setIsDisabled(checked);
   }, []);
 
-  const handleToggleRequired = useCallback(() => {
-    setIsRequired((prev) => !prev);
+  const handleChangeRequired = useCallback((checked: boolean) => {
+    setIsRequired(checked);
   }, []);
 
-  const handleTogglePreviewChecked = useCallback(() => {
-    setIsPreviewChecked((prev) => !prev);
+  const handleChangePreviewChecked = useCallback((checked: boolean) => {
+    setIsPreviewChecked(checked);
   }, []);
 
   const renderSizes = useMemo(() => {
     return switchSizes.map((item) => {
       return (
-        <Switch
-          key={item}
-          size={item}
+        <FormLabel
           label={capitalizeFirstLetter(item) as string}
-          name={item}
-          isChecked={isPreviewChecked}
-          onToggle={handleTogglePreviewChecked}
-          isDisabled={isDisabled}
-          isRequired={isRequired}
+          size={item}
+          disabled={isDisabled}
+          required={isRequired}
+          Component={
+            <Switch
+              checked={isPreviewChecked}
+              onChange={handleChangePreviewChecked}
+            />
+          }
         />
       );
     });
-  }, [isPreviewChecked, handleTogglePreviewChecked, isDisabled, isRequired]);
+  }, [isPreviewChecked, handleChangePreviewChecked, isDisabled, isRequired]);
 
   return (
     <div className="page">
       <section className="section">
         <SectionTitle>Switch</SectionTitle>
-        <div>
-          <Checkbox
-            isChecked={isDisabled}
-            label="Disabled"
-            name="disabled"
-            onToggle={handleToggleDisabled}
-          />
-          <Checkbox
-            isChecked={isRequired}
+        <div className="mods">
+          <FormLabel
             label="Required"
-            name="required"
-            onToggle={handleToggleRequired}
+            Component={
+              <Checkbox checked={isRequired} onChange={handleChangeRequired} />
+            }
+          />
+          <FormLabel
+            label="Disabled"
+            Component={
+              <Checkbox checked={isDisabled} onChange={handleChangeDisabled} />
+            }
           />
         </div>
         <div className="subsections">

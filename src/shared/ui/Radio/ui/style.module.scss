@@ -1,0 +1,86 @@
+@import "@/app/styles/mixins", "@/app/styles/media", "@/app/styles/animations";
+
+.radio-wrapper {
+  --height: var(--button-height-medium);
+  --emulatorColor: var(--primary-500);
+  --bgColor: var(--secondary-200);
+  --bgColorHover: var(--secondary-opacity);
+  --borderColor: var(--secondary-300);
+  --borderColorChecked: var(--primary-500);
+  --color: var(--secondary-500);
+}
+
+.radio {
+  position: relative;
+  height: var(--height);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transition-duration: 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  @include hover {
+      background-color: var(--bgColorHover);
+  }
+  &:before {
+    content: '';
+    height: 50%;
+    aspect-ratio: 1;
+    border-radius: inherit;
+    border: 1px solid var(--borderColor);
+    background-color: var(--bgColor);
+    transition-duration: inherit;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+}
+
+.emulator {
+  position: absolute;
+  background-color: var(--emulatorColor);
+  height: 0%;
+  aspect-ratio: 1;
+  transition-duration: inherit;
+  border-radius: inherit;
+}
+
+.input {
+  @include visually-hidden;
+  &:focus-visible + .radio:after {
+      background-color: var(--bgColorHover);
+      animation: ripple 1s infinite;
+  }
+}
+
+// Sizes
+.radio-wrapper {
+  &.small {
+    --height: var(--button-height-small-l);
+  }
+}
+
+// Variants
+.radio-wrapper {
+  &.outlined {
+    --bgColor: transparent;
+  }
+}
+
+// Mods
+.radio-wrapper {
+  &.checked {
+    --borderColor: var(--borderColorChecked);
+    .emulator {
+      height: 30%;
+    }
+  }
+  &.disabled {
+    opacity: var(--opacity-medium);
+    pointer-events: none;
+  }
+}

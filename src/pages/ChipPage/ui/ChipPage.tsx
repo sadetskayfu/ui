@@ -1,5 +1,5 @@
 import { Chip, ChipVariant } from "@/shared/ui/Chip";
-import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/Radio";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useState } from "react";

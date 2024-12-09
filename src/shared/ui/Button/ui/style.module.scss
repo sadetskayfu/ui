@@ -9,20 +9,14 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   cursor: pointer;
   border: none;
   border-radius: var(--border-radius-small);
   text-wrap: nowrap;
-  @include user-select-off;
-  gap: var(--gap-small-s);
   color: var(--color);
   background-color: var(--bgColor);
   transition: box-shadow 0.4s, background-color 0.2s, filter 0.2s;
-}
-
-.icon {
-  display: flex;
+  @include user-select-off;
   svg {
     fill: var(--color);
     stroke: var(--color);
@@ -32,9 +26,6 @@
 
 // Colors
 .button {
-  &.primary {
-    
-  }
   &.secondary {
     --color: var(--secondary-500);
     --hoverBgColor: var(--secondary-100);
@@ -66,14 +57,17 @@
   &.small {
     padding-inline: var(--padding-small-l);
     height: var(--button-height-small-l);
+    gap: 5px;
   }
   &.medium {
     padding-inline: var(--padding-medium);
     height: var(--button-height-medium);
+    gap: 8px;
   }
   &.large {
     padding-inline: var(--padding-large);
     height: var(--button-height-large);
+    gap: 11px;
   }
 }
 
@@ -81,11 +75,7 @@
 .button {
   @include hover {
     background-color: var(--hoverBgColor);
-  }
-  &:not(:focus-visible) {
-    @include hover {
-      filter: drop-shadow(0 0 1px var(--bgColor));
-    }
+    filter: drop-shadow(0 0 1px var(--bgColor));
   }
   &:focus-visible {
     box-shadow: var(--boxShadowFocus);
@@ -96,6 +86,6 @@
     pointer-events: none;
   }
   &.readonly {
-    pointer-events: none;
+    cursor: default;
   }
 }

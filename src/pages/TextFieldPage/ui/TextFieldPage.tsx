@@ -4,7 +4,7 @@ import { Field, FieldLabelVariant, FieldVariant } from "@/shared/ui/Field";
 import { useCallback, useRef, useState } from "react";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import styles from "./style.module.scss";
-import { Radio, RadioGroup } from "@/shared/ui/RadioGroup";
+import { Radio, RadioGroup } from "@/shared/ui/Radio";
 import { fieldLabelVariants, fieldVariants } from "../model/Field";
 import { requiredValidate } from "@/shared/lib/validate";
 import { InputAdornment } from "@/shared/ui/InputAdornment";

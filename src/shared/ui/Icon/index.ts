@@ -4,4 +4,5 @@ export type {
   IconColor,
   IconFillVariant,
   IconSize,
+  IconProps
 } from "./ui/Icon";

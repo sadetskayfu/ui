@@ -14,7 +14,7 @@ import {
   minimalismLinkVariants,
 } from "../model/Link";
 import { Group } from "@/shared/ui/Group";
-import { RadioGroup } from "@/shared/ui/RadioGroup";
+import { RadioGroup } from "@/shared/ui/Radio";
 import { Icon } from "@/shared/ui/Icon";
 
 const LinkPage = () => {

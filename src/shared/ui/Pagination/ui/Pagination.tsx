@@ -1,19 +1,18 @@
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
-import { IconButton } from "@/shared/ui/IconButton";
+import { IconButton, IconButtonBorderRadius } from "@/shared/ui/IconButton";
 import { Icon } from "@/shared/ui/Icon";
 
-export type PaginationVariant = 'filled' | 'outlined'
-export type PaginationForm = "square" | "round";
-export type PaginationSize = "small-l" | "medium" | "large";
+export type PaginationVariant = "filled" | "outlined";
+export type PaginationSize = "small-l" | "medium";
 
 interface PaginationProps {
   className?: string;
-  form?: PaginationForm;
+  borderRadius?: IconButtonBorderRadius;
   size?: PaginationSize;
-  variant?: PaginationVariant
-  isInfinity?: boolean;
+  variant?: PaginationVariant;
+  infinity?: boolean;
   totalItems: number;
   totalItemsOnPage: number;
   currentPage: number;
@@ -24,10 +23,10 @@ interface PaginationProps {
 export const Pagination = memo(
   ({
     className,
-    form,
     size = "small-l",
-    variant = 'outlined',
-    isInfinity,
+    variant = "outlined",
+    borderRadius,
+    infinity,
     totalItems,
     totalItemsOnPage,
     currentPage,
@@ -37,7 +36,7 @@ export const Pagination = memo(
     const totalPages = Math.ceil(totalItems / totalItemsOnPage);
 
     const handlePageChange = (page: number) => {
-      if (isInfinity) {
+      if (infinity) {
         if (page > totalPages) {
           onChangePage(1);
         } else if (page < 1) {
@@ -84,53 +83,93 @@ export const Pagination = memo(
       return pageNumbers;
     };
 
-    const additionalClasses: Array<string | undefined> = [className];
-
-    return (
-      <div className={classNames(styles["pagination"], additionalClasses)}>
-        <IconButton
-          size={size}
-          variant="clear"
-          color="primary"
-          form={form}
-          onClick={() => handlePageChange(currentPage - 1)}
-          isDisabled={currentPage === 1 && !isInfinity}
-          aria-label="Preview page"
-        >
-          <Icon variant="arrow" color="custom-color" size="custom-size" />
-        </IconButton>
-        {getPageNumbers().map((page, index) => {
+    const renderButtons = () => {
+      return getPageNumbers().map((page, index) => {
+        if (typeof page === "string") {
           return (
+            <li key={index}>
+              <IconButton
+                variant="clear"
+                color="secondary"
+                disabled
+                size={size}
+              >
+                ...
+              </IconButton>
+            </li>
+          );
+        }
+
+        const isCurrentPage = currentPage === page;
+
+        return (
+          <li key={index}>
             <IconButton
               className={styles["button"]}
-              variant={currentPage === page ? (variant === 'filled' ? 'filled' : 'outlined') : "clear"}
-              form={form}
-              color='secondary'
+              variant={isCurrentPage ? "filled" : "clear"}
+              borderRadius={borderRadius}
+              color="secondary"
               size={size}
-              key={index}
-              onClick={() => typeof page === "number" && handlePageChange(page)}
-              isReadonly={currentPage === page}
-              isDisabled={typeof page === "string"}
-              aria-current={currentPage === page ? 'page' : undefined}
-              aria-label={`Page ${page}`}
+              onClick={() => handlePageChange(page)}
+              readonly={isCurrentPage}
+              buttonProps={{
+                "aria-label": isCurrentPage
+                  ? `Page ${page}`
+                  : `Go to page ${page}`,
+                "aria-current": isCurrentPage ? "true" : undefined,
+              }}
             >
               {page.toString()}
             </IconButton>
-          );
-        })}
-        <IconButton
-          className={styles["button-next-page"]}
-          size={size}
-          variant="clear"
-          color="primary"
-          form={form}
-          onClick={() => handlePageChange(currentPage + 1)}
-          isDisabled={currentPage === totalPages && !isInfinity}
-          aria-label="Next page"
-        >
-          <Icon variant="arrow" color="custom-color" size="custom-size" />
-        </IconButton>
-      </div>
+          </li>
+        );
+      });
+    };
+
+    const additionalClasses: Array<string | undefined> = [className];
+
+    return (
+      <nav
+        aria-label="pagination navigation"
+        className={classNames(styles["pagination"], additionalClasses)}
+      >
+        <ul className={styles['list']}>
+          <li>
+            <IconButton
+              size={size}
+              variant="clear"
+              color="secondary"
+              borderRadius={borderRadius}
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1 && !infinity}
+              buttonProps={{ "aria-label": "Preview page" }}
+            >
+              <Icon
+                variant="arrow"
+                size={size === "small-l" ? "small-s" : "small-l"}
+              />
+            </IconButton>
+          </li>
+          {renderButtons()}
+          <li>
+            <IconButton
+              className={styles["button-next-page"]}
+              size={size}
+              variant="clear"
+              color="secondary"
+              borderRadius={borderRadius}
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages && !infinity}
+              buttonProps={{ "aria-label": "Next page" }}
+            >
+              <Icon
+                variant="arrow"
+                size={size === "small-l" ? "small-s" : "small-l"}
+              />
+            </IconButton>
+          </li>
+        </ul>
+      </nav>
     );
   }
 );

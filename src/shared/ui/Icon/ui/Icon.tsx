@@ -26,7 +26,7 @@ export type IconFillVariant = "filled" | "outlined";
 export type IconSize = "small-s" | "small-m" | "small-l" | "medium" | "large" | "custom-size";
 export type IconColor = "primary" | "secondary" | "light" | "red" | "dark" | "custom-color";
 
-interface IconProps {
+export interface IconProps {
   className?: string;
   variant: IconVariant;
   fillVariant?: IconFillVariant;

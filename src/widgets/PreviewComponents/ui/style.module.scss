@@ -18,8 +18,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--gap-medium-s);
-    padding-block: var(--section-padding);
-    padding-inline: var(--padding-medium);
+    padding: var(--padding-medium);
     box-shadow: 0 0 0 1px var(--primary-200);
     border-radius: var(--border-radius-medium);
 }
