@@ -1,20 +1,21 @@
 @import '@/app/styles/media';
 
-.tooltip-wrapper {
+.container {
     --arrowWidth: 15px;
     --arrowHeight: 20px;
     --padding: 15px;
-    --bgColor: var(--secondary-200);
-    --color: var(--secondary-500);
+    --opacity: 0;
+    --tooltipPointerEvents: none;
+}
+
+.tooltip-wrapper {
     position: absolute;
+    opacity: var(--opacity);
+    transition: opacity 0.2s, transform 0.2s;
     z-index: var(--z-index-tooltip);
     display: flex;
-    left: 0;
-    top: 0;
-    animation: mounting 0.2s forwards;
-    &.unmounting {
-        animation: unmounting 0.2s forwards;
-    }
+    pointer-events: none;
+    transform: scale(0.5);
 }
 
 .tooltip {
@@ -23,26 +24,33 @@
     justify-content: center;
     align-items: center;
     min-width: 30px;
-    padding: 10px;
+    padding: var(--padding-small-l);
     border-radius: var(--border-radius-small);
+    background-color: var(--secondary-200);
     background-color: var(--bgColor);
-    color: var(--color);
+    color: var(--secondary-600);
     font-size: var(--font-size-small);
-    text-wrap: nowrap;
     &:before {
         content: '';
         position: absolute;
         height: var(--arrowHeight);
         width: var(--arrowWidth);
-        background-color: var(--bgColor);
+        background-color: var(--secondary-200);
         clip-path: polygon(50% 50%, 100% 50%, 50% 100%, 0% 50%);
     }
+}
+
+.content {
+    text-wrap: nowrap;
 }
 
 // Position
 .tooltip-wrapper {
     &.top {
         padding-bottom: var(--padding);
+        bottom: 100%;
+        left: 50%;
+        translate: -50%;
         .tooltip:before {
             left: 50%;
             translate: -50%;
@@ -52,6 +60,9 @@
     &.right {
         align-items: center;
         padding-left: var(--padding);
+        left: 100%;
+        top: 50%;
+        translate: 0 -50%;
         .tooltip:before {
             right: calc(100% - (var(--arrowWidth) / 2) - 1px);
             top: 50%;
@@ -62,6 +73,9 @@
     &.left {
         align-items: center;
         padding-right: var(--padding);
+        right: 100%;
+        top: 50%;
+        translate: 0 -50%;
         .tooltip:before {
             left: calc(100% - (var(--arrowWidth) / 2) - 1px);
             top: 50%;
@@ -71,33 +85,14 @@
     }
     &.bottom {
         padding-top: var(--padding);
+        top: 100%;
+        left: 50%;
+        translate: -50%;
         .tooltip:before {
             left: 50%;
             translate: -50%;
             bottom: calc(100% - (var(--arrowHeight) / 2) - 1px);
             transform: rotate(180deg);
         }
-    }
-}
-
-@keyframes mounting {
-    0% {
-        opacity: 0;
-        transform: scale(0.6);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes unmounting {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.6);
     }
 }

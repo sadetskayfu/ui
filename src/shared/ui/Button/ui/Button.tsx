@@ -19,14 +19,8 @@ export type ButtonVariant = "filled" | "outlined" | "clear";
 export type ButtonColor = "primary" | "secondary";
 export type ButtonSize = "small" | "medium" | "large";
 
-type LinkProps = Omit<
-  LinkHTMLAttributes<HTMLAnchorElement>,
-  "href" | "tabIndex"
->;
-type OtherButtonProps = Omit<
-  ButtonHTMLAttributes<HTMLButtonElement>,
-  "onClick" | "type" | "tabIndex" | "disabled"
->;
+type HTMLLinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex" | "onKeyDown" | "onMouseDown" | "aria-readonly">
+type HTMLButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "type" | "tabIndex" | "onClick" | "onKeyDown" | "onMouseDown" | "aria-readonly">
 
 interface ButtonProps {
   className?: string;
@@ -45,13 +39,15 @@ interface ButtonProps {
   EndIcon?: ReactNode;
   tabIndex?: number;
   onClick?: () => void;
-  linkProps?: LinkProps;
-  buttonProps?: OtherButtonProps;
+  onMouseDown?: () => void;
+  onKeyDown?: () => void;
+  linkProps?: HTMLLinkProps;
+  buttonProps?: HTMLButtonProps
 }
 
 export const Button = memo(
   forwardRef(
-    (props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement | null>) => {
+    (props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement | null>) => {
       const {
         children,
         className,
@@ -69,19 +65,23 @@ export const Button = memo(
         EndIcon,
         tabIndex,
         onClick,
-        buttonProps,
+        onMouseDown,
+        onKeyDown,
         linkProps,
+        buttonProps,
+        ...otherProps
       } = props;
 
       const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
-      const linkRef = useRef<HTMLAnchorElement | null>(null);
+      const localLinkRef = useRef<HTMLAnchorElement | null>(null)
+      const linkRef = ref ? ref as React.RefObject<HTMLAnchorElement> : localLinkRef
 
       const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (readonly) return;
+
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          event.stopPropagation();
-
-          if (readonly) return;
+          event.stopPropagation();  
 
           if (isLink || isExternalLink) {
             linkRef.current?.click();
@@ -91,12 +91,18 @@ export const Button = memo(
 
           handleRipple(rippleWrapperRef);
         }
+
+        onKeyDown?.()
       };
 
       const handleMouseDown = (event: React.MouseEvent) => {
+        if(readonly) return
+        
         if (stopFocus) {
           event.preventDefault();
         }
+
+        onMouseDown?.()
       };
 
       const handleClick = (event: React.MouseEvent) => {
@@ -127,11 +133,13 @@ export const Button = memo(
           <Link
             className={classNames(styles["button"], additionalClasses, mods)}
             onKeyDown={handleKeyDown}
+            onMouseDown={handleMouseDown}
             onClick={handleClick}
             to={to}
             tabIndex={localTabIndex}
-            ref={linkRef}
+            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
             {...linkProps}
+            {...otherProps}
           >
             {StartIcon ? StartIcon : undefined}
             {children}
@@ -146,11 +154,13 @@ export const Button = memo(
           <a
             className={classNames(styles["button"], additionalClasses, mods)}
             onKeyDown={handleKeyDown}
+            onMouseDown={handleMouseDown}
             onClick={handleClick}
             href={to}
             tabIndex={localTabIndex}
-            ref={linkRef}
+            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
             {...linkProps}
+            {...otherProps}
           >
             {StartIcon ? StartIcon : undefined}
             {children}
@@ -170,8 +180,9 @@ export const Button = memo(
           tabIndex={localTabIndex}
           disabled={disabled}
           aria-readonly={readonly ? "true" : undefined}
-          ref={ref}
+          ref={ref as React.ForwardedRef<HTMLButtonElement>}
           {...buttonProps}
+          {...otherProps}
         >
           {StartIcon ? StartIcon : undefined}
           {children}

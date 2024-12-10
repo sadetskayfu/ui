@@ -78,8 +78,4 @@ export const navigationLinks: NavigationLink[] = [
         label: 'Tooltip',
         path: ROUTES.TOOLTIP
     },
-    {
-        label: 'Icons',
-        path: ROUTES.ICONS
-    }
 ]

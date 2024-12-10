@@ -1,52 +1,53 @@
-import { memo, useEffect, useRef } from "react";
+import { memo } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./style.module.scss";
 import { IconButton, IconButtonBorderRadius } from "@/shared/ui/IconButton";
 import { Icon } from "@/shared/ui/Icon";
 
-export type PaginationVariant = "filled" | "outlined";
-export type PaginationSize = "small-l" | "medium";
+export type PaginationSize = "small" | "medium";
+export type PaginationColor = "primary" | "secondary";
+export type PaginationBorderRadius = IconButtonBorderRadius;
 
 interface PaginationProps {
   className?: string;
-  borderRadius?: IconButtonBorderRadius;
+  borderRadius?: PaginationBorderRadius;
   size?: PaginationSize;
-  variant?: PaginationVariant;
+  color?: PaginationColor;
   infinity?: boolean;
   totalItems: number;
   totalItemsOnPage: number;
   currentPage: number;
   maxDisplayedPages: number;
-  onChangePage: (page: number) => void;
+  onChange: (page: number) => void;
 }
 
 export const Pagination = memo(
   ({
     className,
-    size = "small-l",
-    variant = "outlined",
+    size = "medium",
+    color = "secondary",
     borderRadius,
     infinity,
     totalItems,
     totalItemsOnPage,
     currentPage,
     maxDisplayedPages,
-    onChangePage,
+    onChange,
   }: PaginationProps) => {
     const totalPages = Math.ceil(totalItems / totalItemsOnPage);
 
-    const handlePageChange = (page: number) => {
+    const handleChangePage = (page: number) => {
       if (infinity) {
         if (page > totalPages) {
-          onChangePage(1);
+          onChange(1);
         } else if (page < 1) {
-          onChangePage(totalPages);
+          onChange(totalPages);
         } else {
-          onChangePage(page);
+          onChange(page);
         }
       } else {
         if (page > 0 && page !== totalPages + 1) {
-          onChangePage(page);
+          onChange(page);
         }
       }
     };
@@ -87,15 +88,8 @@ export const Pagination = memo(
       return getPageNumbers().map((page, index) => {
         if (typeof page === "string") {
           return (
-            <li key={index}>
-              <IconButton
-                variant="clear"
-                color="secondary"
-                disabled
-                size={size}
-              >
-                ...
-              </IconButton>
+            <li className={styles["list-item"]} key={index}>
+              ...
             </li>
           );
         }
@@ -103,69 +97,76 @@ export const Pagination = memo(
         const isCurrentPage = currentPage === page;
 
         return (
-          <li key={index}>
+          <li key={index} className={styles["list-item"]}>
             <IconButton
               className={styles["button"]}
               variant={isCurrentPage ? "filled" : "clear"}
               borderRadius={borderRadius}
-              color="secondary"
-              size={size}
-              onClick={() => handlePageChange(page)}
+              color={color}
+              size="custom-size"
+              onClick={() => handleChangePage(page)}
               readonly={isCurrentPage}
               buttonProps={{
+                "aria-current": isCurrentPage ? "true" : undefined,
                 "aria-label": isCurrentPage
                   ? `Page ${page}`
                   : `Go to page ${page}`,
-                "aria-current": isCurrentPage ? "true" : undefined,
+                style: {
+                  color: !isCurrentPage ? "inherit" : undefined,
+                },
               }}
             >
-              {page.toString()}
+              {page}
             </IconButton>
           </li>
         );
       });
     };
 
-    const additionalClasses: Array<string | undefined> = [className];
+    const additionalClasses: Array<string | undefined> = [
+      className,
+      styles[size],
+    ];
 
     return (
       <nav
         aria-label="pagination navigation"
         className={classNames(styles["pagination"], additionalClasses)}
       >
-        <ul className={styles['list']}>
-          <li>
+        <ul className={styles["list"]}>
+          <li className={styles["list-item"]}>
             <IconButton
-              size={size}
+              className={styles["button"]}
+              size="custom-size"
               variant="clear"
               color="secondary"
               borderRadius={borderRadius}
-              onClick={() => handlePageChange(currentPage - 1)}
+              onClick={() => handleChangePage(currentPage - 1)}
               disabled={currentPage === 1 && !infinity}
-              buttonProps={{ "aria-label": "Preview page" }}
+              buttonProps={{
+                "aria-label": "Preview page",
+              }}
             >
-              <Icon
-                variant="arrow"
-                size={size === "small-l" ? "small-s" : "small-l"}
-              />
+              <Icon className={styles["arrow-icon"]} variant="arrow" />
             </IconButton>
           </li>
           {renderButtons()}
-          <li>
+          <li className={styles["list-item"]}>
             <IconButton
-              className={styles["button-next-page"]}
-              size={size}
+              className={classNames(styles["button"], [
+                styles["button-next-page"],
+              ])}
+              size="custom-size"
               variant="clear"
               color="secondary"
               borderRadius={borderRadius}
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={() => handleChangePage(currentPage + 1)}
               disabled={currentPage === totalPages && !infinity}
-              buttonProps={{ "aria-label": "Next page" }}
+              buttonProps={{
+                "aria-label": "Next page",
+              }}
             >
-              <Icon
-                variant="arrow"
-                size={size === "small-l" ? "small-s" : "small-l"}
-              />
+              <Icon className={styles["arrow-icon"]} variant="arrow" />
             </IconButton>
           </li>
         </ul>

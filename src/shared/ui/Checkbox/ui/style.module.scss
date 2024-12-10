@@ -5,6 +5,7 @@
   --bgColor: var(--secondary-200);
   --bgColorChecked: var(--primary-500);
   --bgColorHover: var(--secondary-opacity);
+  --bgColorFocus: var(--primary-opacity);
   --borderColor: var(--secondary-300);
   --borderColorChecked: var(--primary-500);
   --fz: var(--font-size-medium);
@@ -48,7 +49,7 @@
 .input {
   @include visually-hidden;
   &:focus-visible + .checkbox:after{
-    background-color: var(--bgColorHover);
+    background-color: var(--bgColorFocus);
     animation: ripple 1s infinite;
   }
 }
@@ -72,6 +73,7 @@
     --bgColor: var(--red-200);
     --bgColorChecked: var(--red-500);
     --bgColorHover: var(--red-opacity);
+    --bgColorFocus: var(--red-opacity);
     --borderColor: var(--red-300);
     --borderColorChecked: var(--red-500);
     --color: var(--red-500);
@@ -80,6 +82,10 @@
 
 // Variants
 .checkbox-wrapper {
+  &.filled {
+    --borderColor: transparent;
+    --borderColorChecked: transparent;
+  }
   &.outlined {
     --bgColor: transparent;
   }

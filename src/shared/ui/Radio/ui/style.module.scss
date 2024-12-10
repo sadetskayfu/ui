@@ -5,6 +5,7 @@
   --emulatorColor: var(--primary-500);
   --bgColor: var(--secondary-200);
   --bgColorHover: var(--secondary-opacity);
+  --bgColorFocus: var(--primary-opacity);
   --borderColor: var(--secondary-300);
   --borderColorChecked: var(--primary-500);
   --color: var(--secondary-500);
@@ -52,7 +53,7 @@
 .input {
   @include visually-hidden;
   &:focus-visible + .radio:after {
-      background-color: var(--bgColorHover);
+      background-color: var(--bgColorFocus);
       animation: ripple 1s infinite;
   }
 }
@@ -66,6 +67,10 @@
 
 // Variants
 .radio-wrapper {
+  &.filled {
+    --borderColor: transparent;
+    --borderColorChecked: transparent;
+  }
   &.outlined {
     --bgColor: transparent;
   }

@@ -19,7 +19,6 @@ import { ModalPage } from "@/pages/ModalPage";
 import { SelectPage } from "@/pages/SelectPage";
 import { ChipPage } from "@/pages/ChipPage";
 import { TooltipPage } from "@/pages/TooltipPage";
-import { IconsPage } from "@/pages/IconsPage";
 
 export const AppRouter = () => {
   return (
@@ -54,8 +53,9 @@ export const AppRouter = () => {
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
         
         <Route path={ROUTES.ACCORDION} element={<AccordionPage />} />
+        
+         */}
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
-        <Route path={ROUTES.ICONS} element={<IconsPage />} /> */}
         <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
         <Route path={ROUTES.BUTTON} element={<ButtonPage />} />
         <Route path={ROUTES.SWITCH} element={<SwitchPage />} />

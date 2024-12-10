@@ -1,100 +1,176 @@
 import {
+  cloneElement,
   memo,
-  ReactNode,
-  RefObject,
+  ReactElement,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
+import { Portal } from "@/shared/ui/Portal";
+import { throttle } from "lodash";
+import styles from "./style.module.scss";
 
-type TooltipPositionVariant = 'left' | 'top' | 'bottom' | 'right'
+type TooltipPositionVariant = "left" | "top" | "bottom" | "right";
 
 interface TooltipProps {
   className?: string
-  position?: TooltipPositionVariant
-  children: ReactNode
-  parentRef: RefObject<HTMLElement>;
-  anotherVisibilityCondition?: boolean;
-  initialVisibility?: boolean;
-  onToggle?: (value: boolean) => void;
+  position?: TooltipPositionVariant;
+  children: ReactElement;
+  Component: ReactElement;
+  clickableTooltip?: boolean;
+  disabledFocus?: boolean
+  disabledHover?: boolean
 }
 
 export const Tooltip = memo((props: TooltipProps) => {
   const {
     className,
-    position = 'top',
+    position: tooltipPosition = "top",
     children,
-    parentRef,
-    anotherVisibilityCondition,
-    initialVisibility = false,
-    onToggle,
+    Component,
+    clickableTooltip,
+    disabledFocus,
+    disabledHover,
   } = props;
 
-  const [isVisible, setIsVisible] = useState<boolean>(initialVisibility);
-
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
-
-  const handleOpen = useCallback(() => {
-    setIsVisible(true);
-    onToggle?.(true);
-  }, [onToggle]);
-
-  const handleBlur = useCallback(() => {
-    setIsVisible(false)
-  }, [])
-
-  const handleClose = useCallback(
-    (event: MouseEvent) => {
-      if (
-        tooltipRef.current &&
-        !parentRef.current?.contains(event.target as Node) &&
-        !tooltipRef.current?.contains(event.target as Node) &&
-        !anotherVisibilityCondition
-      ) {
-        setIsVisible(false);
-        onToggle?.(false);
-      }
-    },
-    [parentRef, anotherVisibilityCondition, onToggle]
-  );
-
-  useEffect(() => {
-    const currentParentRef = parentRef.current;
-    currentParentRef?.addEventListener("focusin", handleOpen);
-    currentParentRef?.addEventListener("focusout", handleBlur);
-    currentParentRef?.addEventListener("mouseenter", handleOpen);
-    if (isVisible) {
-      window.addEventListener("mousemove", handleClose);
-    }
-    return () => {
-      window.removeEventListener("mousemove", handleClose);
-      currentParentRef?.removeEventListener("mouseenter", handleOpen);
-      currentParentRef?.removeEventListener("focusin", handleOpen);
-      currentParentRef?.removeEventListener("focusout", handleBlur);
-    };
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isUnmountingAnimation, setIsUnmountingAnimation] = useState<boolean>(false)
+  const [position, setPosition] = useState({
+    translateX: "-100%",
+    translateY: "-100%",
   });
 
-  useEffect(() => {
-    setIsVisible(initialVisibility);
-  }, [initialVisibility]);
+  const triggerElementRef = useRef<HTMLElement | null>(null);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null)
 
-  const mods: Record<string, boolean | undefined> = {
-    [styles["visible"]]: isVisible,
+  const handleOpen = () => {
+    if(timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current)
+      setIsUnmountingAnimation(false)
+    }
+    setIsVisible(true);
   };
 
-  const additionalClasses: Array<string | undefined> = [
-    className,
-    styles[position]
-  ]
+  const handleClose = () => {
+    setIsUnmountingAnimation(true)
+    timeoutIdRef.current = setTimeout(() => {
+      setIsVisible(false)
+    }, 200)
+  }
+
+  useEffect(() => {
+    if(!isVisible && isUnmountingAnimation) {
+      setIsUnmountingAnimation(false)
+    }
+  }, [isVisible, isUnmountingAnimation])
+
+  const handleChangePosition = useCallback(() => {
+    const triggerElement = triggerElementRef.current;
+    const tooltip = tooltipRef.current;
+
+    if (!triggerElement || !tooltip) return;
+    
+    const triggerElementRect = triggerElement.getBoundingClientRect();
+
+    const newPosition = { ...position };
+
+    switch (tooltipPosition) {
+      case "top":
+      case "bottom":
+        newPosition.translateX =
+          triggerElementRect.left -
+          (tooltip.offsetWidth - triggerElementRect.width) / 2 +
+          window.scrollX +
+          "px";
+        newPosition.translateY =
+          tooltipPosition === "top"
+            ? triggerElementRect.top -
+              tooltip.offsetHeight +
+              window.scrollY +
+              "px"
+            : triggerElementRect.bottom + window.scrollY + "px";
+        break;
+      case "left":
+      case "right":
+        newPosition.translateY =
+          triggerElementRect.top -
+          (tooltip.offsetHeight - triggerElementRect.height) / 2 +
+          window.scrollY +
+          "px";
+        newPosition.translateX =
+          tooltipPosition === "left"
+            ? triggerElementRect.left -
+              tooltip.offsetWidth +
+              window.scrollX +
+              "px"
+            : triggerElementRect.right + window.scrollX + "px";
+        break;
+    }
+    setPosition(newPosition);
+  }, [tooltipPosition]);
+
+  // Update position
+  useEffect(() => {
+    if(!isVisible) return
+
+    const triggerElement = triggerElementRef.current;
+    const tooltip = tooltipRef.current;
+
+    const throttledHandleChanges = throttle(handleChangePosition, 1000);
+
+    const resizeObserver = new ResizeObserver(throttledHandleChanges);
+
+    if (tooltip && triggerElement) {
+      resizeObserver.observe(tooltip);
+      resizeObserver.observe(triggerElement);
+    }
+
+    window.addEventListener("resize", throttledHandleChanges);
+    window.addEventListener("scroll", throttledHandleChanges);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", throttledHandleChanges);
+      window.removeEventListener("scroll", throttledHandleChanges);
+      throttledHandleChanges.cancel();
+    };
+  }, [isVisible, handleChangePosition]);
+
+  const triggerElementProps = {
+    onFocus: !disabledFocus ? handleOpen : undefined,
+    onBlur: !disabledFocus ? handleClose : undefined,
+    onMouseEnter: !disabledHover ? handleOpen : undefined,
+    onMouseLeave: (!clickableTooltip && !disabledHover) ? handleClose : undefined,
+    ref: triggerElementRef
+  }
+
+  const mods: Record<string, boolean> = {
+    [styles['unmounting']]: isUnmountingAnimation,
+  }
 
   return (
-    <div ref={tooltipRef} className={classNames(styles["container"], additionalClasses, mods)}>
-      <div className={styles["tooltip"]}>
-        <div className={styles['content']}>{children}</div>
-      </div>
+    <div className={classNames(styles['container'], [className])} onMouseLeave={(clickableTooltip && !disabledHover) ? handleClose : undefined}>
+        {cloneElement(Component, {...triggerElementProps})}
+      {isVisible && (
+        <Portal>
+          <div
+            ref={tooltipRef}
+            className={classNames(styles["tooltip-wrapper"], [
+              styles[tooltipPosition]
+            ], mods)}
+            style={{
+              translate: `${position.translateX} ${position.translateY}`,
+            }}
+          >
+            <div className={styles["tooltip"]}>
+                {children}
+            </div>
+          </div>
+        </Portal>
+      )}
     </div>
   );
 });

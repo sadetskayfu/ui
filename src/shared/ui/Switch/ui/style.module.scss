@@ -9,8 +9,7 @@
   --thumbColor: var(--secondary-300);
   --thumbColorChecked: var(--primary-500);
   --thumbColorHover: var(--secondary-opacity);
-  --borderColor: var(--secondary-300);
-  --borderColorChecked: var(--primary-500);
+  --thumbColorFocus: var(--primary-opacity);
   --color: var(--secondary-500);
   --marginInline: var(--padding-small-m);
   cursor: pointer;
@@ -31,7 +30,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--borderColor);
 }
 
 .thumb {
@@ -65,7 +63,7 @@
   @include visually-hidden;
   &:focus-visible + .track {
     .thumb:after {
-      background-color: var(--thumbColorHover);
+      background-color: var(--thumbColorFocus);
       animation: ripple 1s infinite;
     }
   }
@@ -76,7 +74,6 @@
   &.checked {
     --trackColor: var(--trackColorChecked);
     --thumbColor: var(--thumbColorChecked);
-    --borderColor: var(--borderColorChecked);
     .thumb {
       transform: translateX(var(--translateX));
     }

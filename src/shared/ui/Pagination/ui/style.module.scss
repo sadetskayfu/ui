@@ -1,11 +1,31 @@
 .pagination {
-
+    --itemWidth: var(--button-height-medium);
+    --arrowIconSize: var(--font-size-small-m);
+    &.small {
+        --itemWidth: var(--button-height-small-l);
+    }
 }
 
 .list {
     display: flex;
     align-items: center;
     column-gap: 5px;
+}
+
+.list-item {
+    width: var(--itemWidth);
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    height: 100%;
+}
+
+.arrow-icon {
+    font-size: var(--arrowIconSize);
 }
 
 .button-next-page {

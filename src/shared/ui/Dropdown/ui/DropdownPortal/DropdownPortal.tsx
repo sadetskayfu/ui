@@ -143,7 +143,7 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
       window.removeEventListener("scroll", throttledHandleChanges);
       throttledHandleChanges.cancel();
     };
-  }, [isVisible, parentRef, positionVariant, handleChangePosition]);
+  }, [isVisible, parentRef, handleChangePosition]);
 
   // Closing the menu by clicking outside the menu area
   useEffect(() => {

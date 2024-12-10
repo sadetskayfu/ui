@@ -266,7 +266,7 @@ export const Field = memo(
                   <IconButton
                     onClick={handleClear}
                     className={styles["clear-field-button"]}
-                    isStopFocus
+                    stopFocus
                     size="small-l"
                     variant="clear"
                     color="secondary"
@@ -288,7 +288,7 @@ export const Field = memo(
                   size="custom-size"
                   tabIndex={-1}
                   aria-label="Find by the entered value"
-                  isReadonly={isReadonly}
+                  readonly={isReadonly}
                 >
                   <Icon variant="search" size="small-l" />
                 </IconButton>
