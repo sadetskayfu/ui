@@ -26,7 +26,7 @@ export const UserMenu = memo(() => {
     }, [handleClose])
 
     return (
-        <div className={styles['user-menu']}>
+        <>
             <Button
                 onClick={handleToggleVisible}
                 ref={buttonRef}
@@ -64,6 +64,6 @@ export const UserMenu = memo(() => {
                 <Divider component="li" orientation="horizontal" />
                 <MenuItem onClick={handleClickMenuItem}>Log out</MenuItem>
             </Menu>
-        </div>
+        </>
     )
 })

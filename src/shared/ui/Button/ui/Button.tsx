@@ -24,6 +24,7 @@ type HTMLButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" 
 
 interface ButtonProps {
   className?: string;
+  id?: string
   variant?: ButtonVariant;
   color?: ButtonColor;
   size?: ButtonSize;
@@ -50,6 +51,7 @@ export const Button = memo(
     (props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement | null>) => {
       const {
         children,
+        id,
         className,
         disabled,
         readonly,
@@ -132,6 +134,7 @@ export const Button = memo(
         return (
           <Link
             className={classNames(styles["button"], additionalClasses, mods)}
+            id={id}
             onKeyDown={handleKeyDown}
             onMouseDown={handleMouseDown}
             onClick={handleClick}
@@ -153,6 +156,7 @@ export const Button = memo(
         return (
           <a
             className={classNames(styles["button"], additionalClasses, mods)}
+            id={id}
             onKeyDown={handleKeyDown}
             onMouseDown={handleMouseDown}
             onClick={handleClick}
@@ -173,6 +177,7 @@ export const Button = memo(
       return (
         <button
           className={classNames(styles["button"], additionalClasses, mods)}
+          id={id}
           type={type}
           onMouseDown={handleMouseDown}
           onKeyDown={handleKeyDown}

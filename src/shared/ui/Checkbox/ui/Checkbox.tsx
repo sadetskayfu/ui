@@ -75,6 +75,8 @@ export const Checkbox = memo((props: CheckboxProps) => {
     [styles["disabled"]]: disabled,
   };
 
+  const localTabIndex = disabled ? -1 : tabIndex
+
   return (
     <label
       className={classNames(
@@ -89,7 +91,7 @@ export const Checkbox = memo((props: CheckboxProps) => {
         value={name}
         name={name}
         onChange={handleChange}
-        tabIndex={tabIndex}
+        tabIndex={localTabIndex}
         disabled={disabled}
         required={required}
         checked={checked}

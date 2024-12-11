@@ -37,7 +37,7 @@ export const AppRouter = () => {
         <Route path={ROUTES.SLIDER} element={<SliderPage />} />
         <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
         
-        <Route path={ROUTES.MODAL} element={<ModalPage />} />
+        
         
         
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
@@ -50,11 +50,13 @@ export const AppRouter = () => {
         <Route path={ROUTES.ASIDE_MENU} element={<AsideMenuPage />} />
         <Route path={ROUTES.STAR_RATING} element={<StarRatingPage />} />
         <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
-        <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
+        
         
         <Route path={ROUTES.ACCORDION} element={<AccordionPage />} />
         
          */}
+        <Route path={ROUTES.BACKDROP} element={<BackdropPage />} />
+        <Route path={ROUTES.MODAL} element={<ModalPage />} />
         <Route path={ROUTES.TOOLTIP} element={<TooltipPage />} />
         <Route path={ROUTES.PAGINATION} element={<PaginationPage />} />
         <Route path={ROUTES.BUTTON} element={<ButtonPage />} />

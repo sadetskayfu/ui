@@ -68,6 +68,8 @@ export const Radio = memo((props: RadioProps) => {
     [styles['checked']]: isChecked
   }
 
+  const localTabIndex = disabled ? -1 : tabIndex
+
   return (
     <label
       className={classNames(styles["radio-wrapper"], additionalClasses, mods)}
@@ -79,7 +81,7 @@ export const Radio = memo((props: RadioProps) => {
         value={value}
         onChange={handleChange}
         checked={isChecked}
-        tabIndex={tabIndex}
+        tabIndex={localTabIndex}
         disabled={disabled}
         aria-labelledby={labelId ? labelId : undefined}
         {...inputProps}

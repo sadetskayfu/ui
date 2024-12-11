@@ -1,18 +1,31 @@
 .modal {
-    border: var(--border-secondary);
-    opacity: 0;
-    z-index: var(--z-index-close);
-    transition: opacity 0.4s, transform 0.4s, z-index 3s;
+    border: 1px solid var(--secondary-300);
     background-color: var(--light);
-    border-radius: var(--border-radius-medium);
-    pointer-events: none;
-    transform: translateY(50%);
-
-    &.visible {
-        opacity: 1;
-        z-index: var(--z-index-menu);
-        transition: opacity 0.4s, transform 0.4s, z-index 0s;
-        pointer-events: all;
-        transform: translateY(0);
+    border-radius: var(--border-radius-small);
+    animation: mounting 0.2s forwards;
+    &.unmounting {
+        animation: unmounting 0.2s forwards;
     }
+}
+
+@keyframes mounting {
+    0% {
+        opacity: 0;
+        transform: translateY(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
+
+@keyframes unmounting {
+    0% {
+        opacity: 1;
+        transform: translateY(0%) ;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(50%);
+    } 
 }

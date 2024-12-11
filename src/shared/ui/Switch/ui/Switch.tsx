@@ -62,6 +62,8 @@ export const Switch = memo((props: SwitchProps) => {
     [styles["disabled"]]: disabled,
   };
 
+  const localTabIndex = disabled ? -1 : tabIndex
+
   return (
     <label
       className={classNames(styles["switch"], additionalClasses, mods)}
@@ -72,7 +74,7 @@ export const Switch = memo((props: SwitchProps) => {
         value={name}
         name={name}
         onChange={handleChange}
-        tabIndex={tabIndex}
+        tabIndex={localTabIndex}
         disabled={disabled}
         required={required}
         checked={checked}

@@ -4,6 +4,7 @@ import {
   ReactElement,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -44,6 +45,7 @@ export const Tooltip = memo((props: TooltipProps) => {
 
   const triggerElementRef = useRef<HTMLElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const tooltipId = useId() + 'tooltip'
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleOpen = () => {
@@ -144,7 +146,8 @@ export const Tooltip = memo((props: TooltipProps) => {
     onBlur: !disabledFocus ? handleClose : undefined,
     onMouseEnter: !disabledHover ? handleOpen : undefined,
     onMouseLeave: (!clickableTooltip && !disabledHover) ? handleClose : undefined,
-    ref: triggerElementRef
+    ref: triggerElementRef,
+    'aria-labelledby': isVisible ? tooltipId : undefined
   }
 
   const mods: Record<string, boolean> = {
@@ -165,7 +168,7 @@ export const Tooltip = memo((props: TooltipProps) => {
               translate: `${position.translateX} ${position.translateY}`,
             }}
           >
-            <div className={styles["tooltip"]}>
+            <div role="tooltip" id={tooltipId} className={styles["tooltip"]}>
                 {children}
             </div>
           </div>

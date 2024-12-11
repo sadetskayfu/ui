@@ -8,6 +8,7 @@ export {
 export {
   handleRippleMousePosition,
   handleRipple,
+  rippleId
 } from "./handleRipple/handleRipple";
 export { updateScrollList } from "./updateScrollList/updateScrollList";
 export { getSelectedValue } from "./getSelectedValue/getSelectedValue";

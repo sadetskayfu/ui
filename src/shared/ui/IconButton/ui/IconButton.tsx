@@ -31,6 +31,7 @@ type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "t
 
 export interface IconButtonProps {
   className?: string;
+  id?: string
   variant?: IconButtonVariant;
   color?: IconButtonColor;
   size?: IconButtonSize;
@@ -59,6 +60,7 @@ export const IconButton =
     ) => {
       const {
         children,
+        id,
         className,
         disabled,
         readonly,
@@ -141,6 +143,7 @@ export const IconButton =
         return (
           <Link
             className={classNames(styles["button"], additionalClasses, mods)}
+            id={id}
             to={to}
             tabIndex={localTabIndex}
             onClick={handleClick}
@@ -160,6 +163,7 @@ export const IconButton =
         return (
           <a
             className={classNames(styles["button"], additionalClasses, mods)}
+            id={id}
             href={to}
             tabIndex={localTabIndex}
             onClick={handleClick}
@@ -178,6 +182,7 @@ export const IconButton =
       return (
         <button
           className={classNames(styles["button"], additionalClasses, mods)}
+          id={id}
           type={type}
           onMouseDown={handleMouseDown}
           onKeyDown={handleKeyDown}

@@ -21,7 +21,7 @@ const BackdropPage = () => {
         <SectionTitle>Backdrop</SectionTitle>
         <PreviewComponents title="Backdrop variants">
           <Button onClick={() => setIsOpen(true)}>Dark</Button>
-          <Backdrop onClose={handleClose} isVisible={isOpen}>
+          <Backdrop onClose={handleClose} isVisible={isOpen} zIndex={2000}>
             <p>I am dark</p>
           </Backdrop>
           <Button onClick={() => setIsOpenClearBackdrop(true)}>Clear</Button>
@@ -29,6 +29,7 @@ const BackdropPage = () => {
             variant="clear"
             onClose={handleCloseClearBackdrop}
             isVisible={isOpenClearBackdrop}
+            zIndex={2000}
           >
             <p>I am clear</p>
           </Backdrop>

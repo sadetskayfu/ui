@@ -1,18 +1,19 @@
 import { ReactElement } from "react";
 import { classNames } from "@/shared/lib";
+import { Portal } from "@/shared/ui/Portal";
 import styles from "./style.module.scss";
-import { Portal } from "../../Portal";
 
 export type BackdropVariant = "dark" | "clear";
-type BackdropZIndex = "small" | "large";
 
 interface BackdropProps {
   className?: string;
   variant?: BackdropVariant;
-  zIndex?: BackdropZIndex;
   children: ReactElement;
   isVisible: boolean;
+  isUnmountingAnimation?: boolean;
+  isMountingAnimation?: boolean
   onClose?: () => void;
+  zIndex: number;
 }
 
 export const Backdrop = (props: BackdropProps) => {
@@ -20,24 +21,29 @@ export const Backdrop = (props: BackdropProps) => {
     className,
     children,
     isVisible,
+    isUnmountingAnimation,
+    isMountingAnimation,
     onClose,
     variant = "dark",
-    zIndex = "large",
+    zIndex,
   } = props;
 
-  const mods: Record<string, boolean> = {
+  const mods: Record<string, boolean | undefined> = {
     [styles["visible"]]: isVisible,
+    [styles['unmounting']]: isUnmountingAnimation,
+    [styles['mounting']]: isMountingAnimation
   };
+
   const additionalClasses: Array<string | undefined> = [
     className,
     styles[variant],
-    styles[zIndex],
   ];
 
   return (
     <Portal>
       <div
-        onClick={() => onClose?.()}
+        style={{zIndex: isVisible ? zIndex : -1000}}
+        onClick={onClose}
         className={classNames(styles["backdrop"], additionalClasses, mods)}
       >
         {children}
