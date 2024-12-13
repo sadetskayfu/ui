@@ -7,9 +7,9 @@ import styles from './style.module.scss';
 export interface OptionItemProps {
   className?: string;
   children?: ReactNode;
-  isDisabled?: boolean;
-  isSelected?: boolean;
-  isReadonly?: boolean;
+  disabled?: boolean;
+  selected?: boolean;
+  readonly?: boolean;
   StartIcon?: ReactNode;
   EndIcon?: ReactNode;
   index?: number;
@@ -24,9 +24,9 @@ export const OptionItem = memo((props: OptionItemProps) => {
   const {
     className,
     children,
-    isDisabled,
-    isSelected,
-    isReadonly,
+    disabled,
+    selected,
+    readonly,
     index,
     setFocusedOptionIndex,
     StartIcon,
@@ -40,9 +40,9 @@ export const OptionItem = memo((props: OptionItemProps) => {
   const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["disabled"]]: isDisabled,
-    [styles["readonly"]]: isReadonly,
-    [styles["selected"]]: isSelected,
+    [styles["disabled"]]: disabled,
+    [styles["readonly"]]: readonly,
+    [styles["selected"]]: selected,
   };
 
   const handleMouseMove = () => {
@@ -59,17 +59,17 @@ export const OptionItem = memo((props: OptionItemProps) => {
       id={id}
       role={role}
       tabIndex={-1}
-      data-disabled={isDisabled || isReadonly ? true : undefined}
+      data-disabled={disabled || readonly ? true : undefined}
       data-index={typeof index === "number" ? index : undefined}
       data-value={value || undefined}
-      aria-selected={isSelected ? "true" : undefined}
+      aria-selected={selected ? "true" : undefined}
       onClick={handleClick}
       onMouseMove={handleMouseMove}
     >
-      {StartIcon && <>{StartIcon}</>}
+      {StartIcon && StartIcon}
       {children ? children : label}
-      {EndIcon && <div className={styles["end-icon"]}>{EndIcon}</div>}
-      {isSelected && (
+      {EndIcon && <span className={styles["end-icon"]}>{EndIcon}</span>}
+      {selected && (
         <CheckMark
           className={styles["check-mark"]}
           variant="check-mark"

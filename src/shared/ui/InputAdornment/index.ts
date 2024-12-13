@@ -1,1 +1,1 @@
-export { InputAdornment } from "./ui/InputAdornment";
+export { InputAdornment, type InputAdornmentProps } from "./ui/InputAdornment";

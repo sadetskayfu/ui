@@ -1,6 +1,11 @@
-import { ReactNode, RefObject, useCallback, useEffect, useId, useRef, useState } from "react";
-import { Portal } from "../../Portal";
-import { classNames } from "@/shared/lib";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { classNames, rippleId } from "@/shared/lib";
 import { Backdrop, BackdropVariant } from "@/shared/ui/Backdrop";
 import styles from "./style.module.scss";
 
@@ -8,77 +13,119 @@ type AsideMenuPositionVariant = "left" | "right" | "top" | "bottom";
 
 interface AsideMenuProps {
   className?: string;
-  label?: string
+  labelId: string;
   children: ReactNode;
   isVisible: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   positionVariant?: AsideMenuPositionVariant;
   backdropVariant?: BackdropVariant;
-  parentRef?: RefObject<HTMLElement>
+  zIndex?: number;
 }
 
 export const AsideMenu = (props: AsideMenuProps) => {
   const {
     className,
-    label = 'Navigate menu',
+    labelId,
     children,
-    isVisible,
+    isVisible: externalIsVisible,
     onClose,
     positionVariant = "left",
     backdropVariant,
-    parentRef,
+    zIndex = 1000,
   } = props;
 
+  const [isVisible, setIsVisible] = useState<boolean>(externalIsVisible);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [isUnmountingAnimation, setIsUnmountingAnimation] =
+    useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
   const focusableElementsRef = useRef<HTMLElement[]>([]);
-  const [isFocusFirstItem, setIsFocusFirstItem] = useState<boolean>(false)
-  const [isFocusLastItem, setIsFocusLastItem] = useState<boolean>(false)
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
-  const id = useId() + 'aside-menu-label'
+  // Get items
+  useEffect(() => {
+    const menu = menuRef.current;
 
-  const firstItem = focusableElementsRef.current[0]
-  const lastItem = focusableElementsRef.current[focusableElementsRef.current.length - 1]
+    if (!menu || !isVisible) return;
 
-  const handleSetFocusFirstItem = () => {
-    setIsFocusFirstItem(true)
-  }
-  const handleClearFocusFirstItem = () => {
-    setIsFocusFirstItem(false)
-  }
-  const handleSetFocusLastItem = () => {
-    setIsFocusLastItem(true)
-  }
-  const handleClearFocusLastItem = () => {
-    setIsFocusLastItem(false)
-  }
+    const updateFocusableElements = () => {
+      const focusableElements = Array.from(
+        menu.querySelectorAll<HTMLElement>(
+          "a, button, input, textarea, select, [tabindex]"
+        )
+      ).filter((el) => el.tabIndex !== -1);
 
-  const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
+      focusableElementsRef.current = focusableElements;
+    };
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          // Ignoring non HTML elements and add ripple <span>
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.id !== rippleId) {
+              updateFocusableElements();
+            }
+          });
+          // Ignoring non HTML elements and remove ripple <span>
+          mutation.removedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.id !== rippleId) {
+              updateFocusableElements();
+            }
+          });
+        }
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "tabindex"
+        ) {
+          updateFocusableElements();
+        }
+      });
+    });
+
+    observer.observe(menu, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    });
+
+    updateFocusableElements();
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isVisible]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose?.()
+      let newIndex = activeIndex;
+      const currentFocusableElements = focusableElementsRef.current;
+
+      switch (event.key) {
+        case "Tab":
+          event.preventDefault();
+          const direction = event.shiftKey ? -1 : 1;
+          newIndex =
+            newIndex === -1 && direction === -1
+              ? currentFocusableElements.length - 1
+              : (activeIndex + direction + currentFocusableElements.length) %
+                currentFocusableElements.length;
+          currentFocusableElements[newIndex].focus();
+          break;
+        case "Escape":
+          event.preventDefault();
+          onClose();
+          break;
+        default:
+          break;
       }
-      if (event.key === 'Tab') {
-        
-        if(focusableElementsRef.current.length === 1) {
-            event.preventDefault();
-            firstItem?.focus()
-            return
-        }
-        if (isFocusLastItem && !event.shiftKey) {
-            event.preventDefault();
-            firstItem?.focus();
-        } else if (isFocusFirstItem && event.shiftKey) {
-            event.preventDefault();
-            lastItem?.focus();
-        }
+
+      if (newIndex !== activeIndex) {
+        setActiveIndex(newIndex);
       }
     },
-    [firstItem, lastItem, isFocusFirstItem, isFocusLastItem, onClose]
+    [activeIndex, onClose]
   );
 
   useEffect(() => {
@@ -88,121 +135,66 @@ export const AsideMenu = (props: AsideMenuProps) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isVisible, handleKeyDown]);
+  }, [handleKeyDown, isVisible, activeIndex]);
 
+  // Delay close modal for animation
   useEffect(() => {
-    const currentParent = parentRef?.current
-    if(isVisible && firstItem) {
-        firstItem.focus()
-        handleSetFocusFirstItem()
-    }   
-    return () => {
-        currentParent?.focus()
-    }
-  }, [isVisible, firstItem, parentRef])
-
-  // Get items
-  useEffect(() => {
-    if (!menuRef.current) return;
-  
-    const currentMenuRef = menuRef.current;
-
-    const updateFocusableElements = () => {
-      const focusableElements = currentMenuRef.querySelectorAll<HTMLElement>(
-        "a, button, input, textarea, select, [tabindex]"
-      );
-      focusableElementsRef.current = Array.from(focusableElements);
-    };
-
-    const observer = new MutationObserver(updateFocusableElements);
-  
-    observer.observe(currentMenuRef, {
-      childList: true,
-      subtree: true,
-    });
-
-    updateFocusableElements();
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // Update tab index
-  useEffect(() => {
-    focusableElementsRef.current.forEach((el) => {
-      if (!el.hasAttribute("data-tabindex")) {
-        el.setAttribute("data-tabindex", el.getAttribute("tabindex") ?? "0");
+    if (externalIsVisible) {
+      setIsVisible(true);
+      setIsUnmountingAnimation(false);
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
       }
-      if (isVisible) {
-        const originalTabIndex = el.getAttribute("data-tabindex");
-        el.tabIndex =
-          originalTabIndex !== null ? parseInt(originalTabIndex, 10) : 0;
-      } else {
-        el.tabIndex = -1;
-      }
-    });
-  }, [isVisible]);
+    }
+    if (!externalIsVisible && isVisible) {
+      setIsUnmountingAnimation(true);
+      timeoutIdRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, 200);
+    }
+  }, [externalIsVisible]);
 
+  // Focus on modal after open
   useEffect(() => {
-    if(isVisible && firstItem && lastItem) {
-        firstItem.addEventListener('focus', handleSetFocusFirstItem)
-        firstItem.addEventListener('blur', handleClearFocusFirstItem)
-        lastItem.addEventListener('focus', handleSetFocusLastItem)
-        lastItem.addEventListener('blur', handleClearFocusLastItem)
+    if (isVisible && activeIndex === -1) {
+      menuRef.current?.focus();
     }
-    return () => {
-        if(firstItem && lastItem) {
-            lastItem.removeEventListener('focus', handleSetFocusLastItem)
-            lastItem.removeEventListener('blur', handleClearFocusLastItem)
-            firstItem.removeEventListener('focus', handleSetFocusFirstItem)
-            firstItem.removeEventListener('blur', handleClearFocusFirstItem)
-        }
+  }, [activeIndex, isVisible]);
+
+  // Reset active index
+  useEffect(() => {
+    if (!isVisible && activeIndex !== -1) {
+      setActiveIndex(-1);
     }
-  }, [isVisible, firstItem, lastItem])
+  }, [isVisible, activeIndex]);
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["visible"]]: isVisible,
+    [styles["unmounting"]]: isUnmountingAnimation,
   };
-  const additionalClasses: Array<string | undefined> = [
-    className,
-    styles[positionVariant],
-  ];
+  const additionalClasses: Array<string | undefined> = [className, styles[positionVariant]];
 
-  if (backdropVariant) {
-    return (
-      <Backdrop
-        isVisible={isVisible}
-        onClose={onClose}
-        variant={backdropVariant}
-      >
-        <div
-          ref={menuRef}
-          onClick={handleContentClick}
-          className={classNames(styles["aside-menu"], additionalClasses, mods)}
-          role="menu"
-          aria-hidden={!isVisible}
-          aria-labelledby={id}
-        >
-          <span id={id} className="visually-hidden">{label}</span>
-          {children}
-        </div>
-      </Backdrop>
-    );
-  }
+  if (!isVisible) return;
 
   return (
-    <Portal>
+    <Backdrop
+      isVisible={isVisible}
+      onClose={onClose}
+      variant={backdropVariant}
+      zIndex={zIndex}
+      isUnmountingAnimation={isUnmountingAnimation}
+      isMountingAnimation
+    >
       <div
         ref={menuRef}
         className={classNames(styles["aside-menu"], additionalClasses, mods)}
         role="menu"
-        aria-hidden={!isVisible}
-        aria-labelledby={id}
+        aria-modal="true"
+        aria-labelledby={labelId}
+        tabIndex={-1}
+        style={{zIndex}}
       >
-        <span id={id} className="visually-hidden">{label}</span>
         {children}
       </div>
-    </Portal>
+    </Backdrop>
   );
 };

@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib'
 
 type InputAdornmentPosition = 'start' | 'end'
 
-interface InputAdornmentProps {
+export interface InputAdornmentProps {
     children: ReactNode
     position?: InputAdornmentPosition
 }

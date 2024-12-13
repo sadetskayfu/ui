@@ -1,11 +1,13 @@
 import { Chip, ChipVariant } from "@/shared/ui/Chip";
-import { Radio, RadioGroup } from "@/shared/ui/Radio";
+import { Radio } from "@/shared/ui/Radio";
 import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useState } from "react";
 import { chipSizes, chipVariants } from "../model/Chip";
 import { Switch } from "@/shared/ui/Switch";
 import { ChipSize } from "@/shared/ui/Chip/ui/Chip";
+import { FormGroup } from "@/shared/ui/FormGroup";
+import { FormLabel } from "@/shared/ui/FormLabel";
 
 const ChipPage = () => {
   const [variant, setVariant] = useState<ChipVariant>("filled");
@@ -14,21 +16,25 @@ const ChipPage = () => {
     useState<boolean>(false);
   const [isClickable, setIsClickable] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isReadonly, setIsReadonly] = useState<boolean>(false)
 
-  const handleToggleVariant = useCallback((value: string) => {
+  const handleChangeVariant = useCallback((value: string) => {
     setVariant(value as ChipVariant);
   }, []);
-  const handleToggleSize = useCallback((value: string) => {
+  const handleChangeSize = useCallback((value: string) => {
     setSize(value as ChipSize);
   }, []);
-  const handleToggleVisibleCloseButton = useCallback(() => {
+  const handleChangeVisibleCloseButton = useCallback(() => {
     setIsVIsibleCloseButton((prev) => !prev);
   }, []);
-  const handleToggleClickable = useCallback(() => {
+  const handleChangeClickable = useCallback(() => {
     setIsClickable((prev) => !prev);
   }, []);
-  const handleToggleDisabled = useCallback(() => {
+  const handleChangeDisabled = useCallback(() => {
     setIsDisabled((prev) => !prev);
+  }, []);
+  const handleChangeReadonly = useCallback(() => {
+    setIsReadonly((prev) => !prev);
   }, []);
 
   return (
@@ -36,83 +42,85 @@ const ChipPage = () => {
       <section className="section">
         <SectionTitle>Chip</SectionTitle>
         <div className="mods">
-          <RadioGroup
-            legend="Sizes"
-            name="size"
-            selectedValue={size}
-            onChange={handleToggleSize}
-          >
-            {chipSizes.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+          <FormGroup label="Variants">
+            {chipVariants.map((chipVariant) => {
+              return (
+                <FormLabel
+                  label={chipVariant.label}
+                  Component={
+                    <Radio
+                      name="chip-variant"
+                      value={chipVariant.value}
+                      selectedValue={variant}
+                      onChange={handleChangeVariant}
+                    />
+                  }
+                />
+              );
             })}
-          </RadioGroup>
-          <RadioGroup
-            legend="Variants"
-            name="variant"
-            selectedValue={variant}
-            onChange={handleToggleVariant}
-          >
-            {chipVariants.map((radio) => {
-              return <Radio label={radio.label} value={radio.value} />;
+          </FormGroup>
+          <FormGroup label="Sizes">
+            {chipSizes.map((chipSize) => {
+              return (
+                <FormLabel
+                  label={chipSize.label}
+                  Component={
+                    <Radio
+                      name="chip-size"
+                      value={chipSize.value}
+                      selectedValue={size}
+                      onChange={handleChangeSize}
+                    />
+                  }
+                />
+              );
             })}
-          </RadioGroup>
-          <div>
-            <Switch
-              label="Close button"
-              name="visible-close-button"
-              isChecked={isVisibleCloseButton}
-              onToggle={handleToggleVisibleCloseButton}
-            />
-            <Switch
-              label="Clickable"
-              name="clickable-chip"
-              isChecked={isClickable}
-              onToggle={handleToggleClickable}
-            />
-            <Switch
-              label="Disabled"
-              name="disabled-chip"
-              isChecked={isDisabled}
-              onToggle={handleToggleDisabled}
-            />
-          </div>
+          </FormGroup>
+          <FormLabel label="Close button" Component={<Switch checked={isVisibleCloseButton} onChange={handleChangeVisibleCloseButton}/>}/>
+          <FormLabel label="Disabled" Component={<Switch checked={isDisabled} onChange={handleChangeDisabled}/>}/>
+          <FormLabel label="Readonly" Component={<Switch checked={isReadonly} onChange={handleChangeReadonly}/>}/>
+          <FormLabel label="Clickable" Component={<Switch checked={isClickable} onChange={handleChangeClickable}/>}/>
         </div>
         <div className="subsections">
           <PreviewComponents title="Colors">
             <Chip
-              isClickable={isClickable}
+              clickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
               variant={variant}
               color="primary"
               size={size}
-              isDisabled={isDisabled}
+              disabled={isDisabled}
+              readonly={isReadonly}
               label="Primary"
             />
             <Chip
-              isClickable={isClickable}
+              clickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
               variant={variant}
               color="secondary"
               size={size}
-              isDisabled={isDisabled}
+              disabled={isDisabled}
+              readonly={isReadonly}
               label="Secondary"
             />
             <Chip
-              isClickable={isClickable}
+              clickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
               variant={variant}
               color="success"
               size={size}
-              isDisabled={isDisabled}
+              disabled={isDisabled}
+              readonly={isReadonly}
               label="Success"
             />
             <Chip
-              isClickable={isClickable}
+              clickable={isClickable}
               onClose={isVisibleCloseButton ? () => undefined : undefined}
               variant={variant}
               color="error"
               size={size}
-              isDisabled={isDisabled}
+              disabled={isDisabled}
+              readonly={isReadonly}
               label="Error"
             />
           </PreviewComponents>

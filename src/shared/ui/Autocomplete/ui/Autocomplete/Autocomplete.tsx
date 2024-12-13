@@ -42,9 +42,9 @@ interface AutocompleteProps {
   onSelect: (optionValue: string | string[]) => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  isReadonly?: boolean;
-  isDisabled?: boolean;
-  isRequired?: boolean;
+  readonly?: boolean;
+  disabled?: boolean;
+  required?: boolean;
   getDisabledOption?: (value: string) => boolean;
   children: ReactElement<OptionItemProps>[];
   variant?: FieldVariant;
@@ -73,9 +73,9 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
     onBlur,
     onFocus,
     isStrict = true,
-    isReadonly,
-    isDisabled,
-    isRequired,
+    readonly,
+    disabled,
+    required,
     children,
     getDisabledOption,
     variant,
@@ -122,12 +122,12 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
   }, [options]);
 
   const handleToggleVisibleMenu = useCallback(() => {
-    if (isReadonly) return;
+    if (readonly) return;
     if (!isMountingMenu) setIsMountingMenu(true);
 
     fieldRef.current?.focus();
     setIsVisibleMenu((prev) => !prev);
-  }, [isReadonly, isMountingMenu]);
+  }, [readonly, isMountingMenu]);
 
   const handleOpenMenu = useCallback(() => {
     if (!isMountingMenu) setIsMountingMenu(true);
@@ -228,7 +228,7 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
   }, [onFocus]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (isReadonly) return;
+    if (readonly) return;
 
     switch (event.key) {
       case "ArrowUp":
@@ -251,6 +251,9 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
           const newValues = selectedValue.slice(0, -1);
           onSelect(newValues);
         }
+        break
+      default:
+        break
     }
   };
 
@@ -281,17 +284,17 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
             color="secondary"
             variant={variant === "filled" ? "outlined" : "filled"}
             size="small"
-            isStopFocus
+            stopFocus
             onClose={() => handleDelete(value)}
             key={value}
             label={localOptions[value].label}
             closeButtonTabIndex={-1}
-            isReadonly={isReadonly}
+            readonly={readonly}
           />
         );
       });
     }
-  }, [variant, handleDelete, isReadonly, localOptions, selectedValue, isMulti]);
+  }, [variant, handleDelete, readonly, localOptions, selectedValue, isMulti]);
 
   const mods: Record<string, boolean | undefined> = {
     [styles["visible-menu"]]: isVisibleMenu,
@@ -316,16 +319,16 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         labelVariant={labelVariant}
         tabIndex={tabIndex}
         debounceTime={100}
-        isDisabled={isDisabled}
-        isReadonly={isReadonly}
-        isRequired={isRequired}
+        disabled={disabled}
+        readonly={readonly}
+        required={required}
         onBlur={handleBlur}
         onFocus={handleFocus}
         onClick={handleToggleVisibleMenu}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         isMultiAutocomplete={isMulti}
-        chips={renderSelectedOptions}
+        chips={renderSelectedOptions && <div className={styles['chips']} aria-hidden='true'>{renderSelectedOptions}</div>}
         autoComplete="off"
         role="combobox"
         aria-haspopup="listbox"
@@ -340,10 +343,10 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
               size="small-l"
               variant="clear"
               color="secondary"
-              isStopFocus
+              stopFocus
               onClick={handleToggleVisibleMenu}
               tabIndex={-1}
-              isReadonly={isReadonly}
+              readonly={readonly}
             >
               <Icon className={styles["open-menu-icon"]} variant="arrow" />
             </IconButton>
@@ -355,11 +358,11 @@ export const Autocomplete = memo((props: AutocompleteProps) => {
         isVisible={isVisibleMenu}
         onClose={handleCloseMenu}
         parentRef={autocompleteRef}
-        isStopAnimation
+        stopAnimation
         width={menuWidth}
         positionVariant={menuPosition}
       >
-        {!isDisabled && !isReadonly && isMountingMenu && (
+        {!disabled && !readonly && isMountingMenu && (
           <Options
             isVisible={isVisibleMenu}
             onClose={handleCloseMenu}

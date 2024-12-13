@@ -238,11 +238,11 @@ export const Options = memo((props: OptionsProps) => {
       const isSelected = getSelectedValue(optionValue!, selectedValue);
 
       const props: Partial<OptionItemProps> = {
-        isDisabled,
+        disabled: isDisabled,
         id: optionId,
         index,
         setFocusedOptionIndex,
-        isSelected,
+        selected: isSelected,
       };
       return cloneElement(option, { ...props, key: index });
     });

@@ -1,4 +1,4 @@
-import { classNames } from "@/shared/lib";
+import { classNames, rippleId } from "@/shared/lib";
 import {
   DropdownClosingVariant,
   DropdownPortal,
@@ -24,15 +24,16 @@ interface MenuProps {
   labelId: string;
   positionVariant?: DropdownPositionVariant;
   closingVariant?: DropdownClosingVariant;
-  height?: 'full' | string
+  height?: 'full-screen' | string
   width?: string
+  zIndex?: number
 }
 
 export const Menu = (props: MenuProps) => {
   const {
     className,
     children,
-    isVisible,
+    isVisible: externalIsVisible,
     onClose,
     parentRef,
     id,
@@ -40,32 +41,63 @@ export const Menu = (props: MenuProps) => {
     positionVariant,
     closingVariant,
     height,
-    width
+    width,
+    zIndex,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const [isVisible, setIsVisible] = useState<boolean>(externalIsVisible)
+  const [isUnmountingAnimation, setIsUnmountingAnimation] = useState<boolean>(false)
 
   const menuRef = useRef<HTMLUListElement | null>(null);
   const focusableElementsRef = useRef<HTMLElement[]>([]);
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null)
 
   // Get items
   useEffect(() => {
-    if (!menuRef.current) return;
+    const menu = menuRef.current;
 
-    const currentMenu = menuRef.current;
+    if (!menu || !isVisible) return;
 
     const updateFocusableElements = () => {
-      const focusableElements = currentMenu.querySelectorAll<HTMLElement>(
-        "a, button, [tabindex]"
-      );
-      focusableElementsRef.current = Array.from(focusableElements);
+      const focusableElements = Array.from(
+        menu.querySelectorAll<HTMLElement>(
+          "a, button, input, textarea, select, [tabindex]"
+        )
+      ).filter((el) => el.tabIndex !== -1);
+
+      focusableElementsRef.current = focusableElements;
     };
 
-    const observer = new MutationObserver(updateFocusableElements);
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          // Ignoring non HTML elements and add ripple <span>
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.id !== rippleId) {
+              updateFocusableElements();
+            }
+          });
+          // Ignoring non HTML elements and remove ripple <span>
+          mutation.removedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.id !== rippleId) {
+              updateFocusableElements();
+            }
+          });
+        }
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "tabindex"
+        ) {
+          updateFocusableElements();
+        }
+      });
+    });
 
-    observer.observe(currentMenu, {
+    observer.observe(menu, {
       childList: true,
       subtree: true,
+      attributes: true,
     });
 
     updateFocusableElements();
@@ -73,7 +105,7 @@ export const Menu = (props: MenuProps) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isVisible]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -101,11 +133,6 @@ export const Menu = (props: MenuProps) => {
           break;
       }
 
-      if (event.shiftKey && event.key === "Tab") {
-        event.preventDefault();
-        onClose();
-      }
-
       if (newIndex !== activeIndex) {
         setActiveIndex(newIndex);
       }
@@ -126,6 +153,25 @@ export const Menu = (props: MenuProps) => {
     };
   }, [handleKeyDown, isVisible, activeIndex, parentRef]);
 
+  // Delay close modal for animation
+  useEffect(() => {
+    if (externalIsVisible) {
+      setIsVisible(true);
+      setIsUnmountingAnimation(false);
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    }
+    if (!externalIsVisible && isVisible) {
+      setIsUnmountingAnimation(true);
+      timeoutIdRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, 200);
+    }
+  }, [externalIsVisible]);
+
+  if(!isVisible) return
+
   return (
     <DropdownPortal
       isVisible={isVisible}
@@ -135,6 +181,9 @@ export const Menu = (props: MenuProps) => {
       positionVariant={positionVariant}
       height={height}
       width={width}
+      isMountingAnimation
+      isUnmountingAnimation={isUnmountingAnimation}
+      zIndex={zIndex}
     >
       <ul
         className={classNames(styles["menu-list"], [className])}

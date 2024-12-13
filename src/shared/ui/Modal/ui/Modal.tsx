@@ -10,7 +10,7 @@ interface ModalProps {
   isVisible: boolean;
   onClose: () => void;
   backdropVariant?: BackdropVariant;
-  zIndex: number;
+  zIndex?: number;
 }
 
 export const Modal = (props: ModalProps) => {
@@ -21,10 +21,10 @@ export const Modal = (props: ModalProps) => {
     isVisible: externalIsVisible,
     onClose,
     backdropVariant = "dark",
-    zIndex,
+    zIndex = 1000,
   } = props;
 
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(externalIsVisible);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [isUnmountingAnimation, setIsUnmountingAnimation] =
     useState<boolean>(false);
@@ -32,10 +32,6 @@ export const Modal = (props: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const focusableElementsRef = useRef<HTMLElement[]>([]);
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
 
   // Get items
   useEffect(() => {
@@ -163,7 +159,6 @@ export const Modal = (props: ModalProps) => {
   }, [isVisible, activeIndex]);
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["visible"]]: isVisible,
     [styles["unmounting"]]: isUnmountingAnimation,
   };
   const additionalClasses: Array<string | undefined> = [className];
@@ -181,12 +176,12 @@ export const Modal = (props: ModalProps) => {
     >
       <div
         className={classNames(styles["modal"], additionalClasses, mods)}
-        onClick={handleContentClick}
         ref={modalRef}
         role="dialog"
         aria-labelledby={labelId}
         aria-modal="true"
         tabIndex={-1}
+        style={{zIndex}}
       >
         {children}
       </div>

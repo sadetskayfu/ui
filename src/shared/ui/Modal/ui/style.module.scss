@@ -1,4 +1,8 @@
 .modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%; 
     border: 1px solid var(--secondary-300);
     background-color: var(--light);
     border-radius: var(--border-radius-small);

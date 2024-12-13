@@ -19,7 +19,7 @@ export type ButtonVariant = "filled" | "outlined" | "clear";
 export type ButtonColor = "primary" | "secondary";
 export type ButtonSize = "small" | "medium" | "large";
 
-type HTMLLinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex" | "onKeyDown" | "onMouseDown" | "aria-readonly">
+type HTMLLinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex" | "onKeyDown" | "onMouseDown" | "onClick" | "aria-readonly">
 type HTMLButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "type" | "tabIndex" | "onClick" | "onKeyDown" | "onMouseDown" | "aria-readonly">
 
 interface ButtonProps {
@@ -140,7 +140,7 @@ export const Button = memo(
             onClick={handleClick}
             to={to}
             tabIndex={localTabIndex}
-            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
+            ref={linkRef}
             {...linkProps}
             {...otherProps}
           >
@@ -162,7 +162,7 @@ export const Button = memo(
             onClick={handleClick}
             href={to}
             tabIndex={localTabIndex}
-            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
+            ref={linkRef}
             {...linkProps}
             {...otherProps}
           >
@@ -185,7 +185,7 @@ export const Button = memo(
           tabIndex={localTabIndex}
           disabled={disabled}
           aria-readonly={readonly ? "true" : undefined}
-          ref={ref as React.ForwardedRef<HTMLButtonElement>}
+          ref={ref && ref as React.ForwardedRef<HTMLButtonElement>}
           {...buttonProps}
           {...otherProps}
         >

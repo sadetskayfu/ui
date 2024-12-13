@@ -45,7 +45,7 @@ export const Tooltip = memo((props: TooltipProps) => {
 
   const triggerElementRef = useRef<HTMLElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const tooltipId = useId() + 'tooltip'
+  const tooltipId = useId()
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleOpen = () => {

@@ -1,24 +1,15 @@
 import { SectionTitle } from "@/shared/ui/SectionTitle";
-import { Select, SelectLabelVariant, SelectVariant } from "@/shared/ui/Select";
+import { Select } from "@/shared/ui/Select";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { useCallback, useMemo, useState } from "react";
-import { options, selectLabelVariants, selectVariants } from "../model/Select";
+import { options } from "../model/Select";
 import styles from "./style.module.scss";
-import { Radio, RadioGroup } from "@/shared/ui/Radio";
-import { Checkbox } from "@/shared/ui/Checkbox";
 import { InputAdornment } from "@/shared/ui/InputAdornment";
 import { OptionItem } from "@/shared/ui/OptionItem";
 
 const SelectPage = () => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [labelVariant, setLabelVariant] =
-    useState<SelectLabelVariant>("visible");
-  const [variant, setVariant] = useState<SelectVariant>("outlined");
-
-  const [isRequired, setIsRequired] = useState<boolean>(false);
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const [isReadonly, setIsReadonly] = useState<boolean>(false);
 
   const handleSelectOption = useCallback((values: string | string[]) => {
     setSelectedOption(values as string);
@@ -27,22 +18,6 @@ const SelectPage = () => {
     setSelectedOptions(values as string[]);
   }, []);
 
-  const handleToggleLabelVariant = useCallback((value: string) => {
-    setLabelVariant(value as SelectLabelVariant);
-  }, []);
-  const handleToggleVariant = useCallback((value: string) => {
-    setVariant(value as SelectVariant);
-  }, []);
-
-  const handleToggleRequired = useCallback(() => {
-    setIsRequired((prev) => !prev);
-  }, []);
-  const handleToggleDisabled = useCallback(() => {
-    setIsDisabled((prev) => !prev);
-  }, []);
-  const handleToggleReadonly = useCallback(() => {
-    setIsReadonly((prev) => !prev);
-  }, []);
 
   const getDisabledOption = useCallback((value: string) => {
     if (value === "2" || value === "5") {
@@ -61,59 +36,6 @@ const SelectPage = () => {
     <div className="page">
       <section className="section">
         <SectionTitle>Select</SectionTitle>
-        <div className="mods">
-          <RadioGroup
-            legend="Variants"
-            name="variant"
-            direction="horizontal"
-            selectedValue={variant}
-            onChange={handleToggleVariant}
-          >
-            {selectVariants.map((radio) => {
-              return (
-                <Radio
-                  key={radio.value}
-                  label={radio.label}
-                  value={radio.value}
-                />
-              );
-            })}
-          </RadioGroup>
-          <RadioGroup
-            legend="Label variants"
-            name="label-variant"
-            direction="horizontal"
-            selectedValue={labelVariant}
-            onChange={handleToggleLabelVariant}
-          >
-            {selectLabelVariants.map((radio) => {
-              return (
-                <Radio
-                  key={radio.value}
-                  label={radio.label}
-                  value={radio.value}
-                />
-              );
-            })}
-          </RadioGroup>
-          <div>
-            <Checkbox
-              label="Required"
-              isChecked={isRequired}
-              onToggle={handleToggleRequired}
-            />
-            <Checkbox
-              label="Disabled"
-              isChecked={isDisabled}
-              onToggle={handleToggleDisabled}
-            />
-            <Checkbox
-              label="Readonly"
-              isChecked={isReadonly}
-              onToggle={handleToggleReadonly}
-            />
-          </div>
-        </div>
         <div className="subsections">
           <PreviewComponents title="Single select" direction="vertical">
             <Select
@@ -125,11 +47,6 @@ const SelectPage = () => {
               options={options}
               value={selectedOption}
               onSelect={handleSelectOption}
-              variant={variant}
-              labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
               startAdornment={<InputAdornment>Movie</InputAdornment>}
               getDisabledOption={getDisabledOption}
             >
@@ -144,11 +61,6 @@ const SelectPage = () => {
               options={options}
               value={selectedOption}
               onSelect={handleSelectOption}
-              variant={variant}
-              labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
             >
               {renderOptions}
             </Select>
@@ -163,11 +75,6 @@ const SelectPage = () => {
               options={options}
               value={selectedOptions}
               onSelect={handleSelectOptions}
-              variant={variant}
-              labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
               getDisabledOption={getDisabledOption}
             >
               {renderOptions}
@@ -181,11 +88,6 @@ const SelectPage = () => {
               options={options}
               value={selectedOptions}
               onSelect={handleSelectOptions}
-              variant={variant}
-              labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
             >
               {renderOptions}
             </Select>

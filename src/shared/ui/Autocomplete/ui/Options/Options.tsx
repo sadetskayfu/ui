@@ -243,12 +243,12 @@ export const Options = memo((props: OptionsProps) => {
   }, [focusedOptionIndex, setFocusedOptionId]);
 
   const renderOptions = useMemo(() => {
-    if (options.length === 0) return <OptionItem isReadonly>No options</OptionItem>;
+    if (options.length === 0) return <OptionItem readonly>No options</OptionItem>;
 
     const filteredOptions = getFilteredOptions(options, value, isStopFilter);
 
     if (filteredOptions.length === 0)
-      return <OptionItem isReadonly>No options</OptionItem>;
+      return <OptionItem readonly>No options</OptionItem>;
 
     return filteredOptions.map((option: ReactElement<OptionItemProps>, index) => {
       const optionValue = option.props.value;
@@ -257,11 +257,11 @@ export const Options = memo((props: OptionsProps) => {
       const isSelected = getSelectedValue(optionValue!, selectedValue);
 
       const props: Partial<OptionItemProps> = {
-        isDisabled,
+        disabled: isDisabled,
         id: optionId,
         index,
         setFocusedOptionIndex,
-        isSelected,
+        selected: isSelected,
       };
       return cloneElement(option, { ...props, key: index });
     });

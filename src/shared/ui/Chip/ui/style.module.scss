@@ -1,82 +1,99 @@
-@import "@/app/styles/media";
+@import "@/app/styles/media", "@/app/styles/animations";
 
 .chip {
   --height: var(--button-height-small-m);
-  --chipBgColor: var(--primary-500);
-  --chipHoverBgColor: var(--primary-200);
-  --focusColor: var(--primary-500);
+  --bgColor: var(--primary-500);
+  --bgColorHover: var(--bgColor);
+  --boxShadowColor: var(--bgColor);
   --color: var(--light);
-  --hoverColor: var(--secondary-600);
+  --paddingBlock: 4px;
   height: var(--height);
   border-radius: var(--border-radius-large);
   display: flex;
   align-items: center;
-  column-gap: var(--gap-small-s);
+  justify-content: center;
+  column-gap: var(--paddingBlock);
   color: var(--color);
-  background-color: var(--chipBgColor);
+  background-color: var(--bgColor);
+  padding-block: var(--paddingBlock);
   text-wrap: nowrap;
   cursor: inherit;
+  position: relative;
+  &:after {
+    content: '';
+    pointer-events: none;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    position: absolute;
+    border-radius: inherit;
+    height: 100%;
+    width: 100%;
+    transition-duration: 0.2s;
+  }
 
   &.clickable {
     cursor: pointer;
     border: none;
     transition-duration: 0.2s;
-    overflow: hidden;
     position: relative;
     &:focus-visible {
-      box-shadow: 0 0 5px 1px var(--focusColor);
+      background-color: var(--bgColorHover);
+      &:after {
+        width: calc(100% + 5px);
+        height: calc(100% + 5px);
+        box-shadow: 0 0 0 2px var(--primary-500);
+      }
     }
     @include hover {
-      background-color: var(--chipHoverBgColor);
-      --color: var(--hoverColor);
+      filter: drop-shadow(0 0 1px var(--boxShadowColor));
+      background-color: var(--bgColorHover);
     }
   }
 }
 
+.close-button {
+  height: 100%;
+  font-size: 9px;
+}
+
 // Colors
 .chip {
-    &.primary {
-  
-    }
     &.secondary {
-      --chipBgColor: var(--secondary-200);
-      --chipHoverBgColor: var(--secondary-100);
+      --bgColor: var(--secondary-200);
       --color: var(--secondary-600);
-      --focusColor: var(--secondary-600);
+      --boxShadowColor: var(--secondary-300);
     }
     &.error {
-      --chipBgColor: var(--red-500);
-      --chipHoverBgColor: var(--red-100);
-      --focusColor: var(--red-500);
+      --bgColor: var(--red-500);
     }
     &.success {
-        --chipBgColor: var(--green-500);
-        --chipHoverBgColor: var(--green-100);
-        --focusColor: var(--green-500);
+      --bgColor: var(--green-500);
       }
 }
 
 // Variants
 .chip {
   &.outlined {
-    --chipBgColor: transparent;
+    --bgColor: transparent;
+    --boxShadowColor: transparent;
     border: 1px solid var(--color);
     &.primary {
       --color: var(--primary-500);
-      --chipHoverBgColor: var(--primary-100);
+      --bgColorHover: var(--primary-100);
     }
     &.secondary {
       --color: var(--secondary-600);
-      --chipHoverBgColor: var(--secondary-100);
+      --bgColorHover: var(--secondary-100);
       border-color: var(--secondary-500);
     }
     &.success {
       --color: var(--green-500);
-      --chipHoverBgColor: var(--green-100);
+      --bgColorHover: var(--green-100);
     }
     &.error {
       --color: var(--red-500);
-      --chipHoverBgColor: var(--red-100);
+      --bgColorHover: var(--red-100);
     }
   }
 }
@@ -99,7 +116,10 @@
     pointer-events: none;
     opacity: var(--opacity-medium);
   }
+  &.readonly {
+    cursor: default;
+  }
   &.have-close-button {
-    padding-right: 2.5px;
+    padding-right: var(--paddingBlock);
   }
 }

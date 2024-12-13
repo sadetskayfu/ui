@@ -26,7 +26,7 @@ export type IconButtonSize =
 
 export type IconButtonBorderRadius = 'left' | 'right' | 'everywhere' | 'round' | 'none'
 
-type LinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex" | "onKeyDown" | "onMouseDown" | "aria-readonly">
+type LinkProps = Omit<LinkHTMLAttributes<HTMLAnchorElement>, "href" | "tabIndex" | "onKeyDown" | "onMouseDown" | "onClick" | "aria-readonly">
 type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "type" | "tabIndex" | "onClick" | "onKeyDown" | "onMouseDown" | "aria-readonly">
 
 export interface IconButtonProps {
@@ -149,7 +149,7 @@ export const IconButton =
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             onMouseDown={handleMouseDown}
-            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
+            ref={linkRef}
             {...linkProps}
             {...otherProps}
           >
@@ -169,7 +169,7 @@ export const IconButton =
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             onMouseDown={handleMouseDown}
-            ref={ref ? ref as React.ForwardedRef<HTMLAnchorElement> : localLinkRef}
+            ref={linkRef}
             {...linkProps}
             {...otherProps}
           >
@@ -190,7 +190,7 @@ export const IconButton =
           tabIndex={localTabIndex}
           disabled={disabled}
           aria-readonly={readonly ? 'true' : undefined}
-          ref={ref as React.ForwardedRef<HTMLButtonElement>}
+          ref={ref && ref as React.ForwardedRef<HTMLButtonElement>}
           {...buttonProps}
           {...otherProps}
         >

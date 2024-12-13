@@ -14,9 +14,10 @@ interface DropdownMenuProps {
   isVisible: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
-  isStopAnimation?: boolean;
+  stopAnimation?: boolean;
   width?: string | 'parent';
   height?: string;
+  zIndex?: number
 }
 
 type VerticalOpeningDirection =
@@ -33,21 +34,22 @@ type HorizontalOpeningDirection =
 export const Dropdown = (props: DropdownMenuProps) => {
   const {
     className,
-    positionVariant = "row",
+    positionVariant = "column",
     closingVariant = "mousedown",
     children,
     isVisible,
     onClose,
     parentRef,
-    isStopAnimation,
+    stopAnimation,
     width,
     height,
+    zIndex = 1000,
   } = props;
 
   const [verticalOpeningDirection, setVerticalOpeningDirection] =
-    useState<VerticalOpeningDirection>("row-down");
+    useState<VerticalOpeningDirection>("column-down");
   const [horizontalOpeningDirection, setHorizontalOpeningDirection] =
-    useState<HorizontalOpeningDirection>("row-left");
+    useState<HorizontalOpeningDirection>("column-left");
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -141,7 +143,7 @@ export const Dropdown = (props: DropdownMenuProps) => {
 
   const mods: Record<string, boolean> = {
     [styles["visible"]]: isVisible,
-    [styles["no-animation"]]: !!isStopAnimation,
+    [styles["no-transition"]]: !!stopAnimation,
   };
 
   const additionalClasses: Array<string | undefined> = [
@@ -159,6 +161,7 @@ export const Dropdown = (props: DropdownMenuProps) => {
       style={{
         width: width === 'parent' ? '100%' : width,
         height: height,
+        zIndex: isVisible ? zIndex : -1000,
       }}
     >
       {children}

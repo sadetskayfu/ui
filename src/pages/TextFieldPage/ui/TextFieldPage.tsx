@@ -2,14 +2,16 @@ import { SectionTitle } from "@/shared/ui/SectionTitle";
 import { PreviewComponents } from "@/widgets/PreviewComponents";
 import { Field, FieldLabelVariant, FieldVariant } from "@/shared/ui/Field";
 import { useCallback, useRef, useState } from "react";
-import { Checkbox } from "@/shared/ui/Checkbox";
 import styles from "./style.module.scss";
-import { Radio, RadioGroup } from "@/shared/ui/Radio";
+import { Radio } from "@/shared/ui/Radio";
 import { fieldLabelVariants, fieldVariants } from "../model/Field";
 import { requiredValidate } from "@/shared/lib/validate";
 import { InputAdornment } from "@/shared/ui/InputAdornment";
 import { IconButton } from "@/shared/ui/IconButton";
 import { Icon } from "@/shared/ui/Icon";
+import { FormLabel } from "@/shared/ui/FormLabel";
+import { Switch } from "@/shared/ui/Switch";
+import { FormGroup } from "@/shared/ui/FormGroup";
 
 const TextFieldPage = () => {
   const [value, setValue] = useState<string>("");
@@ -72,49 +74,26 @@ const TextFieldPage = () => {
       <section className="section">
         <SectionTitle>Field</SectionTitle>
         <div className="mods">
-          <RadioGroup
-            legend="Variants"
-            name="variant"
-            direction="horizontal"
-            selectedValue={variant}
-            onChange={handleToggleVariant}
-          >
-            {fieldVariants.map((radio) => {
-              return <Radio key={radio.value} label={radio.label} value={radio.value} />;
+          <FormGroup label="Variants">
+            {fieldVariants.map((fieldVariant) => {
+              return <FormLabel label={fieldVariant.label} Component={<Radio name='field-variant' value={fieldVariant.value} selectedValue={variant} onChange={handleToggleVariant}/>}/>
             })}
-          </RadioGroup>
-          <RadioGroup
-            legend="Label variants"
-            name="label-variant"
-            direction="horizontal"
-            selectedValue={labelVariant}
-            onChange={handleToggleLabelVariant}
-          >
-            {fieldLabelVariants.map((radio) => {
-              return <Radio key={radio.value} label={radio.label} value={radio.value} />;
+          </FormGroup>
+          <FormGroup label="Label variants">
+            {fieldLabelVariants.map((fieldVariant) => {
+              return <FormLabel label={fieldVariant.label} Component={<Radio name='field-label-variant' value={fieldVariant.value} selectedValue={labelVariant} onChange={handleToggleLabelVariant}/>}/>
             })}
-          </RadioGroup>
+          </FormGroup>
           <div>
-            <Checkbox
-              label="Required"
-              isChecked={isRequired}
-              onToggle={handleToggleRequired}
-            />
-            <Checkbox
-              label="Disabled"
-              isChecked={isDisabled}
-              onToggle={handleToggleDisabled}
-            />
-            <Checkbox
-              label="Readonly"
-              isChecked={isReadonly}
-              onToggle={handleToggleReadonly}
-            />
+            <FormLabel label="Disabled" Component={<Switch checked={isDisabled} onChange={handleToggleDisabled}/>}/>
+            <FormLabel label="Required" Component={<Switch checked={isRequired} onChange={handleToggleRequired}/>}/>
+            <FormLabel label="Readonly" Component={<Switch checked={isReadonly} onChange={handleToggleReadonly}/>}/>
           </div>
         </div>
         <div className="subsections">
           <PreviewComponents title="Sizes" direction="vertical">
             <Field
+              id="medium-field"
               name="medium"
               className={styles["field"]}
               label="Medium"
@@ -123,15 +102,16 @@ const TextFieldPage = () => {
               value={value}
               onChange={handleChangeValue}
               placeholder="Enter value..."
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
+              disabled={isDisabled}
+              readonly={isReadonly}
+              required={isRequired}
               autoComplete="off"
               variant={variant}
               errorMessage={error}
               onBlur={handleValidate}
             />
             <Field
+              id='large-field'
               name="large"
               className={styles["field"]}
               label="Large"
@@ -140,9 +120,9 @@ const TextFieldPage = () => {
               onChange={handleChangeValue}
               placeholder="Enter value..."
               labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
+              disabled={isDisabled}
+              readonly={isReadonly}
+              required={isRequired}
               autoComplete="off"
               type="text"
               variant={variant}
@@ -151,6 +131,7 @@ const TextFieldPage = () => {
           <PreviewComponents title="Password field">
             <form autoComplete="off">
               <Field
+                id='password-field'
                 className={styles["field"]}
                 ref={passwordInputRef}
                 name="password"
@@ -160,9 +141,9 @@ const TextFieldPage = () => {
                 onChange={handleChangePassword}
                 placeholder="Enter password..."
                 labelVariant={labelVariant}
-                isDisabled={isDisabled}
-                isReadonly={isReadonly}
-                isRequired={isRequired}
+                disabled={isDisabled}
+                readonly={isReadonly}
+                required={isRequired}
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 endAdornment={
@@ -173,7 +154,7 @@ const TextFieldPage = () => {
                       variant="clear"
                       color="secondary"
                       aria-label={showPassword ? 'hide the password' : 'display the password'}
-                      isStopFocus
+                      stopFocus
                       tabIndex={isDisabled ? -1 : 0}
                     >
                       {showPassword ? <Icon variant="eye" /> : <Icon variant="eye-slash" />}
@@ -186,6 +167,7 @@ const TextFieldPage = () => {
           </PreviewComponents>
           <PreviewComponents title="Search field">
             <Field
+              id='search-field'
               className={styles["field"]}
               name="search"
               label="Search"
@@ -194,9 +176,9 @@ const TextFieldPage = () => {
               onChange={handleChangeValue}
               placeholder="Search..."
               labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
+              disabled={isDisabled}
+              readonly={isReadonly}
+              required={isRequired}
               autoComplete="off"
               onSearch={() => alert("Search")}
               variant={variant}
@@ -204,6 +186,7 @@ const TextFieldPage = () => {
           </PreviewComponents>
           <PreviewComponents title="Multiline">
             <Field
+              id='multiline-field'
               name="multiline"
               className={styles["field"]}
               label="Large"
@@ -212,9 +195,9 @@ const TextFieldPage = () => {
               onChange={handleChangeValue}
               placeholder="Enter value..."
               labelVariant={labelVariant}
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
+              disabled={isDisabled}
+              readonly={isReadonly}
+              required={isRequired}
               autoComplete="off"
               variant={variant}
               isMultiline
@@ -222,6 +205,7 @@ const TextFieldPage = () => {
           </PreviewComponents>
           <PreviewComponents title="With custom adornment">
             <Field
+              id='custom-start-adornment-field'
               name="custom-start-adornment"
               className={styles["field"]}
               label="Medium"
@@ -230,9 +214,9 @@ const TextFieldPage = () => {
               value={value}
               onChange={handleChangeValue}
               placeholder="Enter value..."
-              isDisabled={isDisabled}
-              isReadonly={isReadonly}
-              isRequired={isRequired}
+              disabled={isDisabled}
+              readonly={isReadonly}
+              required={isRequired}
               autoComplete="off"
               variant={variant}
               startAdornment={

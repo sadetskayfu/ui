@@ -99,7 +99,7 @@ export const Checkbox = memo((props: CheckboxProps) => {
         {...inputProps}
       />
       <div className={styles["checkbox"]}>
-        {Icon ? <span className={styles["icon"]}>{Icon}</span> : undefined}
+        {Icon && <span className={styles["icon"]}>{Icon}</span>}
         <span className={styles["checked-icon"]}>
           {CheckedIcon ? CheckedIcon : <Checkmark variant="check-mark" color="light" />}
         </span>

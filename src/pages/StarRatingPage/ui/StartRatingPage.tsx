@@ -40,71 +40,78 @@ const StarRatingPage = () => {
       <PreviewComponents title="5 stars">
         <StarRating
           label="Rating 5 stars"
-          initialRating={rating1}
+          selectedValue={rating1}
           maxStars={5}
           onChange={handleChangeRating1}
           name="5-stars"
           size="medium"
+          hiddenLabel
         />
       </PreviewComponents>
       <PreviewComponents title="10 stars">
         <StarRating
           label="Rating 10 stars"
-          initialRating={rating2}
+          selectedValue={rating2}
           maxStars={10}
           onChange={handleChangeRating2}
           name="10-star"
           size="medium"
+          hiddenLabel
         />
       </PreviewComponents>
-      <PreviewComponents title="Sizes and precise mod" direction="vertical" isCentering>
+      <PreviewComponents title="Sizes and precise mod" direction="vertical">
         <StarRating
           label="Rating small size"
-          initialRating={rating3}
+          selectedValue={rating3}
           maxStars={5}
           onChange={handleChangeRating3}
           name="small"
           size="small"
-          isPrecise
+          precise
+          hiddenLabel
         />
         <StarRating
           label="Rating medium size"
-          initialRating={rating4}
+          selectedValue={rating4}
           maxStars={5}
           onChange={handleChangeRating4}
           name="medium"
           size="medium"
-          isPrecise
+          precise
+          hiddenLabel
         />
         <StarRating
           label="Rating large size"
-          initialRating={rating5}
+          selectedValue={rating5}
           maxStars={5}
           onChange={handleChangeRating5}
           name="large"
           size="large"
-          isPrecise
+          precise
+          hiddenLabel
         />
       </PreviewComponents>
       <PreviewComponents title="Readonly">
         <StarRating
           label="Rating"
-          initialRating={avgRating}
+          selectedValue={avgRating}
           maxStars={5}
           onChange={() => undefined}
           name="rating"
-          isReadonly
+          readonly
+          hiddenLabel
         />
         {avgRating}
       </PreviewComponents>
       <PreviewComponents title="Disabled">
         <StarRating
           label="Rating"
-          initialRating={avgRating}
+          selectedValue={avgRating}
           maxStars={5}
           onChange={() => undefined}
           name="rating"
-          isDisabled
+          disabled
+          hiddenLabel
         />
         {avgRating}
       </PreviewComponents>

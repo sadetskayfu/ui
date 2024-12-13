@@ -30,22 +30,20 @@ interface FieldProps extends HTMLInputProps {
   label: string;
   name?: string;
   id: string;
-  labelId: string;
+  labelId?: string;
   placeholder?: string;
   variant?: FieldVariant;
   labelVariant?: FieldLabelVariant;
   size?: FieldSize;
-  isReadonly?: boolean;
-  isDisabled?: boolean;
-  isRequired?: boolean;
-  isHiddenLabel?: boolean;
+  readonly?: boolean;
+  disabled?: boolean;
+  required?: boolean;
   isMultiline?: boolean;
   isMultiAutocomplete?: boolean;
   errorMessage?: string;
   value: string;
-  type?: "text" | "password";
   tabIndex?: number;
-  chips?: ReactElement[];
+  chips?: ReactElement;
   startAdornment?: ReactElement;
   endAdornment?: ReactElement | ReactElement[];
   debounceTime?: number;
@@ -58,7 +56,7 @@ interface FieldProps extends HTMLInputProps {
 
 export const Field = memo(
   forwardRef(
-    (props: FieldProps, ref: React.ForwardedRef<HTMLInputElement | null>) => {
+    (props: FieldProps, ref: React.ForwardedRef<HTMLInputElement | HTMLTextAreaElement | null>) => {
       const {
         id,
         labelId,
@@ -72,9 +70,9 @@ export const Field = memo(
         variant = "outlined",
         labelVariant = "visible",
         size = "medium",
-        isReadonly,
-        isRequired,
-        isDisabled,
+        readonly,
+        required,
+        disabled,
         isMultiline,
         isMultiAutocomplete,
         tabIndex = 0,
@@ -85,25 +83,25 @@ export const Field = memo(
         onBlur,
         onFocus,
         onSearch,
-        type = "text",
         debounceTime = 0,
         ...otherProps
       } = props;
 
+      
       const [value, setValue] = useState<string>(externalValue);
+      const [isDirty, setIsDirty] = useState<boolean>(false)
+      const [isMovedLabel, setIsMovedLabel] = useState<boolean>(false)
       const [isFocusedField, setIsFocusedField] = useState<boolean>(false);
       const [transitionDuration, setTransitionDuration] = useState<
         string | undefined
       >(undefined);
 
-      const isDirty = value.length > 0 || !!startAdornment || !!chips;
-
       const errorMessageId = id + 'error-message';
+      const localLabelId = labelId ? labelId : id + 'label'
 
-      const inputRef = useRef<HTMLInputElement>(null);
-      const input = ref ? (ref as React.RefObject<HTMLInputElement>) : inputRef;
-      const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
+      const localInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+      const inputRef = ref ? (ref as React.RefObject<HTMLInputElement | HTMLTextAreaElement>) : localInputRef;
+      
       const handleKeyDown = (event: React.KeyboardEvent) => {
         if (onSearch) {
           if (event.key === "Enter" && isDirty) {
@@ -123,11 +121,7 @@ export const Field = memo(
       };
 
       const handleClick = () => {
-        if (isMultiline) {
-          textareaRef.current?.focus();
-        } else {
-          input.current?.focus();
-        }
+          inputRef.current?.focus();
         onClick?.();
       };
 
@@ -148,7 +142,7 @@ export const Field = memo(
       const handleClear = () => {
         setValue("");
         onChange?.("");
-        input.current?.focus();
+        inputRef.current?.focus();
       };
 
       useEffect(() => {
@@ -159,13 +153,13 @@ export const Field = memo(
 
       // Update height textarea
       useEffect(() => {
-        const textarea = textareaRef.current;
+        const textarea = inputRef.current;
         if (textarea) {
           textarea.style.height = "auto";
           const newHeight = textarea.scrollHeight;
           textarea.style.height = `${newHeight}px`;
         }
-      }, [value]);
+      }, [value, inputRef]);
 
       // Add lazy transition for skip autofill
       useEffect(() => {
@@ -184,15 +178,30 @@ export const Field = memo(
         setValue(externalValue);
       }, [externalValue]);
 
-      const localTabIndex: number = isDisabled ? -1 : tabIndex;
+      // Update isDirty
+      useEffect(() => {
+        value.length > 0 ? setIsDirty(true) : setIsDirty(false)
+      }, [value])
+
+      // Update isMovedLabel
+      useEffect(() => {
+        if(isDirty || !!startAdornment || !!chips) {
+          setIsMovedLabel(true)
+        } else {
+          setIsMovedLabel(false)
+        }
+      }, [isDirty, startAdornment, chips])
+
+      const localTabIndex: number = disabled ? -1 : tabIndex;
 
       const mods: Record<string, boolean | undefined> = {
         [styles["dirty"]]: isDirty,
+        [styles['moved-label']]: isMovedLabel,
         [styles["errored"]]: !!errorMessage,
         [styles["focused"]]: isFocusedField,
-        [styles["readonly"]]: isReadonly,
-        [styles["disabled"]]: isDisabled,
-        [styles["required"]]: isRequired,
+        [styles["readonly"]]: readonly,
+        [styles["disabled"]]: disabled,
+        [styles["required"]]: required,
         [styles["multiline"]]: isMultiline,
         [styles["multi-autocomplete"]]: isMultiAutocomplete,
       };
@@ -213,16 +222,16 @@ export const Field = memo(
         onChange: handleChange,
         onBlur: handleBlur,
         onFocus: handleFocus,
-        disabled: isDisabled,
-        required: isRequired,
-        readOnly: isReadonly,
+        disabled: disabled,
+        required: required,
+        readOnly: readonly,
         className: styles['input'],
       }
 
       return (
         <div className={classNames(styles["wrapper"], additionalClasses, mods)}>
           <div className={styles["field-wrapper"]}>
-            <label className={styles["label"]} htmlFor={id} id={labelId}>
+            <label className={styles["label"]} htmlFor={id} id={localLabelId}>
               {label}
             </label>
             <div
@@ -241,7 +250,7 @@ export const Field = memo(
                   <textarea
                     rows={1}
                     style={{ transitionDuration }}
-                    ref={textareaRef}
+                    ref={inputRef as React.RefObject<HTMLTextAreaElement>}
                     aria-errormessage={
                       errorMessage ? errorMessageId : undefined
                     }
@@ -250,8 +259,7 @@ export const Field = memo(
                 ) : (
                   <input
                     style={{ transitionDuration }}
-                    type={type}
-                    ref={input}
+                    ref={inputRef as React.RefObject<HTMLInputElement>}
                     aria-errormessage={
                       errorMessage ? errorMessageId : undefined
                     }
@@ -262,7 +270,7 @@ export const Field = memo(
                 )}
               </div>
               <div className={styles["buttons"]}>
-                {value.length > 0 && !isReadonly && !isDisabled && (
+                {isDirty && !readonly && !disabled && (
                   <IconButton
                     onClick={handleClear}
                     className={styles["clear-field-button"]}
@@ -288,7 +296,7 @@ export const Field = memo(
                   size="custom-size"
                   tabIndex={-1}
                   aria-label="Find by the entered value"
-                  readonly={isReadonly}
+                  readonly={readonly}
                 >
                   <Icon variant="search" size="small-l" />
                 </IconButton>
@@ -296,9 +304,9 @@ export const Field = memo(
             </div>
           </div>
           {errorMessage && (
-            <div className={styles["error-message"]} id={errorMessageId}>
-              <p>{errorMessage}</p>
-            </div>
+            <p className={styles["error-message"]} id={errorMessageId}>
+              {errorMessage}
+            </p>
           )}
         </div>
       );

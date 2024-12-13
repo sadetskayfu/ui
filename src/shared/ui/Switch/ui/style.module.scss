@@ -5,7 +5,7 @@
   --width: var(--height);
   --translateX: calc((var(--width) - var(--height) / 2) / 2);
   --trackColor: var(--secondary-200);
-  --trackColorChecked: var(--primary-200);
+  --trackColorChecked: var(--primary-400);
   --thumbColor: var(--secondary-300);
   --thumbColorChecked: var(--primary-500);
   --thumbColorHover: var(--secondary-opacity);
@@ -14,6 +14,9 @@
   --marginInline: var(--padding-small-m);
   cursor: pointer;
   margin-inline: var(--marginInline);
+  height: var(--height);
+  display: flex;
+  align-items: center;
   @include hover {
     .thumb {
       background-color: var(--thumbColorHover);
@@ -22,7 +25,7 @@
 }
 
 .track {
-  height: calc(var(--height) / 3);
+  height: 30%;
   width: var(--width);
   background-color: var(--trackColor);
   border-radius: var(--border-radius-large);

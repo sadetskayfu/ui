@@ -1,104 +1,118 @@
-import { memo, MouseEventHandler, useRef } from "react";
+import { useId } from "react";
 import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
-export type StarSize = 'small' | 'medium' | 'large'
+export type StarSize = "small" | "medium" | "large";
 
 interface StarProps {
-  className?: string;
-  size?: StarSize
+  className?: string
+  size?: StarSize;
   value: number;
+  selectedValue: number;
+  name: string;
   onChange: (value: number) => void;
-  onMouseEnter: (value: number) => void;
-  onMouseLeave: () => void;
-  isFilled: boolean;
-  isThreeQuartersFilled: boolean
+  onChangeFillValue: (value: number) => void;
+  isFullFilled: boolean;
+  isThreeQuartersFilled: boolean;
   isHalfFilled: boolean;
-  isQuarterFilled: boolean
-  isReadonly?: boolean
-  isDisabled?: boolean
-  isPrecise?: boolean
+  isQuarterFilled: boolean;
+  readonly?: boolean;
+  disabled?: boolean;
+  precise?: boolean;
+  tabIndex?: number
 }
 
-export const Star = memo((props: StarProps) => {
+export const Star = (props: StarProps) => {
   const {
     className,
-    size = 'medium',
+    size = "medium",
     value,
+    selectedValue,
+    name,
     onChange,
-    onMouseEnter,
-    onMouseLeave,
-    isFilled,
-    isHalfFilled,
+    onChangeFillValue,
+    isFullFilled,
     isThreeQuartersFilled,
+    isHalfFilled,
     isQuarterFilled,
-    isReadonly,
-    isDisabled,
-    isPrecise,
+    disabled,
+    readonly,
+    precise,
+    tabIndex = 0,
   } = props;
 
-  const starRef = useRef<HTMLDivElement>(null);
+  const halfLabelId = useId()
+  const labelId = useId()
 
-  const handleMouseEnter: MouseEventHandler<HTMLDivElement> = (event) => {
-    const currentStar = starRef.current;
-    
-    if (currentStar && isPrecise) {
-      const { clientX } = event;
-      const starRect = currentStar.getBoundingClientRect();
-      const clickPosition = clientX - starRect.left;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if(readonly) return
 
-      const isLeftHalf = clickPosition < starRect.width / 2;
-      const localValue = isLeftHalf ? value - 0.5 : value;
-
-      onMouseEnter(localValue);
-    } else {
-      onMouseEnter(value)
-    }
+    onChange(Number(event.target.value));
   };
 
-  const handleChange: MouseEventHandler<HTMLDivElement> = (event) => {
-    event.preventDefault()
-    const currentStar = starRef.current;
+  const handleChangeFillValue = (value: number) => {
+    if(readonly) return
 
-    if (currentStar && isPrecise) {
-      const { clientX } = event;
-      const starRect = currentStar.getBoundingClientRect();
-      const clickPosition = clientX - starRect.left;
+    onChangeFillValue(value)
+  }
 
-      const isLeftHalf = clickPosition < starRect.width / 2;
-      const localValue = isLeftHalf ? value - 0.5 : value;
-
-      onChange(localValue);
-    } else {
-      onChange(value)
-    }
-    
-  };
+  const halfValue = value - 0.5;
+  const halfLabelTitle = `${halfValue} Stars`
+  const labelTitle = value === 1 ? `${value} Star` : `${value} Stars`
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["filled"]]: isFilled,
-    [styles['three-quarters-filled']]: isThreeQuartersFilled,
+    [styles["full-filled"]]: isFullFilled,
+    [styles["three-quarters-filled"]]: isThreeQuartersFilled,
     [styles["half-filled"]]: isHalfFilled,
-    [styles['quarter-filled']]: isQuarterFilled,
-    [styles['readonly']]: isReadonly,
-    [styles['disabled']]: isDisabled
+    [styles["quarter-filled"]]: isQuarterFilled,
+    [styles["readonly"]]: readonly,
+    [styles["disabled"]]: disabled,
   };
 
   const additionalClasses: Array<string | undefined> = [
     className,
-    styles[size]
-  ]
+    styles[size],
+  ];
+
+  const localTabIndex = disabled ? -1 : tabIndex
 
   return (
-    <div
-      role="radio"
-      ref={starRef}
-      onMouseMove={handleMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onClick={(handleChange)}
-      className={classNames(styles["star"], additionalClasses, mods)}
-    >
+    <div className={classNames(styles["star"], additionalClasses, mods)}>
+      {precise && (
+        <label className={styles["label"]} onMouseEnter={() => handleChangeFillValue(halfValue)}>
+          <input
+            className={styles['input']}
+            type="radio"
+            value={halfValue}
+            name={name}
+            onChange={handleChange}
+            checked={selectedValue === halfValue}
+            readOnly={readonly}
+            disabled={disabled}
+            tabIndex={localTabIndex}
+            aria-labelledby={halfLabelId}
+          />
+          <span className={styles['focus-border']}></span>
+          <span id={halfLabelId} className="visually-hidden">{halfLabelTitle}</span>
+        </label>
+      )}
+      <label className={styles["label"]} onMouseEnter={() => handleChangeFillValue(value)}>
+        <input
+          className={styles['input']}
+          type="radio"
+          value={value}
+          name={name}
+          onChange={handleChange}
+          checked={selectedValue === value}
+          readOnly={readonly}
+          disabled={disabled}
+          tabIndex={localTabIndex}
+          aria-labelledby={labelId}
+        />
+        <span className={styles['focus-border']}></span>
+        <span id={labelId} className="visually-hidden">{labelTitle}</span>
+      </label>
       <span className={styles["icon"]}></span>
     </div>
   );
-});
+};

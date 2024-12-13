@@ -21,12 +21,12 @@ interface ChipProps {
   label: string;
   onClose?: () => void;
   onClick?: () => void;
-  isStopFocus?: boolean;
+  stopFocus?: boolean;
   tabIndex?: number;
   closeButtonTabIndex?: number;
-  isDisabled?: boolean;
-  isReadonly?: boolean;
-  isClickable?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  clickable?: boolean;
 }
 
 export const Chip = memo((props: ChipProps) => {
@@ -38,51 +38,42 @@ export const Chip = memo((props: ChipProps) => {
     label,
     onClick,
     onClose,
-    isStopFocus,
-    isClickable,
-    isDisabled,
-    isReadonly,
+    stopFocus,
+    clickable,
+    disabled,
+    readonly,
     tabIndex = 0,
     closeButtonTabIndex = 0,
   } = props;
 
   const rippleWrapperRef = useRef<HTMLSpanElement | null>(null);
 
-  const handleKeyDownClick = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {
       event.stopPropagation();
       event.preventDefault()
-      if(isReadonly) return
+      if(readonly) return
       onClick?.();
       handleRipple(rippleWrapperRef);
     }
   };
 
-  const handleClose = () => {
-    if(isReadonly) return
-    onClose?.();
-  };
-
   const handleClick = (event: React.MouseEvent) => {
     //event.stopPropagation();
-    if(isReadonly) return
+    if(readonly) return
     onClick?.();
     handleRippleMousePosition(rippleWrapperRef, event);
   };
 
-  const handleStopPropagation = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
-
   const handleStopFocus = (event: React.MouseEvent) => {
-    isStopFocus && event.preventDefault();
+    stopFocus && event.preventDefault();
   };
 
   const mods: Record<string, boolean | undefined> = {
     [styles["have-close-button"]]: !!onClose,
-    [styles["clickable"]]: isClickable,
-    [styles["disabled"]]: isDisabled,
-    [styles['readonly']]: isReadonly,
+    [styles["clickable"]]: clickable,
+    [styles["disabled"]]: disabled,
+    [styles['readonly']]: readonly,
   };
 
   const additionalClasses: Array<string | undefined> = [
@@ -92,30 +83,32 @@ export const Chip = memo((props: ChipProps) => {
     styles[size],
   ];
 
-  const localTabIndex = isDisabled ? -1 : tabIndex;
-  const localCloseButtonTabIndex = isDisabled ? -1 : closeButtonTabIndex;
+  const localTabIndex = disabled ? -1 : tabIndex;
+  const localCloseButtonTabIndex = disabled ? -1 : closeButtonTabIndex;
 
-  if (isClickable) {
+  if (clickable) {
     return (
       <button
         className={classNames(styles["chip"], additionalClasses, mods)}
         onClick={handleClick}
-        onKeyDown={handleKeyDownClick}
+        onKeyDown={handleKeyDown}
         onMouseDown={handleStopFocus}
         tabIndex={localTabIndex}
-        disabled={isDisabled}
-        aria-readonly={isReadonly ? 'true' : undefined}
+        disabled={disabled}
+        aria-readonly={readonly ? 'true' : undefined}
       >
-        <p>{label}</p>
+        <span>{label}</span>
         {onClose && (
           <IconButton
-            size={size === "small" ? "small-s" : "small-m"}
+            className={styles['close-button']}
+            size='custom-size'
             color="secondary"
             variant="filled"
-            onClick={handleClose}
-            isDisabled={isDisabled}
-            isReadonly={isReadonly}
+            onClick={onClose}
+            disabled={disabled}
+            readonly={readonly}
             tabIndex={localCloseButtonTabIndex}
+            stopFocus
           >
             <Icon color="custom-color" variant="x-mark" size="custom-size" />
           </IconButton>
@@ -131,16 +124,18 @@ export const Chip = memo((props: ChipProps) => {
       //onClick={handleStopPropagation}
       onMouseDown={handleStopFocus}
     >
-      <p>{label}</p>
+      <span>{label}</span>
       {onClose && (
         <IconButton
-          size={size === "small" ? "small-s" : "small-m"}
+          className={styles['close-button']}
+          size='custom-size'
           color="secondary"
           variant="filled"
-          onClick={handleClose}
-          isDisabled={isDisabled}
-          isReadonly={isReadonly}
+          onClick={onClose}
+          disabled={disabled}
+          readonly={readonly}
           tabIndex={localCloseButtonTabIndex}
+          stopFocus
         >
           <Icon color="custom-color" variant="x-mark" size="custom-size" />
         </IconButton>

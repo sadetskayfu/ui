@@ -16,8 +16,6 @@ const AsideMenuPage = () => {
   const [isVisibleClearBackdropMenu, setIsVisibleClearBackdropMenu] =
     useState<boolean>(false);
 
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-
   const handleToggleVisibleLeftMenu = () => {
     setIsVisibleLeftMenu((prev) => !prev);
   };
@@ -42,7 +40,7 @@ const AsideMenuPage = () => {
       <section className="section">
         <SectionTitle>Aside menu</SectionTitle>
         <PreviewComponents title="Aside menu">
-          <Button onClick={handleToggleVisibleLeftMenu} ref={buttonRef}>
+          <Button onClick={handleToggleVisibleLeftMenu}>
             Left
           </Button>
           <Button onClick={handleToggleVisibleRightMenu}>Right</Button>
@@ -51,7 +49,6 @@ const AsideMenuPage = () => {
           <AsideMenu
             isVisible={isVisibleLeftMenu}
             onClose={() => setIsVisibleLeftMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["horizontal-content"]}>
               <Button onClick={() => setIsVisibleLeftMenu(false)}>Close</Button>
@@ -61,7 +58,6 @@ const AsideMenuPage = () => {
             isVisible={isVisibleRightMenu}
             positionVariant="right"
             onClose={() => setIsVisibleRightMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["horizontal-content"]}>
               <Button onClick={() => setIsVisibleRightMenu(false)}>
@@ -73,7 +69,6 @@ const AsideMenuPage = () => {
             isVisible={isVisibleTopMenu}
             positionVariant="top"
             onClose={() => setIsVisibleTopMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["vertical-content"]}>
               <Button onClick={() => setIsVisibleTopMenu(false)}>Close</Button>
@@ -83,7 +78,6 @@ const AsideMenuPage = () => {
             isVisible={isVisibleBottomMenu}
             positionVariant="bottom"
             onClose={() => setIsVisibleBottomMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["vertical-content"]}>
               <Button onClick={() => setIsVisibleBottomMenu(false)}>
@@ -104,7 +98,6 @@ const AsideMenuPage = () => {
             positionVariant="left"
             backdropVariant="dark"
             onClose={() => setIsVisibleDarkBackdropMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["horizontal-content"]}>
               <Button onClick={() => setIsVisibleDarkBackdropMenu(false)}>
@@ -117,7 +110,6 @@ const AsideMenuPage = () => {
             positionVariant="right"
             backdropVariant="clear"
             onClose={() => setIsVisibleClearBackdropMenu(false)}
-            parentRef={buttonRef}
           >
             <div className={styles["horizontal-content"]}>
               <Button onClick={() => setIsVisibleClearBackdropMenu(false)}>

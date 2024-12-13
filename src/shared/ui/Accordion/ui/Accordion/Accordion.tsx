@@ -52,7 +52,7 @@ export const Accordion = memo((props: AccordionProps) => {
   const bodyRef = useRef<HTMLDivElement>(null);
   const focusableElementsRef = useRef<HTMLElement[]>([]);
 
-  const id = useId() + "accordion-body";
+  const bodyId = useId();
 
   const handleToggleOpenMenu = () => {
     if (index && onChangeSelectedIndex) {
@@ -158,21 +158,20 @@ export const Accordion = memo((props: AccordionProps) => {
         onClick={handleToggleOpenMenu}
         onKeyDown={handleKeyDown}
         role="button"
-        aria-disabled={isDisabled ? "true" : "false"}
         aria-expanded={isOpen || isOpenInGroup ? "true" : "false"}
-        aria-controls={id}
+        aria-controls={bodyId}
       >
         {titleVariant === "h3" && <h3 className={styles["title"]}>{title}</h3>}
         {titleVariant === "h4" && <h4 className={styles["title"]}>{title}</h4>}
         <div className={styles["opening-icon"]}>
-          {Icon ? <>{Icon}</> : <ArrowIcon variant="arrow" size="small-m" color="custom-color"/>}
+          {Icon ? Icon : <ArrowIcon variant="arrow" size="small-m" color="custom-color"/>}
         </div>
       </div>
       <div
         className={styles["body"]}
         ref={bodyRef}
         aria-hidden={isOpen || isOpenInGroup ? "false" : "true"}
-        id={id}
+        id={bodyId}
       >
         <div className={styles["content"]}>{children}</div>
       </div>

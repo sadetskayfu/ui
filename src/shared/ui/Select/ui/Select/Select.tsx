@@ -3,6 +3,7 @@ import {
   memo,
   ReactElement,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -37,9 +38,9 @@ interface SelectProps {
   options: Option[];
   children: ReactElement<OptionItemProps>[];
   tabIndex?: number;
-  isRequired?: boolean;
-  isReadonly?: boolean;
-  isDisabled?: boolean;
+  required?: boolean;
+  readonly?: boolean;
+  disabled?: boolean;
   errorMessage?: string;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -64,15 +65,15 @@ export const Select = memo((props: SelectProps) => {
     onSelect,
     getDisabledOption,
     tabIndex = 0,
-    isRequired,
-    isReadonly,
-    isDisabled,
+    required,
+    readonly,
+    disabled,
     errorMessage,
     onBlur,
     onFocus,
     startAdornment,
     menuHeight,
-    menuWidth = 'parent',
+    menuWidth = "parent",
     menuPosition,
   } = props;
 
@@ -83,6 +84,8 @@ export const Select = memo((props: SelectProps) => {
   );
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
   const [isMountingMenu, setIsMountingMenu] = useState<boolean>(false);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const [isMovedLabel, setIsMovedLabel] = useState<boolean>(false);
 
   const fieldRef = useRef<HTMLDivElement | null>(null);
   const selectRef = useRef<HTMLDivElement | null>(null);
@@ -105,7 +108,7 @@ export const Select = memo((props: SelectProps) => {
   }, [options]);
 
   const handleToggleVisibleMenu = () => {
-    if (isReadonly) return;
+    if (readonly) return;
     if (!isMountingMenu) setIsMountingMenu(true);
     setIsVisibleMenu((prev) => !prev);
   };
@@ -174,7 +177,7 @@ export const Select = memo((props: SelectProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (isReadonly) return;
+    if (readonly) return;
 
     switch (event.key) {
       case "ArrowUp":
@@ -198,6 +201,9 @@ export const Select = memo((props: SelectProps) => {
           const newValues = value.slice(0, -1);
           onSelect(newValues);
         }
+        break;
+      default:
+        break;
     }
   };
 
@@ -213,14 +219,26 @@ export const Select = memo((props: SelectProps) => {
             key={optionValue}
             label={localOptions[optionValue].label}
             closeButtonTabIndex={-1}
-            isReadonly={isReadonly}
+            readonly={readonly}
           />
         );
       });
     }
-  }, [value, isMulti, handleDelete, variant, isReadonly, localOptions]);
+  }, [value, isMulti, handleDelete, variant, readonly, localOptions]);
 
-  const isDirty = value.length > 0 || !!startAdornment;
+  // Update isDirty
+  useEffect(() => {
+    value.length > 0 ? setIsDirty(true) : setIsDirty(false);
+  }, [value]);
+
+  // Update isMovedLabel
+  useEffect(() => {
+    if (isDirty || !!startAdornment) {
+      setIsMovedLabel(true);
+    } else {
+      setIsMovedLabel(false);
+    }
+  }, [isDirty, startAdornment]);
 
   const additionalClasses: Array<string | undefined> = [
     className,
@@ -230,15 +248,16 @@ export const Select = memo((props: SelectProps) => {
   ];
 
   const mods: Record<string, boolean | undefined> = {
-    [styles["required"]]: isRequired,
-    [styles["disabled"]]: isDisabled,
+    [styles["required"]]: required,
+    [styles["disabled"]]: disabled,
     [styles["dirty"]]: isDirty,
+    [styles["moved-label"]]: isMovedLabel,
     [styles["visible-menu"]]: isVisibleMenu,
     [styles["errored"]]: !!errorMessage,
     [styles["focused"]]: isFocusedField,
   };
 
-  const localTabIndex = isDisabled ? -1 : tabIndex;
+  const localTabIndex = disabled ? -1 : tabIndex;
 
   return (
     <div
@@ -264,18 +283,24 @@ export const Select = memo((props: SelectProps) => {
           aria-labelledby={labelId}
           aria-controls={isVisibleMenu ? optionsListId : undefined}
           aria-activedescendant={isVisibleMenu ? focusedOptionId : undefined}
-          aria-readonly={isReadonly ? "true" : undefined}
-          aria-required={isRequired ? "true" : undefined}
+          aria-readonly={readonly ? "true" : undefined}
+          aria-required={required ? "true" : undefined}
         >
           {startAdornment && (
             <div className={styles["start-adornment"]}>{startAdornment}</div>
           )}
           <div className={styles["content"]}>
-            <p className={styles["placeholder"]}>{placeholder}</p>
+            {placeholder && (
+              <span className={styles["placeholder"]}>{placeholder}</span>
+            )}
             {isMulti ? (
-              <div className={styles["chips"]}>{renderSelectedOptions}</div>
+              <div aria-hidden="true" className={styles["chips"]}>
+                {renderSelectedOptions}
+              </div>
             ) : (
-              value && <p>{localOptions[value].label}</p>
+              value && (
+                <span aria-hidden="true">{localOptions[value].label}</span>
+              )
             )}
           </div>
           <Icon
@@ -287,17 +312,17 @@ export const Select = memo((props: SelectProps) => {
         </div>
       </div>
       {errorMessage && (
-        <div className={styles["error-message"]} id={errorMessageId}>
-          <p>{errorMessage}</p>
-        </div>
+        <p className={styles["error-message"]} id={errorMessageId}>
+          {errorMessage}
+        </p>
       )}
-      {!isDisabled && !isReadonly && isMountingMenu && (
+      {!disabled && !readonly && isMountingMenu && (
         <DropdownPortal
           className={styles["menu"]}
           isVisible={isVisibleMenu}
           onClose={handleCloseMenu}
           parentRef={selectRef}
-          isStopAnimation
+          stopAnimation
           width={menuWidth}
           positionVariant={menuPosition}
         >

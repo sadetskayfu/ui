@@ -14,25 +14,31 @@ interface DropdownPortalProps {
   closingVariant?: DropdownClosingVariant;
   children: ReactNode;
   isVisible: boolean;
+  isUnmountingAnimation?: boolean;
+  isMountingAnimation?: boolean;
+  stopAnimation?: boolean;
   onClose: () => void;
   parentRef: React.RefObject<HTMLElement>;
-  isStopAnimation?: boolean;
   width?: "parent" | string;
-  height?: "full" | string;
+  height?: "full-screen" | string;
+  zIndex?: number;
 }
 
 export const DropdownPortal = (props: DropdownPortalProps) => {
   const {
     className,
-    positionVariant = "row",
+    positionVariant = "column",
     closingVariant = "mousedown",
     children,
     isVisible,
     onClose,
     parentRef,
-    isStopAnimation,
+    isMountingAnimation,
+    isUnmountingAnimation,
+    stopAnimation,
     width,
     height,
+    zIndex = 1000
   } = props;
 
   const [position, setPosition] = useState({
@@ -68,10 +74,9 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
     const parent = parentRef.current;
 
     if (!menu || !parent) return;
-
-    const menuRect = menu.getBoundingClientRect();
-    const menuHeight = menuRect.height;
-    const menuWidth = menuRect.width;
+    
+    const menuHeight = menu.offsetHeight;
+    const menuWidth = menu.offsetWidth;
 
     const parentRect = parent.getBoundingClientRect();
     const parentWidth = parentRect.width;
@@ -88,7 +93,7 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
       newPosition.width = parentWidth + "px";
     }
     // Row
-    if (positionVariant === "row") {
+    if (positionVariant === "column") {
       newPosition.translateY = parentRect.bottom + window.scrollY + "px";
       newPosition.translateX = parentRect.left + window.scrollX + "px";
 
@@ -103,7 +108,7 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
     }
 
     // Column
-    if (positionVariant === "column") {
+    if (positionVariant === "row") {
       height === 'full' ? newPosition.translateY = '0%' : newPosition.translateY = parentRect.top + window.scrollY + "px";
       newPosition.translateX = parentRect.right + window.scrollX + "px";
 
@@ -155,9 +160,11 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
     };
   }, [isVisible, handleClose, closingVariant]);
 
-  const mods: Record<string, boolean> = {
+  const mods: Record<string, boolean | undefined> = {
     [styles["visible"]]: isVisible,
-    [styles["no-animation"]]: !!isStopAnimation,
+    [styles["no-transition"]]: !!stopAnimation,
+    [styles['unmounting']]: isUnmountingAnimation && !stopAnimation,
+    [styles['mounting']] : isMountingAnimation && !stopAnimation
   };
 
   const additionalClasses: Array<string | undefined> = [className];
@@ -169,12 +176,13 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
         ref={menuRef}
         onMouseDown={handleStopFocus}
         style={{
-          position: height === "full" ? "fixed" : "absolute",
+          position: height === "full-screen" ? "fixed" : "absolute",
           top: 0,
           left: 0,
           width: width === "parent" ? position.width : width,
-          height: height === 'full' ? '100vh' : height,
+          height: height === 'full-screen' ? '100vh' : height,
           translate: `${position.translateX} ${position.translateY}`,
+          zIndex: isVisible ? zIndex : -1000,
         }}
         role="presentation"
       >

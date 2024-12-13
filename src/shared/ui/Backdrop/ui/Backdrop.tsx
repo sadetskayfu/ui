@@ -13,7 +13,7 @@ interface BackdropProps {
   isUnmountingAnimation?: boolean;
   isMountingAnimation?: boolean
   onClose?: () => void;
-  zIndex: number;
+  zIndex?: number;
 }
 
 export const Backdrop = (props: BackdropProps) => {
@@ -25,7 +25,7 @@ export const Backdrop = (props: BackdropProps) => {
     isMountingAnimation,
     onClose,
     variant = "dark",
-    zIndex,
+    zIndex = 1000,
   } = props;
 
   const mods: Record<string, boolean | undefined> = {
@@ -46,8 +46,8 @@ export const Backdrop = (props: BackdropProps) => {
         onClick={onClose}
         className={classNames(styles["backdrop"], additionalClasses, mods)}
       >
-        {children}
       </div>
+      {children}
     </Portal>
   );
 };

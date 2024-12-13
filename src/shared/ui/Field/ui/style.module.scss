@@ -65,11 +65,6 @@
   pointer-events: none;
   z-index: 1;
   color: var(--labelColor);
-  &:after {
-    content: "*";
-    color: var(--red-500);
-    display: none;
-  }
 }
 
 .buttons {
@@ -127,7 +122,7 @@
     .input::placeholder {
       opacity: 0;
     }
-    &.dirty,
+    &.moved-label,
     &.focused {
       .label {
         font-size: var(--font-size-small-l);
@@ -152,7 +147,7 @@
       translate: -50% -50%;
       background-color: var(--light);
     }
-    &.dirty,
+    &.moved-label,
     &.focused {
       .label {
         top: 0;
@@ -164,7 +159,7 @@
       (var(--height) - var(--button-height-small-m)) - var(--paddingBlock)
     );
     --paddingBottom: var(--paddingBlock);
-    &.dirty,
+    &.moved-label,
     &.focused {
       .label {
         top: var(--paddingBottom);
@@ -204,7 +199,8 @@
 .wrapper {
   &.required {
     .label:after {
-      display: inline;
+        content: "*";
+        color: var(--red-500);
     }
   }
   &.errored {
@@ -236,7 +232,7 @@
       min-width: 30px;
       flex-grow: 1;
     }
-    &.dirty {
+    &.moved-label {
       .input::placeholder {
         opacity: 1;
       }
