@@ -3,67 +3,56 @@
   aspect-ratio: 1;
   flex-shrink: 0;
   height: 1em;
+  --fill: currentColor;
+  --stroke: currentColor;
+  &:not(.custom-color) {
+    svg {
+      fill: var(--fill);
+      stroke: var(--stroke);
+    }
+  }
 }
 
 // Variants
 .icon {
   &.filled {
     &.primary {
-      svg {
-        fill: var(--primary-500);
-        stroke: var(--primary-500);
-      }
+        --fill: var(--primary-500);
+        --stroke: var(--primary-500);
     }
     &.secondary {
-      svg {
-        fill: var(--secondary-300);
-        stroke: var(--secondary-300);
-      }
+        --fill: var(--secondary-300);
+        --stroke: var(--secondary-300);
     }
     &.light {
-      svg {
-        fill: var(--light);
-        stroke: var(--light);
-      }
+        --fill: var(--light);
+        --stroke: var(--light);
     }
     &.dark {
-      svg {
-        fill: var(--secondary-500);
-        stroke: var(--secondary-500);
-      }
+        --fill: var(--secondary-500);
+        --stroke: var(--secondary-500);
     }
     &.red {
-      svg {
-        fill: var(--red-500);
-        stroke: var(--red-500);
-      }
+        --fill: var(--red-500);
+        --stroke: var(--red-500);
     }
   }
   &.outlined {
+    --fill: none;
     &.primary {
-      svg {
-        stroke: var(--primary-500);
-      }
+        --stroke: var(--primary-500);
     }
     &.secondary {
-      svg {
-        stroke: var(--secondary-300);
-      }
+        --stroke: var(--secondary-300);
     }
     &.light {
-      svg {
-        stroke: var(--light);
-      }
+        --stroke: var(--light);
     }
     &.dark {
-      svg {
-        stroke: var(--secondary-500);
-      }
+        --stroke: var(--secondary-500);
     }
     &.red {
-      svg {
-        stroke: var(--red-500);
-      }
+        --stroke: var(--red-500);
     }
   }
 }

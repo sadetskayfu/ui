@@ -1,0 +1,66 @@
+.snackbar {
+    --bgColor: var(--dark-900);
+    --color: var(--light);
+    position: fixed;
+    color: var(--color);
+    background-color: var(--bgColor);
+    box-shadow: var(--box-shadow-fly);
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items:center;
+    overflow: hidden;
+    animation: mounting 0.3s;
+    &.unmounting {
+        animation: unmounting 0.3s forwards;
+    }
+}
+
+.message {
+    margin-inline: 15px;
+    margin-block: 5px;
+}
+
+// Variants
+.snackbar {
+    &.clear {
+        --bgColor: transparent;
+    }
+}
+
+// Positions
+.snackbar {
+    &.top-left {
+        left: 20px;
+        top: 20px;
+    }
+    &.top-right {
+        right: 20px;
+        top: 20px;
+    }
+    &.bottom-right {
+        right: 20px;
+        bottom: 20px;
+    }
+    &.bottom-left {
+        left: 20px;
+        bottom: 20px;
+    }
+}
+
+@keyframes mounting {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes unmounting {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

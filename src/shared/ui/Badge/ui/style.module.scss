@@ -1,0 +1,73 @@
+@import '@/app/styles/mixins';
+
+.container {
+    --badgeWidth: 20px;
+    --bgColor: var(--primary-500);
+    --color: var(--light);
+    position: relative;
+    display: inline-flex;
+    @include user-select-off;
+    &.visible {
+        .badge {
+            transform: scale(1);
+        }
+    }
+}
+.badge {
+    position: absolute;
+    border-radius: 999px;
+    min-width: var(--badgeWidth);
+    height: var(--badgeWidth);
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color);
+    background-color: var(--bgColor);
+    transform: scale(0);
+    transition: 0.2s;
+    padding-inline: 6px;
+}
+
+// Colors
+.container {
+    &.secondary {
+        --bgColor: var(--secondary-500);
+    }
+    &.light {
+        --bgColor: var(--secondary-200);
+        --color: var(--secondary-600);
+    }
+}
+
+// Position
+.container {
+    &.top-left {
+        .badge {
+            top: 0px;
+            left: 0px;
+            translate: -50% -50%;
+        }
+    }
+    &.top-right {
+        .badge {
+            top: 0px;
+            right: 0px;
+            translate: 50% -50%;
+        }
+    }
+    &.bottom-right {
+        .badge {
+            bottom: 0px;
+            right: 0px;
+            translate: 50% 50%;
+        }
+    }
+    &.bottom-left {
+        .badge {
+            bottom: 0px;
+            left: 0px;
+            translate: -50% 50%;
+        }
+    }
+}

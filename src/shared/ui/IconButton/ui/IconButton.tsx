@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
 
 export type IconButtonVariant = "filled" | "outlined" | "clear";
-export type IconButtonColor = "primary" | "secondary"
+export type IconButtonColor = "primary" | "secondary" | "custom-color"
 export type IconButtonSize =
   | "small-s"
   | "small-m"

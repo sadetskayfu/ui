@@ -3,6 +3,7 @@
   --light-100: rgb(241, 241, 241);
   --light-500: rgb(209, 209, 209);
   --dark-900: rgb(12, 2, 24);
+  --dark-opacity: rgb(12, 2, 24, 0.8);
 
   --primary-600: rgb(65, 31, 107);
   --primary-500: rgb(137, 71, 218);
@@ -21,4 +22,5 @@
   --box-shadow-menu: 0 0 2px 1px var(--secondary-200), 0 0 2px 1px var(--secondary-200);
   --box-shadow-focus-primary: 0 0 0 2px var(--light) inset, 2px 2px 0 1px var(--primary-600), -2px -2px 0 1px var(--primary-500);
   --box-shadow-focus-secondary: 0 0 0 2px var(--light) inset, 2px 2px 0 1px var(--secondary-600), -2px -2px 0 1px var(--secondary-500);
+  --box-shadow-fly: 0 5px 10px var(--secondary-300);
 }

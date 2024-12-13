@@ -2,3 +2,15 @@
     width: 200px;
     text-wrap: wrap;
 }
+
+.test {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.alerts {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
