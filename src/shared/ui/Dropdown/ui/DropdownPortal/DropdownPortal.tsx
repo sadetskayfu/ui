@@ -38,7 +38,7 @@ export const DropdownPortal = (props: DropdownPortalProps) => {
     stopAnimation,
     width,
     height,
-    zIndex = 1000
+    zIndex = 1300
   } = props;
 
   const [position, setPosition] = useState({

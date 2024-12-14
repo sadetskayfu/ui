@@ -1,0 +1,50 @@
+.avatar-group {
+    display: flex;
+    --borderRadius: ;
+    --space: ;
+    > * {
+        box-sizing: content-box;
+        border: 2px solid var(--light);
+        position: relative;
+        border-radius: var(--borderRadius);
+    }
+}
+
+// Orientation
+.avatar-group {
+    &.vertical {
+        flex-direction: column-reverse;
+        > *:not(:first-child) {
+            margin-bottom: var(--space);
+        }
+    }
+    &.horizontal {
+        flex-direction: row-reverse;
+        > *:not(:first-child) {
+            margin-right: var(--space);
+        }
+    }
+}
+
+// Spacing
+.avatar-group {
+    &.small {
+        --space: -8px;
+    }
+    &.medium {
+        --space: -12px;
+    }
+}
+
+// Avatar variant
+.avatar-group {
+    &.circular {
+        --borderRadius: 50%;
+    }
+    &.rounded {
+        --borderRadius: var(--border-radius-small);
+    }
+    &.square {
+        --borderRadius: 0px;
+    }
+}

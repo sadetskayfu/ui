@@ -43,7 +43,7 @@ export const Dropdown = (props: DropdownMenuProps) => {
     stopAnimation,
     width,
     height,
-    zIndex = 1000,
+    zIndex = 1300,
   } = props;
 
   const [verticalOpeningDirection, setVerticalOpeningDirection] =

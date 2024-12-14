@@ -21,7 +21,7 @@ export const Modal = (props: ModalProps) => {
     isVisible: externalIsVisible,
     onClose,
     backdropVariant = "dark",
-    zIndex = 1000,
+    zIndex = 1200,
   } = props;
 
   const [isVisible, setIsVisible] = useState<boolean>(externalIsVisible);

@@ -14,11 +14,12 @@ interface SnackbarProps {
   message?: string
   children?: ReactElement;
   variant?: SnackbarVariant
-  position?: SnackbarPosition
+  position?: SnackbarPosition;
+  zIndex?: number
 }
 
 export const Snackbar = (props: SnackbarProps) => {
-    const { isVisible: externalIsVisible, onClose, autoHideDuration, message, children, variant = 'filled', position = 'top-right', className} = props;
+    const { isVisible: externalIsVisible, onClose, autoHideDuration, message, children, variant = 'filled', position = 'top-right', className, zIndex = 1400} = props;
 
     const [isUnmountingAnimation, setIsUnmountingAnimation] = useState<boolean>(false)
     const [isVisible, setIsVisible] = useState<boolean>(externalIsVisible)
@@ -71,7 +72,7 @@ export const Snackbar = (props: SnackbarProps) => {
 
   return (
     <Portal>
-      <div className={classNames(styles['snackbar'], additionalClasses, mods)}>
+      <div className={classNames(styles['snackbar'], additionalClasses, mods)} style={{zIndex}}>
         {message && <p className={styles['message']}>{message}</p>}
         {children && children}
       </div>

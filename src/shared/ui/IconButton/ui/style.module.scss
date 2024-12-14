@@ -3,7 +3,7 @@
 .button {
   --bgColor: transparent;
   --color: inherit;
-  --hoverBgColor: var(--secondary-opacity);
+  --hoverBgColor: ;
   --boxShadowFocus: var(--box-shadow-focus-primary);
   aspect-ratio: 1;
   border: none;
@@ -20,24 +20,18 @@
   svg {
     transition-duration: 0.2s;
   }
-  &:not(.custom-color) {
-    svg {
-      fill: var(--color);
-      stroke: var(--color);
-    }
-  }
 }
 
 // Colors
 .button {
   &.secondary {
     --color: var(--secondary-500);
-    --hoverBgColor: var(--secondary-opacity);
+    --hoverBgColor: var(--secondary-600);
     --boxShadowFocus: var(--box-shadow-focus-secondary);
   }
   &.primary {
     --color: var(--primary-500);
-    --hoverBgColor: var(--primary-opacity);
+    --hoverBgColor: var(--primary-600);
   }
 }
 
@@ -50,13 +44,11 @@
     }
     &.primary {
       --color: var(--light);
-      --hoverBgColor: var(--primary-600);
       --bgColor: var(--primary-500);
     }
     &.secondary {
       --color: var(--light);
       --bgColor: var(--secondary-500);
-      --hoverBgColor: var(--secondary-600);
     }
   }
   &.outlined {
@@ -128,7 +120,6 @@
 .button {
   &:focus-visible {
     box-shadow: var(--boxShadowFocus);
-    background-color: var(--hoverBgColor);
   }
   &.disabled {
     opacity: var(--opacity-medium);

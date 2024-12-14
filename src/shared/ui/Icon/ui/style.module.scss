@@ -5,12 +5,10 @@
   height: 1em;
   --fill: currentColor;
   --stroke: currentColor;
-  &:not(.custom-color) {
     svg {
       fill: var(--fill);
       stroke: var(--stroke);
     }
-  }
 }
 
 // Variants

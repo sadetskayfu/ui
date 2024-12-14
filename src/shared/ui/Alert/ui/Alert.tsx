@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { Children, cloneElement, ReactElement } from "react";
 import styles from "./style.module.scss";
 import { classNames } from "@/shared/lib";
 
@@ -8,7 +8,7 @@ type AlertBorderRadius = "small" | "none";
 
 interface AlertProps {
   className?: string;
-  Action?: ReactElement;
+  Action?: ReactElement | ReactElement[];
   Icon?: ReactElement;
   children: string;
   title?: string;
@@ -36,17 +36,27 @@ export const Alert = (props: AlertProps) => {
     styles[borderRadius],
   ];
 
+  const mods: Record<string, boolean | undefined> = {
+    [styles['have-action']]: !!Action
+  }
+
   return (
     <div
       role="alert"
-      className={classNames(styles["alert"], additionalClasses)}
+      className={classNames(styles["alert"], additionalClasses, mods)}
     >
       {Icon}
-      <div className={styles['content']}>
+      <div className={styles["content"]}>
         {title && <span className={styles["title"]}>{title}</span>}
         <p className={styles["message"]}>{children}</p>
       </div>
-      <div className={styles["action"]}>{Action}</div>
+      {Action && (
+        <div className={styles['actions']}>
+          {Children.map(Action, (child) => {
+            return cloneElement(child);
+          })}
+        </div>
+      )}
     </div>
   );
 };

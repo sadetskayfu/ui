@@ -23,6 +23,7 @@ interface TooltipProps {
   clickableTooltip?: boolean;
   disabledFocus?: boolean
   disabledHover?: boolean
+  zIndex?: number
 }
 
 export const Tooltip = memo((props: TooltipProps) => {
@@ -34,6 +35,7 @@ export const Tooltip = memo((props: TooltipProps) => {
     clickableTooltip,
     disabledFocus,
     disabledHover,
+    zIndex = 1500,
   } = props;
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -155,7 +157,7 @@ export const Tooltip = memo((props: TooltipProps) => {
   }
 
   return (
-    <div className={classNames(styles['container'], [className])} onMouseLeave={(clickableTooltip && !disabledHover) ? handleClose : undefined}>
+    <div  className={classNames(styles['container'], [className])} onMouseLeave={(clickableTooltip && !disabledHover) ? handleClose : undefined}>
         {cloneElement(Component, {...triggerElementProps})}
       {isVisible && (
         <Portal>
@@ -166,6 +168,7 @@ export const Tooltip = memo((props: TooltipProps) => {
             ], mods)}
             style={{
               translate: `${position.translateX} ${position.translateY}`,
+              zIndex,
             }}
           >
             <div role="tooltip" id={tooltipId} className={styles["tooltip"]}>

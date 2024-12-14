@@ -9,14 +9,17 @@
     padding-inline: 15px;
     padding-block: 5px;
     gap: 15px;
+    &.have-action {
+        .content {
+            margin-right: -7px;
+        }
+    }
     svg {
-        fill: var(--svgColor);
-        stroke: var(--svgColor);
+        color: var(--svgColor);
     }
 }
 
 .content {
-  margin-right: -7px;
   display: flex;
   flex-direction: column;
 }
@@ -25,10 +28,8 @@
     font-weight: bold;
 }
 
-.action {
-     min-height: 20px;
+.actions {
      display: flex;
-     justify-content: center;
      align-items: center;
      margin-left: auto;
      margin-right: -7px;
